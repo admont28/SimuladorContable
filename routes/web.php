@@ -11,6 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('admin.template.main');
+Route::get('/',['as' => 'front.index', function () {
+    return view('front.index');
+}]);
+
+Route::get('inicio', function(){
+    return view('admin.index');
 });

@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>@yield('title', 'Default') | Simulador Contable</title>
+    <title>@yield('title', 'Título por defecto.') | Simulador Contable</title>
     <link rel="stylesheet" href="{{ asset('plugins/bootstrap/css/bootstrap-lumen.min.css') }}" media="screen" title="no title">
     <link rel="stylesheet" href="{{ asset('css/main.css') }}" media="screen" title="no title">
     @yield('styelsheet')
@@ -11,7 +11,12 @@
         @include('admin.template.partials.nav')
         <!-- Begin page content -->
         <div class="container">
-            @yield('content', '<div class="page-header"><h1>Título por defecto, nungún contenido.</h1></div>')
+            <div class="page-header">
+                <h1>
+                    @yield('title', 'Título por defecto.')
+                </h1>
+            </div>
+            @yield('content', '')
         </div>
         @include('admin.template.partials.footer')
     <script src="{{ asset('plugins/jquery/js/jquery-3.1.1.min.js') }}" charset="utf-8"></script>
