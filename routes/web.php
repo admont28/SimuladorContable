@@ -15,6 +15,6 @@ Route::get('/',['as' => 'front.index', function () {
     return view('front.index');
 }]);
 
-Route::get('inicio', function(){
-    return view('admin.index');
-});
+Route::get('/inicio', ['as' => 'admin.index', function(){
+    return view('front.inicio');
+}]);
