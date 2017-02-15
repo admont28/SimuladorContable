@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class UsuariosController extends Controller
+class TemasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,8 +23,7 @@ class UsuariosController extends Controller
      */
     public function create()
     {
-        return view('admin.Usuarios.prueba');
-
+        //
     }
 
     /**
@@ -35,7 +34,7 @@ class UsuariosController extends Controller
      */
     public function store(Request $request)
     {
-      //  dd($request->all());
+        //
     }
 
     /**
