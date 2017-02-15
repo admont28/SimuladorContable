@@ -18,3 +18,8 @@ Route::get('/',['as' => 'front.index', function () {
 Route::get('/inicio', ['as' => 'admin.index', function(){
     return view('front.inicio');
 }]);
+
+Route::group(['prefix' => 'admin'], function(){
+
+        Route::resource('usuario','UsuariosController');
+});
