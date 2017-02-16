@@ -4,7 +4,7 @@
 
 @section('content')
 
-{!! form::open(['route' => 'usuario.store', 'method' => 'POST']) !!}
+<form class="form-horizontal" action="{{ url('admin.usuario.store') }}" method="post">
   <fieldset>
 
     <div class="form-group">
@@ -13,7 +13,6 @@
         <input type="text" class="form-control" id="inputNombre" placeholder="Escriba su nombre">
       </div>
     </div>
-
     <div class="form-group">
       <label for="inputEmail" class="col-lg-2 control-label">Email</label>
       <div class="col-lg-10">
@@ -49,9 +48,8 @@
       <div class="col-lg-10 col-lg-offset-2">
         <button type="reset" class="btn btn-default">Cancelar</button>
         <button type="submit" class="btn btn-primary">Registrarse</button>
-      </div>
-    </div>
+
   </fieldset>
-{!! form::close() !!}
+</form>
 
 @endsection

@@ -18,7 +18,7 @@
 	      <li><a href="{{ route('front.index') }}">Información</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Registrarme</a></li>
+        <li><a href="{{ url('admin/usuario/create') }}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Registrarme</a></li>
     		<li><a href="#">Iniciar Sesión</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
