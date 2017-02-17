@@ -17,10 +17,35 @@
         <li class="active"><a href="{{ route('admin.index') }}">Inicio</a></li>
 	      <li><a href="{{ route('front.index') }}">Información</a></li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="{{ url('register') }}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Registrarme</a></li>
-    		<li><a href="{{ url('login') }}">Iniciar Sesión</a></li>
-      </ul>
+
+        <!-- Right Side Of Navbar -->
+        <ul class="nav navbar-nav navbar-right">
+            <!-- Authentication Links -->
+            @if (Auth::guest())
+                <li><a href="{{ url('/login') }}">{{ trans('messages.iniciar_sesion') }}</a></li>
+                <li><a href="{{ url('/register') }}">{{ trans('messages.registrarme') }}</a></li>
+            @else
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        {{ Auth::user()->usua_nombre }} <span class="caret"></span>
+                    </a>
+
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="{{ url('/logout') }}"
+                              onclick="event.preventDefault();
+                                       document.getElementById('logout-form').submit();">
+                              Logout
+                            </a>
+
+                            <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                              {{ csrf_field() }}
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            @endif
+        </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>

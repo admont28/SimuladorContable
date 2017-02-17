@@ -13,7 +13,7 @@
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('usua_nombre') ? ' has-error' : '' }}">
-                            <label for="usua_nombre" class="col-md-4 control-label">Nombre</label>
+                            <label for="usua_nombre" class="col-md-4 control-label">{{ trans('messages.nombre') }}</label>
 
                             <div class="col-md-6">
                                 <input id="usua_nombre" type="text" class="form-control" name="usua_nombre" value="{{ old('usua_nombre') }}" required autofocus>
@@ -27,7 +27,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('usua_correo') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">Correo Electrónico</label>
+                            <label for="email" class="col-md-4 control-label">{{ trans('validation.attributes.usua_correo') }}</label>
 
                             <div class="col-md-6">
                                 <input id="usua_correo" type="email" class="form-control" name="usua_correo" value="{{ old('usua_correo') }}" required>
@@ -41,7 +41,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('usua_contrasena') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Contraseña</label>
+                            <label for="password" class="col-md-4 control-label">{{ trans('validation.attributes.usua_contrasena') }}</label>
 
                             <div class="col-md-6">
                                 <input id="usua_contrasena" type="password" class="form-control" name="usua_contrasena" required>
