@@ -57,4 +57,14 @@ class User extends Authenticatable
     protected $hidden = [
         'usua_contrasena', 'remember_token',
     ];
+
+    /**
+     * Get the password for the user.
+     *
+     * @return string
+     */
+    public function getAuthPassword()
+    {
+        return $this->usua_contrasena;
+    }
 }

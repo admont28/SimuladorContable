@@ -36,4 +36,16 @@ class LoginController extends Controller
     {
         $this->middleware('guest', ['except' => 'logout']);
     }
+
+    /**
+     * Función que permite modificar el Campo por defecto email usado en la autenticación del usuario.
+     *
+     * @return string retorna el valor usua_correo
+     */
+    public function username()
+    {
+        return 'usua_correo';
+    }
+
+
 }

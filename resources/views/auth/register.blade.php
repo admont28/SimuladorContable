@@ -1,4 +1,6 @@
-@extends('layouts.app')
+@extends('admin.template.main')
+
+@section('title', 'Registrarse')
 
 @section('content')
 <div class="container">
@@ -39,7 +41,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('usua_contrasena') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
+                            <label for="password" class="col-md-4 control-label">Contraseña</label>
 
                             <div class="col-md-6">
                                 <input id="usua_contrasena" type="password" class="form-control" name="usua_contrasena" required>
