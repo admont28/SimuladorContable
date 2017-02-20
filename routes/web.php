@@ -40,3 +40,21 @@ Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
 Route::get('/home', 'HomeController@index');
+
+
+// ruta para asignar el valor del Lenguaje
+Route::group(['middleware' => ['web']], function () {
+
+//Route::get('/lang/{lang}', function () {
+//    return view('front.index');
+//});
+
+Route::get('lang/{lang}', function ($lang) {
+    session(['lang' => $lang]);
+    return \Redirect::back();
+})->where([
+    'lang' => 'en|es'
+]);
+
+});
+?>

@@ -6,10 +6,10 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Tablero</div>
+                <div class="panel-heading">{{ trans('messages.actualizacion') }}</div>
 
                 <div class="panel-body">
-                    Te haz logueado!!
+                  {{ trans('messages.bienvenido') }}
                 </div>
             </div>
         </div>

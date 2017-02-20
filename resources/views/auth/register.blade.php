@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Registro</div>
+                <div class="panel-heading">{{ trans('messages.registrarme') }}</div>
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
                         {{ csrf_field() }}
@@ -55,7 +55,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="usua_contrasena-confirm" class="col-md-4 control-label">Confirmar Contraseña</label>
+                            <label for="usua_contrasena-confirm" class="col-md-4 control-label">{{ trans('messages.Confirmar_Contrasena') }}</label>
 
                             <div class="col-md-6">
                                 <input id="usua_contrasenas-confirm" type="password" class="form-control" name="usua_contrasena_confirmation" required>
@@ -65,7 +65,7 @@
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
-                                    Registrar
+                                    {{ trans('messages.registrarme') }}
                                 </button>
                             </div>
                         </div>

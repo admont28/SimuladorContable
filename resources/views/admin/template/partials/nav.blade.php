@@ -8,14 +8,14 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Simulador Contable</a>
+      <a class="navbar-brand" href="#">{{ trans('messages.simulador_contable') }}</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="{{ route('admin.index') }}">Inicio</a></li>
-	      <li><a href="{{ route('front.index') }}">Información</a></li>
+        <li class="active"><a href="{{ route('admin.index') }}">{{ trans('messages.inicio') }}</a></li>
+	      <li><a href="{{ route('front.index') }}">{{ trans('messages.informacion') }}</a></li>
       </ul>
 
         <!-- Right Side Of Navbar -->
@@ -35,7 +35,7 @@
                             <a href="{{ url('/logout') }}"
                               onclick="event.preventDefault();
                                        document.getElementById('logout-form').submit();">
-                              Logout
+                              {{ trans('messages.logout') }}
                             </a>
 
                             <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
