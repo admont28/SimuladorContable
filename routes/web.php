@@ -11,18 +11,42 @@
 |
 */
 
+/*
+ * Rutas generales.
+ */
 Route::get('/',['as' => 'front.index', function () {
-    return view('front.index');
+    return view('estudiante.index');
 }]);
 
 Route::get('/inicio', ['as' => 'admin.index', function(){
-    return view('front.inicio');
+    return view('estudiante.index');
 }]);
 
-Route::group(['prefix' => 'admin'], function(){
+Route::resource('usuario','UsuariosController');
 
-        Route::resource('usuario','UsuariosController');
+/*
+ * Rutas para el rol de estudiante.
+ */
+Route::group(['prefix' => 'estudiante', 'middleware' => ['auth','estudiante'] ], function(){
+
+    Route::get('/',['as' => 'estudiante.index', function () {
+        return view('estudiante.index');
+    }])->middleware('auth');
+
+    Route::get('/inicio',['as' => 'estudiante.index', function () {
+        return view('estudiante.index');
+    }])->middleware('auth');
 });
+
+/*
+ * Rutas para el rol de profesor.
+ */
+Route::group(['prefix' => 'profesor'], function(){
+    Route::get('/inicio',['as' => 'profesor.index', function () {
+        return view('profesor.index');
+    }])->middleware('auth');
+});
+
 
 // Authentication Routes...
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');

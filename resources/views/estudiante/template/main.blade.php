@@ -8,7 +8,7 @@
     @yield('styelsheet')
   </head>
   <body>
-        @include('admin.template.partials.nav')
+        @include('estudiante.template.partials.nav')
         <!-- Begin page content -->
         <div class="container">
             <div class="page-header">
@@ -18,7 +18,7 @@
             </div>
             @yield('content', '')
         </div>
-        @include('admin.template.partials.footer')
+        @include('estudiante.template.partials.footer')
     <script src="{{ asset('plugins/jquery/js/jquery-3.1.1.min.js') }}" charset="utf-8"></script>
     <script src="{{ asset('plugins/bootstrap/js/bootstrap.min.js') }}" charset="utf-8"></script>
     @yield('scripts')

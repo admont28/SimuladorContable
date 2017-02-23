@@ -1,6 +1,6 @@
-@extends('admin.template.main')
+@extends('estudiante.template.main')
 
-@section('title', 'Informacion')
+@section('title', 'Información')
 
 @section('content')
     <div class="col-md-12">
