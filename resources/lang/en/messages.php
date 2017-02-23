@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 return [
     'bienvenido' => 'Welcome to Accounting Simulator application',
@@ -23,4 +23,5 @@ return [
     'taller' => 'workshop',
     'enviar_contrasena' => 'Send password',
     'restablecer_contrasena' => 'Restore password',
+    'temasatratar' => 'topics to talk about',
 ];

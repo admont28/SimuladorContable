@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 return [
     'bienvenido' => 'Bienvenido a la aplicación del Simulador Contable',
@@ -23,4 +23,5 @@ return [
     'taller' => 'taller',
     'enviar_contrasena' => 'Enviar Contraseña',
     'restablecer_contrasena' => 'Restablecer contraseña',
+    'temasatratar' => 'temas a tratar',
 ];
