@@ -33,9 +33,9 @@ Route::resource('usuario','UsuariosController');
  */
 Route::group(['prefix' => 'estudiante', 'middleware' => ['auth','estudiante'] ], function(){
 
-    Route::get('/',[function () {
+    Route::get('/',function () {
         return redirect()->route('estudiante.index');
-    }]);
+    });
 
     Route::get('/inicio',['as' => 'estudiante.index', function () {
         return view('estudiante.index');
@@ -51,9 +51,9 @@ Route::group(['prefix' => 'estudiante', 'middleware' => ['auth','estudiante'] ],
  */
 Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], function(){
 
-    Route::get('/',[function () {
+    Route::get('/',function () {
         return redirect()->route('profesor.index');
-    }]);
+    });
 
     Route::get('/inicio',['as' => 'profesor.index', function () {
         return view('profesor.index');

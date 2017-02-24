@@ -16,9 +16,8 @@ class ProfesorMiddleware
      */
     public function handle($request, Closure $next)
     {
-
         if(Auth::user()->usua_rol != "profesor"){
-            return view('welcome');
+            return redirect()->route(Auth::user()->usua_rol.'.index');
         }
         return $next($request);
     }
