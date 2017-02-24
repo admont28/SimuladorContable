@@ -14,13 +14,17 @@
 /*
  * Rutas generales.
  */
-Route::get('/',['as' => 'front.index', function () {
-    return redirect()->route('estudiante.index');
+Route::get('/',function () {
+    return redirect()->route('general.inicio');
+});
+
+Route::get('/inicio',[ 'as' => 'general.inicio', function(){
+    return view('inicio');
 }]);
 
-Route::get('/inicio', function(){
-    return view('inicio');
-});
+Route::get('/informacion',['as' => 'general.informacion', function () {
+    return view('informacion');
+}]);
 
 Route::resource('usuario','UsuariosController');
 
@@ -69,14 +73,6 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
 
     Route::get('/taller/vertalleres',['as'=>'profesor.vertalleres', function(){
     return view('profesor.taller.ver_taller');
-    }]);
-
-    Route::get('/informacion',['as' => 'profesor.informacion', function () {
-        return view('profesor.informacion');
-    }]);
-
-    Route::get('/inicio',['as' => 'profesor.index', function () {
-        return view('profesor.index');
     }]);
 });
 

@@ -14,8 +14,8 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="{{ route('profesor.index') }}">{{ trans('messages.inicio') }}</a></li>
-	      <li><a href="{{ route('profesor.informacion') }}">{{ trans('messages.informacion') }}</a></li>
+        <li class="active"><a href="{{ route('general.inicio') }}">{{ trans('messages.inicio') }}</a></li>
+	      <li><a href="{{ route('general.informacion') }}">{{ trans('messages.informacion') }}</a></li>
         <li><a href="{{ route('profesor.temas') }}">{{ trans('messages.temasatratar') }}</a></li>
         <li><a href="{{ route('profesor.taller') }}">{{ trans('messages.taller') }}</a></li>
       </ul>
