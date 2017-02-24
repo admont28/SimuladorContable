@@ -59,12 +59,8 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
         return view('profesor.index');
     }]);
 
-    Route::get('/temasatratar',['as'=>'profesor.temas', function(){
-        return view('profesor.temas');
-    }]);
-
     Route::get('/taller/inicio',['as'=>'profesor.taller', function(){
-        return view('profesor.taller.taller');
+        return view('profesor.taller.index');
     }]);
 
     Route::get('/taller/crear',['as'=>'profesor.creartaller', function(){

@@ -15,8 +15,6 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li class="active"><a href="{{ route('general.inicio') }}">{{ trans('messages.inicio') }}</a></li>
-	      <li><a href="{{ route('general.informacion') }}">{{ trans('messages.informacion') }}</a></li>
-        <li><a href="{{ route('estudiante.temas') }}">{{ trans('messages.temasatratar') }}</a></li>
       </ul>
 
         <!-- Right Side Of Navbar -->
@@ -32,6 +30,9 @@
                     </a>
 
                     <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="{{ route(Auth::user()->usua_rol.'.index') }}"> {{ trans('messages.perfil') }}</a>
+                        </li>
                         <li>
                             <a href="{{ url('/logout') }}"
                               onclick="event.preventDefault();
