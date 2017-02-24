@@ -36,6 +36,10 @@ Route::group(['prefix' => 'estudiante', 'middleware' => ['auth','estudiante'] ],
     Route::get('/inicio',['as' => 'estudiante.index', function () {
         return view('estudiante.index');
     }]);
+
+    Route::get('/temasatratar',['as'=>'estudiante.temas', function(){
+        return view('estudiante.temas');
+    }]);
 });
 
 /*
@@ -45,6 +49,30 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
 
     Route::get('/',[function () {
         return redirect()->route('profesor.index');
+    }]);
+
+    Route::get('/inicio',['as' => 'profesor.index', function () {
+        return view('profesor.index');
+    }]);
+
+    Route::get('/temasatratar',['as'=>'profesor.temas', function(){
+        return view('profesor.temas');
+    }]);
+
+    Route::get('/taller/inicio',['as'=>'profesor.taller', function(){
+        return view('profesor.taller.taller');
+    }]);
+
+    Route::get('/taller/crear',['as'=>'profesor.creartaller', function(){
+    return view('profesor.taller.crear_taller');
+    }]);
+
+    Route::get('/taller/vertalleres',['as'=>'profesor.vertalleres', function(){
+    return view('profesor.taller.ver_taller');
+    }]);
+
+    Route::get('/informacion',['as' => 'profesor.informacion', function () {
+        return view('profesor.informacion');
     }]);
 
     Route::get('/inicio',['as' => 'profesor.index', function () {

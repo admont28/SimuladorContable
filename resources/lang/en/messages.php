@@ -1,16 +1,6 @@
-<?php
+<?php 
 
 return [
-
-    /*
-    |--------------------------------------------------------------------------
-    | Lenguaje usado por la aplicación.
-    |--------------------------------------------------------------------------
-    |
-    | Las siguientes lineas son usadas para la internacionalización de la aplicación.
-    |
-    */
-
     'bienvenido' => 'Welcome to Accounting Simulator application',
     'iniciar_sesion' => 'Login',
     'registrarme' => 'Register',
@@ -25,8 +15,13 @@ return [
     'simulador_contable' => 'Accounting Simulator',
     'bt_ingresar' => 'Enter',
     'olvidaste_contrasena' => 'Did you forget your password?',
-    'recordar_contrasena' => 'Remember password',
     'Confirmar_Contrasena' => 'Confirm Password',
     'footer' => 'Designed by',
     'and' => 'and',
+    'introduccion' => 'introduction',
+    'tema' => 'themes',
+    'taller' => 'workshop',
+    'enviar_contrasena' => 'Send password',
+    'restablecer_contrasena' => 'Restore password',
+    'temasatratar' => 'topics to talk about',
 ];
