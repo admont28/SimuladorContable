@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 return [
     'bienvenido' => 'Welcome to Accounting Simulator application',
@@ -9,8 +9,9 @@ return [
     'passwd' => 'Password',
     'correo' => 'E-Mail',
     'recordar_contrasena' => 'Remember password',
-    'inicio' => 'start',
-    'informacion' => 'information',
+    'inicio' => 'Start',
+    'paginaprincipal' => 'Home',
+    'informacion' => 'Information',
     'logout' => 'logout',
     'simulador_contable' => 'Accounting Simulator',
     'bt_ingresar' => 'Enter',

@@ -2,6 +2,8 @@
 
 @section('title','Sección de talleres')
 
+@section('active','#profesor-curso')
+
 @section('content')
 
 <form class="form-horizontal">

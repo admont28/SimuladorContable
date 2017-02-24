@@ -1,4 +1,4 @@
-@extends('admin.template.main')
+@extends('general.template.main')
 
 @section('title', 'Bienvenido')
 @section('content')

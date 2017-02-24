@@ -14,7 +14,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="{{ route('general.inicio') }}">{{ trans('messages.inicio') }}</a></li>
+        <li id="estudiante-index"><a href="{{ route('estudiante.index') }}">{{ trans('messages.inicio') }}</a></li>
       </ul>
 
         <!-- Right Side Of Navbar -->

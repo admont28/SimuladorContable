@@ -13,7 +13,7 @@ class CrearCursoTabla extends Migration
      */
     public function up()
     {
-        Schema::create('curso', function (Blueprint $table) {
+        Schema::create('Curso', function (Blueprint $table) {
             $table->increments('curs_id');
             $table->string('curs_nombre', 100);
             $table->text('curs_introduccion', 500);

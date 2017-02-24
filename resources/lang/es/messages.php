@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 return [
     'bienvenido' => 'Bienvenido a la aplicación del Simulador Contable',
@@ -9,8 +9,9 @@ return [
     'passwd' => 'Contraseña',
     'correo' => 'Corrreo electronico',
     'recordar_contrasena' => 'Recordar Contraseña',
-    'inicio' => 'inicio',
-    'informacion' => 'informacion',
+    'inicio' => 'Inicio',
+    'paginaprincipal' => 'Página principal',
+    'informacion' => 'Informacion',
     'logout' => 'salir',
     'simulador_contable' => 'Simulador Contable',
     'bt_ingresar' => 'ingresar',

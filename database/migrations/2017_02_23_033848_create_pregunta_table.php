@@ -13,13 +13,13 @@ class CreatePreguntaTable extends Migration
      */
     public function up()
     {
-        Schema::create('pregunta', function (Blueprint $table) {
+        Schema::create('Pregunta', function (Blueprint $table) {
             $table->increments('preg_id');
             $table->text('preg_texto' , 500);
             $table->enum('preg_tipo', ['multiple','unica','abierta','archivo']);
             $table->decimal('preg_porcentaje', 2, 1);
             $table->integer('talle_id')->unsigned();
-            $table->foreign('talle_id')->references('talle_id')->on('taller');
+            $table->foreign('talle_id')->references('talle_id')->on('Taller');
 
 
             $table->timestamp('talle_fechacreacion')->default(DB::raw('CURRENT_TIMESTAMP'));

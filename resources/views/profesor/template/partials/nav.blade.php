@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -14,10 +14,10 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="{{ route('profesor.index') }}">{{ trans('messages.inicio') }}</a></li>
-        <li class="active"><a href="{{ route('profesor.curso') }}">{{ trans('messages.curso') }}</a></li>
-        <li class="active"><a href="{{ route('profesor.taller') }}">{{ trans('messages.taller') }}</a></li>
-        
+        <li id="profesor-index" ><a href="{{ route('profesor.index') }}">{{ trans('messages.inicio') }}</a></li>
+        <li id="profesor-curso"><a href="{{ route('profesor.curso') }}">{{ trans('messages.curso') }}</a></li>
+        <li id="profesor-taller"><a href="{{ route('profesor.taller') }}">{{ trans('messages.taller') }}</a></li>
+
       </ul>
 
         <!-- Right Side Of Navbar -->

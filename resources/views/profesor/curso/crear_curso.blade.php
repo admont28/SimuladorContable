@@ -2,6 +2,8 @@
 
 @section('title', 'Sección de cursos')
 
+@section('active','#profesor-curso')
+
 @section('content')
 <form class="form-horizontal">
   <fieldset>
@@ -30,7 +32,5 @@
     </div>
   </fieldset>
 </form>
-
-
 
 @endsection

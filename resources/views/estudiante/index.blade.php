@@ -1,6 +1,8 @@
 @extends('estudiante.template.main')
 
-@section('title', 'Información')
+@section('title', 'Página principal del estudiante')
+
+@section('active','#estudiante-index')
 
 @section('content')
     <div class="col-md-12">
