@@ -15,12 +15,12 @@
  * Rutas generales.
  */
 Route::get('/',['as' => 'front.index', function () {
-    return view('estudiante.index');
+    return redirect()->route('estudiante.index');
 }]);
 
-Route::get('/inicio', ['as' => 'admin.index', function(){
-    return view('estudiante.index');
-}]);
+Route::get('/inicio', function(){
+    return view('inicio');
+});
 
 Route::resource('usuario','UsuariosController');
 
@@ -29,22 +29,27 @@ Route::resource('usuario','UsuariosController');
  */
 Route::group(['prefix' => 'estudiante', 'middleware' => ['auth','estudiante'] ], function(){
 
-    Route::get('/',['as' => 'estudiante.index', function () {
-        return view('estudiante.index');
-    }])->middleware('auth');
+    Route::get('/',[function () {
+        return redirect()->route('estudiante.index');
+    }]);
 
     Route::get('/inicio',['as' => 'estudiante.index', function () {
         return view('estudiante.index');
-    }])->middleware('auth');
+    }]);
 });
 
 /*
  * Rutas para el rol de profesor.
  */
-Route::group(['prefix' => 'profesor'], function(){
+Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], function(){
+
+    Route::get('/',[function () {
+        return redirect()->route('profesor.index');
+    }]);
+
     Route::get('/inicio',['as' => 'profesor.index', function () {
         return view('profesor.index');
-    }])->middleware('auth');
+    }]);
 });
 
 

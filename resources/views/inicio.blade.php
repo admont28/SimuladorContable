@@ -1,4 +1,4 @@
-@extends('admin.template.main')
+@extends('estudiante.template.main')
 
 @section('title', 'Inicio')
 
@@ -7,6 +7,6 @@
         <div class="col-md-5 text-center">
             <img src="{{ asset('images/mujer-senala.jpg') }}" alt="Mujer Señala" class="img-responsive">
         </div>
-
+        <p>Hola</p>
     </div>
 @endsection
