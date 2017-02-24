@@ -24,4 +24,6 @@ return [
     'enviar_contrasena' => 'Enviar Contraseña',
     'restablecer_contrasena' => 'Restablecer contraseña',
     'temasatratar' => 'temas a tratar',
+    'perfil' => 'perfil',
+    'curso' => 'curso',
 ];

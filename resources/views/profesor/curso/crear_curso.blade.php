@@ -1,9 +1,8 @@
 @extends('profesor.template.main')
 
-@section('title', 'Sección de talleres')
+@section('title', 'Sección de cursos')
 
 @section('content')
-
 <form class="form-horizontal">
   <fieldset>
     <h2>CREAR</h2>
@@ -14,10 +13,14 @@
       </div>
     </div>
 
-    <div class="jumbotron">
-      <h1>Introducción</h1>
-      <p></p>
-    </div>
+    <div class="form-group">
+         <label for="textArea" class="col-lg-2 control-label">Introducción del curso</label>
+         <div class="col-lg-10">
+           <textarea class="form-control" rows="3" id="textArea"></textarea>
+           <span class="help-block">En este campo puede describir con exactitud todo lo relacionado con la descripción del curso.</span>
+         </div>
+       </div>
+
 
      <div class="form-group">
       <div class="col-lg-10 col-lg-offset-2">
@@ -30,13 +33,4 @@
 
 
 
-@endsection
-@section('scripts')
-<script type="text/javascript">
-            $(function () {
-                $('#tiempo_taller').datetimepicker({
-                    sideBySide: true
-                });
-            });
-        </script>
 @endsection

@@ -24,4 +24,6 @@ return [
     'enviar_contrasena' => 'Send password',
     'restablecer_contrasena' => 'Restore password',
     'temasatratar' => 'topics to talk about',
+    'perfil' => 'profile',
+    'curso' => 'course',
 ];

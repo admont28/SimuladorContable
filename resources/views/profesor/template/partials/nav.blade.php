@@ -14,7 +14,10 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="{{ route('general.inicio') }}">{{ trans('messages.inicio') }}</a></li>
+        <li class="active"><a href="{{ route('profesor.index') }}">{{ trans('messages.inicio') }}</a></li>
+        <li class="active"><a href="{{ route('profesor.curso') }}">{{ trans('messages.curso') }}</a></li>
+        <li class="active"><a href="{{ route('profesor.taller') }}">{{ trans('messages.taller') }}</a></li>
+        
       </ul>
 
         <!-- Right Side Of Navbar -->

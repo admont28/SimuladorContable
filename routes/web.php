@@ -70,6 +70,31 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     Route::get('/taller/vertalleres',['as'=>'profesor.vertalleres', function(){
     return view('profesor.taller.ver_taller');
     }]);
+
+    Route::get('/curso/inicio',['as'=>'profesor.curso', function(){
+    return view('profesor.curso.index');
+    }]);
+
+    Route::get('/curso/crear',['as'=>'profesor.crearcurso', function(){
+    return view('profesor.curso.crear_curso');
+    }]);
+
+    Route::get('/curso/vercursos',['as'=>'profesor.vercursos', function(){
+    return view('profesor.curso.ver_curso');
+    }]);
+
+    Route::get('/temas/crear',['as'=>'profesor.creartema', function(){
+    return view('profesor.tema.crear_tema');
+    }]);
+
+    Route::get('/temas/inicio',['as'=>'profesor.tema', function(){
+    return view('profesor.tema.index');
+    }]);
+
+    Route::get('/temas/ver',['as'=>'profesor.vertemas', function(){
+    return view('profesor.tema.ver_tema');
+    }]);
+
 });
 
 
