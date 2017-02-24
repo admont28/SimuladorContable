@@ -1,4 +1,4 @@
-@extends('estudiante.template.main')
+@extends('profesor.template.main')
 
 @section('title', 'Temas a tratar')
 

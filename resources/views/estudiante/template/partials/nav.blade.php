@@ -16,7 +16,7 @@
       <ul class="nav navbar-nav">
         <li class="active"><a href="{{ route('admin.index') }}">{{ trans('messages.inicio') }}</a></li>
 	      <li><a href="{{ route('front.index') }}">{{ trans('messages.informacion') }}</a></li>
-          <li><a href="{{ route('front.index') }}">{{ trans('messages.temasatratar') }}</a></li>
+        <li><a href="{{ route('estudiante.temas') }}">{{ trans('messages.temasatratar') }}</a></li>
       </ul>
 
         <!-- Right Side Of Navbar -->
