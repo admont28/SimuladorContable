@@ -33,6 +33,6 @@ class CreateTallerTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('taller');
+        Schema::dropIfExists('Taller');
     }
 }

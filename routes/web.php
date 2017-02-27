@@ -71,17 +71,14 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     return view('profesor.taller.ver_taller');
     }]);
 
-    Route::get('/curso/inicio',['as'=>'profesor.curso', function(){
-    return view('profesor.curso.index');
-    }]);
+    Route::get('/curso/inicio', 'CursoController@index')->name('profesor.curso');
+    Route::get('/curso/crear', 'CursoController@edit')->name('profesor.crearcurso');
+    Route::get('/curso/ver/{id?}', 'CursoController@show')->name('profesor.curso.ver');
+    Route::get('/curso/editar/{id?}', 'CursoController@edit')->name('profesor.curso.editar');
+    Route::get('/curso/eliminar/{id?}', 'CursoController@destroy')->name('profesor.curso.eliminar');
 
-    Route::get('/curso/crear',['as'=>'profesor.crearcurso', function(){
-    return view('profesor.curso.crear_curso');
-    }]);
 
-    Route::get('/curso/vercursos',['as'=>'profesor.vercursos', function(){
-    return view('profesor.curso.ver_curso');
-    }]);
+
 
     Route::get('/temas/crear',['as'=>'profesor.creartema', function(){
     return view('profesor.tema.crear_tema');

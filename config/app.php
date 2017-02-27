@@ -164,6 +164,8 @@ return [
         Illuminate\View\ViewServiceProvider::class,
 
 
+
+
         /*
          * Package Service Providers...
          */
@@ -183,6 +185,10 @@ return [
          * Providers propios instalados
          */
         Collective\Html\HtmlServiceProvider::class,
+
+
+
+
     ],
 
     /*
@@ -236,6 +242,10 @@ return [
          */
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+
+
+
+        
     ],
 
 ];

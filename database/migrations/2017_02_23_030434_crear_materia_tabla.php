@@ -32,6 +32,6 @@ class CrearMateriaTabla extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('materia');
+        Schema::dropIfExists('Materia');
     }
 }
