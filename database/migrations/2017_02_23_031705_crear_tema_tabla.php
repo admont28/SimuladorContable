@@ -31,6 +31,6 @@ class CrearTemaTabla extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tema');
+        Schema::dropIfExists('Tema');
     }
 }

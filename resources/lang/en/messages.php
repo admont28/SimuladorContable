@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 return [
     'bienvenido' => 'Welcome to Accounting Simulator application',
@@ -27,4 +27,6 @@ return [
     'temasatratar' => 'topics to talk about',
     'perfil' => 'profile',
     'curso' => 'course',
+    'crear_curso' => 'Create course',
+    'ver_cursos' => 'See courses',
 ];

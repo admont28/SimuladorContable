@@ -17,6 +17,8 @@ class CreatePasswordResetsTable extends Migration
             $table->string('reco_correo')->index();
             $table->string('reco_token')->index();
             $table->timestamp('created_at')->nullable();
+            $table->timestamp('reco_fechacreacion')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('reco_fechamodificacion')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
     }
 

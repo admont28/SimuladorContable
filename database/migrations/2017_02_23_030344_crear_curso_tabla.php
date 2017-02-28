@@ -29,6 +29,6 @@ class CrearCursoTabla extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('curso');
+        Schema::dropIfExists('Curso');
     }
 }

@@ -94,7 +94,8 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
-            'table' => 'password_resets',
+            'table' => 'RestablecerContrasena',
+            'email' => 'auth.users.usua_correo',
             'expire' => 60,
         ],
     ],
