@@ -1,4 +1,4 @@
-@extends('admin.template.main')
+@extends('general.template.main')
 @section('title', 'Cambiar Contraseña')
 
 
@@ -19,15 +19,15 @@
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/password/email') }}">
                         {{ csrf_field() }}
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label" >{{ trans('messages.correo') }}</label>
+                        <div class="form-group{{ $errors->has('usua_correo') ? ' has-error' : '' }}">
+                            <label for="usua_correo" class="col-md-4 control-label" >{{ trans('messages.correo') }}</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
+                                <input id="usua_correo" type="email" class="form-control" name="usua_correo" value="{{ old('usua_correo') }}" required>
 
-                                @if ($errors->has('email'))
+                                @if ($errors->has('usua_correo'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
+                                        <strong>{{ $errors->first('usua_correo') }}</strong>
                                     </span>
                                 @endif
                             </div>
