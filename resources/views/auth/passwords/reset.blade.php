@@ -1,4 +1,4 @@
-@extends('admin.template.main')
+@extends('geleral.template.main')
 
 
 @section('content')

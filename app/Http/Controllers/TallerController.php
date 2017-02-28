@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class TalleresController extends Controller
+class TallerController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +13,7 @@ class TalleresController extends Controller
      */
     public function index()
     {
-        //
+        return "hola desde index";
     }
 
     /**

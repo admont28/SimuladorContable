@@ -11,6 +11,10 @@
 <li><a href="{{ route('profesor.curso.ver') }}">Ver cursos disponibles</a></li>
 <li><a href="{{ route('profesor.tema') }}">{{ trans('messages.tema') }}</a></li>
 
-@include('profesor.template.partials.table', ['cabeceras' => $cabeceras, 'filas' => $cursos, 'nombres_atributos' => $nombres_atributos, 'opciones' => $opciones])
+{!! $dataTable->table() !!}
 
+@endsection
+
+@section('scripts')
+{!! $dataTable->scripts() !!}
 @endsection
