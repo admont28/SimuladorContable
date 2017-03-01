@@ -6,7 +6,8 @@
 
 @section('content')
 
-    <form class="form-horizontal" action="{{ route('profesor.curso.editar.Put',['id' =>$curso->curs_id]) }}" method="put">
+    <form class="form-horizontal" action="{{ route('profesor.curso.put',['id' => $curso->curs_id]) }}" method="POST">
+        {{ method_field('PUT') }}
         {{ csrf_field() }}
       <fieldset>
         <h2>EDITAR CURSO</h2>
