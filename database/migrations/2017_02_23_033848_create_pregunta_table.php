@@ -18,12 +18,12 @@ class CreatePreguntaTable extends Migration
             $table->text('preg_texto' , 500);
             $table->enum('preg_tipo', ['multiple','unica','abierta','archivo']);
             $table->decimal('preg_porcentaje', 2, 1);
-            $table->integer('talle_id')->unsigned();
-            $table->foreign('talle_id')->references('talle_id')->on('Taller');
+            $table->integer('tall_id')->unsigned();
+            $table->foreign('tall_id')->references('tall_id')->on('Taller');
 
 
-            $table->timestamp('talle_fechacreacion')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('talle_fechamodificacion')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+            $table->timestamp('preg_fechacreacion')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('preg_fechamodificacion')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
     }
 

@@ -67,4 +67,17 @@ class User extends Authenticatable
     {
         return $this->usua_contrasena;
     }
+
+    // 2
+    public function getEmailForPasswordReset() {
+        return $this->usua_correo;
+    }
+
+    // 3
+    public function getUserNameForPasswordReset(){
+        return $this->usua_correo;
+    }
+
+    // 4
+    protected $email = "usua_correo";
 }

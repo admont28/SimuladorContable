@@ -50,7 +50,9 @@ class CursoDataTables extends DataTable
                         [
                             "stateSave" => true,
                             "responsive" =>  true,
-                            "buttons" => ["print"],
+                            "buttons" => [
+                                "print"
+                            ],
                             "language" => [
                                 "url" => "//cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
                                 ]
@@ -70,19 +72,19 @@ class CursoDataTables extends DataTable
                 'name' => 'curs_id',
                 'title' => 'ID',
                 'data' => 'curs_id',
-                'width' => '10%'
+                'width' => '10px'
             ],
             [
                 'name' => 'curs_nombre',
                 'title' => 'Nombre del curso',
                 'data' => 'curs_nombre',
-                'width' => '30%'
+                'width' => '30px'
             ],
             [
                 'name' => 'curs_introduccion',
                 'title' => 'Introducción del curso',
                 'data' => 'curs_introduccion',
-                'width' => '30%'
+                'width' => '30px'
             ],
             [
                 'name' => 'editar',
@@ -90,7 +92,7 @@ class CursoDataTables extends DataTable
                 'data' => 'editar',
                 'searchable' => false,
                 'orderable'=> false,
-                'width' => '30%'
+                'width' => '10px'
             ]
             // add your columns
             //'name',

@@ -17,8 +17,8 @@ class CreateTarifaTable extends Migration
             $table->increments('tari_id');
             $table->string('tari_nombre', 100);
             $table->string('tari_valor', 30);
-            $table->integer('talle_id')->unsigned();
-            $table->foreign('talle_id')->references('talle_id')->on('Taller');
+            $table->integer('tall_id')->unsigned();
+            $table->foreign('tall_id')->references('tall_id')->on('Taller');
 
 
             $table->timestamp('tari_fechacreacion')->default(DB::raw('CURRENT_TIMESTAMP'));
