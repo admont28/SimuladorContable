@@ -54,4 +54,12 @@ class Curso extends Model
     protected $hidden = [
 
     ];
+
+    /**
+     * Obtener los temas para el curso
+     */
+    public function temas()
+    {
+        return $this->hasMany('App\Curso','curs_id');
+    }
 }

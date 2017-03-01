@@ -54,4 +54,12 @@ class Tema extends Model
     protected $hidden = [
 
     ];
+
+    /**
+     * Obtener el curso que es dueño del tema.
+     */
+    public function curso()
+    {
+        return $this->belongsTo('App\Curso', 'curs_id');
+    }
 }
