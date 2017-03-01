@@ -16,8 +16,10 @@ class CursoDataTables extends DataTable
     {
         return $this->datatables
             ->eloquent($this->query())
-            ->addColumn('editar', function ($curso) {
-                return '<a href="'.route('profesor.curso.editar', ['id' => $curso->curs_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>';
+            ->addColumn('opciones', function ($curso) {
+                return
+                '<a href="'.route('profesor.curso.editar', ['id' => $curso->curs_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
+                 <a href="'.route('profesor.curso.eliminar', ['id' => $curso->curs_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Eliminar</a>';
             })
             //->addColumn('action', 'path.to.action.view')
             ->make(true);
@@ -87,9 +89,9 @@ class CursoDataTables extends DataTable
                 'width' => '30px'
             ],
             [
-                'name' => 'editar',
-                'title' => 'Editar',
-                'data' => 'editar',
+                'name' => 'opciones',
+                'title' => 'Opciones',
+                'data' => 'opciones',
                 'searchable' => false,
                 'orderable'=> false,
                 'width' => '10px'
