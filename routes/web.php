@@ -77,20 +77,26 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     Route::put('/curso/editar/{id?}', 'CursoController@update')->name('profesor.curso.put');
     Route::get('/curso/eliminar/{id?}', 'CursoController@destroy')->name('profesor.curso.eliminar');
 
+    Route::get('/tema/inicio', 'TemaController@index')->name('profesor.tema');
+    Route::get('/tema/crear', 'CursoController@create')->name('profesor.creartema');
+    Route::post('/tema/crear', 'CursoController@store')->name('profesor.creartema.post');
+    Route::get('/tema/ver/{id?}', 'TemaController@show')->name('profesor.tema.ver');
+    Route::get('/tema/editar/{id?}', 'TemaController@edit')->name('profesor.tema.editar');
+    Route::put('/tema/editar/{id?}', 'TemaController@update')->name('profesor.tema.put');
+    Route::get('/tema/eliminar/{id?}', 'TemaController@destroy')->name('profesor.tema.eliminar');
 
 
-
-    Route::get('/temas/crear',['as'=>'profesor.creartema', function(){
-    return view('profesor.tema.crear_tema');
+    /*Route::get('/temas/crear',['as'=>'profesor.creartema', function(){
+        return view('profesor.tema.crear_tema');
     }]);
 
     Route::get('/temas/inicio',['as'=>'profesor.tema', function(){
-    return view('profesor.tema.index');
+        return view('profesor.tema.index');
     }]);
 
     Route::get('/temas/ver',['as'=>'profesor.vertemas', function(){
-    return view('profesor.tema.ver_tema');
-    }]);
+        return view('profesor.tema.ver_tema');
+    }]);*/
 
 });
 

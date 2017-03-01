@@ -27,7 +27,7 @@ class Tema extends Model
      *
      * @var string
      */
-    const CREATED_AT = 'curs_fechacreacion';
+    const CREATED_AT = 'tema_fechacreacion';
 
     /**
      * El nombre del campo equivalente a UPDATED_AT en la base de datos.
@@ -35,7 +35,7 @@ class Tema extends Model
      *
      * @var string
      */
-    const UPDATED_AT = 'curs_fechamodificacion';
+    const UPDATED_AT = 'tema_fechamodificacion';
 
     /**
      * The attributes that are mass assignable.
@@ -43,7 +43,7 @@ class Tema extends Model
      * @var array
      */
     protected $fillable = [
-        'curs_id', 'curs_nombre', 'curs_introduccion'
+        'tema_id', 'tema_titulo'
     ];
 
     /**

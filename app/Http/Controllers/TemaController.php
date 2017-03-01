@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\DB;
+use App\Tema;
+use App\DataTables\TemaDataTables;
 
 class TemaController extends Controller
 {
@@ -11,9 +14,9 @@ class TemaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(TemaDataTables $dataTable)
     {
-        //
+        return $dataTable->render('profesor.tema.index');
     }
 
     /**
