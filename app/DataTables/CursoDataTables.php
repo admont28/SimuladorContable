@@ -18,8 +18,9 @@ class CursoDataTables extends DataTable
             ->eloquent($this->query())
             ->addColumn('opciones', function ($curso) {
                 return
-                '<a href="'.route('profesor.curso.editar', ['id' => $curso->curs_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
-                 <a href="'.route('profesor.curso.eliminar', ['id' => $curso->curs_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Eliminar</a>';
+                '<a href="'.route('profesor.curso.ver', ['id' => $curso->curs_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
+                <a href="'.route('profesor.curso.editar', ['id' => $curso->curs_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
+                <a href="'.route('profesor.curso.eliminar', ['id' => $curso->curs_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
             })
             //->addColumn('action', 'path.to.action.view')
             ->make(true);

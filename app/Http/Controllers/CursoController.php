@@ -70,9 +70,9 @@ class CursoController extends Controller
      */
     public function edit($id)
     {
-            $curso = Curso::find($id);
-            return View('profesor.curso.ver_curso')->with('curso', $curso);
-            //return $curso->curs_introduccion;
+        $curso = Curso::find($id);
+        return View('profesor.curso.ver_curso')->with('curso', $curso);
+        //return $curso->curs_introduccion;
     }
 
     /**
@@ -88,6 +88,7 @@ class CursoController extends Controller
         $curso->curs_nombre = $request->input('nombre_curso');
         $curso->curs_introduccion = $request->input('introduccion_curso');
         $curso->save();
+        flash('Curso "'.$curso->curs_nombre.'" editado con éxito.', 'success');
         return redirect()->route('profesor.curso');
     }
 
