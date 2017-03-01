@@ -49,7 +49,18 @@ class TemaDataTables extends DataTable
                     ->columns($this->getColumns())
                     ->ajax(route('profesor.tema'))
                     //->addAction(['width' => '80px'])
-                    ->parameters($this->getBuilderParameters());
+                    ->parameters(
+                        [
+                            "stateSave" => true,
+                            "responsive" =>  true,
+                            "buttons" => [
+                                "print"
+                            ],
+                            "language" => [
+                                "url" => "//cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
+                            ]
+                        ]
+                    );
     }
 
     /**
