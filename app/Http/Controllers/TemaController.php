@@ -61,7 +61,8 @@ class TemaController extends Controller
      */
     public function show($id)
     {
-        //
+        $tema = Tema::find($id);
+        return View('profesor.tema.ver_tema')->with('tema', $tema);
     }
 
     /**

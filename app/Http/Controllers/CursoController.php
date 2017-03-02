@@ -59,7 +59,8 @@ class CursoController extends Controller
      */
     public function show($id)
     {
-        return $id;
+        $curso = Curso::find($id);
+        return View('profesor.curso.ver_curso')->with('curso', $curso);
     }
 
     /**
@@ -71,7 +72,7 @@ class CursoController extends Controller
     public function edit($id)
     {
         $curso = Curso::find($id);
-        return View('profesor.curso.ver_curso')->with('curso', $curso);
+        return View('profesor.curso.editar_curso')->with('curso', $curso);
         //return $curso->curs_introduccion;
     }
 

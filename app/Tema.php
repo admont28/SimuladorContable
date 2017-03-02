@@ -43,7 +43,7 @@ class Tema extends Model
      * @var array
      */
     protected $fillable = [
-        'tema_id', 'tema_titulo', 'tema_rutaarchivo', 'curs_id'
+        'tema_id', 'tema_titulo','curs_id','tema_rutaarchivo'
     ];
 
     /**

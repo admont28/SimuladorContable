@@ -1,6 +1,6 @@
 @extends('profesor.template.main')
 
-@section('title','Sección de cursos')
+@section('title',' Sección de Ver cursos')
 
 @section('active','#profesor-curso')
 
@@ -10,19 +10,18 @@
         {{ method_field('PUT') }}
         {{ csrf_field() }}
       <fieldset>
-        <h2>EDITAR CURSO</h2>
+        <h2>ESTAS VIENDO EL CURSO</h2>
         <div class="form-group">
           <label for="nombre_curso" class="col-lg-2 control-label">Nombre del curso</label>
           <div class="col-lg-10">
-            <input type="text" class="form-control" id="nombre_curso" placeholder="Ingrese el nombre del curso" value="{{ $curso->curs_nombre }}" name="nombre_curso">
+            <label for="nombre_curso" class="col-lg-2 control-label" id="nombre_curso" name="nombre_curso">{{ $curso->curs_nombre }} </label>
           </div>
         </div>
 
         <div class="form-group">
              <label for="introduccion_curso" class="col-lg-2 control-label">Introducción del curso</label>
              <div class="col-lg-10">
-               <textarea class="form-control" rows="3" id="introduccion_curso" name="introduccion_curso" >{{ $curso->curs_introduccion }}</textarea>
-               <span class="help-block">En este campo puede describir con exactitud todo lo relacionado con la descripción del curso.</span>
+                 <label for="nombre_curso" class="col-lg-2 control-label" id="introduccion_curso" name="introduccion_curso">{{ $curso->curs_introduccion }}</label>
              </div>
            </div>
 

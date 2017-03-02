@@ -83,7 +83,7 @@ class TemaDataTables extends DataTable
             ],
             [
                 'name' => 'tema_titulo',
-                'title' => 'Nombre del curso',
+                'title' => 'Nombre del tema',
                 'data' => 'tema_titulo',
                 'width' => '30px'
             ],

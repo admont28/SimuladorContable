@@ -32,9 +32,7 @@
                         <a href="{{ route('profesor.curso.ver') }}"> {{ trans('messages.ver_cursos') }}</a>
                     </li>
                     <li role="separator" class="divider"></li>
-                    <li>
-                        <a href="{{ route('profesor.tema') }}"> {{ trans('messages.tema') }}</a>
-                    </li>
+                    
                 </ul>
             </li>
         </ul>
