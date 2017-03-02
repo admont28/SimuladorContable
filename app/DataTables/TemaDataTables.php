@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Tema;
+use App\Curso;
 use Yajra\Datatables\Services\DataTable;
 
 class TemaDataTables extends DataTable
@@ -18,9 +19,13 @@ class TemaDataTables extends DataTable
             ->eloquent($this->query())
             ->addColumn('opciones', function ($tema) {
                 return
-                '<a href="'.route('profesor.tema.ver', ['id' => $tema->curs_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
-                <a href="'.route('profesor.tema.editar', ['id' => $tema->curs_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
-                <a href="'.route('profesor.tema.eliminar', ['id' => $tema->curs_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
+                '<a href="'.route('profesor.tema.ver', ['id' => $tema->tema_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
+                <a href="'.route('profesor.tema.editar', ['id' => $tema->tema_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
+                <a href="'.route('profesor.tema.eliminar', ['id' => $tema->tema_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
+            })
+            ->addColumn('curso', function ($tema)
+            {
+                return '<a href="'.route('profesor.curso.ver', ['id' => $tema->curs_id]).'">'.$tema->curso->curs_nombre.'</a>';
             })
             //->addColumn('action', 'path.to.action.view')
             ->make(true);
@@ -33,9 +38,8 @@ class TemaDataTables extends DataTable
      */
     public function query()
     {
-        $query = Tema::query();
-
-        return $this->applyScopes($query);
+        $temas = Tema::query();
+        return $this->applyScopes($temas);
     }
 
     /**
@@ -84,10 +88,12 @@ class TemaDataTables extends DataTable
                 'width' => '30px'
             ],
             [
-                'name' => 'curs_id',
+                'name' => 'curso',
                 'title' => 'Curso al que pertenece',
-                'data' => 'curs_id',
-                'width' => '30px'
+                'data' => 'curso',
+                'width' => '30px',
+                'searchable' => false,
+                'orderable'=> false,
             ],
             [
                 'name' => 'opciones',
@@ -97,10 +103,6 @@ class TemaDataTables extends DataTable
                 'orderable'=> false,
                 'width' => '10px'
             ]
-            //'tema_id',
-            // add your columns
-            //'created_at',
-            //'updated_at',
         ];
     }
 
