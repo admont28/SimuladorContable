@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\DB;
 use App\Tema;
+use App\Curso;
 use App\DataTables\TemaDataTables;
 
 class TemaController extends Controller
@@ -26,7 +27,7 @@ class TemaController extends Controller
      */
     public function create()
     {
-        //
+        return View('profesor.tema.crear_tema');
     }
 
     /**
@@ -37,7 +38,19 @@ class TemaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            //'curs_id' => 'required',
+           'titulo_tema' => 'required',
+           'curso' => 'required'
+        ]);
+
+        //dd($request);
+        Tema::create([
+            'tema_titulo' => $request['titulo_tema'],
+            'curs_id'=> $request['curso'],
+            'tema_rutaarchivo' => $request['tema_rutaarchivo']
+        ]);
+        return redirect()->route('profesor.tema');
     }
 
     /**
