@@ -7,6 +7,7 @@ use App\Http\Controllers\DB;
 use App\Tema;
 use App\Curso;
 use App\DataTables\TemaDataTables;
+use Yajra\Datatables\Services\DataTable;
 
 class TemaController extends Controller
 {
@@ -63,6 +64,33 @@ class TemaController extends Controller
     {
         $tema = Tema::find($id);
         return View('profesor.tema.ver_tema')->with('tema', $tema);
+    }
+
+    public function getBasic($id)
+    {
+
+        return view('profesor.tema.ver_tema');
+    }
+
+    public function getBasicData($id)
+    {
+        //dd( \DB::table('tema')->where('curs_id', $id)->get());
+        $tema = \DB::table('tema')->where('curs_id', $id)->get();
+
+        return View('profesor.tema.ver_tema')->with('tema', $tema);
+    }
+
+    public function listarTemasPorCurso($id)
+    {
+        dd(\DB::table('tema')->where('curs_id', $id)->get());
+
+
+        return View('profesor.tema.ver_tema')
+                    ->with('tema', $tema);
+
+
+
+
     }
 
     /**

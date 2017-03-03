@@ -81,6 +81,7 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     Route::get('/tema/crear', 'TemaController@create')->name('profesor.creartema');
     Route::post('/tema/crear', 'TemaController@store')->name('profesor.creartema.post');
     Route::get('/tema/ver/{id?}', 'TemaController@show')->name('profesor.tema.ver');
+    Route::get('/tema/ver_temas_por_curso/{id?}', 'TemaController@getBasicData')->name('profesor.tema.vertemascurso');
     Route::get('/tema/editar/{id?}', 'TemaController@edit')->name('profesor.tema.editar');
     Route::put('/tema/editar/{id?}', 'TemaController@update')->name('profesor.tema.put');
     Route::get('/tema/eliminar/{id?}', 'TemaController@destroy')->name('profesor.tema.eliminar');
