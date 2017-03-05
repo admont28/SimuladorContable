@@ -48,6 +48,7 @@ class CursoController extends Controller
             'curs_nombre' => $request['nombre_curso'],
             'curs_introduccion'=> $request['introduccion_curso']
           ]);
+          flash('Curso "'.$curso->curs_nombre.'" creado con éxito.', 'success');
         return redirect()->route('profesor.curso');
     }
 
@@ -102,6 +103,7 @@ class CursoController extends Controller
     public function destroy($id)
     {
         Curso::destroy($id);
+        flash('Curso "'.$curso->curs_nombre.'" eliminado con éxito.', 'success');
         return redirect()->route('profesor.curso');
 
 

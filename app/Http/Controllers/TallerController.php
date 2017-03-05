@@ -13,7 +13,7 @@ class TallerController extends Controller
      */
     public function index()
     {
-        return "hola desde index";
+        return view('profesor.taller.index');
     }
 
     /**
