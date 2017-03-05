@@ -27,6 +27,7 @@ return [
     'temasatratar' => 'temas a tratar',
     'perfil' => 'Perfil',
     'curso' => 'Curso',
+    'ver_todos_los_cursos' => 'Ver todos los cursos',
     'crear_curso' => 'Crear curso',
     'ver_cursos' => 'Ver cursos',
 ];

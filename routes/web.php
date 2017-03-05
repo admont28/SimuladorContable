@@ -76,12 +76,18 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     Route::get('/curso/editar/{id?}', 'CursoController@edit')->name('profesor.curso.editar');
     Route::put('/curso/editar/{id?}', 'CursoController@update')->name('profesor.curso.put');
     Route::get('/curso/eliminar/{id?}', 'CursoController@destroy')->name('profesor.curso.eliminar');
+    // Route::get('/curso/temas/{curs_id}', 'CursoController@ver_temas_por_curso')->name('profesor.curso.tema.ver');
+    Route::get('/curso/temas/ajax/{curs_id}', 'CursoController@ver_temas_por_curso_ajax')->name('profesor.curso.tema.verajax');
+
+    Route::get('/curso/temas/crear/{curs_id}', 'TemaController@create')->name('profesor.curso.tema.crear');
+    Route::post('/curso/temas/crear/{curs_id}', 'TemaController@store')->name('profesor.curso.tema.crear.post');
+
 
     Route::get('/tema/inicio', 'TemaController@index')->name('profesor.tema');
     Route::get('/tema/crear', 'TemaController@create')->name('profesor.creartema');
-    Route::post('/tema/crear', 'TemaController@store')->name('profesor.creartema.post');
+
     Route::get('/tema/ver/{id?}', 'TemaController@show')->name('profesor.tema.ver');
-    Route::get('/tema/ver_temas_por_curso/{id?}', 'TemaController@getBasicData')->name('profesor.tema.vertemascurso');
+
     Route::get('/tema/editar/{id?}', 'TemaController@edit')->name('profesor.tema.editar');
     Route::put('/tema/editar/{id?}', 'TemaController@update')->name('profesor.tema.put');
     Route::get('/tema/eliminar/{id?}', 'TemaController@destroy')->name('profesor.tema.eliminar');

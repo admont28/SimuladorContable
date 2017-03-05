@@ -16,20 +16,16 @@
         <ul class="nav navbar-nav">
             <li id="profesor-index" ><a href="{{ route('profesor.index') }}">{{ trans('messages.inicio') }}</a></li>
             <li id="profesor-taller"><a href="{{ route('profesor.taller') }}">{{ trans('messages.taller') }}</a></li>
-            <li class="dropdown">
+            <li class="dropdown" id="profesor-curso">
                 <a href="{{ route('profesor.curso') }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                     {!! trans('messages.curso') !!}  <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" role="menu">
                     <li>
-                        <a href="{{ route('profesor.curso') }}"> {{ trans('messages.curso') }}</a>
+                        <a href="{{ route('profesor.curso') }}"> {{ trans('messages.ver_todos_los_cursos') }}</a>
                     </li>
-
                     <li>
                         <a href="{{ route('profesor.crearcurso') }}"> {{ trans('messages.crear_curso') }}</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('profesor.curso.ver') }}"> {{ trans('messages.ver_cursos') }}</a>
                     </li>
                     <li role="separator" class="divider"></li>
                     <li>

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 return [
     'accepted' => 'El campo :attribute debe ser aceptado.',
@@ -81,6 +81,10 @@ return [
         'password' => 'contraseña',
         'usua_correo' => 'Correo Electrónico',
         'usua_contrasena' => 'Contraseña',
+        'nombre_curso' => 'Nombre del curso',
+        'introduccion_curso' => 'Introducción del curso',
+        'tema_titulo' => 'Titulo del tema',
+        'tema_rutaarchivo' => 'Archivo'
     ],
     'after_or_equal' => '',
     'before_or_equal' => '',

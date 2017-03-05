@@ -7,7 +7,8 @@ use App\Http\Controllers\DB;
 use App\Tema;
 use App\Curso;
 use App\DataTables\TemaDataTables;
-use Yajra\Datatables\Services\DataTable;
+use Yajra\Datatables\Datatables;
+use Validator;
 
 class TemaController extends Controller
 {
@@ -26,9 +27,14 @@ class TemaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($curs_id = "")
     {
-        return View('profesor.tema.crear_tema');
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso');
+        }
+        return View('profesor.curso.tema.crear_tema')->with('curso', $curso);
     }
 
     /**
@@ -37,21 +43,27 @@ class TemaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $curs_id)
     {
-        $this->validate($request, [
-            //'curs_id' => 'required',
-           'titulo_tema' => 'required',
-           'curso' => 'required'
-        ]);
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso');
+        }
 
-        //dd($request);
+        Validator::make($request->all(), [
+           'tema_titulo' => 'required|max:100',
+           'tema_rutaarchivo' => 'required'
+        ])->validate();
+
         Tema::create([
-            'tema_titulo' => $request['titulo_tema'],
-            'curs_id'=> $request['curso'],
+            'tema_titulo' => $request['tema_titulo'],
+            'curs_id'=> $curs_id,
             'tema_rutaarchivo' => $request['tema_rutaarchivo']
         ]);
-        return redirect()->route('profesor.tema');
+
+        flash('El tema "'.$request['tema_titulo'].'" ha sido creado con éxito.','success');
+        return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
     }
 
     /**
@@ -63,21 +75,7 @@ class TemaController extends Controller
     public function show($id)
     {
         $tema = Tema::find($id);
-        return View('profesor.tema.ver_tema')->with('tema', $tema);
-    }
-
-    public function getBasic($id)
-    {
-
-        return view('profesor.tema.ver_tema');
-    }
-
-    public function getBasicData($id)
-    {
-        //dd( \DB::table('tema')->where('curs_id', $id)->get());
-        $tema = \DB::table('tema')->where('curs_id', $id)->get();
-
-        return View('profesor.tema.ver_tema')->with('tema', $tema);
+        return View('profesor.tema.ver_tema')->with('temas', $tema);
     }
 
     public function listarTemasPorCurso($id)

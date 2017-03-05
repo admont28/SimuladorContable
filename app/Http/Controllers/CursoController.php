@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\DB;
 use App\Curso;
+use App\Tema;
 use App\DataTables\CursoDataTables;
+use Validator;
+use Yajra\Datatables\Datatables;
 
 class CursoController extends Controller
 {
@@ -85,6 +88,10 @@ class CursoController extends Controller
      */
     public function update(Request $request, $id)
     {
+        Validator::make($request->all(), [
+            'nombre_curso' => 'required|max:100',
+            'introduccion_curso' => 'required|max:500',
+        ])->validate();
         $curso = Curso::find($id);
         $curso->curs_nombre = $request->input('nombre_curso');
         $curso->curs_introduccion = $request->input('introduccion_curso');
@@ -103,7 +110,17 @@ class CursoController extends Controller
     {
         Curso::destroy($id);
         return redirect()->route('profesor.curso');
+    }
 
+    public function ver_temas_por_curso($curs_id = "")
+    {
+        $curso = Curso::find($curs_id);
+        return View('profesor.curso.tema.ver_tema')->with('curso', $curso);
+    }
 
+    public function ver_temas_por_curso_ajax($curs_id = "")
+    {
+        $temas = Tema::where('curs_id', $curs_id)->get();
+        return Datatables::of($temas)->make();
     }
 }

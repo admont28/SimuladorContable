@@ -10,25 +10,27 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/DataTables-1.10.13/css/dataTables.bootstrap.min.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/Buttons-1.2.4/css/buttons.bootstrap.min.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/Responsive-2.1.1/css/responsive.bootstrap.min.css') }} "/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/sweetalert2/css/sweetalert2.min.css') }} "/>
     @yield('styelsheet')
   </head>
   <body>
         @include('profesor.template.partials.nav')
         <!-- Begin page content -->
         <div class="container">
-            <div class="page-header">
-                <h1>
-                    @yield('title', 'Título por defecto.')
-                </h1>
-            </div>
-            @if (session()->has('flash_notification.message'))
-                <div class="alert alert-{{ session('flash_notification.level') }}">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    {!! session('flash_notification.message') !!}
+            <div class="row">
+                <div class="page-header">
+                    <h1>
+                        @yield('title', 'Título por defecto.')
+                    </h1>
                 </div>
-            @endif
+                @if (session()->has('flash_notification.message'))
+                    <div class="alert alert-{{ session('flash_notification.level') }}">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        {!! session('flash_notification.message') !!}
+                    </div>
+                @endif
+            </div>
             @yield('content', '')
-
         </div>
         @include('profesor.template.partials.footer')
         <script type="text/javascript" src="{{ asset('plugins/jquery/js/jquery-3.1.1.min.js') }}" charset="utf-8"></script>
@@ -46,6 +48,8 @@
         <script type="text/javascript" src="{{ asset('plugins/Responsive-2.1.1/js/dataTables.responsive.min.js') }}" charset="utf-8"></script>
         <script type="text/javascript" src="{{ asset('plugins/Responsive-2.1.1/js/responsive.bootstrap.min.js') }}" charset="utf-8"></script>
         <script type="text/javascript" src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('plugins/sweetalert2/js/es6-promise.auto.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('plugins/sweetalert2/js/sweetalert2.min.js') }}"></script>
         <script type="text/javascript">
         $(document).ready(function() {
             $("@yield('active','')").addClass('active');

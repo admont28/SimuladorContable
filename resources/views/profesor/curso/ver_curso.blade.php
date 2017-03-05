@@ -1,40 +1,38 @@
 @extends('profesor.template.main')
 
-@section('title',' Sección de Ver cursos')
+@section('title',' Curso: <strong>'.$curso->curs_nombre.'</strong>')
 
 @section('active','#profesor-curso')
 
 @section('content')
-
-    <form class="form-horizontal" action="{{ route('profesor.curso.put',['id' => $curso->curs_id]) }}" method="POST">
-        {{ method_field('PUT') }}
-        {{ csrf_field() }}
-      <fieldset>
-        <h2>ESTAS VIENDO EL CURSO</h2>
-        <div class="form-group">
-          <label for="nombre_curso" class="col-lg-2 control-label">Nombre del curso</label>
-          <div class="col-lg-10">
-            <label for="nombre_curso" class="col-lg-2 control-label" id="nombre_curso" name="nombre_curso">{{ $curso->curs_nombre }} </label>
-          </div>
+    <div class="row">
+        <div class="col-lg-2">
+            Nombre del curso:
         </div>
-
-        <div class="form-group">
-             <label for="introduccion_curso" class="col-lg-2 control-label">Introducción del curso</label>
-             <div class="col-lg-10">
-                 <label for="nombre_curso" class="col-lg-2 control-label" id="introduccion_curso" name="introduccion_curso">{{ $curso->curs_introduccion }}</label>
-             </div>
-           </div>
-
-
-         <div class="form-group">
-          <div class="col-lg-10 col-lg-offset-2">
-            <button type="reset" class="btn btn-default">Cancelar</button>
-            <button type="submit" class="btn btn-primary">Editar curso</button>
-          </div>
+        <div class="col-lg-10">
+            {{ $curso->curs_nombre }}
         </div>
-      </fieldset>
-    </form>
-
-
-
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-lg-2">
+            Introducción del curso:
+        </div>
+        <div class="col-lg-10">
+            {{ $curso->curs_introduccion }}
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <a type="reset" class="btn btn-default" href="{{ route('profesor.curso') }}">Regresar</a>
+            <a type="submit" class="btn btn-primary" href="{{ route('profesor.curso.editar', ['id' => $curso->curs_id]) }}">Editar curso</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="page-header">
+            <h1>Temas</h1>
+        </div>
+    </div>
+    @include('profesor.curso.tema.ver_tema')    
 @endsection
