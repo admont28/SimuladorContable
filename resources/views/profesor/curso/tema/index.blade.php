@@ -9,6 +9,8 @@
 
 <li><a href="{{ route('profesor.creartema') }}">Crear un tema</a></li>
 <li><a href="{{ route('profesor.tema.ver') }}">Ver temas disponibles</a></li>
+
+
 <div class="table-responsive">
     {!! $dataTable->table(['class' => 'table table-bordered table-condensed table-hover table-striped']) !!}
 </div>
