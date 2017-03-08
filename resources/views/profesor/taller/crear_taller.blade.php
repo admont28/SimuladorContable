@@ -51,7 +51,7 @@
 
     <div class="form-group">
       <div class="col-lg-10 col-lg-offset-2">
-        <button type="reset" class="btn btn-default">Cancelar</button>
+        <a href="{{ route('profesor.taller') }}"  class="btn btn-default">Cancelar</a>
         <button type="submit" class="btn btn-primary">Crear Taller</button>
       </div>
     </div>

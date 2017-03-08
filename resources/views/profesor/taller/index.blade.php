@@ -11,12 +11,13 @@
 <li><a href="{{ route('profesor.vertalleres') }}">Ver talleres disponibles</a></li>
 
 
-<div class="table-responsive">
+<div  class="table-responsive" >
     {!! $dataTable->table(['class' => 'table table-bordered table-condensed table-hover table-striped']) !!}
 </div>
 
 @endsection
 
 @section('scripts')
+
 {!! $dataTable->scripts() !!}
 @endsection

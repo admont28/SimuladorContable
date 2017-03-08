@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\taller;
+use App\Taller;
 use Yajra\Datatables\Services\DataTable;
 
 class TallerDataTables extends DataTable
@@ -14,13 +14,14 @@ class TallerDataTables extends DataTable
      */
     public function ajax()
     {
-        return $this->datatables
+
+            return $this->datatable
             ->eloquent($this->query())
             ->addColumn('opciones', function ($taller) {
                 return
-                '<a href="'.route('profesor.taller.ver', ['id' => $taller->tall_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
-                <a href="'.route('profesor.taller.editar', ['id' => $taller->tall_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
-                <a href="'.route('profesor.taller.eliminar', ['id' => $taller->tall_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
+                '<a href="'.route('profesor.taller.ver', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
+                <a href="'.route('profesor.taller.editar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
+                <a href="'.route('profesor.taller.eliminar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
             })
             //->addColumn('action', 'path.to.action.view')
             ->make(true);
@@ -33,9 +34,9 @@ class TallerDataTables extends DataTable
      */
     public function query()
     {
-        $query = Taller::query();
+    $query = Taller::query();
 
-        return $this->applyScopes($query);
+    return $this->applyScopes($query);
     }
 
     /**
@@ -52,7 +53,7 @@ class TallerDataTables extends DataTable
                     ->parameters(
                         [
                             "stateSave" => true,
-                            "responsive" =>  true,
+                            "responsive" => true,
                             "buttons" => [
                                 "print"
                             ],
@@ -100,6 +101,7 @@ class TallerDataTables extends DataTable
                 'title' => 'curso',
                 'data' => 'curs_id',
                 'width' => '30px'
+
             ],
             [
                 'name' => 'opciones',
@@ -115,7 +117,7 @@ class TallerDataTables extends DataTable
             //'created_at',
             //2'updated_at',
         ];
-        ];
+
     }
 
     /**

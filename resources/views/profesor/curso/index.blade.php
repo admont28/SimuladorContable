@@ -18,6 +18,8 @@
 <br>
 @endsection
 
+
+
 @section('scripts')
 {!! $dataTable->scripts() !!}
 @endsection

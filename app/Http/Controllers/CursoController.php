@@ -19,6 +19,7 @@ class CursoController extends Controller
      */
     public function index(CursoDataTables $dataTable)
     {
+        
         return $dataTable->render('profesor.curso.index');
     }
 
@@ -47,7 +48,7 @@ class CursoController extends Controller
            'introduccion_curso' => 'required'
         ]);
         //dd($request->all());
-        Curso::create([
+        $curso=Curso::create([
             'curs_nombre' => $request['nombre_curso'],
             'curs_introduccion'=> $request['introduccion_curso']
           ]);

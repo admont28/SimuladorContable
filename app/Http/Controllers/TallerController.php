@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\DB;
+use App\Taller;
+use App\DataTables\TallerDataTables;
+use Validator;
+use Yajra\Datatables\Datatables;
 
 class TallerController extends Controller
 {
@@ -11,9 +16,10 @@ class TallerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(TallerDataTables $datatable)
     {
-        return view('profesor.taller.index');
+
+        return $datatable->render('profesor.taller.index');
     }
 
     /**
@@ -23,7 +29,7 @@ class TallerController extends Controller
      */
     public function create()
     {
-        //
+        return View('profesor.taller.crear_curso');
     }
 
     /**
