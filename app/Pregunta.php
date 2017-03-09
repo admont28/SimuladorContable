@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Taller extends Model
+class Pregunta extends Model
 {
-        /**
+    /    /**
          * El nombre de la tabla asociada al modelo.
          *
          * @var string
          */
-        protected $table = 'Taller';
+        protected $table = 'Pregunta';
 
         /**
          * El nombre de la llave primaria de la tabla.
@@ -19,7 +19,7 @@ class Taller extends Model
          *
          * @var string
          */
-        protected $primaryKey = 'tall_id';
+        protected $primaryKey = 'preg_id';
 
         /**
          * El nombre del campo equivalente a CREATE_AT en la base de datos.
@@ -27,7 +27,7 @@ class Taller extends Model
          *
          * @var string
          */
-        const CREATED_AT = 'tall_fechacreacion';
+        const CREATED_AT = 'preg_fechacreacion';
 
         /**
          * El nombre del campo equivalente a UPDATED_AT en la base de datos.
@@ -35,7 +35,7 @@ class Taller extends Model
          *
          * @var string
          */
-        const UPDATED_AT = 'tall_fechamodificacion';
+        const UPDATED_AT = 'preg_fechamodificacion';
 
         /**
          * The attributes that are mass assignable.
@@ -43,7 +43,7 @@ class Taller extends Model
          * @var array
          */
         protected $fillable = [
-            'tall_id', 'tall_nombre','tall_tipo','tall_tiempo','curs_id','tall_rutaarchivo'
+            'preg_id', 'preg_texto', 'preg_tipo','preg_porcentaje','tall_id'
         ];
 
         /**
@@ -60,6 +60,6 @@ class Taller extends Model
          */
         public function temas()
         {
-            return $this->hasMany('App\Curso','curs_id');
+            return $this->hasMany('App\Taller','tall_id');
         }
 }

@@ -60,14 +60,14 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     }]);
 
     Route::get('/taller/inicio', 'TallerController@index')->name('profesor.taller');
+    Route::get('/taller/crear', 'TallerController@create')->name('profesor.creartaller');
+    Route::post('/taller/crear', 'TallerController@store')->name('profesor.creartaller.post');
+    Route::get('/taller/ver/{id?}', 'TallerController@show')->name('profesor.taller.ver');
+    Route::get('/taller/editar/{id?}', 'TallerController@edit')->name('profesor.taller.editar');
+    Route::put('/taller/editar/{id?}', 'TallerController@update')->name('profesor.taller.put');
+    Route::get('/taller/eliminar/{id?}', 'TallerController@destroy')->name('profesor.taller.eliminar');
 
-    Route::get('/taller/crear',['as'=>'profesor.creartaller', function(){
-    return view('profesor.taller.crear_taller');
-    }]);
 
-    Route::get('/taller/vertalleres',['as'=>'profesor.vertalleres', function(){
-    return view('profesor.taller.ver_taller');
-    }]);
 
     Route::get('/curso/inicio', 'CursoController@index')->name('profesor.curso');
     Route::get('/curso/crear', 'CursoController@create')->name('profesor.crearcurso');

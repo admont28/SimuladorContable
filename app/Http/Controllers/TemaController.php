@@ -85,10 +85,6 @@ class TemaController extends Controller
 
         return View('profesor.tema.ver_tema')
                     ->with('tema', $tema);
-
-
-
-
     }
 
     /**
@@ -99,7 +95,8 @@ class TemaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $tema = Tema::find($id);
+        return View('profesor.curso.tema.editar_curso')->with('tema', $tema);
     }
 
     /**
@@ -111,7 +108,17 @@ class TemaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Validator::make($request->all(), [
+           'tema_titulo' => 'required|max:100',
+           'tema_rutaarchivo' => 'required'
+        ])->validate();
+
+        $tema = Tema::find($id);
+        $tema->tema_titulo = $request->input('tema_titulo');
+        $curso->curs_introduccion = $request->input('introduccion_curso');
+        $curso->save();
+        flash('Curso "'.$curso->curs_nombre.'" editado con éxito.', 'success');
+        return redirect()->route('profesor.curso');
     }
 
     /**
