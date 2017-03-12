@@ -20,7 +20,7 @@ class TallerController extends Controller
     public function index(TallerDataTables $datatable)
     {
 
-        return $datatable->render('profesor.taller.index');
+        return $datatable->render('profesor.curso.taller.index');
     }
 
     /**
@@ -30,12 +30,12 @@ class TallerController extends Controller
      */
     public function create($curs_id = "")
     {
-        $curso = Curso::find($curs_id);
-        if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
-            return redirect()->route('profesor.curso');
-        }
-        return View('profesor.taller.crear_taller');
+        //$curso = Curso::find($curs_id);
+        //if (!isset($curso)) {
+    //        flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+    //        return redirect()->route('profesor.curso');
+    //    }
+        return View('profesor.curso.taller.crear_taller');
     }
 
     /**
@@ -44,26 +44,28 @@ class TallerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $curs_id)
+    public function store(Request $request, $curs_id="")
     {
         $curso=Curso::find($curs_id);
-        if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
-            return redirect()->route('profesor.taller');
-        }
+        //if (!isset($curso)) {
+        //    flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+        //    return redirect()->route('profesor.taller');
+        //}
 
         $this->validate($request, [
            'nombre_taller' => 'required',
            'tipo_taller' => 'required',
-           'tiempo_taller'=>'required'
-        ])->validate();
+           'tiempo_taller'=>'required',
+           'curs_id'=>'required'
+
+        ]);
 
         $taller=Taller::create([
             'tall_nombre'=> $request['nombre_taller'],
             'tall_tipo'=> $request['tipo_taller'],
             'tall_tiempo'=> $request['tiempo_taller'],
             'tall_rutaarchivo'=>$request['taller_rutaarchivo'],
-            'curs_id'=>$curs_id
+            'curs_id'=>$request['curso_taller']
           ]);
 
           flash('Taller "'.$taller->tall_nombre.'" creado con éxito.', 'success');
@@ -79,7 +81,7 @@ class TallerController extends Controller
     public function show($id)
     {
         $taller = Taller::find($id);
-        return View('profesor.taller.ver_taller')->with('taller', $taller);
+        return View('profesor.curso.taller.ver_taller')->with('taller', $taller);
     }
 
     /**
@@ -91,7 +93,7 @@ class TallerController extends Controller
     public function edit($id)
     {
         $taller = Taller::find($id);
-        return View('profesor.taller.editar_taller')->with('taller', $taller);
+        return View('profesor.curso.taller.editar_taller')->with('taller', $taller);
     }
 
     /**
@@ -113,7 +115,6 @@ class TallerController extends Controller
         $taller->tall_nombre = $request->input('nombre_taller');
         $taller->tall_tipo = $request->input('tipo_taller');
         $taller->tall_tiempo = $request->input('tiempo_taller');
-        $taller->tall_tiempo = $request->input('tiempo_taller');
         $taller->save();
         flash('Curso "'.$curso->curs_nombre.'" editado con éxito.', 'success');
         return redirect()->route('profesor.curso');
@@ -127,6 +128,8 @@ class TallerController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Taller::destroy($id);
+        flash('Curso "'.$taller->tall_nombre.'" eliminado con éxito.', 'success');
+        return redirect()->route('profesor.taller');
     }
 }

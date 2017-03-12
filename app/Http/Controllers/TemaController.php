@@ -115,8 +115,8 @@ class TemaController extends Controller
 
         $tema = Tema::find($id);
         $tema->tema_titulo = $request->input('tema_titulo');
-        $curso->curs_introduccion = $request->input('introduccion_curso');
-        $curso->save();
+        $tema->tema_rutaarchivo = $request->input('tema_rutaarchivo');
+        $tema->save();
         flash('Curso "'.$curso->curs_nombre.'" editado con éxito.', 'success');
         return redirect()->route('profesor.curso');
     }
@@ -129,6 +129,8 @@ class TemaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Tema::destroy($id);
+        flash('Curso "'.$tema->tema_titulo.'" eliminado con éxito.', 'success');
+        return redirect()->route('profesor.curso');
     }
 }

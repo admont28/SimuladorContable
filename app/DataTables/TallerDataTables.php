@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Taller;
+use App\Curso;
 use Yajra\Datatables\Services\DataTable;
 
 class TallerDataTables extends DataTable
@@ -19,9 +20,9 @@ class TallerDataTables extends DataTable
             ->eloquent($this->query())
             ->addColumn('opciones', function ($taller) {
                 return
-                '<a href="'.route('profesor.taller.ver', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
-                <a href="'.route('profesor.taller.editar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
-                <a href="'.route('profesor.taller.eliminar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
+                '<a href="'.route('profesor.taller.ver', ['id' => $taller->tall_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
+                <a href="'.route('profesor.taller.editar', ['id' => $taller->tall_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
+                <a href="'.route('profesor.taller.eliminar', ['id' => $taller->tall_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
             })
             //->addColumn('action', 'path.to.action.view')
             ->make(true);

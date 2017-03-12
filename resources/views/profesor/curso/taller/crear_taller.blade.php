@@ -28,6 +28,12 @@
     </div>
   </div>
 
+  <div class="form-group">
+    <label for="curso_taller" class="col-lg-2 control-label">Curso</label>
+    <div class="col-lg-10">
+      <input type="text" class="form-control" id="curso_taller" placeholder="Curso del taller" name="curso_taller">
+    </div>
+  </div>
 
 
   <div class="form-group">

@@ -56,9 +56,9 @@ class Pregunta extends Model
         ];
 
         /**
-         * Obtener los temas para el curso
+         * Obtener los talleres para la pregunta 
          */
-        public function temas()
+        public function taller()
         {
             return $this->hasMany('App\Taller','tall_id');
         }
