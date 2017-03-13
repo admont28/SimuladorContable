@@ -7,8 +7,9 @@ use App\Http\Controllers\DB;
 use App\Taller;
 use App\Curso;
 use App\DataTables\TallerDataTables;
-use Validator;
 use Yajra\Datatables\Datatables;
+use Validator;
+
 
 class TallerController extends Controller
 {
@@ -17,10 +18,10 @@ class TallerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(TallerDataTables $datatable)
+    public function index(TallerDataTables $dataTable )
     {
 
-        return $datatable->render('profesor.curso.taller.index');
+        return $dataTable->render('profesor.curso.taller.index');
     }
 
     /**

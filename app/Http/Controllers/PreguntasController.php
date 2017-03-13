@@ -3,6 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\DB;
+use App\Pregunta;
+use App\Taller;
+use App\DataTables\PreguntaDataTables;
+use Yajra\Datatables\Datatables;
+use Validator;
 
 class PreguntasController extends Controller
 {
@@ -11,9 +17,9 @@ class PreguntasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(PreguntaDataTables $dataTable )
     {
-        //
+        return $dataTable->render('profesor.curso.taller.pregunta.index');
     }
 
     /**

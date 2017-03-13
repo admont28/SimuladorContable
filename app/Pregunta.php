@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pregunta extends Model
 {
-    /    /**
+        /**
          * El nombre de la tabla asociada al modelo.
          *
          * @var string
@@ -56,7 +56,7 @@ class Pregunta extends Model
         ];
 
         /**
-         * Obtener los talleres para la pregunta 
+         * Obtener los talleres para la pregunta
          */
         public function taller()
         {

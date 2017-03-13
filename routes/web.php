@@ -67,6 +67,14 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     Route::put('/taller/editar/{id?}', 'TallerController@update')->name('profesor.taller.put');
     Route::get('/taller/eliminar/{id?}', 'TallerController@destroy')->name('profesor.taller.eliminar');
 
+    Route::get('/pregunta/inicio', 'PreguntasController@index')->name('profesor.pregunta');
+    Route::get('/pregunta/crear', 'PreguntasController@create')->name('profesor.crearpregunta');
+    Route::post('/pregunta/crear', 'PreguntasController@store')->name('profesor.crearpregunta.post');
+    Route::get('/pregunta/ver/{id?}', 'PreguntasController@show')->name('profesor.pregunta.ver');
+    Route::get('/pregunta/editar/{id?}', 'PreguntasController@edit')->name('profesor.pregunta.editar');
+    Route::put('/pregunta/editar/{id?}', 'PreguntasController@update')->name('profesor.pregunta.put');
+    Route::get('/pregunta/eliminar/{id?}', 'PreguntasController@destroy')->name('profesor.pregunta.eliminar');
+
 
 
     Route::get('/curso/inicio', 'CursoController@index')->name('profesor.curso');

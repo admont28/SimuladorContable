@@ -3,7 +3,6 @@
 namespace App\DataTables;
 
 use App\Taller;
-use App\Curso;
 use Yajra\Datatables\Services\DataTable;
 
 class TallerDataTables extends DataTable
@@ -15,16 +14,11 @@ class TallerDataTables extends DataTable
      */
     public function ajax()
     {
-
-            return $this->datatable
+        return $this->datatables
             ->eloquent($this->query())
-            ->addColumn('opciones', function ($taller) {
-                return
-                '<a href="'.route('profesor.taller.ver', ['id' => $taller->tall_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
-                <a href="'.route('profesor.taller.editar', ['id' => $taller->tall_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
-                <a href="'.route('profesor.taller.eliminar', ['id' => $taller->tall_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
+            ->addColumn('',function($taller){
+                    return '<a href="'.route('profesor.curso.ver', ['id' => $taller->tall_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
             })
-            //->addColumn('action', 'path.to.action.view')
             ->make(true);
     }
 
@@ -35,9 +29,9 @@ class TallerDataTables extends DataTable
      */
     public function query()
     {
-    $query = Taller::query();
+        $query = Taller::query();
 
-    return $this->applyScopes($query);
+        return $this->applyScopes($query);
     }
 
     /**
@@ -49,20 +43,9 @@ class TallerDataTables extends DataTable
     {
         return $this->builder()
                     ->columns($this->getColumns())
-                    ->ajax(route('profesor.taller'))
-                    //->addAction(['width' => '80px'])
-                    ->parameters(
-                        [
-                            "stateSave" => true,
-                            "responsive" => true,
-                            "buttons" => [
-                                "print"
-                            ],
-                            "language" => [
-                                "url" => "//cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
-                            ]
-                        ]
-                    );
+                    ->ajax('profesor.taller')
+                    ->addAction(['width' => '80px'])
+                    ->parameters($this->getBuilderParameters());
     }
 
     /**
@@ -73,52 +56,11 @@ class TallerDataTables extends DataTable
     protected function getColumns()
     {
         return [
-            [
-                'name' => 'tall_id',
-                'title' => 'ID',
-                'data' => 'tall_id',
-                'width' => '10px'
-            ],
-            [
-                'name' => 'tall_nombre',
-                'title' => 'Nombre del taller',
-                'data' => 'tall_nombre',
-                'width' => '30px'
-            ],
-            [
-                'name' => 'tall_tipo',
-                'title' => 'tipo de taller',
-                'data' => 'tall_tipo',
-                'width' => '30px'
-            ],
-            [
-                'name' => 'tall_tiempo',
-                'title' => 'tiempo del taller',
-                'data' => 'tall_tiempo',
-                'width' => '30px'
-            ],
-            [
-                'name' => 'curs_id',
-                'title' => 'curso',
-                'data' => 'curs_id',
-                'width' => '30px'
-
-            ],
-            [
-                'name' => 'opciones',
-                'title' => 'Opciones',
-                'data' => 'opciones',
-                'searchable' => false,
-                'orderable'=> false,
-                'width' => '10px'
-            ]
+            'id',
             // add your columns
-            //'name',
-            //'Introducción',
-            //'created_at',
-            //2'updated_at',
+            'created_at',
+            'updated_at',
         ];
-
     }
 
     /**
