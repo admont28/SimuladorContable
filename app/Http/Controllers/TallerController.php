@@ -20,7 +20,6 @@ class TallerController extends Controller
      */
     public function index(TallerDataTables $dataTable )
     {
-
         return $dataTable->render('profesor.curso.taller.index');
     }
 
