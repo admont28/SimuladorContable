@@ -55,6 +55,6 @@
             $("@yield('active','')").addClass('active');
         });
     </script>
-    @yield('scripts')
+    @stack('scripts')
   </body>
 </html>

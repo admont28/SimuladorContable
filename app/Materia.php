@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Tema extends Model
+class Materia extends Model
 {
     /**
      * El nombre de la tabla asociada al modelo.
      *
      * @var string
      */
-    protected $table = 'Tema';
+    protected $table = 'Materia';
 
     /**
      * El nombre de la llave primaria de la tabla.
@@ -19,7 +19,7 @@ class Tema extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'tema_id';
+    protected $primaryKey = 'mate_id';
 
     /**
      * El nombre del campo equivalente a CREATE_AT en la base de datos.
@@ -27,7 +27,7 @@ class Tema extends Model
      *
      * @var string
      */
-    const CREATED_AT = 'tema_fechacreacion';
+    const CREATED_AT = 'mate_fechacreacion';
 
     /**
      * El nombre del campo equivalente a UPDATED_AT en la base de datos.
@@ -35,7 +35,7 @@ class Tema extends Model
      *
      * @var string
      */
-    const UPDATED_AT = 'tema_fechamodificacion';
+    const UPDATED_AT = 'mate_fechamodificacion';
 
     /**
      * The attributes that are mass assignable.
@@ -43,7 +43,7 @@ class Tema extends Model
      * @var array
      */
     protected $fillable = [
-        'tema_id', 'tema_titulo','curs_id','tema_rutaarchivo'
+        'mate_id', 'mate_nombre', 'mate_tema', 'mate_rutaarchivo','curs_id'
     ];
 
     /**
@@ -56,7 +56,7 @@ class Tema extends Model
     ];
 
     /**
-     * Obtener el curso que es dueño del tema.
+     * Obtener el curso que es dueño de la materia.
      */
     public function curso()
     {

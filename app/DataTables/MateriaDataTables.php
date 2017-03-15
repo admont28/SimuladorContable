@@ -2,11 +2,10 @@
 
 namespace App\DataTables;
 
-use App\Tema;
-use App\Curso;
+use App\Materia;
 use Yajra\Datatables\Services\DataTable;
 
-class TemaDataTables extends DataTable
+class MateriaDataTables extends DataTable
 {
     /**
      * Display ajax response.
@@ -17,16 +16,16 @@ class TemaDataTables extends DataTable
     {
         return $this->datatables
             ->eloquent($this->query())
-            ->addColumn('opciones', function ($tema) {
+            ->addColumn('opciones', function ($materia) {
                 return
-                '<a href="'.route('profesor.tema.ver', ['id' => $tema->tema_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
-                <a href="'.route('profesor.tema.editar', ['id' => $tema->tema_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
-                <a href="'.route('profesor.tema.eliminar', ['id' => $tema->tema_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
+                '<a href="'.route('profesor.materia.ver', ['id' => $materia->mate_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
+                <a href="'.route('profesor.materia.editar', ['id' => $materia->mate_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
+                <a href="'.route('profesor.materia.eliminar', ['id' => $materia->mate_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
             })
-            ->addColumn('curso', function ($tema)
+            /*->addColumn('curso', function ($materia)
             {
-                return '<a href="'.route('profesor.curso.ver', ['id' => $tema->curs_id]).'">'.$tema->curso->curs_nombre.'</a>';
-            })
+                return '<a href="'.route('profesor.curso.ver', ['id' => $materia->curs_id]).'">'.$materia->curso->curs_nombre.'</a>';
+            })*/
             //->addColumn('action', 'path.to.action.view')
             ->make(true);
     }
@@ -38,8 +37,8 @@ class TemaDataTables extends DataTable
      */
     public function query()
     {
-        $temas = Tema::query();
-        return $this->applyScopes($temas);
+        $materias = Materia::query();
+        return $this->applyScopes($materias);
     }
 
     /**
@@ -49,9 +48,10 @@ class TemaDataTables extends DataTable
      */
     public function html()
     {
+        //dd($this);
         return $this->builder()
                     ->columns($this->getColumns())
-                    ->ajax(route('profesor.tema'))
+                    ->ajax(route('profesor.curso.materia', ['curs_id' => 2]))
                     //->addAction(['width' => '80px'])
                     ->parameters(
                         [
@@ -76,24 +76,22 @@ class TemaDataTables extends DataTable
     {
         return [
             [
-                'name' => 'tema_id',
+                'name' => 'mate_id',
                 'title' => 'ID',
-                'data' => 'tema_id',
+                'data' => 'mate_id',
                 'width' => '10px'
             ],
             [
-                'name' => 'tema_titulo',
-                'title' => 'Nombre del tema',
-                'data' => 'tema_titulo',
+                'name' => 'mate_nombre',
+                'title' => 'Nombre de la materia',
+                'data' => 'mate_nombre',
                 'width' => '30px'
             ],
             [
-                'name' => 'curso',
-                'title' => 'Curso al que pertenece',
-                'data' => 'curso',
-                'width' => '30px',
-                'searchable' => false,
-                'orderable'=> false,
+                'name' => 'mate_tema',
+                'title' => 'Tema de la materia',
+                'data' => 'mate_tema',
+                'width' => '30px'
             ],
             [
                 'name' => 'opciones',
@@ -113,6 +111,6 @@ class TemaDataTables extends DataTable
      */
     protected function filename()
     {
-        return 'temadatatables_' . time();
+        return 'materiadatatables_' . time();
     }
 }

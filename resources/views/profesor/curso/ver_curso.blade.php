@@ -31,8 +31,20 @@
     </div>
     <div class="row">
         <div class="page-header">
-            <h1>Temas</h1>
+            <h1>Materias</h1>
         </div>
     </div>
-    @include('profesor.curso.tema.ver_tema')    
+    <div class="row">
+        <div class="table-responsive">
+            {!! $dataTable->table(['class' => 'table table-bordered table-condensed table-hover table-striped']) !!}
+        </div>
+    </div>
+    <br>
+
+    @push('scripts')
+    {!! $dataTable->scripts() !!}
+    @endpush
+
+    @include('profesor.curso.materia.ver_materia')
+
 @endsection

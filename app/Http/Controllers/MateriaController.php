@@ -4,22 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\DB;
-use App\Tema;
+use App\Materia;
 use App\Curso;
-use App\DataTables\TemaDataTables;
+use App\DataTables\MateriaDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
 
-class TemaController extends Controller
+class MateriaController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(TemaDataTables $dataTable)
+    public function index(MateriaDataTables $dataTable)
     {
-        return $dataTable->render('profesor.tema.index');
+        return $dataTable->render('profesor.materia.index');
     }
 
     /**
@@ -34,7 +34,7 @@ class TemaController extends Controller
             flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
             return redirect()->route('profesor.curso');
         }
-        return View('profesor.curso.tema.crear_tema')->with('curso', $curso);
+        return View('profesor.curso.materia.crear_materia')->with('curso', $curso);
     }
 
     /**
@@ -52,17 +52,19 @@ class TemaController extends Controller
         }
 
         Validator::make($request->all(), [
-           'tema_titulo' => 'required|max:100',
-           'tema_rutaarchivo' => 'required'
+           'mate_nombre' => 'required|max:100',
+           'mate_tema' => 'required|max:1000',
+           'mate_rutaarchivo' => 'required'
         ])->validate();
 
-        Tema::create([
-            'tema_titulo' => $request['tema_titulo'],
-            'curs_id'=> $curs_id,
-            'tema_rutaarchivo' => $request['tema_rutaarchivo']
+        Materia::create([
+            'mate_nombre' => $request['mate_nombre'],
+            'mate_tema'   => $request['mate_tema'],
+            'mate_rutaarchivo' => $request['mate_rutaarchivo'],
+            'curs_id'=> $curs_id
         ]);
 
-        flash('El tema "'.$request['tema_titulo'].'" ha sido creado con éxito.','success');
+        flash('La materia "'.$request['mate_nombre'].'" ha sido creado con éxito.','success');
         return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
     }
 
@@ -74,17 +76,17 @@ class TemaController extends Controller
      */
     public function show($id)
     {
-        $tema = Tema::find($id);
-        return View('profesor.tema.ver_tema')->with('temas', $tema);
+        $materia = Materia::find($id);
+        return View('profesor.materia.ver_materia')->with('materia', $materia);
     }
 
-    public function listarTemasPorCurso($id)
+    public function listarMateriasPorCurso($id)
     {
-        dd(\DB::table('tema')->where('curs_id', $id)->get());
+        dd(\DB::table('materia')->where('curs_id', $id)->get());
 
 
-        return View('profesor.tema.ver_tema')
-                    ->with('tema', $tema);
+        return View('profesor.materia.ver_materia')
+                    ->with('mateia', $materia);
     }
 
     /**
@@ -95,8 +97,8 @@ class TemaController extends Controller
      */
     public function edit($id)
     {
-        $tema = Tema::find($id);
-        return View('profesor.curso.tema.editar_curso')->with('tema', $tema);
+        $materia = Materia::find($id);
+        return View('profesor.curso.materia.editar_materia')->with('materia', $materia);
     }
 
     /**
@@ -109,15 +111,17 @@ class TemaController extends Controller
     public function update(Request $request, $id)
     {
         Validator::make($request->all(), [
-           'tema_titulo' => 'required|max:100',
-           'tema_rutaarchivo' => 'required'
+           'mate_nombre' => 'required|max:100',
+           'mate_tema'   => 'required|max:1000',
+           'mate_rutaarchivo' => 'required'
         ])->validate();
 
-        $tema = Tema::find($id);
-        $tema->tema_titulo = $request->input('tema_titulo');
-        $tema->tema_rutaarchivo = $request->input('tema_rutaarchivo');
-        $tema->save();
-        flash('Curso "'.$curso->curs_nombre.'" editado con éxito.', 'success');
+        $materia = Materia::find($id);
+        $materia->mate_nombre = $request->input('mate_nombre');
+        $materia->mate_tema   = $request->input('mate_tema');
+        $materia->mate_rutaarchivo = $request->input('mate_rutaarchivo');
+        $materia->save();
+        flash('Materia "'.$materia->mate_nombre.'" editada con éxito.', 'success');
         return redirect()->route('profesor.curso');
     }
 
@@ -129,8 +133,9 @@ class TemaController extends Controller
      */
     public function destroy($id)
     {
-        Tema::destroy($id);
-        flash('Curso "'.$tema->tema_titulo.'" eliminado con éxito.', 'success');
+        $materia = Materia::find($id);
+        Materia::destroy($id);
+        flash('Materia "'.$materia->mate_nombre.'" eliminada con éxito.', 'success');
         return redirect()->route('profesor.curso');
     }
 }

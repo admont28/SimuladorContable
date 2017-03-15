@@ -75,7 +75,11 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     Route::put('/pregunta/editar/{id?}', 'PreguntasController@update')->name('profesor.pregunta.put');
     Route::get('/pregunta/eliminar/{id?}', 'PreguntasController@destroy')->name('profesor.pregunta.eliminar');
 
-
+    /*
+    |--------------------------------------------------------------------------
+    | Rutas para los cursos
+    |--------------------------------------------------------------------------
+    */
 
     Route::get('/curso/inicio', 'CursoController@index')->name('profesor.curso');
     Route::get('/curso/crear', 'CursoController@create')->name('profesor.crearcurso');
@@ -84,35 +88,19 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     Route::get('/curso/editar/{id?}', 'CursoController@edit')->name('profesor.curso.editar');
     Route::put('/curso/editar/{id?}', 'CursoController@update')->name('profesor.curso.put');
     Route::get('/curso/eliminar/{id?}', 'CursoController@destroy')->name('profesor.curso.eliminar');
-    // Route::get('/curso/temas/{curs_id}', 'CursoController@ver_temas_por_curso')->name('profesor.curso.tema.ver');
-    Route::get('/curso/temas/ajax/{curs_id}', 'CursoController@ver_temas_por_curso_ajax')->name('profesor.curso.tema.verajax');
 
-    Route::get('/curso/temas/crear/{curs_id}', 'TemaController@create')->name('profesor.curso.tema.crear');
-    Route::post('/curso/temas/crear/{curs_id}', 'TemaController@store')->name('profesor.curso.tema.crear.post');
+    /*
+    |--------------------------------------------------------------------------
+    | Rutas para las materias
+    |--------------------------------------------------------------------------
+    */
+    /* Ver las materias con DataTables */
+    Route::get('/curso/{curs_id}/materias/ajax', 'CursoController@verMateriasPorCursoAjax')->name('profesor.curso.materia.verajax');
+    /* Crear una materia, método get para ver el formulario y método post para guardar la nueva materia */
+    Route::get('/curso/{curs_id}/materias/crear', 'MateriaController@create')->name('profesor.curso.materia.crear');
+    Route::post('/curso/{curs_id}/materias/crear', 'MateriaController@store')->name('profesor.curso.materia.crear.post');
 
-
-    Route::get('/tema/inicio', 'TemaController@index')->name('profesor.tema');
-    Route::get('/tema/crear', 'TemaController@create')->name('profesor.creartema');
-
-    Route::get('/tema/ver/{id?}', 'TemaController@show')->name('profesor.tema.ver');
-
-    Route::get('/tema/editar/{id?}', 'TemaController@edit')->name('profesor.tema.editar');
-    Route::put('/tema/editar/{id?}', 'TemaController@update')->name('profesor.tema.put');
-    Route::get('/tema/eliminar/{id?}', 'TemaController@destroy')->name('profesor.tema.eliminar');
-
-
-    /*Route::get('/temas/crear',['as'=>'profesor.creartema', function(){
-        return view('profesor.tema.crear_tema');
-    }]);
-
-    Route::get('/temas/inicio',['as'=>'profesor.tema', function(){
-        return view('profesor.tema.index');
-    }]);
-
-    Route::get('/temas/ver',['as'=>'profesor.vertemas', function(){
-        return view('profesor.tema.ver_tema');
-    }]);*/
-
+    Route::get('/curso/{curs_id}/materias', 'CursoController@index')->name('profesor.curso.materia');
 });
 
 

@@ -27,11 +27,6 @@
                     <li>
                         <a href="{{ route('profesor.crearcurso') }}"> {{ trans('messages.crear_curso') }}</a>
                     </li>
-                    <li role="separator" class="divider"></li>
-                    <li>
-                        <a href="{{ route('profesor.tema') }}"> {{ trans('messages.tema') }}</a>
-                    </li>
-
                 </ul>
             </li>
         </ul>

@@ -27,9 +27,10 @@ class CursoSeeder extends Seeder
                 'tall_rutaarchivo' => $faker->imageUrl($width = 640, $height = 480)
             ));
 
-            $tema_id = \DB::table('Tema')->insertGetId(array(
-                'tema_titulo' => $faker->realText(rand(10,100)),
-                'tema_rutaarchivo' => $faker->imageUrl($width = 640, $height = 480),
+            $mate_id = \DB::table('Materia')->insertGetId(array(
+                'mate_nombre' => $faker->realText(rand(10,100)),
+                'mate_tema' => $faker->realText(rand(10,1000)),
+                'mate_rutaarchivo' => $faker->imageUrl($width = 640, $height = 480),
                 'curs_id' => $curs_id,
             ));
 

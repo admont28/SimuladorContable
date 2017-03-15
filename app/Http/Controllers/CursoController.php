@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\DB;
 use App\Curso;
-use App\Tema;
+use App\Materia;
 use App\DataTables\CursoDataTables;
+use App\DataTables\MateriaDataTables;
 use Validator;
 use Yajra\Datatables\Datatables;
 
@@ -19,7 +20,6 @@ class CursoController extends Controller
      */
     public function index(CursoDataTables $dataTable)
     {
-        
         return $dataTable->render('profesor.curso.index');
     }
 
@@ -62,10 +62,12 @@ class CursoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, MateriaDataTables $dataTable)
     {
         $curso = Curso::find($id);
-        return View('profesor.curso.ver_curso')->with('curso', $curso);
+        //return View('profesor.curso.ver_curso')->with('curso', $curso);
+
+        return $dataTable->render('profesor.curso.ver_curso', compact('curso', $curso));
     }
 
     /**
@@ -115,15 +117,16 @@ class CursoController extends Controller
         return redirect()->route('profesor.curso');
     }
 
-    public function ver_temas_por_curso($curs_id = "")
+    /*public function ver_temas_por_curso($curs_id = "")
     {
         $curso = Curso::find($curs_id);
         return View('profesor.curso.tema.ver_tema')->with('curso', $curso);
-    }
+    }*/
 
-    public function ver_temas_por_curso_ajax($curs_id = "")
+    public function verMateriasPorCursoAjax($curs_id = "")
     {
-        $temas = Tema::where('curs_id', $curs_id)->get();
+        $temas = Materia::where('curs_id', $curs_id)->get();
         return Datatables::of($temas)->make();
     }
+
 }

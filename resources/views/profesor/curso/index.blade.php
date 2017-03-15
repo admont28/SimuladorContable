@@ -18,8 +18,6 @@
 <br>
 @endsection
 
-
-
-@section('scripts')
+@push('scripts')
 {!! $dataTable->scripts() !!}
-@endsection
+@endpush

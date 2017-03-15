@@ -60,6 +60,11 @@ class Curso extends Model
      */
     public function temas()
     {
-        return $this->hasMany('App\Curso','curs_id');
+        return $this->hasMany('App\Tema','tema_id');
+    }
+
+    public function materias()
+    {
+        return $this->hasMany('App\Materia','mate_id');
     }
 }

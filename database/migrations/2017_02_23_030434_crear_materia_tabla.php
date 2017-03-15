@@ -15,12 +15,13 @@ class CrearMateriaTabla extends Migration
     {
         Schema::create('Materia', function (Blueprint $table) {
           $table->increments('mate_id');
-          $table->string('tema_nombre', 100);
-          $table->longText('tema_tema', 500);
+          $table->string('mate_nombre', 100);
+          $table->longText('mate_tema', 1000);
+          $table->string('mate_rutaarchivo', 255);
           $table->integer('curs_id')->unsigned();
           $table->foreign('curs_id')->references('curs_id')->on('Curso');
-          $table->timestamp('usua_fechacreacion')->default(DB::raw('CURRENT_TIMESTAMP'));
-          $table->timestamp('usua_fechamodificacion')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+          $table->timestamp('mate_fechacreacion')->default(DB::raw('CURRENT_TIMESTAMP'));
+          $table->timestamp('mate_fechamodificacion')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
 
         });
     }
