@@ -13,3 +13,4 @@ composer.lock
 .DS_Store
 workspace.xml
 Thumbs.db
+.ftpconfig
