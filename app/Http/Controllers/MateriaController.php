@@ -9,6 +9,8 @@ use App\Curso;
 use App\DataTables\MateriaDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
+use Storage;
+use File;
 
 class MateriaController extends Controller
 {
@@ -57,10 +59,19 @@ class MateriaController extends Controller
            'mate_rutaarchivo' => 'required'
         ])->validate();
 
+        //obtenemos el campo file definido en el formulario
+        $file = $request->file('mate_rutaarchivo');
+
+        //obtenemos el nombre del archivo
+        $nombre = $file->getClientOriginalName();
+
+        $path = Storage::disk('materias')->put('/', $file);
+
         Materia::create([
             'mate_nombre' => $request['mate_nombre'],
             'mate_tema'   => $request['mate_tema'],
-            'mate_rutaarchivo' => $request['mate_rutaarchivo'],
+            'mate_rutaarchivo' => asset('storage/materias/'.$path),
+            'mate_nombrearchivo' => $nombre,
             'curs_id'=> $curs_id
         ]);
 
@@ -74,19 +85,10 @@ class MateriaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($curs_id, $mate_id)
     {
         $materia = Materia::find($id);
         return View('profesor.materia.ver_materia')->with('materia', $materia);
-    }
-
-    public function listarMateriasPorCurso($id)
-    {
-        dd(\DB::table('materia')->where('curs_id', $id)->get());
-
-
-        return View('profesor.materia.ver_materia')
-                    ->with('mateia', $materia);
     }
 
     /**
@@ -95,10 +97,19 @@ class MateriaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($curs_id, $mate_id)
     {
-        $materia = Materia::find($id);
-        return View('profesor.curso.materia.editar_materia')->with('materia', $materia);
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso');
+        }
+        $materia = Materia::find($mate_id);
+        if (!isset($materia)) {
+            flash('La materia con ID: '.$mate_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso');
+        }
+        return View('profesor.curso.materia.editar_materia')->with('materia', $materia)->with('curso', $curso);
     }
 
     /**

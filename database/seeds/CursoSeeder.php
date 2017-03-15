@@ -31,6 +31,7 @@ class CursoSeeder extends Seeder
                 'mate_nombre' => $faker->realText(rand(10,100)),
                 'mate_tema' => $faker->realText(rand(10,1000)),
                 'mate_rutaarchivo' => $faker->imageUrl($width = 640, $height = 480),
+                'mate_nombrearchivo' => $faker->word(),
                 'curs_id' => $curs_id,
             ));
 

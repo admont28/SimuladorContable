@@ -29,6 +29,26 @@ Route::get('/informacion',['as' => 'general.informacion', function () {
 Route::resource('usuario','UsuariosController');
 
 /*
+Route::get('storage/{archivo}', function ($archivo) {
+    $public_path = public_path();
+
+    $url = $public_path.'/storage/materias/'.$archivo;
+
+    dd($url);
+    //dd(asset('storage/materias/'.$archivo));
+    //$url = asset('storage/materias/'.$archivo);
+    //dd(Storage::disk('materias')->exists($archivo));
+    //verificamos si el archivo existe y lo retornamos
+    if (Storage::disk('materias')->exists($archivo))
+    {
+       return response()->download($url,'descarga.xlsx');
+    }
+    //si no se encuentra lanzamos un error 404.
+    abort(404);
+
+})->where('archivo', '.*');*/
+
+/*
  * Rutas para el rol de estudiante.
  */
 Route::group(['prefix' => 'estudiante', 'middleware' => ['auth','estudiante'] ], function(){
@@ -94,13 +114,18 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     | Rutas para las materias
     |--------------------------------------------------------------------------
     */
-    /* Ver las materias con DataTables */
+    /* Ver las materias con DataTables, este responde un objeto Datatables */
     Route::get('/curso/{curs_id}/materias/ajax', 'CursoController@verMateriasPorCursoAjax')->name('profesor.curso.materia.verajax');
     /* Crear una materia, método get para ver el formulario y método post para guardar la nueva materia */
     Route::get('/curso/{curs_id}/materias/crear', 'MateriaController@create')->name('profesor.curso.materia.crear');
     Route::post('/curso/{curs_id}/materias/crear', 'MateriaController@store')->name('profesor.curso.materia.crear.post');
-
-    Route::get('/curso/{curs_id}/materias', 'CursoController@index')->name('profesor.curso.materia');
+    /* Ver una materia en específico de un curso. */
+    Route::get('/curso/{curs_id}/materias/ver/{mate_id}', 'MateriaController@show')->name('profesor.curso.materia.ver');
+    /* Editar una materia en específico de un curso */
+    Route::get('/curso/{curs_id}/materias/editar/{mate_id}', 'MateriaController@edit')->name('profesor.curso.materia.editar');
+    Route::put('/curso/{curs_id}/materias/editar/{mate_id}', 'MateriaController@update')->name('profesor.curso.materia.editar.put');
+    /* Eliminar una materia en específico de un curso */
+    Route::get('/curso/{curs_id}/materias/eliminar/{mate_id}', 'MateriaController@delete')->name('profesor.curso.materia.eliminar');
 });
 
 

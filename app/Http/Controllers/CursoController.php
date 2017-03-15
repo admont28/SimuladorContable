@@ -62,12 +62,12 @@ class CursoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id, MateriaDataTables $dataTable)
+    public function show($id)
     {
         $curso = Curso::find($id);
-        //return View('profesor.curso.ver_curso')->with('curso', $curso);
+        return View('profesor.curso.ver_curso')->with('curso', $curso);
 
-        return $dataTable->render('profesor.curso.ver_curso', compact('curso', $curso));
+        //return $dataTable->render('profesor.curso.ver_curso', compact('curso', $curso));
     }
 
     /**
@@ -125,8 +125,16 @@ class CursoController extends Controller
 
     public function verMateriasPorCursoAjax($curs_id = "")
     {
-        $temas = Materia::where('curs_id', $curs_id)->get();
-        return Datatables::of($temas)->make();
+        $materias = Materia::where('curs_id', $curs_id)->get();
+        return Datatables::of($materias)
+                        ->addColumn('opciones', function ($materia) {
+                            return
+                            '<a href="'.route('profesor.curso.materia.ver', ['curs_id' => $materia->curs_id, 'mate_id' => $materia->mate_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
+                            <a href="'.route('profesor.curso.materia.editar', ['curs_id' => $materia->curs_id, 'mate_id' => $materia->mate_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
+                            <a href="'.route('profesor.curso.materia.eliminar', ['curs_id' => $materia->curs_id, 'mate_id' => $materia->mate_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
+                        })
+                        ->editColumn('mate_rutaarchivo', '<a href="{{$mate_rutaarchivo}}">{{$mate_nombrearchivo}}</a>')
+                        ->make(true);
     }
 
 }

@@ -43,7 +43,7 @@ class Materia extends Model
      * @var array
      */
     protected $fillable = [
-        'mate_id', 'mate_nombre', 'mate_tema', 'mate_rutaarchivo','curs_id'
+        'mate_id', 'mate_nombre', 'mate_tema', 'mate_rutaarchivo', 'mate_nombrearchivo', 'curs_id'
     ];
 
     /**
