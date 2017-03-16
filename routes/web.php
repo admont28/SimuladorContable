@@ -79,15 +79,16 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
         return view('profesor.index');
     }]);
 
-    Route::get('/taller/inicio', 'TallerController@index')->name('profesor.taller');
-    Route::get('/taller/crear', 'TallerController@create')->name('profesor.creartaller');
-    Route::post('/taller/crear', 'TallerController@store')->name('profesor.creartaller.post');
-    Route::get('/taller/ver/{id?}', 'TallerController@show')->name('profesor.taller.ver');
-    Route::get('/taller/editar/{id?}', 'TallerController@edit')->name('profesor.taller.editar');
-    Route::put('/taller/editar/{id?}', 'TallerController@update')->name('profesor.taller.put');
-    Route::get('/taller/eliminar/{id?}', 'TallerController@destroy')->name('profesor.taller.eliminar');
+    Route::get('/curso/{curs_id}/talleres/ajax', 'CursoController@verTalleresPorCursoAjax')->name('profesor.curso.taller.verajax');
+    Route::get('/curso/{curs_id}/curso/{curs_id}/taller/inicio', 'TallerController@index')->name('profesor.curso.taller');
+    Route::get('/curso/{curs_id}/taller/crear', 'TallerController@create')->name('profesor.curso.creartaller');
+    Route::post('/curso/{curs_id}/taller/crear', 'TallerController@store')->name('profesor.curso.creartaller.post');
+    Route::get('/curso/{curs_id}/taller/ver/{id?}', 'TallerController@show')->name('profesor.curso.taller.ver');
+    Route::get('/curso/{curs_id}/taller/editar/{id?}', 'TallerController@edit')->name('profesor.curso.taller.editar');
+    Route::put('/curso/curs_id/taller/editar/{id?}', 'TallerController@update')->name('profesor.curso.taller.put');
+    Route::get('/curso/{curs_id}/taller/eliminar/{id?}', 'TallerController@destroy')->name('profesor.curso.taller.eliminar');
 
-    Route::get('/pregunta/inicio', 'PreguntasController@index')->name('profesor.pregunta');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/inicio', 'PreguntasController@index')->name('profesor.pregunta');
     Route::get('/pregunta/crear', 'PreguntasController@create')->name('profesor.crearpregunta');
     Route::post('/pregunta/crear', 'PreguntasController@store')->name('profesor.crearpregunta.post');
     Route::get('/pregunta/ver/{id?}', 'PreguntasController@show')->name('profesor.pregunta.ver');
