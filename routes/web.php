@@ -80,7 +80,7 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     }]);
 
     Route::get('/curso/{curs_id}/talleres/ajax', 'CursoController@verTalleresPorCursoAjax')->name('profesor.curso.taller.verajax');
-    Route::get('/curso/{curs_id}/curso/{curs_id}/taller/inicio', 'TallerController@index')->name('profesor.curso.taller');
+    Route::get('/curso/{curs_id}/taller/inicio', 'TallerController@index')->name('profesor.curso.taller');
     Route::get('/curso/{curs_id}/taller/crear', 'TallerController@create')->name('profesor.curso.creartaller');
     Route::post('/curso/{curs_id}/taller/crear', 'TallerController@store')->name('profesor.curso.creartaller.post');
     Route::get('/curso/{curs_id}/taller/ver/{id?}', 'TallerController@show')->name('profesor.curso.taller.ver');
@@ -105,10 +105,10 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     Route::get('/curso/inicio', 'CursoController@index')->name('profesor.curso');
     Route::get('/curso/crear', 'CursoController@create')->name('profesor.crearcurso');
     Route::post('/curso/crear', 'CursoController@store')->name('profesor.crearcurso.post');
-    Route::get('/curso/ver/{id?}', 'CursoController@show')->name('profesor.curso.ver');
-    Route::get('/curso/editar/{id?}', 'CursoController@edit')->name('profesor.curso.editar');
-    Route::put('/curso/editar/{id?}', 'CursoController@update')->name('profesor.curso.put');
-    Route::get('/curso/eliminar/{id?}', 'CursoController@destroy')->name('profesor.curso.eliminar');
+    Route::get('/curso/ver/{id}', 'CursoController@show')->name('profesor.curso.ver');
+    Route::get('/curso/editar/{id}', 'CursoController@edit')->name('profesor.curso.editar');
+    Route::put('/curso/editar/{id}', 'CursoController@update')->name('profesor.curso.put');
+    Route::get('/curso/eliminar/{id}', 'CursoController@destroy')->name('profesor.curso.eliminar');
 
     /*
     |--------------------------------------------------------------------------
@@ -120,13 +120,17 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     /* Crear una materia, método get para ver el formulario y método post para guardar la nueva materia */
     Route::get('/curso/{curs_id}/materias/crear', 'MateriaController@create')->name('profesor.curso.materia.crear');
     Route::post('/curso/{curs_id}/materias/crear', 'MateriaController@store')->name('profesor.curso.materia.crear.post');
-    /* Ver una materia en específico de un curso. */
-    Route::get('/curso/{curs_id}/materias/ver/{mate_id}', 'MateriaController@show')->name('profesor.curso.materia.ver');
+    /* Ver una materia en específico de un curso.
+     * Esta ruta no es necesaria, debido a que en el datatable de la materia,
+     * se puede ver toda la información de la materia, no hay necesidad de una nueva página.
+     *
+     * Route::get('/curso/{curs_id}/materias/ver/{mate_id}', 'MateriaController@show')->name('profesor.curso.materia.ver');
+     */
     /* Editar una materia en específico de un curso */
     Route::get('/curso/{curs_id}/materias/editar/{mate_id}', 'MateriaController@edit')->name('profesor.curso.materia.editar');
     Route::put('/curso/{curs_id}/materias/editar/{mate_id}', 'MateriaController@update')->name('profesor.curso.materia.editar.put');
     /* Eliminar una materia en específico de un curso */
-    Route::get('/curso/{curs_id}/materias/eliminar/{mate_id}', 'MateriaController@delete')->name('profesor.curso.materia.eliminar');
+    Route::delete('/curso/{curs_id}/materias/eliminar/{mate_id}', 'MateriaController@destroy')->name('profesor.curso.materia.eliminar');
 });
 
 
