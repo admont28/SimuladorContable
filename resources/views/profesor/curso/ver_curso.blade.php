@@ -34,7 +34,16 @@
             <h1>Materias</h1>
         </div>
     </div>
-
     @include('profesor.curso.materia.ver_materia')
+
+    <div class="row">
+        <div class="page-header">
+            <h1>Talleres</h1>
+        </div>
+    </div>
+    @include('profesor.curso.taller.index')
+
+
+
 
 @endsection

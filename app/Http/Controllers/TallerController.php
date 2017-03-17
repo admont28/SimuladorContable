@@ -18,10 +18,24 @@ class TallerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(TallerDataTables $dataTable )
+    public function index(TallerDataTables $dataTable)
     {
+
         return $dataTable->render('profesor.curso.taller.index');
+        //->with('taller',$taller );
     }
+
+    public function getBasicData()
+   {
+       $taller = Taller::select('tall_id','tall_nombre','tall_tipo','tall_tiempo','curs_id')->get();
+       return Datatables::of($taller)
+       ->addColumn('opciones', function ($taller) {
+           return
+           '<a href="'.route('profesor.taller.ver', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
+           <a href="'.route('profesor.taller.editar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
+           <a href="'.route('profesor.taller.eliminar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
+       })->make();
+   }
 
     /**
      * Show the form for creating a new resource.
@@ -68,7 +82,7 @@ class TallerController extends Controller
             'curs_id'=>$request['curso_taller']
           ]);
 
-          flash('Taller "'.$taller->tall_nombre.'" creado con éxito.', 'success');
+        flash('Taller "'.$taller->tall_nombre.'" creado con éxito.', 'success');
         return redirect()->route('profesor.taller');
     }
 
@@ -132,4 +146,5 @@ class TallerController extends Controller
         flash('Curso "'.$taller->tall_nombre.'" eliminado con éxito.', 'success');
         return redirect()->route('profesor.taller');
     }
+
 }

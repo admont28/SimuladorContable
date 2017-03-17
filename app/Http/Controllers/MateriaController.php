@@ -24,6 +24,13 @@ class MateriaController extends Controller
         return $dataTable->render('profesor.materia.index');
     }
 
+    public function getBasicData()
+    {
+        $materia = Materia::select(['mate_id','mate_nombre','mate_tema','mate_nombrearchivo']);
+
+        return Datatables::of($materia)->make();
+    }
+
     /**
      * Show the form for creating a new resource.
      *
