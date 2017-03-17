@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\DB;
 use App\Curso;
 use App\Materia;
+use App\Taller;
 use App\DataTables\CursoDataTables;
 use App\DataTables\MateriaDataTables;
 use Validator;
@@ -136,5 +137,17 @@ class CursoController extends Controller
                         ->editColumn('mate_rutaarchivo', '<a href="{{$mate_rutaarchivo}}">{{$mate_nombrearchivo}}</a>')
                         ->make(true);
     }
+
+    public function verTalleresPorCursoAjax($curs_id = "")
+   {
+      $talleres = Taller::where('curs_id', $curs_id)->get();
+       return Datatables::of($talleres)
+       ->addColumn('opciones', function ($taller) {
+           return
+           '<a href="'.route('profesor.taller.ver', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
+           <a href="'.route('profesor.taller.editar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
+           <a href="'.route('profesor.taller.eliminar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
+       })->make(true);
+   }
 
 }

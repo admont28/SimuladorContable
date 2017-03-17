@@ -27,9 +27,10 @@ class PreguntasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($tall_id)
     {
-        //
+        $taller = Taller::find($tall_id);
+        return View('profesor.curso.taller.pregunta.crear_pregunta')->with('taller',$taller);
     }
 
     /**
@@ -38,9 +39,25 @@ class PreguntasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $tall_id)
     {
-        //
+        dd($tall_id);
+        $taller=Taller::find($tall_id);
+        $this->validate($request, [
+           'texto_pregunta' => 'required',
+           'tipo_pregunta' => 'required',
+           'porcentaje_pregunta'=>'required',
+        ]);
+
+        $pregunta=Pregunta::create([
+            'preg_texto'=> $request['texto_pregunta'],
+            'preg_tipo'=> $request['tipo_pregunta'],
+            'preg_porcentaje'=> $request['porcentaje_pregunta'],
+            'tall_id'=>$tall_id
+          ]);
+
+          flash('Pregunta "'.$pregunta->preg_texto.'" creado con éxito.', 'success');
+          return redirect()->route('profesor.taller');
     }
 
     /**

@@ -80,7 +80,7 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     }]);
 
     Route::get('/curso/{curs_id}/talleres/ajax', 'CursoController@verTalleresPorCursoAjax')->name('profesor.curso.taller.verajax');
-    Route::get('/curso/{curs_id}/curso/{curs_id}/taller/inicio', 'TallerController@index')->name('profesor.curso.taller');
+    Route::get('/curso/{curs_id}/taller/inicio', 'TallerController@index')->name('profesor.curso.taller');
     Route::get('/curso/{curs_id}/taller/crear', 'TallerController@create')->name('profesor.curso.creartaller');
     Route::post('/curso/{curs_id}/taller/crear', 'TallerController@store')->name('profesor.curso.creartaller.post');
     Route::get('/curso/{curs_id}/taller/ver/{id?}', 'TallerController@show')->name('profesor.curso.taller.ver');
