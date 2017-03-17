@@ -15,7 +15,6 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
             <li id="profesor-index" ><a href="{{ route('profesor.index') }}">{{ trans('messages.inicio') }}</a></li>
-            
             <li class="dropdown" id="profesor-curso">
                 <a href="{{ route('profesor.curso') }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                     {!! trans('messages.curso') !!}  <span class="caret"></span>

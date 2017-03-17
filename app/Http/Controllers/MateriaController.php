@@ -144,16 +144,35 @@ class MateriaController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Función que permite eliminar una Materia incluyendo su archivo asociado si existe en el sistema de archivos.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  string $curs_id id del curso al que pertenece la materia a eliminar.
+     * @param  string $mate_id id de la materia a eliminar.
+     * @return \Illuminate\Http\Response se realiza una redirección incluyendo un mensaje de éxito o error.
      */
-    public function destroy($id)
+    public function destroy($curs_id = "", $mate_id = "")
     {
-        $materia = Materia::find($id);
-        Materia::destroy($id);
-        flash('Materia "'.$materia->mate_nombre.'" eliminada con éxito.', 'success');
-        return redirect()->route('profesor.curso');
+        // Busco la materia a eliminar.
+        $materia = Materia::find($mate_id);
+        // Obtengo más información del archivo de la materia. ver: http://php.net/manual/es/function.pathinfo.php
+        $infoArchivo = pathinfo($materia->mate_rutaarchivo);
+        // Bandera que indicará si se eliminó o no el archivo.
+        $eliminacionArchivo = true;
+        // Compruebo que exista el archivo en el disco de materias.
+        if(Storage::disk('materias')->exists($infoArchivo['basename'])){
+            // Si existe el archivo procedo a eliminarlo, retorna true si fue exitoso, de lo contrario retorna false.
+            $eliminacionArchivo = Storage::disk('materias')->delete($infoArchivo['basename']);
+        }
+        // Si no se pudo eliminar el archivo por cualquier motivo, le informo al usuario.
+        if($eliminacionArchivo == false){
+            flash('No se pudo eliminar el archivo asociado a la materia "'.$materia->mate_nombre.'"', 'danger');
+        }else{
+            // Si se eliminó el archivo o no existía en el disco procedo a eliminar la materia.
+            $materia->delete();
+            // Mensaje para el usuario indicando la eliminación exitosa.
+            flash('Materia "'.$materia->mate_nombre.'" eliminada con éxito.', 'success');
+        }
+        // Cualquiera que sea el caso, de éxito o error es redirigido a la vista del curso.
+        return redirect()->route('profesor.curso.ver', ['id' => $curs_id]);
     }
 }
