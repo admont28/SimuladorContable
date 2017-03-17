@@ -1,7 +1,7 @@
 
 
 <p>Bienvenido a la sección de talleres por favor escoja que desea hacer:</p>
-<a href="{{ route('profesor.creartaller') }}" class="btn btn-primary" >Crear un taller</a>
+<a href="{{ route('profesor.curso.taller.crear', ['curs_id' => $curso->curs_id]) }}" class="btn btn-primary" >Crear un taller</a>
 <br>
 <br>
 <div class="row">
