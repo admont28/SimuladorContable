@@ -6,7 +6,7 @@
 
 @section('content')
 
-<form class="form-horizontal" action="{{ route('profesor.taller.put',['id' => $taller->tall_id]) }}" method="post">
+<form class="form-horizontal" action="{{ route('profesor.curso.taller.put',['id' => $taller->tall_id]) }}" method="post">
     {{ method_field('PUT') }}
     {{ csrf_field() }}
 

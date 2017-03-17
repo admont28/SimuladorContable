@@ -85,16 +85,16 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     Route::post('/curso/{curs_id}/taller/crear', 'TallerController@store')->name('profesor.curso.creartaller.post');
     Route::get('/curso/{curs_id}/taller/ver/{id?}', 'TallerController@show')->name('profesor.curso.taller.ver');
     Route::get('/curso/{curs_id}/taller/editar/{id?}', 'TallerController@edit')->name('profesor.curso.taller.editar');
-    Route::put('/curso/curs_id/taller/editar/{id?}', 'TallerController@update')->name('profesor.curso.taller.put');
+    Route::put('/curso/{curs_id}/taller/editar/{id?}', 'TallerController@update')->name('profesor.curso.taller.put');
     Route::get('/curso/{curs_id}/taller/eliminar/{id?}', 'TallerController@destroy')->name('profesor.curso.taller.eliminar');
 
-    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/inicio', 'PreguntasController@index')->name('profesor.pregunta');
-    Route::get('/pregunta/crear', 'PreguntasController@create')->name('profesor.crearpregunta');
-    Route::post('/pregunta/crear', 'PreguntasController@store')->name('profesor.crearpregunta.post');
-    Route::get('/pregunta/ver/{id?}', 'PreguntasController@show')->name('profesor.pregunta.ver');
-    Route::get('/pregunta/editar/{id?}', 'PreguntasController@edit')->name('profesor.pregunta.editar');
-    Route::put('/pregunta/editar/{id?}', 'PreguntasController@update')->name('profesor.pregunta.put');
-    Route::get('/pregunta/eliminar/{id?}', 'PreguntasController@destroy')->name('profesor.pregunta.eliminar');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/inicio', 'PreguntasController@index')->name('profesor.curso.taller.pregunta');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/crear', 'PreguntasController@create')->name('profesor.curso.taller.pregunta.crear');
+    Route::post('/curso/{curs_id}/taller/{tall_id}/pregunta/crear', 'PreguntasController@store')->name('profesor.curso.taller.crearpregunta.post');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/ver/{id?}', 'PreguntasController@show')->name('profesor.curso.taller.pregunta.ver');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/editar/{id?}', 'PreguntasController@edit')->name('profesor.curso.taller.pregunta.editar');
+    Route::put('/curso/{curs_id}/taller/{tall_id}/pregunta/editar/{id?}', 'PreguntasController@update')->name('profesor.curso.taller.pregunta.put');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/eliminar/{id?}', 'PreguntasController@destroy')->name('profesor.curso.taller.pregunta.eliminar');
 
     /*
     |--------------------------------------------------------------------------

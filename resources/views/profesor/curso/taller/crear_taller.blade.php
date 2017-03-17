@@ -6,7 +6,7 @@
 
 @section('content')
 
-<form class="form-horizontal" action="{{ route('profesor.creartaller.post') }}" method="post">
+<form class="form-horizontal" action="{{ route('profesor.curso.creartaller.post') }}" method="post">
     {{ csrf_field() }}
   <fieldset>
     <h2>CREAR</h2>
@@ -65,7 +65,7 @@
 
     <div class="form-group">
       <div class="col-lg-10 col-lg-offset-2">
-        <a href="{{ route('profesor.taller') }}"  class="btn btn-default">Cancelar</a>
+        <a href="{{ route('profesor.curso.taller') }}"  class="btn btn-default">Cancelar</a>
         <button type="submit" class="btn btn-primary">Crear Taller</button>
       </div>
     </div>

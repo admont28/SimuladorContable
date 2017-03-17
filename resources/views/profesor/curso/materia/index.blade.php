@@ -12,11 +12,18 @@
 
 
 <div class="table-responsive">
-    {!! $dataTable->table(['class' => 'table table-bordered table-condensed table-hover table-striped']) !!}
+    {!! $dataTable->table(['id'=>'materia-table','class' => 'table table-bordered table-condensed table-hover table-striped']) !!}
 </div>
 
 @endsection
 
 @section('scripts')
-{!! $dataTable->scripts() !!}
+    <script type="text/javascript">
+    $('#materia-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: 'https://datatables.yajrabox.com/eloquent/basic-data'
+            });
+    </script>
+
 @endsection

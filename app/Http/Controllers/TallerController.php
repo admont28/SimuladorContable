@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\DB;
 use App\Taller;
 use App\Curso;
+use App\Pregunta;
 use App\DataTables\TallerDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
@@ -31,9 +32,9 @@ class TallerController extends Controller
        return Datatables::of($taller)
        ->addColumn('opciones', function ($taller) {
            return
-           '<a href="'.route('profesor.taller.ver', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
-           <a href="'.route('profesor.taller.editar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
-           <a href="'.route('profesor.taller.eliminar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
+           '<a href="'.route('profesor.curso.taller.ver', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
+           <a href="'.route('profesor.curso.taller.editar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
+           <a href="'.route('profesor.curso.taller.eliminar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
        })->make();
    }
 
@@ -83,7 +84,7 @@ class TallerController extends Controller
           ]);
 
         flash('Taller "'.$taller->tall_nombre.'" creado con éxito.', 'success');
-        return redirect()->route('profesor.taller');
+        return redirect()->route('profesor.curso.taller');
     }
 
     /**
@@ -144,7 +145,18 @@ class TallerController extends Controller
     {
         Taller::destroy($id);
         flash('Curso "'.$taller->tall_nombre.'" eliminado con éxito.', 'success');
-        return redirect()->route('profesor.taller');
+        return redirect()->route('profesor.curso.taller');
+    }
+    public  function verPreguntasPorTaller($tall_id = "")
+    {
+        $pregunta = Pregunta::where('tall_id', $tall_id)->get();
+        return Datatables::of($pregunta)
+            ->addColumn('opciones', function ($taller) {
+            return
+                '<a href="'.route('profesor.curso.taller.ver', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
+                <a href="'.route('profesor.curso.taller.editar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
+                <a href="'.route('profesor.curso.taller.eliminar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
+
     }
 
 }

@@ -68,7 +68,7 @@ class PreguntasController extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**
