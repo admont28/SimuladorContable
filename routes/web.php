@@ -99,14 +99,14 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     | Rutas para las preguntas
     |--------------------------------------------------------------------------
     */
-    Route::get('/curso/{curs_id}/taller/{tall_id}/preguntas/ajax', 'TallerController@verPreguntasPorTaller')->name('profesor.curso.taller.verajax');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/preguntas/ajax', 'TallerController@verPreguntasPorTaller')->name('profesor.curso.taller.pregunta.verajax');
     Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/inicio', 'PreguntasController@index')->name('profesor.curso.taller.pregunta');
     Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/crear', 'PreguntasController@create')->name('profesor.curso.taller.pregunta.crear');
-    Route::post('/curso/{curs_id}/taller/{tall_id}/pregunta/crear', 'PreguntasController@store')->name('profesor.curso.taller.crearpregunta.post');
+    Route::post('/curso/{curs_id}/taller/{tall_id}/pregunta/crear', 'PreguntasController@store')->name('profesor.curso.taller.pregunta.crear.post');
     Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/ver/{id?}', 'PreguntasController@show')->name('profesor.curso.taller.pregunta.ver');
     Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/editar/{id?}', 'PreguntasController@edit')->name('profesor.curso.taller.pregunta.editar');
-    Route::put('/curso/{curs_id}/taller/{tall_id}/pregunta/editar/{id?}', 'PreguntasController@update')->name('profesor.curso.taller.pregunta.put');
-    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/eliminar/{id?}', 'PreguntasController@destroy')->name('profesor.curso.taller.pregunta.eliminar');
+    Route::put('/curso/{curs_id}/taller/{tall_id}/pregunta/editar/{id?}', 'PreguntasController@update')->name('profesor.curso.taller.pregunta.editar.put');
+    Route::delete('/curso/{curs_id}/taller/{tall_id}/pregunta/eliminar/{id?}', 'PreguntasController@destroy')->name('profesor.curso.taller.pregunta.eliminar');
 
     /*
     |--------------------------------------------------------------------------
@@ -115,8 +115,8 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     */
 
     Route::get('/curso/inicio', 'CursoController@index')->name('profesor.curso');
-    Route::get('/curso/crear', 'CursoController@create')->name('profesor.crearcurso');
-    Route::post('/curso/crear', 'CursoController@store')->name('profesor.crearcurso.post');
+    Route::get('/curso/crear', 'CursoController@create')->name('profesor.curso.crear');
+    Route::post('/curso/crear', 'CursoController@store')->name('profesor.curso.crear.post');
     Route::get('/curso/ver/{id}', 'CursoController@show')->name('profesor.curso.ver');
     Route::get('/curso/editar/{id}', 'CursoController@edit')->name('profesor.curso.editar');
     Route::put('/curso/editar/{id}', 'CursoController@update')->name('profesor.curso.put');

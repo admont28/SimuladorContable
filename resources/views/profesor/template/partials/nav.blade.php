@@ -24,7 +24,7 @@
                         <a href="{{ route('profesor.curso') }}"> {{ trans('messages.ver_todos_los_cursos') }}</a>
                     </li>
                     <li>
-                        <a href="{{ route('profesor.crearcurso') }}"> {{ trans('messages.crear_curso') }}</a>
+                        <a href="{{ route('profesor.curso.crear') }}"> {{ trans('messages.crear_curso') }}</a>
                     </li>
                 </ul>
             </li>
