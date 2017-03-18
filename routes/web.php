@@ -89,10 +89,10 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     Route::get('/curso/{curs_id}/taller/inicio', 'TallerController@index')->name('profesor.curso.taller');
     Route::get('/curso/{curs_id}/taller/crear', 'TallerController@create')->name('profesor.curso.taller.crear');
     Route::post('/curso/{curs_id}/taller/crear', 'TallerController@store')->name('profesor.curso.taller.crear.post');
-    Route::get('/curso/{curs_id}/taller/ver/{id?}', 'TallerController@show')->name('profesor.curso.taller.ver');
-    Route::get('/curso/{curs_id}/taller/editar/{id?}', 'TallerController@edit')->name('profesor.curso.taller.editar');
-    Route::put('/curso/curs_id/taller/editar/{id?}', 'TallerController@update')->name('profesor.curso.taller.editar.put');
-    Route::delete('/curso/{curs_id}/taller/eliminar/{id?}', 'TallerController@destroy')->name('profesor.curso.taller.eliminar');
+    Route::get('/curso/{curs_id}/taller/ver/{tall_id}', 'TallerController@show')->name('profesor.curso.taller.ver');
+    Route::get('/curso/{curs_id}/taller/editar/{tall_id}', 'TallerController@edit')->name('profesor.curso.taller.editar');
+    Route::put('/curso/{curs_id}/taller/editar/{tall_id}', 'TallerController@update')->name('profesor.curso.taller.editar.put');
+    Route::delete('/curso/{curs_id}/taller/eliminar/{tall_id}', 'TallerController@destroy')->name('profesor.curso.taller.eliminar');
 
     /*
     |--------------------------------------------------------------------------
