@@ -11,7 +11,6 @@ use App\DataTables\TallerDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
 
-
 class TallerController extends Controller
 {
     /**
@@ -21,13 +20,11 @@ class TallerController extends Controller
      */
     public function index(TallerDataTables $dataTable)
     {
-
         return $dataTable->render('profesor.curso.taller.index');
-        //->with('taller',$taller );
     }
 
     public function getBasicData()
-   {
+    {
        $taller = Taller::select('tall_id','tall_nombre','tall_tipo','tall_tiempo','curs_id')->get();
        return Datatables::of($taller)
        ->addColumn('opciones', function ($taller) {
@@ -36,7 +33,7 @@ class TallerController extends Controller
            <a href="'.route('profesor.curso.taller.editar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
            <a href="'.route('profesor.curso.taller.eliminar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
        })->make();
-   }
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -45,12 +42,12 @@ class TallerController extends Controller
      */
     public function create($curs_id = "")
     {
-        //$curso = Curso::find($curs_id);
-        //if (!isset($curso)) {
-    //        flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
-    //        return redirect()->route('profesor.curso');
-    //    }
-        return View('profesor.curso.taller.crear_taller');
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso');
+        }
+        return View('profesor.curso.taller.crear_taller')->with('curso', $curso);
     }
 
     /**
@@ -105,10 +102,24 @@ class TallerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($curs_id, $tall_id)
     {
-        $taller = Taller::find($id);
-        return View('profesor.curso.taller.editar_taller')->with('taller', $taller);
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso');
+        }
+        // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
+        $taller = Taller::find($tall_id);
+        if (!isset($taller)) {
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso.ver', ['id' => $curs_id]);
+        }
+        // Retornamos la vista para editr el taller,
+        // y le enviamos el modelo taller y curso para que cargue la información almacenada en bd
+        // en los campos del formulario.
+        return View('profesor.curso.taller.editar_taller')->with('taller', $taller)->with('curso', $curso);
     }
 
     /**
@@ -157,6 +168,7 @@ class TallerController extends Controller
                 <a href="'.route('profesor.curso.taller.editar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
                 <a href="'.route('profesor.curso.taller.eliminar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
 
-    }
 
+            });
+    }
 }
