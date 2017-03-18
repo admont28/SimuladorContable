@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Título por defecto.') | Simulador Contable</title>
+    <title>@yield('title-head', 'Título por defecto.') | Simulador Contable</title>
     <link rel="stylesheet" href="{{ asset('plugins/bootstrap/css/bootstrap-lumen.min.css') }}" media="screen" title="no title">
     <link rel="stylesheet" href="{{ asset('css/main.css') }}" media="screen" title="no title">
     <link rel="stylesheet" href="{{ asset('plugins/datetimepicker/css/bootstrap-datetimepicker.min.css') }}"  media="screen" title="no title">
