@@ -117,10 +117,10 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     Route::get('/curso/inicio', 'CursoController@index')->name('profesor.curso');
     Route::get('/curso/crear', 'CursoController@create')->name('profesor.curso.crear');
     Route::post('/curso/crear', 'CursoController@store')->name('profesor.curso.crear.post');
-    Route::get('/curso/ver/{id}', 'CursoController@show')->name('profesor.curso.ver');
-    Route::get('/curso/editar/{id}', 'CursoController@edit')->name('profesor.curso.editar');
-    Route::put('/curso/editar/{id}', 'CursoController@update')->name('profesor.curso.put');
-    Route::get('/curso/eliminar/{id}', 'CursoController@destroy')->name('profesor.curso.eliminar');
+    Route::get('/curso/ver/{curs_id}', 'CursoController@show')->name('profesor.curso.ver');
+    Route::get('/curso/editar/{curs_id}', 'CursoController@edit')->name('profesor.curso.editar');
+    Route::put('/curso/editar/{curs_id}', 'CursoController@update')->name('profesor.curso.put');
+    Route::get('/curso/eliminar/{curs_id}', 'CursoController@destroy')->name('profesor.curso.eliminar');
 
     /*
     |--------------------------------------------------------------------------

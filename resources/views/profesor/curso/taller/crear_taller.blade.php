@@ -8,7 +8,7 @@
 
 @section('content')
     <div class="row">
-        <form class="form-horizontal" action="{{ route('profesor.curso.taller.crear.post', ['curs_id' => $curso->curs_id]) }}" method="post">
+        <form class="form-horizontal" action="{{ route('profesor.curso.taller.crear.post', ['id' => $curso->curs_id]) }}" method="post">
             {{ csrf_field() }}
             <div class="form-group">
                 <label for="nombre_taller" class="col-lg-2 control-label">Nombre del taller</label>
@@ -50,7 +50,7 @@
             </div>
             <div class="form-group">
                 <div class="col-lg-10 col-lg-offset-2">
-                    <a href="{{ route('profesor.curso.ver', ['curs_id' => $curso->curs_id]) }}"  class="btn btn-default">Cancelar</a>
+                    <a href="{{ route('profesor.curso.ver',['id' => $curso->curs_id]) }}"  class="btn btn-default">Cancelar</a>
                     <button type="submit" class="btn btn-primary">Crear Taller</button>
                 </div>
             </div>
@@ -62,9 +62,9 @@
     <script type="text/javascript">
         $(function () {
             $('#tiempo_taller').datetimepicker({
-                format: 'YYYY-MM-DD kk:mm:ss',
-                extraFormats: [ 'YYYY/MM/DD hh:mm:ss' ],
-                sideBySide: true,
+                format: 'YYYY-MM-DD HH:mm:ss',
+                extraFormats: [ 'YYYY/MM/DD HH:mm:ss' ],
+                sideBySide: false,
                 showTodayButton: true,
                 showClear: true,
                 showClose: true,

@@ -44,13 +44,15 @@ class TallerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $curs_id="")
+    public function store(Request $request, $curs_id ="")
     {
         $curso=Curso::find($curs_id);
-        //if (!isset($curso)) {
-        //    flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
-        //    return redirect()->route('profesor.taller');
 
+        if (!isset($curso)) {
+
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso.taller',['curs_id'=> $curso->curs_id]);
+        }
         $this->validate($request, [
            'nombre_taller' => 'required',
            'tipo_taller' => 'required',
@@ -65,10 +67,9 @@ class TallerController extends Controller
             'tall_rutaarchivo'=>$request['taller_rutaarchivo'],
             'curs_id'=>$curs_id
           ]);
-
-
         flash('Taller "'.$taller->tall_nombre.'" creado con éxito.', 'success');
-        return redirect()->route('profesor.curso.ver')->with('curso', $curso);
+
+        return redirect()->route('profesor.curso.ver',['curs_id'=> $curso->curs_id]);
     }
 
     /**

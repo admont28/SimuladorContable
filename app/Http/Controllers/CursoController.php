@@ -65,6 +65,7 @@ class CursoController extends Controller
      */
     public function show($id)
     {
+        
         $curso = Curso::find($id);
         return View('profesor.curso.ver_curso')->with('curso', $curso);
 
