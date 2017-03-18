@@ -1,12 +1,14 @@
 @extends('profesor.template.main')
 
+@section('title-head', 'Editar materia')
+
 @section('title', 'Crear materia para el curso: <strong>'.$curso->curs_nombre.'</strong>')
 
 @section('active','#profesor-curso')
 
 @section('content')
     <div class="row">
-        <form class="form-horizontal" action="{{ route('profesor.curso.materia.editar.put', ['curs_id' => $curso->curs_id, 'mate_id' => $materia->mate_id ]) }}" method="post">
+        <form class="form-horizontal" action="{{ route('profesor.curso.materia.editar.put', ['curs_id' => $curso->curs_id, 'mate_id' => $materia->mate_id ]) }}" method="post" enctype="multipart/form-data">
             {{ method_field('PUT') }}
             {{ csrf_field() }}
             <div class="form-group {{ $errors->has('mate_nombre') ? ' has-error' : '' }}">
@@ -34,18 +36,21 @@
             <div class="form-group {{ $errors->has('mate_rutaarchivo') ? ' has-error' : '' }}">
                 <label for="mate_rutaarchivo" class="col-lg-2 control-label">Archivo</label>
                 <div class="col-lg-10">
-                    <input type="file" class="form-control" id="mate_rutaarchivo" placeholder="ruta del archivo" name="mate_rutaarchivo" value="{{ $materia->mate_rutaarchivo }}">
+                    <input type="file" class="form-control" id="mate_rutaarchivo" placeholder="ruta del archivo" name="mate_rutaarchivo">
                     @if ($errors->has('mate_rutaarchivo'))
                         <span class="help-block">
                             <strong>{{ $errors->first('mate_rutaarchivo') }}</strong>
                         </span>
                     @endif
+                    <span class="help-block">
+                        <strong>Si selecciona un archivo, se reemplazará el archivo actual por el nuevo.</strong>
+                    </span>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-lg-10 col-lg-offset-2">
                     <a href="{{ route('profesor.curso.ver', ['curs_id' => $curso->curs_id]) }}" class="btn btn-default">Cancelar</a>
-                    <button type="submit" class="btn btn-primary">Crear Materia</button>
+                    <button type="submit" class="btn btn-primary">Editar Materia</button>
                 </div>
             </div>
         </form>

@@ -132,13 +132,7 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     /* Crear una materia, método get para ver el formulario y método post para guardar la nueva materia */
     Route::get('/curso/{curs_id}/materias/crear', 'MateriaController@create')->name('profesor.curso.materia.crear');
     Route::post('/curso/{curs_id}/materias/crear', 'MateriaController@store')->name('profesor.curso.materia.crear.post');
-    /* Ver una materia en específico de un curso.
-     * Esta ruta no es necesaria, debido a que en el datatable de la materia,
-     * se puede ver toda la información de la materia, no hay necesidad de una nueva página.
-     *
-     * Route::get('/curso/{curs_id}/materias/ver/{mate_id}', 'MateriaController@show')->name('profesor.curso.materia.ver');
-     */
-    /* Editar una materia en específico de un curso */
+    /* Editar una materia, método get para vel el formulario y método put para guardar la edición de la materia */
     Route::get('/curso/{curs_id}/materias/editar/{mate_id}', 'MateriaController@edit')->name('profesor.curso.materia.editar');
     Route::put('/curso/{curs_id}/materias/editar/{mate_id}', 'MateriaController@update')->name('profesor.curso.materia.editar.put');
     /* Eliminar una materia en específico de un curso */
