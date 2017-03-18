@@ -143,6 +143,11 @@ class CursoController extends Controller
                         ->make(true);
     }
 
+    /**
+     * Funcion que permite consultar los talleres que tiene un curso
+     * @param  string $curs_id [description]
+     * @return [type]          [description]
+     */
     public function verTalleresPorCursoAjax($curs_id = "")
    {
       $talleres = Taller::where('curs_id', $curs_id)->get();

@@ -5,8 +5,8 @@
 @section('active','#profesor-taller')
 
 @section('content')
-<p>Bienvenido a la sección de talleres por favor escoja que desea hacer:</p>
-<a href="{{ route('profesor.crearpregunta') }}" class="btn btn-primary" >Crear una pregunta</a>
+<p>Bienvenido a la sección de preguntas por favor escoja que desea hacer:</p>
+<a href="{{ route('profesor.curso.taller.pregunta') }}" class="btn btn-primary" >Crear una pregunta</a>
 <br>
 <br>
 

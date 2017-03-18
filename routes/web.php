@@ -99,7 +99,7 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     | Rutas para las preguntas
     |--------------------------------------------------------------------------
     */
-
+    Route::get('/curso/{curs_id}/taller/{tall_id}/preguntas/ajax', 'TallerController@verPreguntasPorTaller')->name('profesor.curso.taller.verajax');
     Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/inicio', 'PreguntasController@index')->name('profesor.curso.taller.pregunta');
     Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/crear', 'PreguntasController@create')->name('profesor.curso.taller.pregunta.crear');
     Route::post('/curso/{curs_id}/taller/{tall_id}/pregunta/crear', 'PreguntasController@store')->name('profesor.curso.taller.crearpregunta.post');

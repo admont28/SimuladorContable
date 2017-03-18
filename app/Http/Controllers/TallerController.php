@@ -26,6 +26,10 @@ class TallerController extends Controller
         //->with('taller',$taller );
     }
 
+    /**
+     * Función que permite consultar los registros de la tabla Taller y colocarlo en el DataTables
+     * @return [type] [description]
+     */
     public function getBasicData()
    {
        $taller = Taller::select('tall_id','tall_nombre','tall_tipo','tall_tiempo','curs_id')->get();
@@ -147,6 +151,11 @@ class TallerController extends Controller
         flash('Curso "'.$taller->tall_nombre.'" eliminado con éxito.', 'success');
         return redirect()->route('profesor.curso.taller');
     }
+    /**
+     * [verPreguntasPorTaller description]
+     * @param  string $tall_id [description]
+     * @return [type]          [description]
+     */
     public  function verPreguntasPorTaller($tall_id = "")
     {
         $pregunta = Pregunta::where('tall_id', $tall_id)->get();
@@ -156,7 +165,7 @@ class TallerController extends Controller
                 '<a href="'.route('profesor.curso.taller.ver', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
                 <a href="'.route('profesor.curso.taller.editar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
                 <a href="'.route('profesor.curso.taller.eliminar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
-
+                })->make(true);
     }
 
 }

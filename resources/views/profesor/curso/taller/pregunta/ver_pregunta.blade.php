@@ -27,9 +27,9 @@
             "ajax": "{{ route('profesor.curso.materia.verajax', ['curs_id' => $curso->curs_id]) }}",
             "columns" : [
                 {data: 'preg_id', name: 'preg_id', width: '5%'},
-                {data: 'preg_texto', name: 'mate_nombre', width: '15%'},
-                {data: '', name: 'mate_tema', width: '40%'},
-                {data: 'mate_rutaarchivo', name: 'mate_rutaarchivo', width: '20%'},
+                {data: 'preg_texto', name: 'preg_texto', width: '15%'},
+                {data: 'preg_tipo', name: 'preg_tipo', width: '40%'},
+                {data: 'preg_porcentaje', name: 'preg_porcentaje', width: '20%'},
                 {data: 'opciones', name: 'action', orderable: false, searchable: false, width: '20%'}
             ],
             "language" : {
