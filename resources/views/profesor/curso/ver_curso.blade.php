@@ -36,7 +36,7 @@
             <h1>Materias</h1>
         </div>
     </div>
-    @include('profesor.curso.materia.ver_materia')
+    @include('profesor.curso.materia.index')
 
     <div class="row">
         <div class="page-header">
