@@ -1,5 +1,7 @@
 @extends('profesor.template.main')
 
+@section('title-head', 'Crear curso')
+
 @section('title', 'Crear curso')
 
 @section('active','#profesor-curso')
