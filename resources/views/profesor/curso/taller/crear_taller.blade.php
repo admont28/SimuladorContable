@@ -62,8 +62,8 @@
     <script type="text/javascript">
         $(function () {
             $('#tiempo_taller').datetimepicker({
-                format: 'YYYY-MM-DD hh:mm:ss A',
-                extraFormats: [ 'YYYY/MM/DD hh:mm:ss A' ],
+                format: 'YYYY-MM-DD kk:mm:ss',
+                extraFormats: [ 'YYYY/MM/DD hh:mm:ss' ],
                 sideBySide: true,
                 showTodayButton: true,
                 showClear: true,

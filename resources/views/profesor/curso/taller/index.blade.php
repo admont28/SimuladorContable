@@ -1,5 +1,5 @@
 <div class="row">
-    <a href="{{ route('profesor.curso.taller.crear', ['curs_id' => $curso->curs_id]) }}" class="btn btn-primary" >Crear taller para el curso</a>
+    <a href="{{ route('profesor.curso.taller.crear.post', ['curs_id' => $curso->curs_id]) }}" class="btn btn-primary" >Crear taller para el curso</a>
 </div>
 <br>
 <div class="row">

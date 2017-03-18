@@ -24,22 +24,6 @@ class TallerController extends Controller
     }
 
     /**
-     * Función que permite consultar los registros de la tabla Taller y colocarlo en el DataTables
-     * @return [type] [description]
-     */
-    public function getBasicData()
-    {
-       $taller = Taller::select('tall_id','tall_nombre','tall_tipo','tall_tiempo','curs_id')->get();
-       return Datatables::of($taller)
-       ->addColumn('opciones', function ($taller) {
-           return
-           '<a href="'.route('profesor.curso.taller.ver', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
-           <a href="'.route('profesor.curso.taller.editar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
-           <a href="'.route('profesor.curso.taller.eliminar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
-       })->make();
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -66,26 +50,25 @@ class TallerController extends Controller
         //if (!isset($curso)) {
         //    flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
         //    return redirect()->route('profesor.taller');
-        //}
 
         $this->validate($request, [
            'nombre_taller' => 'required',
            'tipo_taller' => 'required',
            'tiempo_taller'=>'required',
-           'curs_id'=>'required'
-
-        ]);
+           'taller_rutaarchivo'=>'required',
+         ]);
 
         $taller=Taller::create([
             'tall_nombre'=> $request['nombre_taller'],
             'tall_tipo'=> $request['tipo_taller'],
             'tall_tiempo'=> $request['tiempo_taller'],
             'tall_rutaarchivo'=>$request['taller_rutaarchivo'],
-            'curs_id'=>$request['curso_taller']
+            'curs_id'=>$curs_id
           ]);
 
+
         flash('Taller "'.$taller->tall_nombre.'" creado con éxito.', 'success');
-        return redirect()->route('profesor.curso.taller');
+        return redirect()->route('profesor.curso.ver')->with('curso', $curso);
     }
 
     /**
@@ -156,11 +139,21 @@ class TallerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($curs_id = "", $tall_id = "", $preg_id ="")
     {
-        Taller::destroy($id);
-        flash('Curso "'.$taller->tall_nombre.'" eliminado con éxito.', 'success');
-        return redirect()->route('profesor.curso.taller');
+        // Busco el taller a eliminar.
+        $taller = Taller::find($tall_id);
+        // Compruebo que exista el registro en la tabla de taller.
+        if($taller)
+        {
+            $taller->delete();
+            // Mensaje para el usuario indicando la eliminación exitosa.
+            flash('taller "'.$taller->tall_nombre.'" eliminada con éxito.', 'success');
+        }else{
+            flash('No se pudo eliminar el archivo asociado al taller "'.$taller->taller_nombre.'"', 'danger');
+        }
+        // Cualquiera que sea el caso, de éxito o error es redirigido a la vista del curso.
+        return redirect()->route('profesor.curso.ver', ['id' => $curs_id]);
     }
     /**
      * [verPreguntasPorTaller description]
