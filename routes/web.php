@@ -89,10 +89,10 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     Route::get('/curso/{curs_id}/taller/inicio', 'TallerController@index')->name('profesor.curso.taller');
     Route::get('/curso/{curs_id}/taller/crear', 'TallerController@create')->name('profesor.curso.taller.crear');
     Route::post('/curso/{curs_id}/taller/crear', 'TallerController@store')->name('profesor.curso.taller.crear.post');
-    Route::get('/curso/{curs_id}/taller/ver/{id?}', 'TallerController@show')->name('profesor.curso.taller.ver');
-    Route::get('/curso/{curs_id}/taller/editar/{id?}', 'TallerController@edit')->name('profesor.curso.taller.editar');
-    Route::put('/curso/curs_id/taller/editar/{id?}', 'TallerController@update')->name('profesor.curso.taller.editar.put');
-    Route::delete('/curso/{curs_id}/taller/eliminar/{id?}', 'TallerController@destroy')->name('profesor.curso.taller.eliminar');
+    Route::get('/curso/{curs_id}/taller/ver/{tall_id}', 'TallerController@show')->name('profesor.curso.taller.ver');
+    Route::get('/curso/{curs_id}/taller/editar/{tall_id}', 'TallerController@edit')->name('profesor.curso.taller.editar');
+    Route::put('/curso/{curs_id}/taller/editar/{tall_id}', 'TallerController@update')->name('profesor.curso.taller.editar.put');
+    Route::delete('/curso/{curs_id}/taller/eliminar/{tall_id}', 'TallerController@destroy')->name('profesor.curso.taller.eliminar');
 
     /*
     |--------------------------------------------------------------------------
@@ -132,13 +132,7 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     /* Crear una materia, método get para ver el formulario y método post para guardar la nueva materia */
     Route::get('/curso/{curs_id}/materias/crear', 'MateriaController@create')->name('profesor.curso.materia.crear');
     Route::post('/curso/{curs_id}/materias/crear', 'MateriaController@store')->name('profesor.curso.materia.crear.post');
-    /* Ver una materia en específico de un curso.
-     * Esta ruta no es necesaria, debido a que en el datatable de la materia,
-     * se puede ver toda la información de la materia, no hay necesidad de una nueva página.
-     *
-     * Route::get('/curso/{curs_id}/materias/ver/{mate_id}', 'MateriaController@show')->name('profesor.curso.materia.ver');
-     */
-    /* Editar una materia en específico de un curso */
+    /* Editar una materia, método get para vel el formulario y método put para guardar la edición de la materia */
     Route::get('/curso/{curs_id}/materias/editar/{mate_id}', 'MateriaController@edit')->name('profesor.curso.materia.editar');
     Route::put('/curso/{curs_id}/materias/editar/{mate_id}', 'MateriaController@update')->name('profesor.curso.materia.editar.put');
     /* Eliminar una materia en específico de un curso */

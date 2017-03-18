@@ -1,5 +1,7 @@
 @extends('profesor.template.main')
 
+@section('title-head', 'Ver curso')
+
 @section('title',' Curso: <strong>'.$curso->curs_nombre.'</strong>')
 
 @section('active','#profesor-curso')
@@ -7,18 +9,18 @@
 @section('content')
     <div class="row">
         <div class="col-lg-2">
-            Nombre del curso:
+            <strong>Nombre del curso:</strong>
         </div>
-        <div class="col-lg-10">
+        <div class="col-lg-10 text-justify">
             {{ $curso->curs_nombre }}
         </div>
     </div>
     <br>
     <div class="row">
         <div class="col-lg-2">
-            Introducción del curso:
+            <strong>Introducción del curso:</strong>
         </div>
-        <div class="col-lg-10">
+        <div class="col-lg-10 text-justify">
             {{ $curso->curs_introduccion }}
         </div>
     </div>
@@ -34,7 +36,7 @@
             <h1>Materias</h1>
         </div>
     </div>
-    @include('profesor.curso.materia.ver_materia')
+    @include('profesor.curso.materia.index')
 
     <div class="row">
         <div class="page-header">
@@ -42,8 +44,5 @@
         </div>
     </div>
     @include('profesor.curso.taller.index')
-
-
-
 
 @endsection
