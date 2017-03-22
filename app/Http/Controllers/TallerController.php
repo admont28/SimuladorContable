@@ -18,9 +18,9 @@ class TallerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(TallerDataTables $dataTable)
+    public function index(TallerDataTables $dataTable,$curs_id = "")
     {
-        return $dataTable->render('profesor.curso.taller.index');
+        return $dataTable->render('profesor.curso.taller.index')->with('curs_id',$curs_id );
     }
 
     /**
@@ -107,7 +107,9 @@ class TallerController extends Controller
         // Retornamos la vista para editr el taller,
         // y le enviamos el modelo taller y curso para que cargue la información almacenada en bd
         // en los campos del formulario.
-        return View('profesor.curso.taller.editar_taller')->with('taller', $taller)->with('curso', $curso);
+        return View('profesor.curso.taller.editar_taller')
+            ->with('taller', $taller)
+            ->with('curso', $curso);
     }
 
     /**
@@ -165,11 +167,11 @@ class TallerController extends Controller
     {
         $pregunta = Pregunta::where('tall_id', $tall_id)->get();
         return Datatables::of($pregunta)
-            ->addColumn('opciones', function ($taller) {
+            ->addColumn('opciones', function ($pregunta) {
             return
-                '<a href="'.route('profesor.curso.taller.ver', ['tall_id' => $taller->tall_id, 'curs_id'=>$taller->curs_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
-                <a href="'.route('profesor.curso.taller.editar', ['tall_id' => $taller->tall_id,'curs_id'=>$taller->curs_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
-                <a href="'.route('profesor.curso.taller.eliminar', ['tall_id' => $taller->tall_id,'curs_id'=>$taller->curs_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
+                '<a href="'.route('profesor.curso.taller.pregunta.ver', ['curs_id'=>$pregunta->taller->curs_id,'tall_id' =>$pregunta->taller->tall_id,'preg_id'=>$pregunta->preg_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
+                <a href="'.route('profesor.curso.taller.pregunta.editar', ['curs_id'=>$pregunta->taller->curs_id,'tall_id' => $pregunta->taller->tall_id,'preg_id'=>$pregunta->preg_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
+                <a href="'.route('profesor.curso.taller.pregunta.eliminar', ['curs_id'=>$pregunta->taller->curs_id,'tall_id' => $pregunta->taller->tall_id,'preg_id'=>$pregunta->preg_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
             })->make(true);
     }
 }

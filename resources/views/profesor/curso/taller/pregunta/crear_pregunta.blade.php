@@ -6,12 +6,12 @@
 
 @section('content')
 
-<form class="form-horizontal" action="{{ route('profesor.crearpregunta.post',['taller'=>$taller]) }}" method="post">
+<form class="form-horizontal" action="{{ route('profesor.curso.taller.pregunta.crear.post',['curs_id'=>$taller->curs_id,'tall_id'=>$taller->tall_id]) }}" method="post">
     {{ csrf_field() }}
 
 
     <div class="form-group">
-      <label for="texto_preugnta" class="col-lg-2 control-label">Texto de la pregunta</label>
+      <label for="texto_pregunta" class="col-lg-2 control-label">Texto de la pregunta</label>
       <div class="col-lg-10">
         <input type="text" class="form-control" id="texto_pregunta" placeholder="Texto de la pregunta" name="texto_pregunta">
       </div>
@@ -36,22 +36,10 @@
     </div>
   </div>
 
-  <div class="form-group">
-    <label for="Taller_id" class="col-lg-2 control-label">taller</label>
-    <div class="col-lg-10">
-      <input type="text" class="form-control" id="porcentaje_pregunta" placeholder="Porcentaje de la pregunta" name="porcentaje_pregunta">
-    </div>
-  </div>
-
-
-
-
-
-
     <div class="form-group">
       <div class="col-lg-10 col-lg-offset-2">
-        <a href="{{ route('profesor.taller') }}"  class="btn btn-default">Cancelar</a>
-        <button type="submit" class="btn btn-primary">Crear Taller</button>
+        <a href="{{ route('profesor.curso.taller.ver',['curs_id'=> $taller->curs_id,'tall_id'=>$taller->tall_id]) }}"  class="btn btn-default">Regresar</a>
+        <button type="submit" class="btn btn-primary">Crear Pregunta</button>
       </div>
     </div>
 

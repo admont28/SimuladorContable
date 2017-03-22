@@ -17,7 +17,7 @@ class TallerDataTables extends DataTable
         return $this->datatables
             ->eloquent($this->query())
             ->addColumn('opciones',function($taller){
-                    return '<a href="'.route('profesor.taller.ver', ['id' => $taller->tall_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
+                    return '<a href="'.route('profesor.curso.taller.ver', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
             })
             ->make(true);
     }
@@ -29,9 +29,8 @@ class TallerDataTables extends DataTable
      */
     public function query()
     {
-        $query = Taller::query();
-
-        return $this->applyScopes($query);
+        $taller = Taller::query();
+        return $this->applyScopes($taller);
     }
 
     /**
@@ -43,7 +42,7 @@ class TallerDataTables extends DataTable
     {
         return $this->builder()
                     ->columns($this->getColumns())
-                    ->ajax(route('profesor.taller'))
+                    ->ajax(route('profesor.curso.taller'))
                     //->addAction(['width' => '80px'])
                     ->parameters(
                         [

@@ -1,6 +1,6 @@
 @extends('profesor.template.main')
 
-@section('title', 'Sección de talleres <strong>'.$taller->tall_nombre.'</strong>')
+@section('title', 'ver taller <strong>'.$taller->tall_nombre.'</strong>')
 
 @section('active','#profesor-taller')
 
@@ -8,38 +8,46 @@
 
     <div class="row">
 
-            <div class="form-group">
-                <label for="nombre_taller" class="col-lg-10 ">Nombre del taller</label>
                 <div class="col-lg-2">
+                    <strong>Nombre del taller </strong>
+                </div>
+                <div class="col-lg-10 text-justify">
                     {{ $taller->tall_nombre }}
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label for="tipo_taller" class="col-lg-10 ">Tipo</label>
                 <div class="col-lg-2">
+                    <strong>Tipo</strong>
+                </div>
+                <div class="col-lg-10 text-justify">
                     {{ $taller->tall_tipo }}
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="tiempo_taller" class="col-lg-10">Tiempo del taller</label>
+
                 <div class="col-lg-2">
+                    <strong> Tiempo del taller </strong>
+                </div>
+                <div class="col-lg-10 text-justify">
                     <div class='input-group date ' >
                         {{ $taller->tall_tiempo }}
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="taller_rutaarchivo" class="col-lg-10">Archivo</label>
+
                 <div class="col-lg-2">
+                    <strong> Archivo </strong>
+                </div>
+                <div class="col-lg-10 text-justify">
                     <a href="{{ $taller->tall_rutaarchivo }}"> {{ $taller->tall_rutaarchivo }} </a>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-lg-10 col-lg-offset-2">
-                    <a href="{{ route('profesor.curso.ver',['id' => $taller->curs_id]) }}"  class="btn btn-default">Regresar</a>
+
+                <br>
+                <div class="col-lg-10 col-lg-offset-2 text-center">
+                    <a href="{{ route('profesor.curso.ver',['tall_id' => $taller->tall_id,'curs_id'=>$taller->curs_id]) }}"  class="btn btn-default">Regresar</a>
+                    <a href="{{ route('profesor.curso.taller.editar',['curs_id'=>$taller->curs_id,'tall_id' => $taller->tall_id]) }}"  class="btn btn-default">Editar taller</a>
                 </div>
-            </div>
+
+
+
+
+
 
     </div>
 
