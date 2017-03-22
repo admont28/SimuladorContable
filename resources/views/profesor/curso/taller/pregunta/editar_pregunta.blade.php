@@ -25,7 +25,7 @@
             <div class="form-group {{ $errors->has('tipo_pregunta') ? ' has-error' : '' }}">
                 <label for="tipo_pregunta" class="col-lg-2 control-label">Tipo</label>
                 <div class="col-lg-10">
-                    <select class="form-control" id="tipo_pregunta" name="tipo_pregunta">
+                    <select class="form-control" id="tipo_pregunta" name="tipo_pregunta" disabled="disabled">
                         @foreach ($opciones as $opcion)
                             <option value="{{ $opcion }}" @if($pregunta->preg_tipo == $opcion) {{'selected=selected'}} @endif>{{ $opcion }}</option>
                         @endforeach
@@ -37,10 +37,26 @@
                     @endif
                 </div>
             </div>
+            @if (isset($respuestasMultiplesUnicas) && !empty($respuestasMultiplesUnicas))
+                @foreach ($respuestasMultiplesUnicas as $respuesta)
+                    <div class="form-group">
+                        <label for="respuesta_{{ $loop->iteration }}" class="col-lg-2 control-label">Respuesta {{ $loop->iteration }}:</label>
+                        <div class="col-lg-10">
+                            <div class="input-group">
+                                <p class="form-control">{{ $respuesta->remu_texto }}</p>
+                                <span class="input-group-addon">
+                                    <span>¿Correcta?</span>
+                                    <input type="checkbox" id="respuesta_{{ $loop->iteration }}" name="respuesta_{{ $loop->iteration }}" @if($respuesta->remu_correcta == true) {{'checked=checked'}} @endif>
+                                </span>
+                            </div><!-- /input-group -->
+                        </div><!-- /.col-lg-6 -->
+                    </div>
+                @endforeach
+            @endif
             <div class="form-group {{ $errors->has('porcentaje_pregunta') ? ' has-error' : '' }}">
                 <label for="porcentaje_pregunta" class="col-lg-2 control-label">Porcentaje</label>
                 <div class="col-lg-10">
-                    <input type="number" min="0.1" max="5.0" step="0.1" class="form-control" id="porcentaje_pregunta" placeholder="Ingrese el porcentaje de la pregunta, min: 0, max: 5" name="porcentaje_pregunta" value="@if(old('porcentaje_pregunta') != NULL){{ old('porcentaje_pregunta') }}@else{{ $pregunta->preg_porcentaje }}@endif">
+                    <input type="number" min="0.1" max="5.0" step="0.1" class="form-control" id="porcentaje_pregunta" placeholder="Ingrese el porcentaje de la pregunta, min: 0,1 - max: 5" name="porcentaje_pregunta" value="@if(old('porcentaje_pregunta') != NULL){{ old('porcentaje_pregunta') }}@else{{ $pregunta->preg_porcentaje }}@endif">
                     @if ($errors->has('porcentaje_pregunta'))
                         <span class="help-block">
                             <strong>{{ $errors->first('porcentaje_pregunta') }}</strong>
@@ -51,9 +67,11 @@
                     </span>
                 </div>
             </div>
+
             <div class="form-group">
                 <div class="col-lg-10 col-lg-offset-2">
                     <a href="{{ route('profesor.curso.taller.ver',['curs_id' => $taller->curs_id,'tall_id'=>$taller->tall_id]) }}"  class="btn btn-default">Cancelar</a>
+                    <button type="button" name="adicionar_respuesta" class="btn btn-success">Adicionar respuesta</button>
                     <button type="submit" class="btn btn-primary">Editar Pregunta</button>
                 </div>
             </div>

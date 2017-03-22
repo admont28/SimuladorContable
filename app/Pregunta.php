@@ -64,6 +64,14 @@ class Pregunta extends Model
         return $this->belongsTo('App\Taller','tall_id');
     }
 
+    /**
+     * Obtener las respuestas multiple unica
+     */
+    public function respuestasMultiplesUnicas()
+    {
+        return $this->hasMany('App\RespuestaMultipleUnica','preg_id');
+    }
+
     public static function getPossibleEnumValues(){
         $type = DB::select(DB::raw('SHOW COLUMNS FROM Pregunta WHERE Field = "preg_tipo"'))[0]->Type;
         preg_match('/^enum\((.*)\)$/', $type, $matches);

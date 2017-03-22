@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\DB;
 use App\Pregunta;
+use App\RespuestaMultipleUnica;
 use App\Curso;
 use App\Taller;
 use App\DataTables\PreguntaDataTables;
@@ -20,10 +21,27 @@ class PreguntaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($tall_id)
+    public function create($curs_id, $tall_id)
     {
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso');
+        }
+        // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
         $taller = Taller::find($tall_id);
-        return View('profesor.curso.taller.pregunta.crear_pregunta')->with('taller',$taller);
+        if (!isset($taller)) {
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
+        }
+        // Obtengo las opciones disponbiles en bd en el campo tall_tipo de tipo enum.
+        $posiblesOpciones = Pregunta::getPossibleEnumValues();
+        $taller = Taller::find($tall_id);
+        return View('profesor.curso.taller.pregunta.crear_pregunta')
+                    ->with('curso', $curso)
+                    ->with('taller', $taller)
+                    ->with('opciones', $posiblesOpciones);;
     }
 
     /**
@@ -34,23 +52,36 @@ class PreguntaController extends Controller
      */
     public function store(Request $request, $curs_id, $tall_id)
     {
-
-        $taller=Taller::find($tall_id);
-        $this->validate($request, [
-           'texto_pregunta' => 'required',
-           'tipo_pregunta' => 'required',
-           'porcentaje_pregunta'=>'required',
-        ]);
-            $pregunta=Pregunta::create([
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso');
+        }
+        // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
+        $taller = Taller::find($tall_id);
+        if (!isset($taller)) {
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
+        }
+        // Obtengo las opciones disponbiles en bd en el campo preg_tipo de tipo enum.
+        $opciones = Pregunta::getPossibleEnumValues();
+        $opcionesSeparadasPorComas = implode(",", $opciones);
+        // Para mirar el regex: http://www.regexpal.com/
+        Validator::make($request->all(), [
+            'texto_pregunta' => 'required|max:500|min:5',
+            'tipo_pregunta' => 'required|in:'.$opcionesSeparadasPorComas,
+            'porcentaje_pregunta'=>'required|regex:/^[0-9]([,\.][0-9])?$/'
+        ])->validate();
+        // Almaceno en bd la nueva pregunta
+        Pregunta::create([
             'preg_texto'=> $request['texto_pregunta'],
             'preg_tipo'=> $request['tipo_pregunta'],
             'preg_porcentaje'=> $request['porcentaje_pregunta'],
             'tall_id'=>$tall_id
-          ]);
-
-
-          flash('Pregunta "'.$pregunta->preg_texto.'" creado con éxito.', 'success');
-          return redirect()->route('profesor.curso.taller.ver',['curs_id'=> $curs_id,'tall_id'=>$taller->tall_id]);
+        ]);
+        flash('Pregunta "'.$request['texto_pregunta'].'" creada con éxito.', 'success');
+        return redirect()->route('profesor.curso.taller.ver',['curs_id'=> $curs_id,'tall_id'=>$taller->tall_id]);
     }
 
     /**
@@ -59,10 +90,30 @@ class PreguntaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($curs_id, $tall_id, $preg_id)
     {
-        $pregunta = Pregunta::find($id);
-        return view('profesor.curso.taller.pregunta.ver_pregunta')->with('pregunta', $pregunta);
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso');
+        }
+        // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
+        $taller = Taller::find($tall_id);
+        if (!isset($taller)) {
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
+        }
+        // Verificamos que exista la pregunta en bd, si no es así, informamos al usuario y redireccionamos.
+        $pregunta = Pregunta::find($preg_id);
+        if (!isset($pregunta)) {
+            flash('La pregunta con ID: '.$preg_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
+        }
+        return view('profesor.curso.taller.pregunta.ver_pregunta')
+                    ->with('curso', $curso)
+                    ->with('taller', $taller)
+                    ->with('pregunta', $pregunta);
     }
 
     /**
@@ -93,6 +144,10 @@ class PreguntaController extends Controller
         }
         // Obtengo las opciones disponbiles en bd en el campo tall_tipo de tipo enum.
         $posiblesOpciones = Pregunta::getPossibleEnumValues();
+        $respuestasMultiplesUnicas = array();
+        if($pregunta->preg_tipo == 'unica' || $pregunta->preg_tipo == 'multiple'){
+            $respuestasMultiplesUnicas = $pregunta->respuestasMultiplesUnicas;
+        }
         // Retornamos la vista para editr la pregunta,
         // y le enviamos el modelo pregunta y taller  para que cargue la información almacenada en bd
         // en los campos del formulario.
@@ -100,6 +155,7 @@ class PreguntaController extends Controller
                     ->with('curso', $curso)
                     ->with('taller', $taller)
                     ->with('pregunta', $pregunta)
+                    ->with('respuestasMultiplesUnicas', $respuestasMultiplesUnicas)
                     ->with('opciones', $posiblesOpciones);
     }
 
