@@ -23,8 +23,9 @@ class CursoSeeder extends Seeder
                 'tall_nombre' => $faker->realText(rand(10,45)),
                 'tall_tipo' => $faker->randomElement(array ('diagnostico','teorico','practico')),
                 'tall_tiempo' => $faker->date('Y-m-d H:i:s', $max = 'now'),
-                'curs_id' => $curs_id,
-                'tall_rutaarchivo' => $faker->imageUrl($width = 640, $height = 480)
+                'tall_rutaarchivo' => $faker->imageUrl($width = 640, $height = 480),
+                'tall_nombrearchivo' => $faker->word(),
+                'curs_id' => $curs_id
             ));
 
             $mate_id = \DB::table('Materia')->insertGetId(array(

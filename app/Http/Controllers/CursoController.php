@@ -65,7 +65,7 @@ class CursoController extends Controller
      */
     public function show($id)
     {
-        
+
         $curso = Curso::find($id);
         return View('profesor.curso.ver_curso')->with('curso', $curso);
 
@@ -153,18 +153,20 @@ class CursoController extends Controller
    {
       $talleres = Taller::where('curs_id', $curs_id)->get();
        return Datatables::of($talleres)
-       ->addColumn('opciones', function ($taller) {
-           $method_field = method_field('DELETE');
-           $csrf_field = csrf_field();
-           return
-           '<a href="'.route('profesor.curso.taller.ver', ['curs_id' => $taller->curs_id, 'tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
-           <a href="'.route('profesor.curso.taller.editar', ['curs_id' => $taller->curs_id, 'tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
-           <form action="'.route('profesor.curso.taller.eliminar', ['curs_id' => $taller->curs_id, 'tall_id' => $taller->tall_id]).'" method="POST" class="visible-lg-inline-block">
-               '.$method_field.'
-               '.$csrf_field.'
-               <button type="submit" name="eliminar" class="btn btn-xs btn-danger btn-eliminar"><i class="glyphicon glyphicon-trash"></i> Eliminar</button>
-           </form>';
-       })->make(true);
+                        ->addColumn('opciones', function ($taller) {
+                            $method_field = method_field('DELETE');
+                            $csrf_field = csrf_field();
+                            return
+                                '<a href="'.route('profesor.curso.taller.ver', ['curs_id' => $taller->curs_id, 'tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
+                                <a href="'.route('profesor.curso.taller.editar', ['curs_id' => $taller->curs_id, 'tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
+                                <form action="'.route('profesor.curso.taller.eliminar', ['curs_id' => $taller->curs_id, 'tall_id' => $taller->tall_id]).'" method="POST" class="visible-lg-inline-block">
+                                    '.$method_field.'
+                                    '.$csrf_field.'
+                                    <button type="submit" name="eliminar" class="btn btn-xs btn-danger btn-eliminar"><i class="glyphicon glyphicon-trash"></i> Eliminar</button>
+                                    </form>';
+                       })
+                       ->editColumn('tall_rutaarchivo', '<a href="{{$tall_rutaarchivo}}">{{$tall_nombrearchivo}}</a>')
+                       ->make(true);
    }
 
 }

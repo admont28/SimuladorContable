@@ -68,7 +68,7 @@ class MateriaController extends Controller
             'curs_id'=> $curs_id
         ]);
         // Informo al usuario y redireccionamos.
-        flash('La materia "'.$request['mate_nombre'].'" ha sido creado con éxito.','success');
+        flash('La materia "'.$request['mate_nombre'].'" ha sido creada con éxito.','success');
         return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
     }
 
