@@ -1,5 +1,7 @@
 @extends('profesor.template.main')
 
+@section('title-head', 'Ver taller')
+
 @section('title', 'Sección de talleres <strong>'.$taller->tall_nombre.'</strong>')
 
 @section('active','#profesor-taller')
