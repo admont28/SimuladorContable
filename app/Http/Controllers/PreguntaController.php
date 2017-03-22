@@ -11,7 +11,7 @@ use App\DataTables\PreguntaDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
 
-class PreguntasController extends Controller
+class PreguntaController extends Controller
 {
 
 
@@ -71,28 +71,36 @@ class PreguntasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($tall_id ,$preg_id )
+    public function edit($curs_id, $tall_id, $preg_id)
     {
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
-        $taller = Taller::find($tall_id);
-
-        if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
-            return redirect()->route('profesor.curso.taller');
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso');
         }
         // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
-        $pregunta = pregunta::find($preg_id);
-        dd($pregunta);
-        if (!isset($pregunta)) {
-            flash('La pregunta con el ID: '.$preg_id.' no existe. Verifique por favor.', 'danger');
-            return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $taller->curs_id,'tall_id'=>$taller->tall_id]);
+        $taller = Taller::find($tall_id);
+        if (!isset($taller)) {
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
+        // Verificamos que exista la pregunta en bd, si no es así, informamos al usuario y redireccionamos.
+        $pregunta = Pregunta::find($preg_id);
+        if (!isset($pregunta)) {
+            flash('La pregunta con ID: '.$preg_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
+        }
+        // Obtengo las opciones disponbiles en bd en el campo tall_tipo de tipo enum.
+        $posiblesOpciones = Pregunta::getPossibleEnumValues();
         // Retornamos la vista para editr la pregunta,
         // y le enviamos el modelo pregunta y taller  para que cargue la información almacenada en bd
         // en los campos del formulario.
         return View('profesor.curso.taller.pregunta.editar_pregunta')
-            ->with('pregunta', $pregunta)
-            ->with('taller', $taller);
+                    ->with('curso', $curso)
+                    ->with('taller', $taller)
+                    ->with('pregunta', $pregunta)
+                    ->with('opciones', $posiblesOpciones);
     }
 
     /**
@@ -102,23 +110,43 @@ class PreguntasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id = "")
+    public function update(Request $request, $curs_id, $tall_id, $preg_id)
     {
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso');
+        }
+        // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
+        $taller = Taller::find($tall_id);
+        if (!isset($taller)) {
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
+        }
+        // Verificamos que exista la pregunta en bd, si no es así, informamos al usuario y redireccionamos.
+        $pregunta = Pregunta::find($preg_id);
+        if (!isset($pregunta)) {
+            flash('La pregunta con ID: '.$preg_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
+        }
+        // Obtengo las opciones disponbiles en bd en el campo preg_tipo de tipo enum.
+        $opciones = Pregunta::getPossibleEnumValues();
+        $opcionesSeparadasPorComas = implode(",", $opciones);
+        // Para mirar el regex: http://www.regexpal.com/
         Validator::make($request->all(), [
-            'texto_pregunta' => 'required',
-            'tipo_pregunta' => 'required',
-            'porcentaje_pregunta'=>'required'
+            'texto_pregunta' => 'required|max:500|min:5',
+            'tipo_pregunta' => 'required|in:'.$opcionesSeparadasPorComas,
+            'porcentaje_pregunta'=>'required|regex:/^[0-9]([,\.][0-9])?$/'
         ])->validate();
 
-
-        $pregunta = Pregunta::find($id);
         $pregunta->preg_texto = $request->input('texto_pregunta');
         $pregunta->preg_tipo = $request->input('tipo_pregunta');
         $pregunta->preg_porcentaje = $request->input('porcentaje_pregunta');
         $pregunta->save();
 
-        flash('pregunta "'.$pregunta->preg_texto.'" editado con éxito.', 'success');
-        return redirect()->route('profesor.curso.taller.ver',['curs_id'=> $pregunta->taller->curs_id,'tall_id'=>$pregunta->tall_id]);
+        flash('La pregunta "'.substr($pregunta->preg_texto, 0, 80).'..." editada con éxito.', 'success');
+        return redirect()->route('profesor.curso.taller.ver',['curs_id'=> $curs_id, 'tall_id'=> $tall_id]);
     }
 
     /**

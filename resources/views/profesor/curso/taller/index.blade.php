@@ -31,8 +31,8 @@
                     {data: 'tall_id', name: 'tall_id', width: '5%'},
                     {data: 'tall_nombre', name: 'tall_nombre', width: '30%'},
                     {data: 'tall_tipo', name: 'tall_tipo', width: '10%'},
-                    {data: 'tall_tiempo', name: 'tall_tiempo', width: '15%'},
-                    {data: 'tall_rutaarchivo', name: 'tall_rutaarchivo', width: '20%'},
+                    {data: 'tall_tiempo', name: 'tall_tiempo', width: '20%'},
+                    {data: 'tall_rutaarchivo', name: 'tall_rutaarchivo', width: '15%'},
                     {data: 'opciones', name: 'action', orderable: false, searchable: false, width: '20%'}
                 ],
                 "language" : {

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Pregunta extends Model
 {
@@ -61,5 +62,15 @@ class Pregunta extends Model
     public function taller()
     {
         return $this->belongsTo('App\Taller','tall_id');
+    }
+
+    public static function getPossibleEnumValues(){
+        $type = DB::select(DB::raw('SHOW COLUMNS FROM Pregunta WHERE Field = "preg_tipo"'))[0]->Type;
+        preg_match('/^enum\((.*)\)$/', $type, $matches);
+        $values = array();
+        foreach(explode(',', $matches[1]) as $value){
+            $values[] = trim($value, "'");
+        }
+        return $values;
     }
 }

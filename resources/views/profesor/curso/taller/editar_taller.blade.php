@@ -4,7 +4,7 @@
 
 @section('title', 'Editar taller para el curso: <strong>'.$curso->curs_nombre.'</strong>')
 
-@section('active','#profesor-taller')
+@section('active','#profesor-curso')
 
 @section('content')
     <div class="row">

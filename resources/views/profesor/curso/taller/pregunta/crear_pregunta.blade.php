@@ -2,7 +2,7 @@
 
 @section('title', 'Sección de preguntas')
 
-@section('active','#profesor-preguntas')
+@section('active','#profesor-curso')
 
 @section('content')
 
