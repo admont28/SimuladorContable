@@ -104,6 +104,7 @@
                     nextCentury: 'Siguiente siglo'
                 }
             });
+            $('#tiempo_taller').val('{{ old('tiempo_taller') }}');
         });
     </script>
 @endpush

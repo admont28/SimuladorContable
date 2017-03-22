@@ -62,8 +62,7 @@ class TallerController extends Controller
         Validator::make($request->all(), [
            'nombre_taller' => 'required|max:45',
            'tipo_taller' => 'required|in:'.$opcionesSeparadasPorComas,
-           'tiempo_taller' => 'required|date',
-           //'tiempo_taller' => 'required|date_format:YYYY-MM-DD HH:mm:ss',
+           'tiempo_taller' => 'required|date_format:Y-m-d H:i:s',
            'taller_rutaarchivo' => 'required'
         ])->validate();
         //obtenemos el campo file definido en el formulario
@@ -157,8 +156,7 @@ class TallerController extends Controller
         Validator::make($request->all(), [
            'nombre_taller' => 'required|max:45',
            'tipo_taller' => 'required|in:'.$opcionesSeparadasPorComas,
-           'tiempo_taller' => 'required|date'
-           //'tiempo_taller' => 'required|date_format:YYYY-MM-DD HH:mm:ss'
+           'tiempo_taller' => 'required|date_format:Y-m-d H:i:s'
         ])->validate();
         //obtenemos el campo file definido en el formulario
         $file = $request->file('taller_rutaarchivo');
