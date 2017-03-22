@@ -53,10 +53,16 @@ return [
             'root' => storage_path('app/public'),
             'visibility' => 'public',
         ],
-        
+
         'materias' => [
             'driver' => 'local',
             'root' => storage_path('app/public/materias'),
+            'visibility' => 'public',
+        ],
+
+        'talleres' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/talleres'),
             'visibility' => 'public',
         ],
 

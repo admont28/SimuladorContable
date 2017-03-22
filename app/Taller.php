@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Taller extends Model
 {
@@ -43,7 +44,7 @@ class Taller extends Model
      * @var array
      */
     protected $fillable = [
-        'tall_id', 'tall_nombre','tall_tipo','tall_tiempo','curs_id','tall_rutaarchivo'
+        'tall_id', 'tall_nombre','tall_tipo','tall_tiempo','curs_id','tall_rutaarchivo','tall_nombrearchivo'
     ];
 
     /**
@@ -61,5 +62,15 @@ class Taller extends Model
     public function preguntas()
     {
         return $this->hasMany('App\Pregunta','preg_id');
+    }
+
+    public static function getPossibleEnumValues(){
+        $type = DB::select(DB::raw('SHOW COLUMNS FROM Taller WHERE Field = "tall_tipo"'))[0]->Type;
+        preg_match('/^enum\((.*)\)$/', $type, $matches);
+        $values = array();
+        foreach(explode(',', $matches[1]) as $value){
+            $values[] = trim($value, "'");
+        }
+        return $values;
     }
 }

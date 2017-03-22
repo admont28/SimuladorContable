@@ -10,6 +10,7 @@ use App\Pregunta;
 use App\DataTables\TallerDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
+use Storage;
 
 class TallerController extends Controller
 {
@@ -31,11 +32,13 @@ class TallerController extends Controller
     public function create($curs_id = "")
     {
         $curso = Curso::find($curs_id);
+        // Obtengo las opciones disponbiles en bd en el campo tall_tipo de tipo enum.
+        $posiblesOpciones = Taller::getPossibleEnumValues();
         if (!isset($curso)) {
             flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
             return redirect()->route('profesor.curso');
         }
-        return View('profesor.curso.taller.crear_taller')->with('curso', $curso);
+        return View('profesor.curso.taller.crear_taller')->with('curso', $curso)->with('opciones', $posiblesOpciones);
     }
 
     /**
@@ -44,31 +47,41 @@ class TallerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $curs_id ="")
+    public function store(Request $request, $curs_id = "")
     {
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso=Curso::find($curs_id);
-
         if (!isset($curso)) {
-
             flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
             return redirect()->route('profesor.curso.taller',['curs_id'=> $curso->curs_id]);
         }
-        $this->validate($request, [
-           'nombre_taller' => 'required',
-           'tipo_taller' => 'required',
-           'tiempo_taller'=>'required',
-           'taller_rutaarchivo'=>'required',
-         ]);
-
-        $taller=Taller::create([
-            'tall_nombre'=> $request['nombre_taller'],
-            'tall_tipo'=> $request['tipo_taller'],
-            'tall_tiempo'=> $request['tiempo_taller'],
-            'tall_rutaarchivo'=>$request['taller_rutaarchivo'],
-            'curs_id'=>$curs_id
-          ]);
-        flash('Taller "'.$taller->tall_nombre.'" creado con éxito.', 'success');
-
+        // Obtengo las opciones disponbiles en bd en el campo tall_tipo de tipo enum.
+        $opciones = Taller::getPossibleEnumValues();
+        $opcionesSeparadasPorComas = implode(",", $opciones);
+        // Validamos los campos del formulario.
+        Validator::make($request->all(), [
+           'nombre_taller' => 'required|max:45',
+           'tipo_taller' => 'required|in:'.$opcionesSeparadasPorComas,
+           'tiempo_taller' => 'required|date_format:Y-m-d H:i:s',
+           'taller_rutaarchivo' => 'required'
+        ])->validate();
+        //obtenemos el campo file definido en el formulario
+        $file = $request->file('taller_rutaarchivo');
+        //obtenemos el nombre del archivo
+        $nombreArchivo = $file->getClientOriginalName();
+        // Almaceno en el dicso talleres el archivo cargado por el usuario.
+        $path = Storage::disk('talleres')->put('/', $file);
+        // Almaceno en bd el nuevo taller.
+        Taller::create([
+            'tall_nombre' => $request['nombre_taller'],
+            'tall_tipo' => $request['tipo_taller'],
+            'tall_tiempo' => $request['tiempo_taller'],
+            'tall_rutaarchivo' => asset('storage/talleres/'.$path),
+            'tall_nombrearchivo' => $nombreArchivo,
+            'curs_id' => $curs_id
+        ]);
+        // Informo al usuario y redireccionamos.
+        flash('El taller "'.$request['nombre_taller'].'" ha sido creado con éxito.', 'success');
         return redirect()->route('profesor.curso.ver',['curs_id'=> $curso->curs_id]);
     }
 
@@ -104,12 +117,16 @@ class TallerController extends Controller
             flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
             return redirect()->route('profesor.curso.ver', ['id' => $curs_id]);
         }
+        // Obtengo las opciones disponbiles en bd en el campo tall_tipo de tipo enum.
+        $posiblesOpciones = Taller::getPossibleEnumValues();
         // Retornamos la vista para editr el taller,
         // y le enviamos el modelo taller y curso para que cargue la información almacenada en bd
         // en los campos del formulario.
         return View('profesor.curso.taller.editar_taller')
-            ->with('taller', $taller)
-            ->with('curso', $curso);
+                    ->with('taller', $taller)
+                    ->with('curso', $curso)
+                    ->with('opciones', $posiblesOpciones);
+
     }
 
     /**
@@ -119,21 +136,67 @@ class TallerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $curs_id, $tall_id)
     {
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso');
+        }
+        // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
+        $taller = Taller::find($tall_id);
+        if (!isset($taller)) {
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
+        }
+        // Obtengo las opciones disponbiles en bd en el campo tall_tipo de tipo enum.
+        $opciones = Taller::getPossibleEnumValues();
+        $opcionesSeparadasPorComas = implode(",", $opciones);
+        // Validamos los campos del formulario.
         Validator::make($request->all(), [
-            'nombre_taller' => 'required',
-            'tipo_taller' => 'required',
-            'tiempo_taller'=>'required'
-
+           'nombre_taller' => 'required|max:45',
+           'tipo_taller' => 'required|in:'.$opcionesSeparadasPorComas,
+           'tiempo_taller' => 'required|date_format:Y-m-d H:i:s'
         ])->validate();
-        $taller = Taller::find($id);
+        //obtenemos el campo file definido en el formulario
+        $file = $request->file('taller_rutaarchivo');
+        // Si existe y no es nulo $file es porque el usuario seleccionó un archivo en el formulario.
+        if(isset($file)){
+            //obtenemos el nombre del archivo
+            $nombreArchivo = $file->getClientOriginalName();
+            // Obtengo más información del archivo de la materia. ver: http://php.net/manual/es/function.pathinfo.php
+            $infoArchivo = pathinfo($taller->mate_rutaarchivo);
+            $eliminacionArchivo = true;
+            // Compruebo que exista el archivo en el disco de materias.
+            if(Storage::disk('talleres')->exists($infoArchivo['basename'])){
+                // Si existe el archivo procedo a eliminarlo, retorna true si fue exitoso, de lo contrario retorna false.
+                $eliminacionArchivo = Storage::disk('talleres')->delete($infoArchivo['basename']);
+            }
+            if($eliminacionArchivo){
+                // Una vez eliminado el archivo, almaceno el nuevo archivo en el disco talleres
+                $path = Storage::disk('talleres')->put('/', $file);
+            }else {
+                // Si no se pudo eliminar el archivo anterior, informo al usuario y redireccionamos.
+                flash('No se pudo eliminar el archivo asociado al taller "'.$taller->mate_nombre.'"', 'danger');
+                return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
+            }
+        }
+        // Asignamos el nuevo nombre del taller, nuevo tipo y tiempo.
         $taller->tall_nombre = $request->input('nombre_taller');
-        $taller->tall_tipo = $request->input('tipo_taller');
+        $taller->tall_tipo   = $request->input('tipo_taller');
         $taller->tall_tiempo = $request->input('tiempo_taller');
+        // Si existe $path y $nombreArchivo es porque el usuario está cargando un nuevo archivo,
+        // almaceno la nueva ruta y nombre del archivo en bd.
+        if(isset($path,$nombreArchivo)){
+            $taller->tall_rutaarchivo = asset('storage/talleres/'.$path);
+            $taller->tall_nombrearchivo = $nombreArchivo;
+        }
+        // Guardo los cambios en el modelo.
         $taller->save();
-        flash('Curso "'.$curso->curs_nombre.'" editado con éxito.', 'success');
-        return redirect()->route('profesor.curso');
+        // Informo al usuairo y redireccionamos.
+        flash('Taller "'.$taller->tall_nombre.'" editado con éxito.', 'success');
+        return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
     }
 
     /**

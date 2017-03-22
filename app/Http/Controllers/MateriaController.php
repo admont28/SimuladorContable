@@ -68,7 +68,7 @@ class MateriaController extends Controller
             'curs_id'=> $curs_id
         ]);
         // Informo al usuario y redireccionamos.
-        flash('La materia "'.$request['mate_nombre'].'" ha sido creado con éxito.','success');
+        flash('La materia "'.$request['mate_nombre'].'" ha sido creada con éxito.','success');
         return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
     }
 
@@ -130,9 +130,9 @@ class MateriaController extends Controller
         }
         // Verificamos que exista la materia en bd, si no es así, informamos al usuario y redireccionamos.
         $materia = Materia::find($mate_id);
-        if (!isset($curso)) {
+        if (!isset($materia)) {
             flash('La materia con ID: '.$mate_id.' no existe. Verifique por favor.', 'danger');
-            return redirect()->route('profesor.curso.ver', ['id' => $curs_id]);
+            return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
         // Validar solo 2 campos del formulario.
         Validator::make($request->all(), [
@@ -147,18 +147,19 @@ class MateriaController extends Controller
             $nombreArchivo = $file->getClientOriginalName();
             // Obtengo más información del archivo de la materia. ver: http://php.net/manual/es/function.pathinfo.php
             $infoArchivo = pathinfo($materia->mate_rutaarchivo);
+            $eliminacionArchivo = true;
             // Compruebo que exista el archivo en el disco de materias.
             if(Storage::disk('materias')->exists($infoArchivo['basename'])){
                 // Si existe el archivo procedo a eliminarlo, retorna true si fue exitoso, de lo contrario retorna false.
                 $eliminacionArchivo = Storage::disk('materias')->delete($infoArchivo['basename']);
-                if($eliminacionArchivo){
-                    // Una vez eliminado el archivo, almaceno el nuevo archivo en el disco materias
-                    $path = Storage::disk('materias')->put('/', $file);
-                }else {
-                    // Si no se pudo eliminar el archivo anterior, informo al usuario y redireccionamos.
-                    flash('No se pudo eliminar el archivo asociado a la materia "'.$materia->mate_nombre.'"', 'danger');
-                    return redirect()->route('profesor.curso.ver', ['id' => $curs_id]);
-                }
+            }
+            if($eliminacionArchivo){
+                // Una vez eliminado el archivo, almaceno el nuevo archivo en el disco materias
+                $path = Storage::disk('materias')->put('/', $file);
+            }else {
+                // Si no se pudo eliminar el archivo anterior, informo al usuario y redireccionamos.
+                flash('No se pudo eliminar el archivo asociado a la materia "'.$materia->mate_nombre.'"', 'danger');
+                return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
             }
         }
         // Asignamos el nuevo nombre de la materia y el nuevo tema.

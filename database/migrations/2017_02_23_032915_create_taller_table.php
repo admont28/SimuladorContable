@@ -21,6 +21,7 @@ class CreateTallerTable extends Migration
             $table->integer('curs_id')->unsigned();
             $table->foreign('curs_id')->references('curs_id')->on('Curso');
             $table->string('tall_rutaarchivo', 255);
+            $table->string('tall_nombrearchivo', 255);
             $table->timestamp('tall_fechacreacion')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('tall_fechamodificacion')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
