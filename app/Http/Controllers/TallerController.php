@@ -180,9 +180,9 @@ class TallerController extends Controller
         return Datatables::of($pregunta)
             ->addColumn('opciones', function ($taller) {
             return
-                '<a href="'.route('profesor.curso.taller.ver', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
-                <a href="'.route('profesor.curso.taller.editar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
-                <a href="'.route('profesor.curso.taller.eliminar', ['tall_id' => $taller->tall_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
+                '<a href="'.route('profesor.curso.taller.ver', ['tall_id' => $taller->tall_id, 'curs_id'=>$taller->curs_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
+                <a href="'.route('profesor.curso.taller.editar', ['tall_id' => $taller->tall_id,'curs_id'=>$taller->curs_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
+                <a href="'.route('profesor.curso.taller.eliminar', ['tall_id' => $taller->tall_id,'curs_id'=>$taller->curs_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
             })->make(true);
     }
 }
