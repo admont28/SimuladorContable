@@ -110,6 +110,21 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
 
     /*
     |--------------------------------------------------------------------------
+    | Rutas para las respuestas
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/{preg_id}/respuesta/ajax', 'PreguntaController@verRespuestasPorPregunta')->name('profesor.curso.taller.pregunta.respuesta.verajax');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/{preg_id}/respuesta/inicio', 'RespuestaController@index')->name('profesor.curso.taller.pregunta.respuesta');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/{preg_id}/respuesta/crear', 'RespuestaController@crearRespuestaMultipleUnica')->name('profesor.curso.taller.pregunta.respuesta.crear');
+    Route::post('/curso/{curs_id}/taller/{tall_id}/pregunta/{preg_id}/respuesta/crear', 'RespuestaController@guardarRespuestaMultipleUnica')->name('profesor.curso.taller.pregunta.respuesta.crear.post');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/{preg_id}/respuesta/ver/{remu_id}', 'RespuestaController@show')->name('profesor.curso.taller.pregunta.respuesta.ver');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/{preg_id}/respuesta/editar/{remu_id}', 'RespuestaController@editarRespuestaMultipleUnica')->name('profesor.curso.taller.pregunta.respuesta.editar');
+    Route::put('/curso/{curs_id}/taller/{tall_id}/pregunta/{preg_id}/respuesta/editar/{remu_id}', 'RespuestaController@actualizarRespuestaMultipleUnica')->name('profesor.curso.taller.pregunta.respuesta.editar.put');
+    Route::delete('/curso/{curs_id}/taller/{tall_id}/pregunta/{preg_id}/respuesta/eliminar/{remu_id}', 'RespuestaController@eliminarRespuestaMultipleUnica')->name('profesor.curso.taller.pregunta.respuesta.eliminar');
+
+    /*
+    |--------------------------------------------------------------------------
     | Rutas para los cursos
     |--------------------------------------------------------------------------
     */

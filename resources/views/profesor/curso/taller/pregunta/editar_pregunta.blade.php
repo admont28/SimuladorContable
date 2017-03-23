@@ -37,22 +37,6 @@
                     @endif
                 </div>
             </div>
-            @if (isset($respuestasMultiplesUnicas) && !empty($respuestasMultiplesUnicas))
-                @foreach ($respuestasMultiplesUnicas as $respuesta)
-                    <div class="form-group">
-                        <label for="respuesta_{{ $loop->iteration }}" class="col-lg-2 control-label">Respuesta {{ $loop->iteration }}:</label>
-                        <div class="col-lg-10">
-                            <div class="input-group">
-                                <p class="form-control">{{ $respuesta->remu_texto }}</p>
-                                <span class="input-group-addon">
-                                    <span>¿Correcta?</span>
-                                    <input type="checkbox" id="respuesta_{{ $loop->iteration }}" name="respuesta_{{ $loop->iteration }}" @if($respuesta->remu_correcta == true) {{'checked=checked'}} @endif>
-                                </span>
-                            </div><!-- /input-group -->
-                        </div><!-- /.col-lg-6 -->
-                    </div>
-                @endforeach
-            @endif
             <div class="form-group {{ $errors->has('porcentaje_pregunta') ? ' has-error' : '' }}">
                 <label for="porcentaje_pregunta" class="col-lg-2 control-label">Porcentaje</label>
                 <div class="col-lg-10">
@@ -71,7 +55,6 @@
             <div class="form-group">
                 <div class="col-lg-10 col-lg-offset-2">
                     <a href="{{ route('profesor.curso.taller.ver',['curs_id' => $taller->curs_id,'tall_id'=>$taller->tall_id]) }}"  class="btn btn-default">Cancelar</a>
-                    <button type="button" name="adicionar_respuesta" class="btn btn-success">Adicionar respuesta</button>
                     <button type="submit" class="btn btn-primary">Editar Pregunta</button>
                 </div>
             </div>

@@ -1,41 +1,53 @@
-<div class="row">
-        <a href="{{ route('profesor.curso.taller.pregunta.crear', ['tall_id' => $taller->tall_id,'curs_id'=>$taller->curs_id]) }}" class="btn btn-primary">Crear pregunta para el taller</a>
-</div>
-<br>
-<div class="row">
-    <div class="table-responsive">
-        <table class="table" id="ver-materias">
-            <thead>
-                <tr>
-                    <td><strong>ID</strong></td>
-                    <td><strong>Texto</strong></td>
-                    <td><strong>Tipo</strong></td>
-                    <td><strong>Porcentaje</strong></td>
-                </tr>
-            </thead>
-        </table>
-    </div>
-</div>
-<br>
+@extends('profesor.template.main')
 
-@push('scripts')
-<script type="text/javascript">
-    $(function() {
-        $('#ver-materias').DataTable({
-            "processing": true,
-            "serverSide": true,
-            "ajax": "{{ route('profesor.curso.materia.verajax', ['curs_id' => $curso->curs_id]) }}",
-            "columns" : [
-                {data: 'preg_id', name: 'preg_id', width: '5%'},
-                {data: 'preg_texto', name: 'preg_texto', width: '15%'},
-                {data: 'preg_tipo', name: 'preg_tipo', width: '40%'},
-                {data: 'preg_porcentaje', name: 'preg_porcentaje', width: '20%'},
-                {data: 'opciones', name: 'action', orderable: false, searchable: false, width: '20%'}
-            ],
-            "language" : {
-                "url" : "//cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
-            }
-        });
-    });
-</script>
-@endpush
+@section('title-head', 'Ver pregunta')
+
+@section('title', 'Pregunta: <strong>'.substr($pregunta->preg_texto,0,80).'...</strong>')
+
+@section('active','#profesor-curso')
+
+@section('content')
+    <div class="row">
+        <div class="col-lg-2">
+            <strong>Texto de la pregunta:</strong>
+        </div>
+        <div class="col-lg-10 text-justify">
+            {{ $pregunta->preg_texto }}
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-lg-2">
+            <strong>Tipo de pregunta:</strong>
+        </div>
+        <div class="col-lg-10 text-justify">
+            {{ $pregunta->preg_tipo }}
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-lg-2">
+            <strong>Porcentaje de la pregunta:</strong>
+        </div>
+        <div class="col-lg-10 text-justify">
+            <div class='input-group date ' >
+                {{ $pregunta->preg_porcentaje }}
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <a href="{{ route('profesor.curso.taller.ver',['curs_id'=>$curso->curs_id, 'tall_id' => $taller->tall_id]) }}"  class="btn btn-default">Regresar</a>
+            <a href="{{ route('profesor.curso.taller.pregunta.editar',['curs_id'=>$curso->curs_id,'tall_id' => $taller->tall_id, 'preg_id' => $pregunta->preg_id]) }}"  class="btn btn-primary">Editar pregunta</a>
+        </div>
+    </div>
+    @if ($pregunta->preg_tipo == 'unica-multiple')
+        <div class="row">
+            <div class="page-header">
+                <h1>Respuestas de la pregunta</h1>
+            </div>
+        </div>
+        @include('profesor.curso.taller.pregunta.respuesta.index')
+    @endif
+@endsection

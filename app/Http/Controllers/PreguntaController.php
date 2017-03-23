@@ -41,7 +41,7 @@ class PreguntaController extends Controller
         return View('profesor.curso.taller.pregunta.crear_pregunta')
                     ->with('curso', $curso)
                     ->with('taller', $taller)
-                    ->with('opciones', $posiblesOpciones);;
+                    ->with('opciones', $posiblesOpciones);
     }
 
     /**
@@ -144,10 +144,6 @@ class PreguntaController extends Controller
         }
         // Obtengo las opciones disponbiles en bd en el campo tall_tipo de tipo enum.
         $posiblesOpciones = Pregunta::getPossibleEnumValues();
-        $respuestasMultiplesUnicas = array();
-        if($pregunta->preg_tipo == 'unica' || $pregunta->preg_tipo == 'multiple'){
-            $respuestasMultiplesUnicas = $pregunta->respuestasMultiplesUnicas;
-        }
         // Retornamos la vista para editr la pregunta,
         // y le enviamos el modelo pregunta y taller  para que cargue la información almacenada en bd
         // en los campos del formulario.
@@ -155,7 +151,6 @@ class PreguntaController extends Controller
                     ->with('curso', $curso)
                     ->with('taller', $taller)
                     ->with('pregunta', $pregunta)
-                    ->with('respuestasMultiplesUnicas', $respuestasMultiplesUnicas)
                     ->with('opciones', $posiblesOpciones);
     }
 
@@ -214,5 +209,26 @@ class PreguntaController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function verRespuestasPorPregunta($curs_id, $tall_id, $preg_id)
+    {
+        $pregunta = Pregunta::find($preg_id);
+        //$respuesta = $pregunta->respuestasMultiplesUnicas;
+        $respuestas = RespuestaMultipleUnica::where('preg_id', $preg_id)->get();
+        return Datatables::of($respuestas)
+            ->addColumn('opciones', function ($respuesta) {
+                $method_field = method_field('DELETE');
+                $csrf_field = csrf_field();
+                return
+                    '<a href="'.route('profesor.curso.taller.pregunta.respuesta.editar', ['curs_id'=>$respuesta->pregunta->taller->curs_id,'tall_id' => $respuesta->pregunta->taller->tall_id,'preg_id'=>$respuesta->pregunta->preg_id, 'remu_id' => $respuesta->remu_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
+                    <form action="'.route('profesor.curso.taller.pregunta.respuesta.eliminar', ['curs_id'=>$respuesta->pregunta->taller->curs_id,'tall_id' => $respuesta->pregunta->taller->tall_id,'preg_id'=>$respuesta->pregunta->preg_id, 'remu_id' => $respuesta->remu_id]).'" method="POST" class="visible-lg-inline-block">
+                        '.$method_field.'
+                        '.$csrf_field.'
+                        <button type="submit" name="eliminar" class="btn btn-xs btn-danger btn-eliminar"><i class="glyphicon glyphicon-trash"></i> Eliminar</button>
+                    </form>';
+            })
+            ->editColumn('remu_correcta', '@if($remu_correcta == 1) {{ "SI" }} @else {{ "NO" }} @endif')
+            ->make(true);
     }
 }
