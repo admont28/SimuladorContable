@@ -71,7 +71,7 @@ class PreguntasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($tall_id ,$preg_id )
+    public function edit($curs_id,$tall_id ,$preg_id )
     {
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $taller = Taller::find($tall_id);
@@ -82,8 +82,9 @@ class PreguntasController extends Controller
         }
         // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
         $pregunta = pregunta::find($preg_id);
-        dd($pregunta);
+
         if (!isset($pregunta)) {
+
             flash('La pregunta con el ID: '.$preg_id.' no existe. Verifique por favor.', 'danger');
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $taller->curs_id,'tall_id'=>$taller->tall_id]);
         }
@@ -93,6 +94,7 @@ class PreguntasController extends Controller
         return View('profesor.curso.taller.pregunta.editar_pregunta')
             ->with('pregunta', $pregunta)
             ->with('taller', $taller);
+
     }
 
     /**

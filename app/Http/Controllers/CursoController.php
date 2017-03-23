@@ -25,6 +25,16 @@ class CursoController extends Controller
     }
 
     /**
+     * [indexEstudiante description]
+     * @return [type] [description]
+     */
+    public function indexEstudiante(CursoDataTables $dataTable)
+    {
+
+        return $dataTable->render('estudiante.curso.index');
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -167,6 +177,17 @@ class CursoController extends Controller
                        })
                        ->editColumn('tall_rutaarchivo', '<a href="{{$tall_rutaarchivo}}">{{$tall_nombrearchivo}}</a>')
                        ->make(true);
+   }
+
+   public function verCursosEstudiantesAjax()
+   {
+              return Datatables::of()
+           ->addColumn('opciones', function ($curso) {
+               return
+               '<a href="'.route('estudiante.curso.ver').'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
+               //<a href="'.route('profesor.curso.tema.ver', ['curs_id' => $curso->curs_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-zoom-out"></i> Ver temas</a>';
+           })
+           ->make(true);
    }
 
 }

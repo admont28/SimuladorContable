@@ -64,6 +64,21 @@ Route::group(['prefix' => 'estudiante', 'middleware' => ['auth','estudiante'] ],
     Route::get('/temasatratar',['as'=>'estudiante.temas', function(){
         return view('estudiante.temas');
     }]);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Rutas para los cursos
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/curso/inicio', 'CursoController@indexEstudiante')->name('estudiante.curso');
+    Route::get('/curso/ver/{curs_id}', 'CursoController@show')->name('estudiante.curso.ver');
+    Route::get('/curso/inicio/ajax', 'CursoController@verCursosEstudiantesAjax')->name('estudiante.curso.verajax');
+
+
+
+
+
+
 });
 
 /*
