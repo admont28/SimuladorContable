@@ -43,7 +43,7 @@
                 <label for="tiempo_taller" class="col-lg-2 control-label">Tiempo del taller</label>
                 <div class="col-lg-10">
                     <div class='input-group date' >
-                        <input type="date" class="form-control" name="tiempo_taller" placeholder="Seleccione el tiempo máximo del taller" id="tiempo_taller" value="{{ old('tiempo_taller') }}"/>
+                        <input type="text" class="form-control" name="tiempo_taller" placeholder="Seleccione el tiempo máximo del taller" id="tiempo_taller" value="{{ old('tiempo_taller') }}"/>
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
