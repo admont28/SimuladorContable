@@ -115,13 +115,28 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     |--------------------------------------------------------------------------
     */
     Route::get('/curso/{curs_id}/taller/{tall_id}/preguntas/ajax', 'TallerController@verPreguntasPorTaller')->name('profesor.curso.taller.pregunta.verajax');
-    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/inicio', 'PreguntasController@index')->name('profesor.curso.taller.pregunta');
-    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/crear', 'PreguntasController@create')->name('profesor.curso.taller.pregunta.crear');
-    Route::post('/curso/{curs_id}/taller/{tall_id}/pregunta/crear', 'PreguntasController@store')->name('profesor.curso.taller.pregunta.crear.post');
-    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/ver/{preg_id}', 'PreguntasController@show')->name('profesor.curso.taller.pregunta.ver');
-    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/editar/{preg_id}', 'PreguntasController@edit')->name('profesor.curso.taller.pregunta.editar');
-    Route::put('/curso/{curs_id}/taller/{tall_id}/pregunta/editar/{preg_id}', 'PreguntasController@update')->name('profesor.curso.taller.pregunta.editar.put');
-    Route::delete('/curso/{curs_id}/taller/{tall_id}/pregunta/eliminar/{preg_id}', 'PreguntasController@destroy')->name('profesor.curso.taller.pregunta.eliminar');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/inicio', 'PreguntaController@index')->name('profesor.curso.taller.pregunta');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/crear', 'PreguntaController@create')->name('profesor.curso.taller.pregunta.crear');
+    Route::post('/curso/{curs_id}/taller/{tall_id}/pregunta/crear', 'PreguntaController@store')->name('profesor.curso.taller.pregunta.crear.post');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/ver/{preg_id}', 'PreguntaController@show')->name('profesor.curso.taller.pregunta.ver');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/editar/{preg_id}', 'PreguntaController@edit')->name('profesor.curso.taller.pregunta.editar');
+    Route::put('/curso/{curs_id}/taller/{tall_id}/pregunta/editar/{preg_id}', 'PreguntaController@update')->name('profesor.curso.taller.pregunta.editar.put');
+    Route::delete('/curso/{curs_id}/taller/{tall_id}/pregunta/eliminar/{preg_id}', 'PreguntaController@destroy')->name('profesor.curso.taller.pregunta.eliminar');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Rutas para las respuestas
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/{preg_id}/respuesta/ajax', 'PreguntaController@verRespuestasPorPregunta')->name('profesor.curso.taller.pregunta.respuesta.verajax');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/{preg_id}/respuesta/inicio', 'RespuestaController@index')->name('profesor.curso.taller.pregunta.respuesta');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/{preg_id}/respuesta/crear', 'RespuestaController@crearRespuestaMultipleUnica')->name('profesor.curso.taller.pregunta.respuesta.crear');
+    Route::post('/curso/{curs_id}/taller/{tall_id}/pregunta/{preg_id}/respuesta/crear', 'RespuestaController@guardarRespuestaMultipleUnica')->name('profesor.curso.taller.pregunta.respuesta.crear.post');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/{preg_id}/respuesta/ver/{remu_id}', 'RespuestaController@show')->name('profesor.curso.taller.pregunta.respuesta.ver');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/{preg_id}/respuesta/editar/{remu_id}', 'RespuestaController@editarRespuestaMultipleUnica')->name('profesor.curso.taller.pregunta.respuesta.editar');
+    Route::put('/curso/{curs_id}/taller/{tall_id}/pregunta/{preg_id}/respuesta/editar/{remu_id}', 'RespuestaController@actualizarRespuestaMultipleUnica')->name('profesor.curso.taller.pregunta.respuesta.editar.put');
+    Route::delete('/curso/{curs_id}/taller/{tall_id}/pregunta/{preg_id}/respuesta/eliminar/{remu_id}', 'RespuestaController@eliminarRespuestaMultipleUnica')->name('profesor.curso.taller.pregunta.respuesta.eliminar');
 
     /*
     |--------------------------------------------------------------------------

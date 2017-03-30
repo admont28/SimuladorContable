@@ -28,10 +28,10 @@
                 "ajax": "{{ route('profesor.curso.taller.pregunta.verajax',['tall_id' => $taller->tall_id,'curs_id'=>$taller->curs_id]) }}",
                 "columns" : [
                     {data: 'preg_id', name: 'preg_id', width: '5%'},
-                    {data: 'preg_texto', name: 'preg_texto', width: '15%'},
-                    {data: 'preg_tipo', name: 'preg_tipo', width: '40%'},
-                    {data: 'preg_porcentaje', name: 'preg_porcentaje', width: '20%'},
-                    {data: 'opciones', name: 'action', orderable: false, searchable: false, width: '20%'}
+                    {data: 'preg_texto', name: 'preg_texto', width: '40%'},
+                    {data: 'preg_tipo', name: 'preg_tipo', width: '15%'},
+                    {data: 'preg_porcentaje', name: 'preg_porcentaje', width: '10%'},
+                    {data: 'opciones', name: 'action', orderable: false, searchable: false, width: '30%'}
                 ],
                 "language" : {
                     "url" : "//cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"

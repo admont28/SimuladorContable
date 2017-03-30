@@ -7,7 +7,7 @@
 @section('active','#profesor-curso')
 
 @section('content')
-<form class="form-horizontal" action="{{ route('profesor.curso.put',['id' => $curso->curs_id]) }}" method="post">
+<form class="form-horizontal" action="{{ route('profesor.curso.put',['curs_id' => $curso->curs_id]) }}" method="post">
     {{ method_field('PUT') }}
     {{ csrf_field() }}
     <div class="form-group {{ $errors->has('nombre_curso') ? ' has-error' : '' }}">
@@ -36,7 +36,7 @@
 
     <div class="form-group">
         <div class="col-lg-10 col-lg-offset-2">
-            <a type="reset" class="btn btn-default" href="{{ route('profesor.curso') }}">Regresar</a>
+            <a type="reset" class="btn btn-default" href="{{ route('profesor.curso.ver', ['curs_id' => $curso->curs_id]) }}">Regresar</a>
             <button type="submit" class="btn btn-primary">Editar Curso</button>
         </div>
     </div>

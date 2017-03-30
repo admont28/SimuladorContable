@@ -38,7 +38,7 @@ class CursoSeeder extends Seeder
 
             $preg_id = \DB::table('Pregunta')->insertGetId(array(
             'preg_texto' => $faker->realText(rand(10,45)),
-            'preg_tipo' => $faker->randomElement(array ('multiple','unica','abierta','archivo')),
+            'preg_tipo' => $faker->randomElement(array ('unica-multiple','abierta','archivo')),
             'preg_porcentaje' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 5),
             'tall_id' =>$tall_id
         ));

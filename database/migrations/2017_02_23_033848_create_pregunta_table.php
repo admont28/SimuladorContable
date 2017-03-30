@@ -16,7 +16,7 @@ class CreatePreguntaTable extends Migration
         Schema::create('Pregunta', function (Blueprint $table) {
             $table->increments('preg_id');
             $table->text('preg_texto' , 500);
-            $table->enum('preg_tipo', ['multiple','unica','abierta','archivo']);
+            $table->enum('preg_tipo', ['unica-multiple','abierta','archivo']);
             $table->decimal('preg_porcentaje', 2, 1);
             $table->integer('tall_id')->unsigned();
             $table->foreign('tall_id')->references('tall_id')->on('Taller');
