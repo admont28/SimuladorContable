@@ -71,8 +71,13 @@ Route::group(['prefix' => 'estudiante', 'middleware' => ['auth','estudiante'] ],
     |--------------------------------------------------------------------------
     */
     Route::get('/curso/inicio', 'CursoController@indexEstudiante')->name('estudiante.curso');
-    Route::get('/curso/ver/{curs_id}', 'CursoController@show')->name('estudiante.curso.ver');
+    Route::get('/curso/ver/{curs_id}', 'CursoController@showEstudiante')->name('estudiante.curso.ver');
     Route::get('/curso/inicio/ajax', 'CursoController@verCursosEstudiantesAjax')->name('estudiante.curso.verajax');
+
+
+
+    /* Ver las materias con DataTables, este responde un objeto Datatables */
+    Route::get('/curso/{curs_id}/materias/ajax', 'CursoController@verMateriasPorCursoAjaxEstudiante')->name('estudiante.curso.materia.verajax');
 
 
 

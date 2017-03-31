@@ -82,6 +82,19 @@ class CursoController extends Controller
         //return $dataTable->render('profesor.curso.ver_curso', compact('curso', $curso));
     }
 
+
+
+
+    public function showEstudiante($id)
+    {
+        $curso = Curso::find($id);
+        $materias =Materia::where('curs_id', $curso->curs_id)->get();;
+        return View('estudiante.curso.ver_curso')
+                ->with('curso', $curso)
+                ->with('materias', $materias);
+        //return $dataTable->render('profesor.curso.ver_curso', compact('curso', $curso));
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -154,6 +167,10 @@ class CursoController extends Controller
                         ->make(true);
     }
 
+
+
+
+
     /**
      * Funcion que permite consultar los talleres que tiene un curso
      * @param  string $curs_id [description]
@@ -181,13 +198,13 @@ class CursoController extends Controller
 
    public function verCursosEstudiantesAjax()
    {
-              return Datatables::of()
+       $cursos = Curso::select(['curs_id','curs_nombre','curs_introduccion']);
+              return Datatables::of($cursos)
            ->addColumn('opciones', function ($curso) {
-               return
-               '<a href="'.route('estudiante.curso.ver').'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
+                return
+                '<a href="'.route('estudiante.curso.ver',['curs_id' => $curso->curs_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
                //<a href="'.route('profesor.curso.tema.ver', ['curs_id' => $curso->curs_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-zoom-out"></i> Ver temas</a>';
-           })
-           ->make(true);
+           })->make(true);
    }
 
 }
