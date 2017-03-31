@@ -8,7 +8,7 @@
 
 @section('content')
     <div class="row">
-        <form class="form-horizontal" action="{{ route('profesor.crearcurso.post') }}" method="post">
+        <form class="form-horizontal" action="{{ route('profesor.curso.crear.post') }}" method="post">
             {{ csrf_field() }}
             <div class="form-group">
                 <label for="nombre_curso" class="col-lg-2 control-label">Nombre del curso:</label>

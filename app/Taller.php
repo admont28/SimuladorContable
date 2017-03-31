@@ -64,6 +64,14 @@ class Taller extends Model
         return $this->hasMany('App\Pregunta','preg_id');
     }
 
+    /**
+     * Obtener el curso que es dueño del taller.
+     */
+    public function curso()
+    {
+        return $this->belongsTo('App\Curso', 'curs_id');
+    }
+
     public static function getPossibleEnumValues(){
         $type = DB::select(DB::raw('SHOW COLUMNS FROM Taller WHERE Field = "tall_tipo"'))[0]->Type;
         preg_match('/^enum\((.*)\)$/', $type, $matches);

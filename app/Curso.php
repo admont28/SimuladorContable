@@ -58,13 +58,13 @@ class Curso extends Model
     /**
      * Obtener los temas para el curso
      */
-    public function temas()
+    public function talleres()
     {
-        return $this->hasMany('App\Tema','tema_id');
+        return $this->hasMany('App\Taller','curs_id');
     }
 
     public function materias()
     {
-        return $this->hasMany('App\Materia','mate_id');
+        return $this->hasMany('App\Materia','curs_id');
     }
 }
