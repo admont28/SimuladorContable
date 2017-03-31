@@ -150,7 +150,7 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     Route::get('/curso/ver/{curs_id}', 'CursoController@show')->name('profesor.curso.ver');
     Route::get('/curso/editar/{curs_id}', 'CursoController@edit')->name('profesor.curso.editar');
     Route::put('/curso/editar/{curs_id}', 'CursoController@update')->name('profesor.curso.put');
-    Route::get('/curso/eliminar/{curs_id}', 'CursoController@destroy')->name('profesor.curso.eliminar');
+    Route::delete('/curso/eliminar/{curs_id}', 'CursoController@destroy')->name('profesor.curso.eliminar');
 
     /*
     |--------------------------------------------------------------------------

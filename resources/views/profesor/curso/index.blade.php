@@ -21,4 +21,32 @@
 
 @push('scripts')
     {!! $dataTable->scripts() !!}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            /**
+             * Función para pedir confirmación del usuario antes de eliminar un elemento de la tabla.
+             */
+            $(document).on('click', '.btn-eliminar', function(event) {
+                event.preventDefault();
+                var form = $(this).parent();
+                swal({
+                    title: '¿Está seguro de eliminar el elemento?',
+                    text: "Esta acción no se puede deshacer. Por favor confirme.",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, eliminar',
+                    cancelButtonText: 'No, cancelar'
+                }).then(function (option) {
+                    if(option === true){
+                        form.submit();
+                        return true;
+                    }else{
+                        return false;
+                    }
+                })
+            });
+        });
+    </script>
 @endpush

@@ -17,11 +17,16 @@ class CursoDataTables extends DataTable
         return $this->datatables
             ->eloquent($this->query())
             ->addColumn('opciones', function ($curso) {
+                $method_field = method_field('DELETE');
+                $csrf_field = csrf_field();
                 return
                 '<a href="'.route('profesor.curso.ver', ['id' => $curso->curs_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
                 <a href="'.route('profesor.curso.editar', ['id' => $curso->curs_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
-                <a href="'.route('profesor.curso.eliminar', ['id' => $curso->curs_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
-                //<a href="'.route('profesor.curso.tema.ver', ['curs_id' => $curso->curs_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-zoom-out"></i> Ver temas</a>';
+                <form action="'.route('profesor.curso.eliminar', ['id' => $curso->curs_id]).'" method="POST" class="visible-lg-inline-block">
+                    '.$method_field.'
+                    '.$csrf_field.'
+                    <button type="submit" name="eliminar" class="btn btn-xs btn-danger btn-eliminar"><i class="glyphicon glyphicon-trash"></i> Eliminar</button>
+                </form>';
             })
             //->addColumn('action', 'path.to.action.view')
             ->make(true);

@@ -52,18 +52,15 @@ class CursoController extends Controller
      */
     public function store(Request $request)
     {
-
         $this->validate($request, [
-            //'curs_id' => 'required',
            'nombre_curso' => 'required',
            'introduccion_curso' => 'required'
         ]);
-        //dd($request->all());
         $curso=Curso::create([
             'curs_nombre' => $request['nombre_curso'],
             'curs_introduccion'=> $request['introduccion_curso']
-          ]);
-          flash('Curso "'.$curso->curs_nombre.'" creado con éxito.', 'success');
+        ]);
+        flash('Curso "'.$curso->curs_nombre.'" creado con éxito.', 'success');
         return redirect()->route('profesor.curso');
     }
 
@@ -73,13 +70,14 @@ class CursoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($curs_id)
     {
-
-        $curso = Curso::find($id);
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso');
+        }
         return View('profesor.curso.ver_curso')->with('curso', $curso);
-
-        //return $dataTable->render('profesor.curso.ver_curso', compact('curso', $curso));
     }
 
     /**
@@ -91,8 +89,11 @@ class CursoController extends Controller
     public function edit($id)
     {
         $curso = Curso::find($id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso');
+        }
         return View('profesor.curso.editar_curso')->with('curso', $curso);
-        //return $curso->curs_introduccion;
     }
 
     /**
@@ -102,13 +103,17 @@ class CursoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $curs_id)
     {
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso');
+        }
         Validator::make($request->all(), [
             'nombre_curso' => 'required|max:100',
             'introduccion_curso' => 'required|max:500',
         ])->validate();
-        $curso = Curso::find($id);
         $curso->curs_nombre = $request->input('nombre_curso');
         $curso->curs_introduccion = $request->input('introduccion_curso');
         $curso->save();
@@ -122,18 +127,23 @@ class CursoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($curs_id)
     {
-        Curso::destroy($id);
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso');
+        }
+        $materias = $curso->materias;
+        $talleres = $curso->talleres;
+        if(!$materias->isEmpty() || !$talleres->isEmpty()){
+            flash('No es posible eliminar el curso: "'.$curso->curs_nombre.'" porque este contiene materias o talleres asociados.', 'danger');
+            return redirect()->route('profesor.curso');
+        }
+        $respuesta = $curso->delete();
         flash('Curso "'.$curso->curs_nombre.'" eliminado con éxito.', 'success');
         return redirect()->route('profesor.curso');
     }
-
-    /*public function ver_temas_por_curso($curs_id = "")
-    {
-        $curso = Curso::find($curs_id);
-        return View('profesor.curso.tema.ver_tema')->with('curso', $curso);
-    }*/
 
     public function verMateriasPorCursoAjax($curs_id = "")
     {
@@ -160,7 +170,7 @@ class CursoController extends Controller
      * @return [type]          [description]
      */
     public function verTalleresPorCursoAjax($curs_id = "")
-   {
+    {
       $talleres = Taller::where('curs_id', $curs_id)->get();
        return Datatables::of($talleres)
                         ->addColumn('opciones', function ($taller) {
