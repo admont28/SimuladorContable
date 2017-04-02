@@ -69,6 +69,7 @@ class Pregunta extends Model
      */
     public function respuestasMultiplesUnicas()
     {
+        // Se pasa el modelo con el que está relacionado, seguido de la llave foranea de la tabla Pregunta en la tabla RespuestaMultipleUnica 
         return $this->hasMany('App\RespuestaMultipleUnica','preg_id');
     }
 

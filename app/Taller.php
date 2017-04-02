@@ -61,7 +61,7 @@ class Taller extends Model
      */
     public function preguntas()
     {
-        return $this->hasMany('App\Pregunta','preg_id');
+        return $this->hasMany('App\Pregunta','tall_id');
     }
 
     /**
@@ -77,6 +77,7 @@ class Taller extends Model
      */
     public function tarifas()
     {
+        // Foranea de Taller en la tabla tarifa.
         return $this->hasMany('App\Tarifa', 'tall_id');
     }
 

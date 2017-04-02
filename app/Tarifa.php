@@ -60,6 +60,7 @@ class Tarifa extends Model
      */
     public function taller()
     {
+        // La fornaea de taller en la tabla Tarifa relacionada con la tabla Taller.
         return $this->belongsTo('App\Taller', 'tall_id');
     }
 
