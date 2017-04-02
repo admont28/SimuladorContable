@@ -7,6 +7,7 @@ use App\Http\Controllers\DB;
 use App\Taller;
 use App\Curso;
 use App\Pregunta;
+use App\Tarifa;
 use App\DataTables\TallerDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
@@ -91,9 +92,19 @@ class TallerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($curs_id, $tall_id)
     {
-        $taller = Taller::find($id);
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso');
+        }
+        // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
+        $taller = Taller::find($tall_id);
+        if (!isset($taller)) {
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso.ver', ['id' => $curs_id]);
+        }
         return View('profesor.curso.taller.ver_taller')->with('taller', $taller);
     }
 
@@ -226,9 +237,10 @@ class TallerController extends Controller
      * @param  string $tall_id [description]
      * @return [type]          [description]
      */
-    public  function verPreguntasPorTaller($tall_id = "")
+    public function verPreguntasPorTaller($curs_id, $tall_id)
     {
-        $pregunta = Pregunta::where('tall_id', $tall_id)->get();
+        $taller = Taller::find($tall_id);
+        $pregunta = $taller->preguntas;
         return Datatables::of($pregunta)
             ->addColumn('opciones', function ($pregunta) {
                 $opcionAdicionarRespuesta = "";
@@ -243,4 +255,19 @@ class TallerController extends Controller
                 <a href="'.route('profesor.curso.taller.pregunta.eliminar', ['curs_id'=>$pregunta->taller->curs_id,'tall_id' => $pregunta->taller->tall_id,'preg_id'=>$pregunta->preg_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
             })->make(true);
     }
+
+    public function verTarifasPorTaller($curs_id, $tall_id)
+    {
+        //$tarifas = Tarifa::where('tall_id', $tall_id)->get();
+        $taller = Taller::find($tall_id);
+        $tarifas = $taller->tarifas;
+        return Datatables::of($tarifas)
+            ->addColumn('opciones', function ($tarifa) {
+                return
+                    'hola';/*<a href="'.route('profesor.curso.taller.pregunta.ver', ['curs_id'=>$pregunta->taller->curs_id,'tall_id' =>$pregunta->taller->tall_id,'preg_id'=>$pregunta->preg_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
+                    <a href="'.route('profesor.curso.taller.pregunta.editar', ['curs_id'=>$pregunta->taller->curs_id,'tall_id' => $pregunta->taller->tall_id,'preg_id'=>$pregunta->preg_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
+                    <a href="'.route('profesor.curso.taller.pregunta.eliminar', ['curs_id'=>$pregunta->taller->curs_id,'tall_id' => $pregunta->taller->tall_id,'preg_id'=>$pregunta->preg_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';*/
+            })->make(true);
+    }
+
 }

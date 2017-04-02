@@ -145,9 +145,10 @@ class CursoController extends Controller
         return redirect()->route('profesor.curso');
     }
 
-    public function verMateriasPorCursoAjax($curs_id = "")
+    public function verMateriasPorCursoAjax($curs_id)
     {
-        $materias = Materia::where('curs_id', $curs_id)->get();
+        $curso = Curso::find($curs_id);
+        $materias = $curso->materias;
         return Datatables::of($materias)
                         ->addColumn('opciones', function ($materia) {
                             $method_field = method_field('DELETE');
@@ -169,10 +170,11 @@ class CursoController extends Controller
      * @param  string $curs_id [description]
      * @return [type]          [description]
      */
-    public function verTalleresPorCursoAjax($curs_id = "")
+    public function verTalleresPorCursoAjax($curs_id)
     {
-      $talleres = Taller::where('curs_id', $curs_id)->get();
-       return Datatables::of($talleres)
+        $curso = Curso::find($curs_id);
+        $talleres = $curso->talleres;
+        return Datatables::of($talleres)
                         ->addColumn('opciones', function ($taller) {
                             $method_field = method_field('DELETE');
                             $csrf_field = csrf_field();

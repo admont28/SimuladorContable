@@ -214,8 +214,7 @@ class PreguntaController extends Controller
     public function verRespuestasPorPregunta($curs_id, $tall_id, $preg_id)
     {
         $pregunta = Pregunta::find($preg_id);
-        //$respuesta = $pregunta->respuestasMultiplesUnicas;
-        $respuestas = RespuestaMultipleUnica::where('preg_id', $preg_id)->get();
+        $respuestas = $pregunta->respuestasMultiplesUnicas;
         return Datatables::of($respuestas)
             ->addColumn('opciones', function ($respuesta) {
                 $method_field = method_field('DELETE');
@@ -228,7 +227,7 @@ class PreguntaController extends Controller
                         <button type="submit" name="eliminar" class="btn btn-xs btn-danger btn-eliminar"><i class="glyphicon glyphicon-trash"></i> Eliminar</button>
                     </form>';
             })
-            ->editColumn('remu_correcta', '@if($remu_correcta == 1) {{ "SI" }} @else {{ "NO" }} @endif')
+            ->editColumn('remu_correcta', '@if($remu_correcta == 1) <span class="label label-success">SI</span> @else <span class="label label-danger">NO</span> @endif')
             ->make(true);
     }
 }
