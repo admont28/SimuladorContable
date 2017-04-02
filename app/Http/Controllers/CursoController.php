@@ -202,7 +202,7 @@ class CursoController extends Controller
                                     '.$method_field.'
                                     '.$csrf_field.'
                                     <button type="submit" name="eliminar" class="btn btn-xs btn-danger btn-eliminar"><i class="glyphicon glyphicon-trash"></i> Eliminar</button>
-                                    </form>';
+                                </form>';
                        })
                        ->editColumn('tall_rutaarchivo', '<a href="{{$tall_rutaarchivo}}">{{$tall_nombrearchivo}}</a>')
                        ->make(true);

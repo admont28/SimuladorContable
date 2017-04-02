@@ -152,6 +152,9 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     Route::get('/curso/{curs_id}/taller/{tall_id}/tarifa/ajax', 'TallerController@verTarifasPorTaller')->name('profesor.curso.taller.tarifa.verajax');
     Route::get('/curso/{curs_id}/taller/{tall_id}/tarifa/crear', 'TarifaController@create')->name('profesor.curso.taller.tarifa.crear');
     Route::post('/curso/{curs_id}/taller/{tall_id}/tarifa/crear', 'TarifaController@store')->name('profesor.curso.taller.tarifa.crear.post');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/tarifa/editar/{tari_id}', 'TarifaController@edit')->name('profesor.curso.taller.tarifa.editar');
+    Route::put('/curso/{curs_id}/taller/{tall_id}/tarifa/editar/{tari_id}', 'TarifaController@update')->name('profesor.curso.taller.tarifa.editar.put');
+    Route::delete('/curso/{curs_id}/taller/{tall_id}/tarifa/eliminar/{tari_id}', 'TarifaController@destroy')->name('profesor.curso.taller.tarifa.eliminar');
 
     /*
     |--------------------------------------------------------------------------

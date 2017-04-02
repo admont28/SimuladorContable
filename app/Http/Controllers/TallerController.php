@@ -134,10 +134,9 @@ class TallerController extends Controller
         // y le enviamos el modelo taller y curso para que cargue la información almacenada en bd
         // en los campos del formulario.
         return View('profesor.curso.taller.editar_taller')
-                    ->with('taller', $taller)
                     ->with('curso', $curso)
+                    ->with('taller', $taller)
                     ->with('opciones', $posiblesOpciones);
-
     }
 
     /**
@@ -240,33 +239,45 @@ class TallerController extends Controller
     public function verPreguntasPorTaller($curs_id, $tall_id)
     {
         $taller = Taller::find($tall_id);
-        $pregunta = $taller->preguntas;
-        return Datatables::of($pregunta)
+        $preguntas = $taller->preguntas;
+        return Datatables::of($preguntas)
             ->addColumn('opciones', function ($pregunta) {
                 $opcionAdicionarRespuesta = "";
                 if($pregunta->preg_tipo == 'unica-multiple')
                 {
                     $opcionAdicionarRespuesta = '<a href="'.route('profesor.curso.taller.pregunta.respuesta.crear',['curs_id'=>$pregunta->taller->curs_id,'tall_id' =>$pregunta->taller->tall_id,'preg_id'=>$pregunta->preg_id]).'" class="btn btn-xs btn-success"><i class="glyphicon glyphicon-plus"></i> Añadir respuesta</a>';
                 }
+                $method_field = method_field('DELETE');
+                $csrf_field = csrf_field();
             return
                 '<a href="'.route('profesor.curso.taller.pregunta.ver', ['curs_id'=>$pregunta->taller->curs_id,'tall_id' =>$pregunta->taller->tall_id,'preg_id'=>$pregunta->preg_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
                 '.$opcionAdicionarRespuesta.'
                 <a href="'.route('profesor.curso.taller.pregunta.editar', ['curs_id'=>$pregunta->taller->curs_id,'tall_id' => $pregunta->taller->tall_id,'preg_id'=>$pregunta->preg_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
-                <a href="'.route('profesor.curso.taller.pregunta.eliminar', ['curs_id'=>$pregunta->taller->curs_id,'tall_id' => $pregunta->taller->tall_id,'preg_id'=>$pregunta->preg_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
-            })->make(true);
+                <form action="'.route('profesor.curso.taller.pregunta.eliminar', ['curs_id'=>$pregunta->taller->curs_id,'tall_id' => $pregunta->taller->tall_id,'preg_id'=>$pregunta->preg_id]).'" method="POST" class="visible-lg-inline-block">
+                    '.$method_field.'
+                    '.$csrf_field.'
+                    <button type="submit" name="eliminar" class="btn btn-xs btn-danger btn-eliminar"><i class="glyphicon glyphicon-trash"></i> Eliminar</button>
+                </form>';
+            })
+            ->editColumn('preg_tipo', '@if($preg_tipo == "unica-multiple") <span class="label label-info">{{ $preg_tipo }}</span> @elseif($preg_tipo == "abierta") <span class="label label-warning">{{ $preg_tipo }}</span> @else <span class="label label-default">{{ $preg_tipo }}</span> @endif')
+            ->make(true);
     }
 
     public function verTarifasPorTaller($curs_id, $tall_id)
     {
-        //$tarifas = Tarifa::where('tall_id', $tall_id)->get();
         $taller = Taller::find($tall_id);
         $tarifas = $taller->tarifas;
         return Datatables::of($tarifas)
             ->addColumn('opciones', function ($tarifa) {
+                $method_field = method_field('DELETE');
+                $csrf_field = csrf_field();
                 return
-                    'hola';/*<a href="'.route('profesor.curso.taller.pregunta.ver', ['curs_id'=>$pregunta->taller->curs_id,'tall_id' =>$pregunta->taller->tall_id,'preg_id'=>$pregunta->preg_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
-                    <a href="'.route('profesor.curso.taller.pregunta.editar', ['curs_id'=>$pregunta->taller->curs_id,'tall_id' => $pregunta->taller->tall_id,'preg_id'=>$pregunta->preg_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
-                    <a href="'.route('profesor.curso.taller.pregunta.eliminar', ['curs_id'=>$pregunta->taller->curs_id,'tall_id' => $pregunta->taller->tall_id,'preg_id'=>$pregunta->preg_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';*/
+                    '<a href="'.route('profesor.curso.taller.tarifa.editar', ['curs_id'=>$tarifa->taller->curs_id,'tall_id' => $tarifa->taller->tall_id,'tari_id'=>$tarifa->tari_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
+                    <form action="'.route('profesor.curso.taller.tarifa.eliminar', ['curs_id'=>$tarifa->taller->curs_id,'tall_id' => $tarifa->taller->tall_id,'tari_if'=>$tarifa->tari_id]).'" method="POST" class="visible-lg-inline-block">
+                        '.$method_field.'
+                        '.$csrf_field.'
+                        <button type="submit" name="eliminar" class="btn btn-xs btn-danger btn-eliminar"><i class="glyphicon glyphicon-trash"></i> Eliminar</button>
+                    </form>';
             })->make(true);
     }
 
