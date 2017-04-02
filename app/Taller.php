@@ -72,6 +72,14 @@ class Taller extends Model
         return $this->belongsTo('App\Curso', 'curs_id');
     }
 
+    /**
+     * Obtener las tarifas para el taller.
+     */
+    public function tarifas()
+    {
+        return $this->hasMany('App\Tarifa', 'tall_id');
+    }
+
     public static function getPossibleEnumValues(){
         $type = DB::select(DB::raw('SHOW COLUMNS FROM Taller WHERE Field = "tall_tipo"'))[0]->Type;
         preg_match('/^enum\((.*)\)$/', $type, $matches);

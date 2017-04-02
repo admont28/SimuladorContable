@@ -19,8 +19,6 @@ class CreateTarifaTable extends Migration
             $table->string('tari_valor', 30);
             $table->integer('tall_id')->unsigned();
             $table->foreign('tall_id')->references('tall_id')->on('Taller');
-
-
             $table->timestamp('tari_fechacreacion')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('tari_fechamodificacion')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
@@ -33,6 +31,6 @@ class CreateTarifaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tarifa');
+        Schema::dropIfExists('Tarifa');
     }
 }

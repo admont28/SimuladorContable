@@ -140,6 +140,16 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
 
     /*
     |--------------------------------------------------------------------------
+    | Rutas para las tarifas
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/curso/{curs_id}/taller/{tall_id}/tarifa/ajax', 'TallerController@verTarifasPorTaller')->name('profesor.curso.taller.tarifa.verajax');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/tarifa/crear', 'TarifaController@create')->name('profesor.curso.taller.tarifa.crear');
+    Route::post('/curso/{curs_id}/taller/{tall_id}/tarifa/crear', 'TarifaController@store')->name('profesor.curso.taller.tarifa.crear.post');
+
+    /*
+    |--------------------------------------------------------------------------
     | Rutas para los cursos
     |--------------------------------------------------------------------------
     */
