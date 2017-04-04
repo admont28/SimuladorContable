@@ -206,9 +206,34 @@ class PreguntaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($curs_id, $tall_id, $preg_id)
     {
-        //
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso');
+        }
+        // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
+        $taller = Taller::find($tall_id);
+        if (!isset($taller)) {
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
+        }
+        // Verificamos que exista la pregunta en bd, si no es así, informamos al usuario y redireccionamos.
+        $pregunta = Pregunta::find($preg_id);
+        if (!isset($pregunta)) {
+            flash('La pregunta con ID: '.$preg_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
+        }
+        if($pregunta->preg_tipo == 'unica-multiple' && ! $pregunta->respuestasMultiplesUnicas->isEmpty()){
+            flash('Pregunta: "'.substr($pregunta->preg_texto,0,80).'..." no puede ser eliminada, debido a que posee respuestas asociadas.', 'danger');
+            return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
+        }
+        $pregunta->delete();
+        flash('Pregunta: "'.substr($pregunta->preg_texto,0,80).'..." eliminada con éxito.', 'success');
+        return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
+
     }
 
     public function verRespuestasPorPregunta($curs_id, $tall_id, $preg_id)
