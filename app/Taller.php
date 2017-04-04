@@ -61,7 +61,7 @@ class Taller extends Model
      */
     public function preguntas()
     {
-        return $this->hasMany('App\Pregunta','preg_id');
+        return $this->hasMany('App\Pregunta','tall_id');
     }
 
     /**
@@ -69,7 +69,17 @@ class Taller extends Model
      */
     public function curso()
     {
+        //inverso de hasMany tecnicamente no es necesasario pero siempre usar la relación y la inversa. el inverso belongsTo trae un dato y el hasmany trae una coleccion.
         return $this->belongsTo('App\Curso', 'curs_id');
+    }
+
+    /**
+     * Obtener las tarifas para el taller.
+     */
+    public function tarifas()
+    {
+        // Foranea de Taller en la tabla tarifa.
+        return $this->hasMany('App\Tarifa', 'tall_id');
     }
 
     public static function getPossibleEnumValues(){

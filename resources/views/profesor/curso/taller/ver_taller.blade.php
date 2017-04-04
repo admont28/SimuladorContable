@@ -58,6 +58,15 @@
         </div>
     </div>
     @include('profesor.curso.taller.pregunta.index')
+
+    @if ($taller->tall_tipo == 'practico')
+        <div class="row">
+            <div class="page-header">
+                <h1>Tarifas</h1>
+            </div>
+        </div>
+        @include('profesor.curso.taller.tarifa.index')
+    @endif
 @endsection
 
 @push('scripts')

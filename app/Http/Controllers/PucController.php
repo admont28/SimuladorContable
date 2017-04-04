@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Curso;
+use App\Puc;
+use Validator;
 
 class PucController extends Controller
 {
@@ -21,9 +25,14 @@ class PucController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($curs_id)
     {
-        //
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso');
+        }
+        return View('profesor.curso.puc.crear_puc')->with('curso', $curso);
     }
 
     /**
@@ -32,9 +41,42 @@ class PucController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $curs_id)
     {
-        //
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso');
+        }
+        $file = $request->file('archivo_puc');
+        // Validamos los campos del formulario.
+        Validator::make(
+            [
+                'file'      => $file,
+                'extension' => strtolower($file->getClientOriginalExtension()),
+            ],
+            [
+                'file'          => 'required|mimetypes:text/plain',
+                'extension'      => 'required|in:csv',
+            ]
+        )->validate();
+        // Eliminamos todos los pucs relacionados con el curso actual, para ser reemplazados.
+        $pucsDeleted = $curso->pucs()->delete();
+        Excel::load($file->getRealPath(), function($pucs) use($curso)
+        {
+            foreach($pucs->get() as $puc)
+            {
+                Puc::create([
+                    'puc_codigo' => $puc->codigo,
+                    'puc_nombre' => $puc->nombre,
+                    'curs_id'    => $curso->curs_id
+                ]);
+            }
+        });
+        // Informo al usuario y redireccionamos.
+        flash('El archivo PUC "'.$file->getClientOriginalName().'" ha sido importado con éxito.','success');
+        return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
     }
 
     /**
@@ -77,7 +119,7 @@ class PucController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($curs_id)
     {
         //
     }

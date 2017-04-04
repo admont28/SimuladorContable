@@ -72,7 +72,7 @@
             </div>
             <div class="form-group">
                 <div class="col-lg-10 col-lg-offset-2">
-                    <a href="{{ route('profesor.curso.ver',['curs_id' => $curso->curs_id]) }}"  class="btn btn-default">Cancelar</a>
+                    <a href="{{ route('profesor.curso.taller.ver',['curs_id' => $curso->curs_id, 'tall_id' => $taller->tall_id]) }}"  class="btn btn-default">Cancelar</a>
                     <button type="submit" class="btn btn-primary">Editar Taller</button>
                 </div>
             </div>

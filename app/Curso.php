@@ -60,11 +60,17 @@ class Curso extends Model
      */
     public function talleres()
     {
+        // Se pasa el modelo con el que está relacionado, seguido de la llave foranea de la tabla Curso en la tabla Taller
         return $this->hasMany('App\Taller','curs_id');
     }
 
     public function materias()
     {
         return $this->hasMany('App\Materia','curs_id');
+    }
+
+    public function pucs()
+    {
+        return $this->hasMany('App\Puc','curs_id');
     }
 }

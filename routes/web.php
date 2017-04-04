@@ -147,6 +147,19 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
 
     /*
     |--------------------------------------------------------------------------
+    | Rutas para las tarifas
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/curso/{curs_id}/taller/{tall_id}/tarifa/ajax', 'TallerController@verTarifasPorTaller')->name('profesor.curso.taller.tarifa.verajax');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/tarifa/crear', 'TarifaController@create')->name('profesor.curso.taller.tarifa.crear');
+    Route::post('/curso/{curs_id}/taller/{tall_id}/tarifa/crear', 'TarifaController@store')->name('profesor.curso.taller.tarifa.crear.post');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/tarifa/editar/{tari_id}', 'TarifaController@edit')->name('profesor.curso.taller.tarifa.editar');
+    Route::put('/curso/{curs_id}/taller/{tall_id}/tarifa/editar/{tari_id}', 'TarifaController@update')->name('profesor.curso.taller.tarifa.editar.put');
+    Route::delete('/curso/{curs_id}/taller/{tall_id}/tarifa/eliminar/{tari_id}', 'TarifaController@destroy')->name('profesor.curso.taller.tarifa.eliminar');
+
+    /*
+    |--------------------------------------------------------------------------
     | Rutas para los cursos
     |--------------------------------------------------------------------------
     */
@@ -161,9 +174,20 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
 
     /*
     |--------------------------------------------------------------------------
+    | Rutas para los PUC
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/curso/{curs_id}/puc/ajax', 'CursoController@verPucPorCursoAjax')->name('profesor.curso.puc.verajax');
+    Route::get('/curso/{curs_id}/puc/crear', 'PucController@create')->name('profesor.curso.puc.crear');
+    Route::post('/curso/{curs_id}/puc/crear', 'PucController@store')->name('profesor.curso.puc.crear.post');
+
+    /*
+    |--------------------------------------------------------------------------
     | Rutas para las materias
     |--------------------------------------------------------------------------
     */
+
     /* Ver las materias con DataTables, este responde un objeto Datatables */
     Route::get('/curso/{curs_id}/materias/ajax', 'CursoController@verMateriasPorCursoAjax')->name('profesor.curso.materia.verajax');
     /* Crear una materia, método get para ver el formulario y método post para guardar la nueva materia */

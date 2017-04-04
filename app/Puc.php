@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Materia extends Model
+class Puc extends Model
 {
     /**
      * El nombre de la tabla asociada al modelo.
      *
      * @var string
      */
-    protected $table = 'Materia';
+    protected $table = 'Puc';
 
     /**
      * El nombre de la llave primaria de la tabla.
@@ -19,7 +19,7 @@ class Materia extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'mate_id';
+    protected $primaryKey = 'puc_id';
 
     /**
      * El nombre del campo equivalente a CREATE_AT en la base de datos.
@@ -27,7 +27,7 @@ class Materia extends Model
      *
      * @var string
      */
-    const CREATED_AT = 'mate_fechacreacion';
+    const CREATED_AT = 'puc_fechacreacion';
 
     /**
      * El nombre del campo equivalente a UPDATED_AT en la base de datos.
@@ -35,7 +35,7 @@ class Materia extends Model
      *
      * @var string
      */
-    const UPDATED_AT = 'mate_fechamodificacion';
+    const UPDATED_AT = 'puc_fechamodificacion';
 
     /**
      * The attributes that are mass assignable.
@@ -43,7 +43,7 @@ class Materia extends Model
      * @var array
      */
     protected $fillable = [
-        'mate_id', 'mate_nombre', 'mate_tema', 'mate_rutaarchivo', 'mate_nombrearchivo', 'curs_id'
+        'puc_id', 'puc_codigo', 'puc_nombre', 'curs_id'
     ];
 
     /**
@@ -56,11 +56,11 @@ class Materia extends Model
     ];
 
     /**
-     * Obtener el curso que es dueño de la materia.
+     * Obtener el curso que es dueño del taller.
      */
     public function curso()
     {
-        // Especifica la llave foránea de Curso en la tabla actual: Materia
+        // La foranea de Curso en la tabla Puc relacionada con la tabla Curso.
         return $this->belongsTo('App\Curso', 'curs_id');
     }
 }

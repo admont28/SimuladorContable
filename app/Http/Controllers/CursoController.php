@@ -72,6 +72,7 @@ class CursoController extends Controller
      */
     public function show($curs_id)
     {
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
             flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
@@ -105,6 +106,7 @@ class CursoController extends Controller
      */
     public function edit($id)
     {
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($id);
         if (!isset($curso)) {
             flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
@@ -122,6 +124,7 @@ class CursoController extends Controller
      */
     public function update(Request $request, $curs_id)
     {
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
             flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
@@ -146,6 +149,7 @@ class CursoController extends Controller
      */
     public function destroy($curs_id)
     {
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
             flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
@@ -162,9 +166,10 @@ class CursoController extends Controller
         return redirect()->route('profesor.curso');
     }
 
-    public function verMateriasPorCursoAjax($curs_id = "")
+    public function verMateriasPorCursoAjax($curs_id)
     {
-        $materias = Materia::where('curs_id', $curs_id)->get();
+        $curso = Curso::find($curs_id);
+        $materias = $curso->materias;
         return Datatables::of($materias)
                         ->addColumn('opciones', function ($materia) {
                             $method_field = method_field('DELETE');
@@ -199,10 +204,11 @@ class CursoController extends Controller
      * @param  string $curs_id [description]
      * @return [type]          [description]
      */
-    public function verTalleresPorCursoAjax($curs_id = "")
+    public function verTalleresPorCursoAjax($curs_id)
     {
-      $talleres = Taller::where('curs_id', $curs_id)->get();
-       return Datatables::of($talleres)
+        $curso = Curso::find($curs_id);
+        $talleres = $curso->talleres;
+        return Datatables::of($talleres)
                         ->addColumn('opciones', function ($taller) {
                             $method_field = method_field('DELETE');
                             $csrf_field = csrf_field();
@@ -213,7 +219,7 @@ class CursoController extends Controller
                                     '.$method_field.'
                                     '.$csrf_field.'
                                     <button type="submit" name="eliminar" class="btn btn-xs btn-danger btn-eliminar"><i class="glyphicon glyphicon-trash"></i> Eliminar</button>
-                                    </form>';
+                                </form>';
                        })
                        ->editColumn('tall_rutaarchivo', '<a href="{{$tall_rutaarchivo}}">{{$tall_nombrearchivo}}</a>')
                        ->make(true);
@@ -230,13 +236,23 @@ class CursoController extends Controller
            })->make(true);
    }
 
+
    public function verTalleresPorCursoEstudiante($curs_id = "")
    {
-      $curso = Curso::find($curs_id);
-     $talleres = Taller::where('curs_id', $curs_id)->get();
-      return view('estudiante.curso.taller.ver_talleres')
+        $curso = Curso::find($curs_id);
+        //relaciones entre los modelos
+        $talleres = $curso->talleres;
+        return view('estudiante.curso.taller.ver_talleres')
           ->with('talleres', $talleres )
           ->with('curso', $curso);
     }
+
+   public function verPucPorCursoAjax($curs_id)
+   {
+       $curso = Curso::find($curs_id);
+       $pucs  = $curso->pucs;
+       return Datatables::of($pucs)->make(true);
+   }
+
 
 }

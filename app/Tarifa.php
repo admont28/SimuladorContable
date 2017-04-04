@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Materia extends Model
+class Tarifa extends Model
 {
     /**
      * El nombre de la tabla asociada al modelo.
      *
      * @var string
      */
-    protected $table = 'Materia';
+    protected $table = 'Tarifa';
 
     /**
      * El nombre de la llave primaria de la tabla.
@@ -19,7 +19,7 @@ class Materia extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'mate_id';
+    protected $primaryKey = 'tari_id';
 
     /**
      * El nombre del campo equivalente a CREATE_AT en la base de datos.
@@ -27,7 +27,7 @@ class Materia extends Model
      *
      * @var string
      */
-    const CREATED_AT = 'mate_fechacreacion';
+    const CREATED_AT = 'tari_fechacreacion';
 
     /**
      * El nombre del campo equivalente a UPDATED_AT en la base de datos.
@@ -35,7 +35,7 @@ class Materia extends Model
      *
      * @var string
      */
-    const UPDATED_AT = 'mate_fechamodificacion';
+    const UPDATED_AT = 'tari_fechamodificacion';
 
     /**
      * The attributes that are mass assignable.
@@ -43,7 +43,7 @@ class Materia extends Model
      * @var array
      */
     protected $fillable = [
-        'mate_id', 'mate_nombre', 'mate_tema', 'mate_rutaarchivo', 'mate_nombrearchivo', 'curs_id'
+        'tari_id', 'tari_nombre','tari_valor','tall_id'
     ];
 
     /**
@@ -56,11 +56,12 @@ class Materia extends Model
     ];
 
     /**
-     * Obtener el curso que es dueño de la materia.
+     * Obtener el curso que es dueño del taller.
      */
-    public function curso()
+    public function taller()
     {
-        // Especifica la llave foránea de Curso en la tabla actual: Materia
-        return $this->belongsTo('App\Curso', 'curs_id');
+        // La fornaea de taller en la tabla Tarifa relacionada con la tabla Taller.
+        return $this->belongsTo('App\Taller', 'tall_id');
     }
+
 }
