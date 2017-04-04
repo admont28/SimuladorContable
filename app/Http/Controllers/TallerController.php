@@ -289,8 +289,7 @@ class TallerController extends Controller
     public  function verPreguntasPorTallerEstudiante($tall_id)
     {
         $taller = Taller::find($tall_id);
-        $curso = Curso::where('tall_id', $taller->curs_id)
-        $preguntas = Pregunta::where('tall_id', $tall_id)->get();
+        $preguntas = $taller->preguntas;
         return view('estudiante.curso.taller.respuesta.ver_preguntas')
             ->with('preguntas', $preguntas)
             ->with('taller', $taller)
