@@ -71,8 +71,10 @@ Route::group(['prefix' => 'estudiante', 'middleware' => ['auth','estudiante'] ],
     |--------------------------------------------------------------------------
     */
     Route::get('/curso/inicio', 'CursoController@indexEstudiante')->name('estudiante.curso');
-    Route::get('/curso/ver/{curs_id}', 'CursoController@showEstudiante')->name('estudiante.curso.ver');
+    Route::get('/curso/ver/{curs_id}/introduccion', 'CursoController@showEstudiante')->name('estudiante.curso.ver.introduccion');
     Route::get('/curso/inicio/ajax', 'CursoController@verCursosEstudiantesAjax')->name('estudiante.curso.verajax');
+    Route::get('/curso/ver/{curs_id}/ver-materias', 'CursoController@verMateriasPorCursoEstudiante')->name('estudiante.curso.ver.materias');
+    Route::get('/curso/ver/{curs_id}/ver-talleres', 'CursoController@verTalleresPorCursoEstudiante')->name('estudiante.curso.ver.talleres');
 
 
 

@@ -243,4 +243,17 @@ class TallerController extends Controller
                 <a href="'.route('profesor.curso.taller.pregunta.eliminar', ['curs_id'=>$pregunta->taller->curs_id,'tall_id' => $pregunta->taller->tall_id,'preg_id'=>$pregunta->preg_id]).'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>';
             })->make(true);
     }
+
+    public  function verPreguntasPorTallerEstudiante($tall_id = "")
+    {
+        $taller = Taller::find($tall_id);
+        $curso = Curso::where('tall_id', $taller->curs_id)
+        $preguntas = Pregunta::where('tall_id', $tall_id)->get();
+        return view('estudiante.curso.taller.respuesta.ver_preguntas')
+            ->with('preguntas', $preguntas)
+            ->with('taller', $taller)
+            ->with('curso', $curso);
+
+
+    }
 }

@@ -33,8 +33,8 @@
                 "ajax": "{{ route('estudiante.curso.verajax') }}",
                 "columns" : [
                     {data: 'curs_id', name: 'curs_id', width: '5%'},
-                    {data: 'curs_nombre', name: 'curs_nombre', width: '30%'},
-                    {data: 'curs_introduccion', name: 'curs_introduccion', width: '10%'},
+                    {data: 'curs_nombre', name: 'curs_nombre', width: '20%'},
+                    {data: 'curs_introduccion', name: 'curs_introduccion', width: '55%'},
                     {data: 'opciones', name: 'action', orderable: false, searchable: false, width: '20%'}
                 ],
                 "language" : {

@@ -82,7 +82,11 @@ class CursoController extends Controller
 
 
 
-
+    /**
+     * Muestra todos los cursos para los estudiantes.
+     * @param  [type] $id la llave primaria de la tabla curso.
+     * @return [type]     la vista para ver cada curso.
+     */
     public function showEstudiante($id)
     {
         $curso = Curso::find($id);
@@ -177,6 +181,15 @@ class CursoController extends Controller
                         ->make(true);
     }
 
+    public function verMateriasPorCursoEstudiante($curs_id = "")
+    {
+        $curso = Curso::find($curs_id);
+        $materias = Materia::where('curs_id', $curs_id)->get();
+        return view('estudiante.curso.materia.ver_materias')
+            ->with('curso', $curso)
+            ->with('materias', $materias);
+    }
+
 
 
 
@@ -212,9 +225,18 @@ class CursoController extends Controller
               return Datatables::of($cursos)
            ->addColumn('opciones', function ($curso) {
                 return
-                '<a href="'.route('estudiante.curso.ver',['curs_id' => $curso->curs_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
+                '<a href="'.route('estudiante.curso.ver.introduccion',['curs_id' => $curso->curs_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
                //<a href="'.route('profesor.curso.tema.ver', ['curs_id' => $curso->curs_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-zoom-out"></i> Ver temas</a>';
            })->make(true);
    }
+
+   public function verTalleresPorCursoEstudiante($curs_id = "")
+   {
+      $curso = Curso::find($curs_id);
+     $talleres = Taller::where('curs_id', $curs_id)->get();
+      return view('estudiante.curso.taller.ver_talleres')
+          ->with('talleres', $talleres )
+          ->with('curso', $curso);
+    }
 
 }
