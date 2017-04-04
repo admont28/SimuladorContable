@@ -43,6 +43,8 @@ class PucController extends Controller
      */
     public function store(Request $request, $curs_id)
     {
+        // Se establece a 3 minutos (180 segundos) la ejecución máxima del script.
+        ini_set('max_execution_time', 180);
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
