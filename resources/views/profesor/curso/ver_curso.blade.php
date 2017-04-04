@@ -37,12 +37,16 @@
         </div>
     </div>
     @include('profesor.curso.materia.index')
-
     <div class="row">
         <div class="page-header">
             <h1>Talleres</h1>
         </div>
     </div>
     @include('profesor.curso.taller.index')
-
+    <div class="row">
+        <div class="page-header">
+            <h1>PUC</h1>
+        </div>
+    </div>
+    @include('profesor.curso.puc.index')
 @endsection

@@ -72,6 +72,7 @@ class CursoController extends Controller
      */
     public function show($curs_id)
     {
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
             flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
@@ -101,6 +102,7 @@ class CursoController extends Controller
      */
     public function edit($id)
     {
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($id);
         if (!isset($curso)) {
             flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
@@ -118,6 +120,7 @@ class CursoController extends Controller
      */
     public function update(Request $request, $curs_id)
     {
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
             flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
@@ -142,6 +145,7 @@ class CursoController extends Controller
      */
     public function destroy($curs_id)
     {
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
             flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
@@ -217,6 +221,13 @@ class CursoController extends Controller
                 '<a href="'.route('estudiante.curso.ver',['curs_id' => $curso->curs_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
                //<a href="'.route('profesor.curso.tema.ver', ['curs_id' => $curso->curs_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-zoom-out"></i> Ver temas</a>';
            })->make(true);
+   }
+
+   public function verPucPorCursoAjax($curs_id)
+   {
+       $curso = Curso::find($curs_id);
+       $pucs  = $curso->pucs;
+       return Datatables::of($pucs)->make(true);
    }
 
 }

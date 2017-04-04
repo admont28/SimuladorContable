@@ -172,9 +172,20 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
 
     /*
     |--------------------------------------------------------------------------
+    | Rutas para los PUC
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/curso/{curs_id}/puc/ajax', 'CursoController@verPucPorCursoAjax')->name('profesor.curso.puc.verajax');
+    Route::get('/curso/{curs_id}/puc/crear', 'PucController@create')->name('profesor.curso.puc.crear');
+    Route::post('/curso/{curs_id}/puc/crear', 'PucController@store')->name('profesor.curso.puc.crear.post');
+
+    /*
+    |--------------------------------------------------------------------------
     | Rutas para las materias
     |--------------------------------------------------------------------------
     */
+
     /* Ver las materias con DataTables, este responde un objeto Datatables */
     Route::get('/curso/{curs_id}/materias/ajax', 'CursoController@verMateriasPorCursoAjax')->name('profesor.curso.materia.verajax');
     /* Crear una materia, método get para ver el formulario y método post para guardar la nueva materia */

@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Curso extends Model
+class Puc extends Model
 {
     /**
      * El nombre de la tabla asociada al modelo.
      *
      * @var string
      */
-    protected $table = 'Curso';
+    protected $table = 'Puc';
 
     /**
      * El nombre de la llave primaria de la tabla.
@@ -19,7 +19,7 @@ class Curso extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'curs_id';
+    protected $primaryKey = 'puc_id';
 
     /**
      * El nombre del campo equivalente a CREATE_AT en la base de datos.
@@ -27,7 +27,7 @@ class Curso extends Model
      *
      * @var string
      */
-    const CREATED_AT = 'curs_fechacreacion';
+    const CREATED_AT = 'puc_fechacreacion';
 
     /**
      * El nombre del campo equivalente a UPDATED_AT en la base de datos.
@@ -35,7 +35,7 @@ class Curso extends Model
      *
      * @var string
      */
-    const UPDATED_AT = 'curs_fechamodificacion';
+    const UPDATED_AT = 'puc_fechamodificacion';
 
     /**
      * The attributes that are mass assignable.
@@ -43,7 +43,7 @@ class Curso extends Model
      * @var array
      */
     protected $fillable = [
-        'curs_id', 'curs_nombre', 'curs_introduccion'
+        'puc_id', 'puc_codigo', 'puc_nombre', 'curs_id'
     ];
 
     /**
@@ -56,21 +56,11 @@ class Curso extends Model
     ];
 
     /**
-     * Obtener los temas para el curso
+     * Obtener el curso que es dueño del taller.
      */
-    public function talleres()
+    public function curso()
     {
-        // Se pasa el modelo con el que está relacionado, seguido de la llave foranea de la tabla Curso en la tabla Taller
-        return $this->hasMany('App\Taller','curs_id');
-    }
-
-    public function materias()
-    {
-        return $this->hasMany('App\Materia','curs_id');
-    }
-
-    public function pucs()
-    {
-        return $this->hasMany('App\Puc','curs_id');
+        // La foranea de Curso en la tabla Puc relacionada con la tabla Curso.
+        return $this->belongsTo('App\Curso', 'curs_id');
     }
 }
