@@ -50,15 +50,11 @@
         <div class="col-lg-12 text-center">
             <a href="{{ route('profesor.curso.ver',['curs_id'=>$taller->curs_id]) }}"  class="btn btn-default">Regresar</a>
             <a href="{{ route('profesor.curso.taller.editar',['curs_id'=>$taller->curs_id,'tall_id' => $taller->tall_id]) }}"  class="btn btn-primary">Editar taller</a>
+            @if ($taller->tall_tipo == 'practico')
+                <a href="{{ route('profesor.curso.taller.crear.tallerasientoscontables', ['curs_id'=>$taller->curs_id,'tall_id' => $taller->tall_id]) }}" class="btn btn-info">Marcar taller como: Taller para asientos contables</a>
+            @endif
         </div>
     </div>
-    <div class="row">
-        <div class="page-header">
-            <h1>Preguntas del taller</h1>
-        </div>
-    </div>
-    @include('profesor.curso.taller.pregunta.index')
-
     @if ($taller->tall_tipo == 'practico')
         <div class="row">
             <div class="page-header">
@@ -66,6 +62,13 @@
             </div>
         </div>
         @include('profesor.curso.taller.tarifa.index')
+    @else
+        <div class="row">
+            <div class="page-header">
+                <h1>Preguntas del taller</h1>
+            </div>
+        </div>
+        @include('profesor.curso.taller.pregunta.index')
     @endif
 @endsection
 
