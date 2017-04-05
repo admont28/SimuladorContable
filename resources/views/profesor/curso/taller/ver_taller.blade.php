@@ -50,12 +50,27 @@
         <div class="col-lg-12 text-center">
             <a href="{{ route('profesor.curso.ver',['curs_id'=>$taller->curs_id]) }}"  class="btn btn-default">Regresar</a>
             <a href="{{ route('profesor.curso.taller.editar',['curs_id'=>$taller->curs_id,'tall_id' => $taller->tall_id]) }}"  class="btn btn-primary">Editar taller</a>
-            @if ($taller->tall_tipo == 'practico')
-                <a href="{{ route('profesor.curso.taller.crear.tallerasientoscontables', ['curs_id'=>$taller->curs_id,'tall_id' => $taller->tall_id]) }}" class="btn btn-info">Marcar taller como: Taller para asientos contables</a>
-            @endif
         </div>
     </div>
     @if ($taller->tall_tipo == 'practico')
+        <div class="row">
+            <div class="page-header">
+                <h1>Asignar sub-tipo al taller</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <p class="lead">Marcar el taller actual con uno de los siguientes tipos (Esta acción no se podrá deshacer):</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <a href="{{ route('profesor.curso.taller.crear.tallerasientoscontables', ['curs_id'=>$taller->curs_id,'tall_id' => $taller->tall_id]) }}" class="btn btn-info">Taller para asientos contables</a>
+                <a href="#" class="btn btn-success">Taller de nómina</a>
+                <a href="#" class="btn btn-warning">Taller de kardex</a>
+                <a href="#" class="btn btn-default">Taller de estados financieros NIF</a>
+            </div>
+        </div>
         <div class="row">
             <div class="page-header">
                 <h1>Tarifas</h1>
