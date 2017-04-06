@@ -55,22 +55,87 @@
     @if ($taller->tall_tipo == 'practico')
         <div class="row">
             <div class="page-header">
-                <h1>Asignar sub-tipo al taller</h1>
+                <h1>Sub-tipo del taller</h1>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <p class="lead">Marcar el taller actual con uno de los siguientes tipos (Esta acción no se podrá deshacer):</p>
+        @if(isset($tallerAsientoContable))
+            <div class="row">
+                <div class="col-lg-3">
+                    <strong>Sub-tipo:</strong>
+                </div>
+                <div class="col-lg-9 text-justify">
+                    Taller Asientos Contables
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <a href="{{ route('profesor.curso.taller.crear.tallerasientoscontables', ['curs_id'=>$taller->curs_id,'tall_id' => $taller->tall_id]) }}" class="btn btn-info">Taller para asientos contables</a>
-                <a href="#" class="btn btn-success">Taller de nómina</a>
-                <a href="#" class="btn btn-warning">Taller de kardex</a>
-                <a href="#" class="btn btn-default">Taller de estados financieros NIF</a>
+            <br>
+            <div class="row">
+                <div class="col-lg-3">
+                    <strong>Cantidad de filas de la tabla para ser solucionado:</strong>
+                </div>
+                <div class="col-lg-9 text-justify">
+                    {{ $tallerAsientoContable->taac_cantidadfilas }}
+                </div>
             </div>
-        </div>
+        @elseif (isset($tallerNomina))
+            <div class="row">
+                <div class="col-lg-3">
+                    <strong>Sub-tipo:</strong>
+                </div>
+                <div class="col-lg-9 text-justify">
+                    Taller de Nómina
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-3">
+                    <strong>Cantidad de filas de la tabla:</strong>
+                </div>
+                <div class="col-lg-9 text-justify">
+                    {{ $tallerNomina->tano_cantidadfilas }}
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-3">
+                    <strong>¿Deducciones en prestamo?:</strong>
+                </div>
+                <div class="col-lg-9 text-justify">
+                    {{ $tallerNomina->tano_deduccionprestamo }}
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-3">
+                    <strong>¿Deducción dos?:</strong>
+                </div>
+                <div class="col-lg-9 text-justify">
+                    {{ $tallerNomina->tano_deduccion2 }}
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-3">
+                    <strong>¿Deducción tres?:</strong>
+                </div>
+                <div class="col-lg-9 text-justify">
+                    {{ $tallerNomina->tano_deduccion3 }}
+                </div>
+            </div>
+        @else
+            <div class="row">
+                <div class="col-lg-12">
+                    <p class="lead">Marcar el taller actual con uno de los siguientes tipos (Esta acción no se podrá deshacer):</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <a href="{{ route('profesor.curso.taller.crear.tallerasientocontable', ['curs_id'=>$taller->curs_id,'tall_id' => $taller->tall_id]) }}" class="btn btn-info">Taller para asientos contables</a>
+                    <a href="{{ route('profesor.curso.taller.crear.tallernomina', ['curs_id'=>$taller->curs_id,'tall_id' => $taller->tall_id]) }}" class="btn btn-success">Taller de nómina</a>
+                    <a href="#" class="btn btn-warning">Taller de kardex</a>
+                    <a href="#" class="btn btn-default">Taller de estados financieros NIF</a>
+                </div>
+            </div>
+        @endif
         <div class="row">
             <div class="page-header">
                 <h1>Tarifas</h1>
@@ -86,36 +151,3 @@
         @include('profesor.curso.taller.pregunta.index')
     @endif
 @endsection
-
-@push('scripts')
-<script type="text/javascript">
-    $(function () {
-        $('#tiempo_taller').datetimepicker({
-            format: 'YYYY-MM-DD HH:mm:ss',
-            extraFormats: [ 'YYYY/MM/DD HH:mm:ss' ],
-            sideBySide: false,
-            showTodayButton: true,
-            showClear: true,
-            showClose: true,
-            toolbarPlacement: 'top',
-            minDate: new Date(),
-            tooltips: {
-                today: 'Hoy',
-                clear: 'Limpiar selección',
-                close: 'Cerrar ventana',
-                selectMonth: 'Seleccionar mes',
-                prevMonth: 'Mes anterior',
-                nextMonth: 'Siguiente mes',
-                selectYear: 'Seleccionar año',
-                prevYear: 'Año anterior',
-                nextYear: 'Siguiente año',
-                selectDecade: 'Seleccionar década',
-                prevDecade: 'Década anterior',
-                nextDecade: 'Siguiente década',
-                prevCentury: 'Siglo anterior',
-                nextCentury: 'Siguiente siglo'
-            }
-        });
-    });
-</script>
-@endpush

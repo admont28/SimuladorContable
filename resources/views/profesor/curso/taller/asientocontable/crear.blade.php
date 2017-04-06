@@ -8,7 +8,7 @@
 
 @section('content')
     <div class="row">
-        <form class="form-horizontal" action="{{ route('profesor.curso.taller.crear.tallerasientoscontables.post', ['curs_id' => $curso->curs_id, 'tall_id' => $taller->tall_id]) }}" method="post" id="form-tallerasientoscontables">
+        <form class="form-horizontal" action="{{ route('profesor.curso.taller.crear.tallerasientocontable.post', ['curs_id' => $curso->curs_id, 'tall_id' => $taller->tall_id]) }}" method="post" id="form-tallerasientocontable">
             {{ csrf_field() }}
             <div class="form-group">
                 <label class="col-sm-2 control-label">Taller:</label>
@@ -19,7 +19,7 @@
             <div class="form-group {{ $errors->has('cantidad_filas_tabla') ? ' has-error' : '' }}">
                 <label for="cantidad_filas_tabla" class="col-lg-2 control-label">Cantidad de filas de la tabla</label>
                 <div class="col-lg-10">
-                    <input type="number" class="form-control" id="cantidad_filas_tabla" placeholder="Ingrese la cantidad de filas que tendrá la tabla del taller de asientos contables para ser solucionado" name="cantidad_filas_tabla" value="{{ old('cantidad_filas_tabla') }}">
+                    <input type="number" min="1" step="1" class="form-control" id="cantidad_filas_tabla" placeholder="Ingrese la cantidad de filas que tendrá la tabla del taller de asientos contables para ser solucionado" name="cantidad_filas_tabla" value="{{ old('cantidad_filas_tabla') }}">
                     @if ($errors->has('cantidad_filas_tabla'))
                         <span class="help-block">
                             <strong>{{ $errors->first('cantidad_filas_tabla') }}</strong>
@@ -45,7 +45,7 @@
              */
             $(document).on('click', '.btn-enviar', function(event) {
                 event.preventDefault();
-                var form = $('#form-tallerasientoscontables');
+                var form = $('#form-tallerasientocontable');
                 swal({
                     title: '¿Está seguro de esta acción?',
                     text: "Al marcar el taller con el sub-tipo: Taller Asientos Contables no podrá deshacer la acción. Por favor confirme.",
