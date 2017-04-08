@@ -74,7 +74,9 @@ Route::group(['prefix' => 'estudiante', 'middleware' => ['auth','estudiante'] ],
     Route::get('/curso/ver/{curs_id}/introduccion', 'CursoController@showEstudiante')->name('estudiante.curso.ver.introduccion');
     Route::get('/curso/inicio/ajax', 'CursoController@verCursosEstudiantesAjax')->name('estudiante.curso.verajax');
     Route::get('/curso/ver/{curs_id}/ver-materias', 'CursoController@verMateriasPorCursoEstudiante')->name('estudiante.curso.ver.materias');
-    Route::get('/curso/ver/{curs_id}/ver-talleres', 'CursoController@verTalleresPorCursoEstudiante')->name('estudiante.curso.ver.talleres');
+    Route::get('/curso/ver/{curs_id}/taller/ver', 'CursoController@verTalleresPorCursoEstudiante')->name('estudiante.curso.ver.talleres');
+    Route::get('/curso/ver/{curs_id}/taller/{tall_id}/preguntas', 'PreguntaController@verRespuestasPorPreguntaEstudiante')->name('estudiante.curso.ver.talleres.ver.preguntas');
+
 
 
 
@@ -115,24 +117,8 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     Route::get('/curso/{curs_id}/taller/editar/{tall_id}', 'TallerController@edit')->name('profesor.curso.taller.editar');
     Route::put('/curso/{curs_id}/taller/editar/{tall_id}', 'TallerController@update')->name('profesor.curso.taller.editar.put');
     Route::delete('/curso/{curs_id}/taller/eliminar/{tall_id}', 'TallerController@destroy')->name('profesor.curso.taller.eliminar');
-
-    /*
-    |--------------------------------------------------------------------------
-    | Rutas para los talleres de asientos contables
-    |--------------------------------------------------------------------------
-    */
-
-    Route::get('/curso/{curs_id}/taller/{tall_id}/crear-taller-asientos-contables', 'TallerController@crearTallerAsientosContables')->name('profesor.curso.taller.crear.tallerasientocontable');
-    Route::post('/curso/{curs_id}/taller/{tall_id}/crear-taller-asientos-contables', 'TallerController@crearTallerAsientosContablesPost')->name('profesor.curso.taller.crear.tallerasientocontable.post');
-
-    /*
-    |--------------------------------------------------------------------------
-    | Rutas para los talleres de nomina
-    |--------------------------------------------------------------------------
-    */
-
-    Route::get('/curso/{curs_id}/taller/{tall_id}/crear-taller-nomina', 'TallerController@crearTallerNomina')->name('profesor.curso.taller.crear.tallernomina');
-    Route::post('/curso/{curs_id}/taller/{tall_id}/crear-taller-nomina', 'TallerController@crearTallerNominaPost')->name('profesor.curso.taller.crear.tallernomina.post');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/crear-taller-asientos-contables', 'TallerController@crearTallerAsientosContables')->name('profesor.curso.taller.crear.tallerasientoscontables');
+    Route::post('/curso/{curs_id}/taller/{tall_id}/crear-taller-asientos-contables', 'TallerController@crearTallerAsientosContablesPost')->name('profesor.curso.taller.crear.tallerasientoscontables.post');
 
     /*
     |--------------------------------------------------------------------------

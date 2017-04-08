@@ -255,4 +255,30 @@ class PreguntaController extends Controller
             ->editColumn('remu_correcta', '@if($remu_correcta == 1) <span class="label label-success">SI</span> @else <span class="label label-danger">NO</span> @endif')
             ->make(true);
     }
+
+    public function verRespuestasPorPreguntaEstudiante($curs_id, $tall_id)
+    {
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('estudiante.curso');
+        }
+        $taller = Taller::find($tall_id);
+        // Verificamos que el taller exista en bd, si no es así informamos al usuario y redireccionamos.
+        if (!isset($taller)) {
+            flash('El taller con ID: '.$taller_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('estudiante.curso');
+        }
+        //verificamos que el taller sea un taller de tipo diagnostico
+        if ($taller->tall_tipo != "diagnostico") {
+            flash('El taller con ID: '.$taller_id.' no es un taller de tipo diagnostico. Verifique por favor.', 'danger');
+            return redirect()->route('estudiante.curso.ver.talleres',['curs_id'=>$curso->curs_id]);
+        }
+        $preguntas = $taller->preguntas;
+        return view('estudiante.curso.taller.pregunta.ver_preguntas')
+            ->with('curso', $curso)
+            ->with('taller',$taller)
+            ->with('preguntas', $preguntas);
+    }
 }
