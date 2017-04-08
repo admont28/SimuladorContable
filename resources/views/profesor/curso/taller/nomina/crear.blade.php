@@ -27,35 +27,35 @@
                     @endif
                 </div>
             </div>
-            <div class="form-group {{ $errors->has('deduccion_prestamo') ? ' has-error' : '' }}">
-                <label for="deduccion_prestamo" class="col-lg-2 control-label">¿Deducción prestamo?</label>
+            <div class="form-group {{ $errors->has('deduccion_uno') ? ' has-error' : '' }}">
+                <label for="deduccion_uno" class="col-lg-2 control-label">¿Deducción uno?</label>
                 <div class="col-lg-10">
-                    <input type="text" class="form-control" id="deduccion_prestamo" placeholder="Ingrese si el taller tiene deducción de prestamo" name="deduccion_prestamo" value="{{ old('deduccion_prestamo') }}">
-                    @if ($errors->has('deduccion_prestamo'))
+                    <input type="text" class="form-control" id="deduccion_uno" placeholder="Ingrese si el taller tiene algúna deducción, esto hará que aparezca una columna más en la tabla plantilla" name="deduccion_uno" value="{{ old('deduccion_uno') }}">
+                    @if ($errors->has('deduccion_uno'))
                         <span class="help-block">
-                            <strong>{{ $errors->first('deduccion_prestamo') }}</strong>
+                            <strong>{{ $errors->first('deduccion_uno') }}</strong>
                         </span>
                     @endif
                 </div>
             </div>
-            <div class="form-group {{ $errors->has('deduccion_2') ? ' has-error' : '' }}">
-                <label for="deduccion_2" class="col-lg-2 control-label">¿Deducción dos?</label>
+            <div class="form-group {{ $errors->has('deduccion_dos') ? ' has-error' : '' }}">
+                <label for="deduccion_dos" class="col-lg-2 control-label">¿Deducción dos?</label>
                 <div class="col-lg-10">
-                    <input type="text" class="form-control" id="deduccion_2" placeholder="Ingrese si el taller tiene deducción dos" name="deduccion_2" value="{{ old('deduccion_2') }}">
-                    @if ($errors->has('deduccion_2'))
+                    <input type="text" class="form-control" id="deduccion_dos" placeholder="Ingrese si el taller tiene algúna deducción, esto hará que aparezca una columna más en la tabla plantilla" name="deduccion_dos" value="{{ old('deduccion_dos') }}">
+                    @if ($errors->has('deduccion_dos'))
                         <span class="help-block">
-                            <strong>{{ $errors->first('deduccion_2') }}</strong>
+                            <strong>{{ $errors->first('deduccion_dos') }}</strong>
                         </span>
                     @endif
                 </div>
             </div>
-            <div class="form-group {{ $errors->has('deduccion_3') ? ' has-error' : '' }}">
-                <label for="deduccion_3" class="col-lg-2 control-label">¿Deducción tres?</label>
+            <div class="form-group {{ $errors->has('deduccion_tres') ? ' has-error' : '' }}">
+                <label for="deduccion_tres" class="col-lg-2 control-label">¿Deducción tres?</label>
                 <div class="col-lg-10">
-                    <input type="text" class="form-control" id="deduccion_3" placeholder="Ingrese si el taller tiene deducción tres" name="deduccion_3" value="{{ old('deduccion_3') }}">
-                    @if ($errors->has('deduccion_3'))
+                    <input type="text" class="form-control" id="deduccion_tres" placeholder="Ingrese si el taller tiene algúna deducción, esto hará que aparezca una columna más en la tabla plantilla" name="deduccion_tres" value="{{ old('deduccion_tres') }}">
+                    @if ($errors->has('deduccion_tres'))
                         <span class="help-block">
-                            <strong>{{ $errors->first('deduccion_3') }}</strong>
+                            <strong>{{ $errors->first('deduccion_tres') }}</strong>
                         </span>
                     @endif
                 </div>
@@ -81,7 +81,7 @@
                 var form = $('#form-tallernomina');
                 swal({
                     title: '¿Está seguro de esta acción?',
-                    text: "Al marcar el taller con el sub-tipo: Taller de Nómina no podrá deshacer la acción. Por favor confirme.",
+                    text: "Al marcar el taller con el sub-tipo: Taller de Nómina no podrá deshacer la acción. Por favor revisa la información suministrada y confirma.",
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',

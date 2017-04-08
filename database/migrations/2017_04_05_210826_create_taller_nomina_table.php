@@ -16,9 +16,9 @@ class CreateTallerNominaTable extends Migration
         Schema::create('TallerNomina', function (Blueprint $table) {
             $table->increments('tano_id');
             $table->integer('tano_cantidadfilas');
-            $table->string('tano_deduccionprestamo',50);
-            $table->string('tano_deduccion2',50);
-            $table->string('tano_deduccion3',50);
+            $table->string('tano_deduccionuno',50);
+            $table->string('tano_deducciondos',50);
+            $table->string('tano_deducciontres',50);
             $table->integer('tall_id')->unsigned();
             $table->foreign('tall_id')->references('tall_id')->on('Taller');
             $table->unique('tall_id');

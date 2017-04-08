@@ -7,6 +7,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Curso;
 use App\Puc;
 use Validator;
+use Illuminate\Support\Facades\DB;
 
 class PucController extends Controller
 {
@@ -78,6 +79,33 @@ class PucController extends Controller
         });
         // Informo al usuario y redireccionamos.
         flash('El archivo PUC "'.$file->getClientOriginalName().'" ha sido importado con éxito.','success');
+        return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
+    }
+
+    public function asociarPucComercial($curs_id)
+    {
+        // Se establece a 3 minutos (180 segundos) la ejecución máxima del script.
+        ini_set('max_execution_time', 180);
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso');
+        }
+        // Eliminamos todos los pucs relacionados con el curso actual, para ser reemplazados.
+        $pucsDeleted = $curso->pucs()->delete();
+        $pucComercial = DB::table('PucComercial')->get();
+        $valores = array();
+        foreach ($pucComercial as $fila) {
+            $valores[] = [
+                'puc_codigo' => $fila->puco_codigo,
+                'puc_nombre'  => $fila->puco_nombre,
+                'curs_id'    => $curso->curs_id
+            ];
+        }
+        DB::table('Puc')->insert($valores);
+        // Informo al usuario y redireccionamos.
+        flash('El PUC Comercial se ha asociado al curso con éxito al curso.','success');
         return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
     }
 

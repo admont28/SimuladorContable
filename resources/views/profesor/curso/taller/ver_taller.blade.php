@@ -100,7 +100,7 @@
                     <strong>¿Deducciones en prestamo?:</strong>
                 </div>
                 <div class="col-lg-9 text-justify">
-                    {{ $tallerNomina->tano_deduccionprestamo }}
+                    {{ $tallerNomina->tano_deduccionuno }}
                 </div>
             </div>
             <br>
@@ -109,7 +109,7 @@
                     <strong>¿Deducción dos?:</strong>
                 </div>
                 <div class="col-lg-9 text-justify">
-                    {{ $tallerNomina->tano_deduccion2 }}
+                    {{ $tallerNomina->tano_deducciondos }}
                 </div>
             </div>
             <br>
@@ -118,7 +118,7 @@
                     <strong>¿Deducción tres?:</strong>
                 </div>
                 <div class="col-lg-9 text-justify">
-                    {{ $tallerNomina->tano_deduccion3 }}
+                    {{ $tallerNomina->tano_deducciontres }}
                 </div>
             </div>
         @else

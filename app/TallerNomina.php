@@ -43,7 +43,7 @@ class TallerNomina extends Model
      * @var array
      */
     protected $fillable = [
-        'tano_id', 'tano_cantidadfilas', 'tano_deduccionprestamo', 'tano_deduccion2', 'tano_deduccion3', 'tall_id'
+        'tano_id', 'tano_cantidadfilas', 'tano_deduccionuno', 'tano_deducciondos', 'tano_deducciontres', 'tall_id'
     ];
 
     /**
