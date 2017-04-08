@@ -1,5 +1,7 @@
 <div class="row">
     <a href="{{ route('profesor.curso.puc.crear', ['curs_id' => $curso->curs_id]) }}" class="btn btn-primary">Cargar nuevo archivo</a>
+    <a href="{{ route('profesor.curso.puc.comercial.crear', ['curs_id' => $curso->curs_id]) }}" class="btn btn-success" id="usar-puc-comercial">¿Usar el PUC Comercial?</a>
+    <a href="{{ asset('storage/puccomercial/PUC-Archivo-Cargable.csv') }}" target="_blank" class="btn btn-default">Descargar PUC Comercial</a>
 </div>
 <br>
 <div class="row">
@@ -31,6 +33,28 @@
                 "language" : {
                     "url" : "//cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
                 }
+            });
+        });
+        $(document).ready(function() {
+            $('#usar-puc-comercial').click(function(event) {
+                event.preventDefault();
+                swal({
+                    title: '¿Está seguro de esta acción?',
+                    text: "Al usar el PUC Comercial cargado en nuestras bases de datos por defecto se copiarán todos los datos al PUC del curso. Por favor confirme.",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, continuar',
+                    cancelButtonText: 'No, cancelar'
+                }).then(function (option) {
+                    if(option === true){
+                        window.location.href = '{{ route('profesor.curso.puc.comercial.crear', ['curs_id' => $curso->curs_id]) }}';
+                        return true;
+                    }else{
+                        return false;
+                    }
+                })
             });
         });
     </script>
