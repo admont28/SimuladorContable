@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\DB;
 use App\Taller;
 use App\TallerAsientoContable;
+use App\TallerNomina;
 use App\Curso;
 use App\Pregunta;
 use App\Tarifa;
@@ -252,7 +253,8 @@ class TallerController extends Controller
         }
         // Verificamos que el taller no tenga asiganado ya un sub-tipo.
         $tallerAsientoContable = $taller->tallerAsientoContable;
-        if(isset($tallerAsientoContable)){
+        $tallerNomina = $taller->tallerNomina;
+        if(isset($tallerAsientoContable) || isset($tallerNomina)){
             flash('El taller con ID: '.$tall_id.' ya tiene relacionado un sub-tipo. Verifique por favor.', 'danger');
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
         }
@@ -277,7 +279,8 @@ class TallerController extends Controller
         }
         // Verificamos que el taller no tenga asiganado ya un sub-tipo.
         $tallerAsientoContable = $taller->tallerAsientoContable;
-        if(isset($tallerAsientoContable)){
+        $tallerNomina = $taller->tallerNomina;
+        if(isset($tallerAsientoContable) || isset($tallerNomina)){
             flash('El taller con ID: '.$tall_id.' ya tiene relacionado un sub-tipo. Verifique por favor.', 'danger');
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
         }
@@ -310,8 +313,9 @@ class TallerController extends Controller
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
         // Verificamos que el taller no tenga asiganado ya un sub-tipo.
+        $tallerAsientoContable = $taller->tallerAsientoContable;
         $tallerNomina = $taller->tallerNomina;
-        if(isset($tallerNomina)){
+        if(isset($tallerAsientoContable) || isset($tallerNomina)){
             flash('El taller con ID: '.$tall_id.' ya tiene relacionado un sub-tipo. Verifique por favor.', 'danger');
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
         }
@@ -335,24 +339,25 @@ class TallerController extends Controller
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
         // Verificamos que el taller no tenga asiganado ya un sub-tipo.
+        $tallerAsientoContable = $taller->tallerAsientoContable;
         $tallerNomina = $taller->tallerNomina;
-        if(isset($tallerNomina)){
+        if(isset($tallerAsientoContable) || isset($tallerNomina)){
             flash('El taller con ID: '.$tall_id.' ya tiene relacionado un sub-tipo. Verifique por favor.', 'danger');
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
         }
         // Validamos los campos del formulario.
         Validator::make($request->all(),[
             'cantidad_filas_tabla' => 'required|integer',
-            'deduccion_prestamo'   => '',
-            'deduccion_2'          => '',
-            'deduccion_3'          => ''
+            'deduccion_uno'   => '',
+            'deduccion_dos'          => '',
+            'deduccion_tres'          => ''
         ])->validate();
         // Creo el taller de nómina en bd y lo relaciono con el taller que sería el padre
         TallerNomina::create([
             'tano_cantidadfilas'     => $request['cantidad_filas_tabla'],
-            'tano_deduccionprestamo' => $request['deduccion_prestamo'],
-            'tano_deduccion2'        => $request['deduccion_2'],
-            'tano_deduccion3'            => $request['deduccion_3'],
+            'tano_deduccionuno'      => $request['deduccion_uno'],
+            'tano_deducciondos'      => $request['deduccion_dos'],
+            'tano_deducciontres'     => $request['deduccion_tres'],
             'tall_id'                => $taller->tall_id
         ]);
         // Informo al usuario y redireccionamos.
