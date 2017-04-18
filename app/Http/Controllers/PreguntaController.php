@@ -256,6 +256,12 @@ class PreguntaController extends Controller
             ->make(true);
     }
 
+    /**
+     * Esta función permite que el estudiante vea las respuesta de una pregunta unica-multiple.
+     * @param  int $curs_id Es la llave foranea entre curso y pregunta.
+     * @param  int $tall_id Es la llave foranea entre taller y curso.
+     * @return  View(ver_preguntas) Retorna la vista de ver_preguntas con el curso,taller y pregunta respectivamente
+     */
     public function verRespuestasPorPreguntaEstudiante($curs_id, $tall_id)
     {
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
@@ -272,7 +278,7 @@ class PreguntaController extends Controller
         }
         //verificamos que el taller sea un taller de tipo diagnostico
         if ($taller->tall_tipo != "diagnostico") {
-            flash('El taller con ID: '.$taller_id.' no es un taller de tipo diagnostico. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$taller->taller_id.' no es un taller de tipo diagnostico. Verifique por favor.', 'danger');
             return redirect()->route('estudiante.curso.ver.talleres',['curs_id'=>$curso->curs_id]);
         }
         $preguntas = $taller->preguntas;
@@ -281,4 +287,8 @@ class PreguntaController extends Controller
             ->with('taller',$taller)
             ->with('preguntas', $preguntas);
     }
+
+    
+
+
 }

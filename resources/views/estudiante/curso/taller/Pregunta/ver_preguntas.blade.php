@@ -8,7 +8,7 @@
 
 @section('content')
     <div class="row">
-        <form class="form-horizontal" action="index.html" method="post">
+        <form class="form-horizontal" action="{{ route('estudiante.curso.ver.talleres.ver.preguntas.ver.calificacion',['curso'=>$curso,'taller'=>$taller]) }}" method="post">
             @foreach ($preguntas as $pregunta)
                 <p class="lead"><strong>{{ $loop->iteration }}.</strong> {{ $pregunta->preg_texto }}</p>
                 @if ($pregunta->preg_tipo== "unica-multiple")

@@ -7,10 +7,13 @@ use App\Http\Controllers\DB;
 use App\Curso;
 use App\Materia;
 use App\Taller;
+use App\Pregunta;
 use App\DataTables\CursoDataTables;
 use App\DataTables\MateriaDataTables;
 use Validator;
 use Yajra\Datatables\Datatables;
+use Illuminate\Support\Facades\Auth;
+
 
 class CursoController extends Controller
 {
@@ -30,7 +33,6 @@ class CursoController extends Controller
      */
     public function indexEstudiante(CursoDataTables $dataTable)
     {
-
         return $dataTable->render('estudiante.curso.index');
     }
 
@@ -225,6 +227,10 @@ class CursoController extends Controller
                        ->make(true);
    }
 
+   /**
+    * [verCursosEstudiantesAjax description]
+    * @return [type] [description]
+    */
    public function verCursosEstudiantesAjax()
    {
        $cursos = Curso::select(['curs_id','curs_nombre','curs_introduccion']);
@@ -236,7 +242,11 @@ class CursoController extends Controller
            })->make(true);
    }
 
-
+   /**
+    * [verTalleresPorCursoEstudiante description]
+    * @param  string $curs_id [description]
+    * @return [type]          [description]
+    */
    public function verTalleresPorCursoEstudiante($curs_id = "")
    {
         $curso = Curso::find($curs_id);
@@ -246,7 +256,11 @@ class CursoController extends Controller
           ->with('talleres', $talleres )
           ->with('curso', $curso);
     }
-
+    /**
+     * [verPucPorCursoAjax description]
+     * @param  [type] $curs_id [description]
+     * @return [type]          [description]
+     */
    public function verPucPorCursoAjax($curs_id)
    {
        $curso = Curso::find($curs_id);

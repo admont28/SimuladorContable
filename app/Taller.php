@@ -107,4 +107,10 @@ class Taller extends Model
         }
         return $values;
     }
+
+    public function Calificaciones()
+    {
+        //inverso de hasMany tecnicamente no es necesasario pero siempre usar la relación y la inversa. el inverso belongsTo trae un dato y el hasmany trae una coleccion.
+        return $this->hasMany('App\Calificacion','tall_id');
+    }
 }

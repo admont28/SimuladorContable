@@ -80,4 +80,10 @@ class User extends Authenticatable
 
     // 4
     protected $email = "usua_correo";
+
+    public function calificaciones()
+    {
+        //inverso de hasMany tecnicamente no es necesasario pero siempre usar la relación y la inversa. el inverso belongsTo trae un dato y el hasmany trae una coleccion.
+        return $this->hasMany('App\Calificacion','usua_id');
+    }
 }
