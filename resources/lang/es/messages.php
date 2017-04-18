@@ -30,4 +30,5 @@ return [
     'ver_todos_los_cursos' => 'Ver todos los cursos',
     'crear_curso' => 'Crear curso',
     'ver_cursos' => 'Ver cursos',
+    'calificacion' => 'Calificacion',
 ];

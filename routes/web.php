@@ -76,6 +76,7 @@ Route::group(['prefix' => 'estudiante', 'middleware' => ['auth','estudiante'] ],
     Route::get('/curso/ver/{curs_id}/ver-materias', 'CursoController@verMateriasPorCursoEstudiante')->name('estudiante.curso.ver.materias');
     Route::get('/curso/ver/{curs_id}/taller/ver', 'CursoController@verTalleresPorCursoEstudiante')->name('estudiante.curso.ver.talleres');
     Route::get('/curso/ver/{curs_id}/taller/{tall_id}/preguntas', 'PreguntaController@verRespuestasPorPreguntaEstudiante')->name('estudiante.curso.ver.talleres.ver.preguntas');
+    Route::get('/curso/ver/{curs_id}/taller/{tall_id}/preguntas/calificacion', 'CalificacionController@create')->name('estudiante.curso.ver.talleres.ver.preguntas.ver.calificacion');
 
 
 
@@ -202,6 +203,15 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     Route::put('/curso/{curs_id}/materias/editar/{mate_id}', 'MateriaController@update')->name('profesor.curso.materia.editar.put');
     /* Eliminar una materia en específico de un curso */
     Route::delete('/curso/{curs_id}/materias/eliminar/{mate_id}', 'MateriaController@destroy')->name('profesor.curso.materia.eliminar');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Rutas para las calificaciones
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/{preg_id}/respuesta/calificacion', 'CalificacionController@create')->name('profesor.curso.taller.pregunta.respuesta.calificacion');
+
+
 });
 
 

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 return [
     'bienvenido' => 'Welcome to Accounting Simulator application',
@@ -29,4 +29,5 @@ return [
     'curso' => 'course',
     'crear_curso' => 'Create course',
     'ver_cursos' => 'See courses',
+    'calificacion' => 'Qualification',
 ];
