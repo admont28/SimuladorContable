@@ -17,10 +17,12 @@
         @include('estudiante.template.partials.nav')
         <!-- Begin page content -->
         <div class="container">
-            <div class="page-header">
-                <h1>
-                    @yield('title', 'Título por defecto.')
-                </h1>
+            <div class="row">
+                <div class="page-header">
+                    <h1>
+                        @yield('title', 'Título por defecto.')
+                    </h1>
+                </div>
                 @if (session()->has('flash_notification.message'))
                     <div class="alert alert-{{ session('flash_notification.level') }}">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -29,6 +31,8 @@
                 @endif
             </div>
             @yield('content', '')
+            <br>
+            <br>
         </div>
         @include('estudiante.template.partials.footer')
         <script type="text/javascript" src="{{ asset('plugins/jquery/js/jquery-3.1.1.min.js') }}" charset="utf-8"></script>
@@ -48,6 +52,7 @@
         <script type="text/javascript" src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
         <script type="text/javascript" src="{{ asset('plugins/sweetalert2/js/es6-promise.auto.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('plugins/sweetalert2/js/sweetalert2.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('plugins/countdown/js/jquery.countdown.min.js') }}"></script>
         <script type="text/javascript">
         $(document).ready(function() {
             $("@yield('active','')").addClass('active');

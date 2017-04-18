@@ -31,6 +31,8 @@
                 @endif
             </div>
             @yield('content', '')
+            <br>
+            <br>
         </div>
         @include('profesor.template.partials.footer')
         <script type="text/javascript" src="{{ asset('plugins/jquery/js/jquery-3.1.1.min.js') }}" charset="utf-8"></script>
