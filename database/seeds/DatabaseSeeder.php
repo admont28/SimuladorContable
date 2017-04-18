@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UsuarioSeeder::class);
         $this->command->info("UsuarioSeeder -> Ejecutado con éxito =)");
         $this->call(PucComercialSeeder::class);
-        $this->command->info("PucComercialSeedr -> Ejecutado con éxito =)");
+        $this->command->info("PucComercialSeeder -> Ejecutado con éxito =)");
 
     }
 }
