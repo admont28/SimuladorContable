@@ -83,21 +83,16 @@ class CursoController extends Controller
         return View('profesor.curso.ver_curso')->with('curso', $curso);
     }
 
-
-
     /**
      * Muestra todos los cursos para los estudiantes.
-     * @param  [type] $id la llave primaria de la tabla curso.
-     * @return [type]     la vista para ver cada curso.
+     * @param  integer $curs_id la llave primaria de la tabla curso.
+     * @return view     la vista para ver cada curso.
      */
-    public function showEstudiante($id)
+    public function verCursoEstudiante($curs_id)
     {
-        $curso = Curso::find($id);
-        $materias =Materia::where('curs_id', $curso->curs_id)->get();;
+        $curso = Curso::find($curs_id);
         return View('estudiante.curso.ver_curso')
-                ->with('curso', $curso)
-                ->with('materias', $materias);
-        //return $dataTable->render('profesor.curso.ver_curso', compact('curso', $curso));
+                ->with('curso', $curso);
     }
 
     /**
@@ -188,18 +183,24 @@ class CursoController extends Controller
                         ->make(true);
     }
 
-    public function verMateriasPorCursoEstudiante($curs_id = "")
+    public function verMateriasPorCursoEstudiante($curs_id)
     {
         $curso = Curso::find($curs_id);
-        $materias = Materia::where('curs_id', $curs_id)->get();
+        $materias = $curso->materias;
         return view('estudiante.curso.materia.ver_materias')
-            ->with('curso', $curso)
-            ->with('materias', $materias);
+                    ->with('curso', $curso)
+                    ->with('materias', $materias);
     }
 
-
-
-
+    public function verTalleresPorCursoEstudiante($curs_id)
+    {
+        $curso = Curso::find($curs_id);
+        //relaciones entre los modelos
+        $talleres = $curso->talleres->where('tall_tipo', 'diagnostico');
+        return view('estudiante.curso.taller.ver_talleres')
+                    ->with('curso', $curso)
+                    ->with('talleres', $talleres);
+    }
 
     /**
      * Funcion que permite consultar los talleres que tiene un curso
@@ -242,20 +243,10 @@ class CursoController extends Controller
            })->make(true);
    }
 
-   /**
-    * [verTalleresPorCursoEstudiante description]
-    * @param  string $curs_id [description]
-    * @return [type]          [description]
-    */
-   public function verTalleresPorCursoEstudiante($curs_id = "")
-   {
-        $curso = Curso::find($curs_id);
-        //relaciones entre los modelos
-        $talleres = $curso->talleres;
-        return view('estudiante.curso.taller.ver_talleres')
-          ->with('talleres', $talleres )
-          ->with('curso', $curso);
-    }
+
+
+
+
     /**
      * [verPucPorCursoAjax description]
      * @param  [type] $curs_id [description]

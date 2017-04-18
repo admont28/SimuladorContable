@@ -31,6 +31,6 @@ class CreateRespuestaAbierta extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('PucComercial');
+        Schema::dropIfExists('RespuestaAbierta');
     }
 }

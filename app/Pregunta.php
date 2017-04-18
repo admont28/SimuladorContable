@@ -84,7 +84,7 @@ class Pregunta extends Model
     }
 
     public function  tieneRespuestaMultiple(){
-        $cantidadRespuestaCorrecta =RespuestaMultipleUnica::where('preg_id', $this->preg_id)->where('remu_correcta',true)->count();
+        $cantidadRespuestaCorrecta = RespuestaMultipleUnica::where('preg_id', $this->preg_id)->where('remu_correcta',true)->count();
         if ($cantidadRespuestaCorrecta>1) {
             return true;
         }
