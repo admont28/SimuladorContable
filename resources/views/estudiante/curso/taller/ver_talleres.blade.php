@@ -30,10 +30,8 @@
                     <p><strong><h3>Archivo Asociado</h3></strong></p>
                     <p><a href="{{ $taller->tall_rutaarchivo }}">{{ $taller->tall_nombrearchivo }}</a></p>
                     <div class="text-center">
-                        <a href="#" class="btn btn-primary">Resolver Taller</a>
+                        <a href="{{ route('estudiante.curso.ver.talleres.ver.preguntas',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id]) }}" class="btn btn-primary resolver-taller" >Resolver Taller</a>
                     </div>
-
-
                 </div>
             </div>
         </div>
@@ -50,12 +48,34 @@
     </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
+
     <script type="text/javascript">
-
-
-
-
+    $(document).ready(function() {
+        $('.resolver-taller').click(function(event) {
+            event.preventDefault();
+            //accedemos a la ruta del boton que se dio click
+            var hrefBoton = $(this).attr('href');
+            swal({
+                title: '¿Está seguro de esta acción?',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, continuar',
+                cancelButtonText: 'No, cancelar'
+            }).then(function (option) {
+                if(option === true){
+                    window.location.href = hrefBoton;
+                    return true;
+                }else{
+                    return false;
+                }
+            })
+        });
+    });
 
     </script>
-@endsection
+
+
+@endpush('scripts')

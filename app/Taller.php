@@ -82,6 +82,22 @@ class Taller extends Model
         return $this->hasMany('App\Tarifa', 'tall_id');
     }
 
+    /**
+     * Obtener el taller de asiento contable asociado al taller actual.
+     */
+    public function tallerAsientoContable()
+    {
+        return $this->hasOne('App\TallerAsientoContable', 'tall_id');
+    }
+
+    /**
+     * Obtener el taller de nomina asociado al taller actual.
+     */
+    public function tallerNomina()
+    {
+        return $this->hasOne('App\TallerNomina', 'tall_id');
+    }
+
     public static function getPossibleEnumValues(){
         $type = DB::select(DB::raw('SHOW COLUMNS FROM Taller WHERE Field = "tall_tipo"'))[0]->Type;
         preg_match('/^enum\((.*)\)$/', $type, $matches);

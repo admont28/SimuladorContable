@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRespuestamultipleunicaTable extends Migration
+class CreateRespuestaMultipleUnicaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -19,7 +19,6 @@ class CreateRespuestamultipleunicaTable extends Migration
             $table->boolean('remu_correcta');
             $table->integer('preg_id')->unsigned();
             $table->foreign('preg_id')->references('preg_id')->on('Pregunta');
-
             $table->timestamp('remu_fechacreacion')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('remu_fechamodificacion')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });

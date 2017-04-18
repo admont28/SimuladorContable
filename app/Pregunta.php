@@ -69,7 +69,7 @@ class Pregunta extends Model
      */
     public function respuestasMultiplesUnicas()
     {
-        // Se pasa el modelo con el que está relacionado, seguido de la llave foranea de la tabla Pregunta en la tabla RespuestaMultipleUnica 
+        // Se pasa el modelo con el que está relacionado, seguido de la llave foranea de la tabla Pregunta en la tabla RespuestaMultipleUnica
         return $this->hasMany('App\RespuestaMultipleUnica','preg_id');
     }
 
@@ -82,4 +82,13 @@ class Pregunta extends Model
         }
         return $values;
     }
+
+    public function  tieneRespuestaMultiple(){
+        $cantidadRespuestaCorrecta =RespuestaMultipleUnica::where('preg_id', $this->preg_id)->where('remu_correcta',true)->count();
+        if ($cantidadRespuestaCorrecta>1) {
+            return true;
+        }
+        return false;
+    }
+
 }

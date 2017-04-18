@@ -74,7 +74,9 @@ Route::group(['prefix' => 'estudiante', 'middleware' => ['auth','estudiante'] ],
     Route::get('/curso/ver/{curs_id}/introduccion', 'CursoController@showEstudiante')->name('estudiante.curso.ver.introduccion');
     Route::get('/curso/inicio/ajax', 'CursoController@verCursosEstudiantesAjax')->name('estudiante.curso.verajax');
     Route::get('/curso/ver/{curs_id}/ver-materias', 'CursoController@verMateriasPorCursoEstudiante')->name('estudiante.curso.ver.materias');
-    Route::get('/curso/ver/{curs_id}/ver-talleres', 'CursoController@verTalleresPorCursoEstudiante')->name('estudiante.curso.ver.talleres');
+    Route::get('/curso/ver/{curs_id}/taller/ver', 'CursoController@verTalleresPorCursoEstudiante')->name('estudiante.curso.ver.talleres');
+    Route::get('/curso/ver/{curs_id}/taller/{tall_id}/preguntas', 'PreguntaController@verRespuestasPorPreguntaEstudiante')->name('estudiante.curso.ver.talleres.ver.preguntas');
+
 
 
 
@@ -183,7 +185,7 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     Route::get('/curso/{curs_id}/puc/ajax', 'CursoController@verPucPorCursoAjax')->name('profesor.curso.puc.verajax');
     Route::get('/curso/{curs_id}/puc/crear', 'PucController@create')->name('profesor.curso.puc.crear');
     Route::post('/curso/{curs_id}/puc/crear', 'PucController@store')->name('profesor.curso.puc.crear.post');
-
+    Route::get('/curso/{curs_id}/puc-comercial/crear','PucController@asociarPucComercial')->name('profesor.curso.puc.comercial.crear');
     /*
     |--------------------------------------------------------------------------
     | Rutas para las materias
