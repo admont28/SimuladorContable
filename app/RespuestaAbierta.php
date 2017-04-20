@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Calificacion extends Model
+class RespuestaAbierta extends Model
 {
     /**
      * El nombre de la tabla asociada al modelo.
      *
      * @var string
      */
-    protected $table = 'Calificacion';
+    protected $table = 'RespuestaAbierta';
 
     /**
      * El nombre de la llave primaria de la tabla.
@@ -19,7 +19,7 @@ class Calificacion extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'cali_id';
+    protected $primaryKey = 'reab_id';
 
     /**
      * El nombre del campo equivalente a CREATE_AT en la base de datos.
@@ -27,7 +27,7 @@ class Calificacion extends Model
      *
      * @var string
      */
-    const CREATED_AT = 'cali_fechacreacion';
+    const CREATED_AT = 'reab_fechacreacion';
 
     /**
      * El nombre del campo equivalente a UPDATED_AT en la base de datos.
@@ -35,7 +35,7 @@ class Calificacion extends Model
      *
      * @var string
      */
-    const UPDATED_AT = 'cali_fechamodificacion';
+    const UPDATED_AT = 'reab_fechamodificacion';
 
     /**
      * The attributes that are mass assignable.
@@ -43,7 +43,7 @@ class Calificacion extends Model
      * @var array
      */
     protected $fillable = [
-        'cali_id', 'cali_calificacion', 'cali_ponderado'
+        'reab_id','reab_textorespuesta','reab_rutaarchivo'
     ];
 
     /**
@@ -56,29 +56,11 @@ class Calificacion extends Model
     ];
 
     /**
-     * Obtener el usuario
-     */
-    public function usuario()
-    {
-        //inverso de hasMany tecnicamente no es necesasario pero siempre usar la relación y la inversa. el inverso belongsTo trae un dato y el hasmany trae una coleccion.
-        return $this->hasMany('App\User','usua_id');
-    }
-
-    /**
      * Obtener el taller de la pregunta que se esta calificando
      */
-    public function taller()
+    public function Respuesta()
     {
         // Se pasa el modelo con el que está relacionado, seguido de la llave foranea de la tabla Curso en la tabla Taller
-        return $this->hasMany('App\Taller','tall_id');
-    }
-
-
-    /**
-     * Obtener la pregunta del taller que se esta calificando
-     */
-    public function pregunta()
-    {
-        return $this->hasMany('App\Pregunta','preg_id');
+        return $this->hasMany('App\Respuesta','resp_id');
     }
 }
