@@ -283,8 +283,22 @@ class PreguntaController extends Controller
             return redirect()->route('estudiante.curso.ver.talleres',['curs_id'=>$curso->curs_id]);
         }
         $preguntas = $taller->preguntas;
-        $intentos = DB::table('IntentoTaller')->where('usua_id', Auth::user()->usua_id)->where('tall_id', $tall_id)->get(['inta_cantidad']);
-        dd($intentos);
+        $intentoTaller = DB::table('IntentoTaller')->select('inta_cantidad', 'inta_id')->where('usua_id', Auth::user()->usua_id)->where('tall_id', $taller->tall_id)->first();
+        if(!isset($intentoTaller)){
+            DB::table('IntentoTaller')->insert([
+                'inta_cantidad' => 1,
+                'usua_id' => Auth::user()->usua_id,
+                'tall_id' => $taller->tall_id
+            ]);
+        }else{
+            $intentos = $intentoTaller->inta_cantidad + 1;
+            if($intentos > 3){
+                flash('Ha superado el número de intentos permitidos para este taller.', 'danger');
+                return redirect()->route('estudiante.curso.ver.talleres',['curs_id'=>$curso->curs_id]);
+            }else{
+                DB::table('IntentoTaller')->where('inta_id', $intentoTaller->inta_id)->increment('inta_cantidad');
+            }
+        }
         return view('estudiante.curso.taller.pregunta.ver_preguntas')
                     ->with('curso', $curso)
                     ->with('taller',$taller)
