@@ -73,7 +73,10 @@ Route::group(['prefix' => 'estudiante', 'middleware' => ['auth','estudiante'] ],
     Route::get('/curso/inicio', 'CursoController@indexEstudiante')->name('estudiante.curso');
     Route::get('/curso/inicio/ajax', 'CursoController@verCursosEstudiantesAjax')->name('estudiante.curso.verajax');
 
-    
+    Route::get('/curso/ver/{curs_id}/ver-materias', 'CursoController@verMateriasPorCursoEstudiante')->name('estudiante.curso.ver.materias');
+    Route::get('/curso/ver/{curs_id}/taller/ver', 'CursoController@verTalleresPorCursoEstudiante')->name('estudiante.curso.ver.talleres');
+    Route::get('/curso/ver/{curs_id}/taller/{tall_id}/preguntas', 'PreguntaController@verRespuestasPorPreguntaEstudiante')->name('estudiante.curso.ver.talleres.ver.preguntas');
+    Route::get('/curso/ver/{curs_id}/taller/{tall_id}/preguntas/calificacion', 'CalificacionController@create')->name('estudiante.curso.ver.talleres.ver.preguntas.ver.calificacion');
 
     Route::get('/curso/{curs_id}/introduccion', 'CursoController@verCursoEstudiante')->name('estudiante.curso.ver.introduccion');
     Route::get('/curso/{curs_id}/materias', 'CursoController@verMateriasPorCursoEstudiante')->name('estudiante.curso.ver.materias');
@@ -212,7 +215,7 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     | Rutas para las calificaciones
     |--------------------------------------------------------------------------
     */
-    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/{preg_id}/respuesta/calificacion', 'CalificacionController@create')->name('profesor.curso.taller.pregunta.respuesta.calificacion');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/{preg_id}/respuesta/calificacion', 'CalificacionController@calificarPregunta')->name('profesor.curso.taller.pregunta.respuesta.calificacion');
 
 
 });
