@@ -72,13 +72,25 @@ Route::group(['prefix' => 'estudiante', 'middleware' => ['auth','estudiante'] ],
     */
     Route::get('/curso/inicio', 'CursoController@indexEstudiante')->name('estudiante.curso');
     Route::get('/curso/inicio/ajax', 'CursoController@verCursosEstudiantesAjax')->name('estudiante.curso.verajax');
-
-    
-
     Route::get('/curso/{curs_id}/introduccion', 'CursoController@verCursoEstudiante')->name('estudiante.curso.ver.introduccion');
+    /*
+    |--------------------------------------------------------------------------
+    | Rutas para las materias
+    |--------------------------------------------------------------------------
+    */
     Route::get('/curso/{curs_id}/materias', 'CursoController@verMateriasPorCursoEstudiante')->name('estudiante.curso.ver.materias');
+    /*
+    |--------------------------------------------------------------------------
+    | Rutas para los talleres
+    |--------------------------------------------------------------------------
+    */
     Route::get('/curso/{curs_id}/talleres', 'CursoController@verTalleresPorCursoEstudiante')->name('estudiante.curso.ver.talleres');
-    Route::get('/curso/{curs_id}/taller/{tall_id}/preguntas', 'PreguntaController@verRespuestasPorPreguntaEstudiante')->name('estudiante.curso.ver.talleres.ver.preguntas');
+    /*
+    |--------------------------------------------------------------------------
+    | Rutas para las preguntas
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/curso/{curs_id}/taller/{tall_id}/preguntas', 'PreguntaController@verPreguntasPorTaller')->name('estudiante.curso.ver.talleres.ver.preguntas');
 
 
 

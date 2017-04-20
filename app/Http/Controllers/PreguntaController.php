@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Pregunta;
 use App\RespuestaMultipleUnica;
 use App\Curso;
@@ -262,7 +263,7 @@ class PreguntaController extends Controller
      * @param  int $tall_id Es la llave foranea entre taller y curso.
      * @return  View(ver_preguntas) Retorna la vista de ver_preguntas con el curso,taller y pregunta respectivamente
      */
-    public function verRespuestasPorPreguntaEstudiante($curs_id, $tall_id)
+    public function verPreguntasPorTaller($curs_id, $tall_id)
     {
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
@@ -278,12 +279,12 @@ class PreguntaController extends Controller
         }
         //verificamos que el taller sea un taller de tipo diagnostico
         if ($taller->tall_tipo != "diagnostico") {
-
             flash('El taller con ID: '.$tall_id.' no es un taller de tipo diagnostico. Verifique por favor.', 'danger');
-
             return redirect()->route('estudiante.curso.ver.talleres',['curs_id'=>$curso->curs_id]);
         }
         $preguntas = $taller->preguntas;
+        $intentos = DB::table('IntentoTaller')->where('usua_id', Auth::user()->usua_id)->where('tall_id', $tall_id)->get(['inta_cantidad']);
+        dd($intentos);
         return view('estudiante.curso.taller.pregunta.ver_preguntas')
                     ->with('curso', $curso)
                     ->with('taller',$taller)
