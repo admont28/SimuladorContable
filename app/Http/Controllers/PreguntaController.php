@@ -292,7 +292,7 @@ class PreguntaController extends Controller
             ]);
         }else{
             $intentos = $intentoTaller->inta_cantidad + 1;
-            if($intentos > 3){
+            if($intentos >= 3){
                 flash('Ha superado el número de intentos permitidos para este taller.', 'danger');
                 return redirect()->route('estudiante.curso.ver.talleres',['curs_id'=>$curso->curs_id]);
             }else{
