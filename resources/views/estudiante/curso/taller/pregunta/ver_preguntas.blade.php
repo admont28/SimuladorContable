@@ -74,27 +74,43 @@
 @push('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
+            // Función para activar el contador.
             $("#clock").countdown("{{ $taller->tall_tiempo }}")
                         .on('update.countdown', function(event) {
+                            // El contador por defecto es de color verde.
                             var format = '<span class="label label-success">%H hr</span> <span class="label label-success">%M min</span> <span class="label label-success">%S seg</span>';
+                            // Se valida si se debe colocar la palabra día en plural o no.
                             if(event.offset.totalDays > 0) {
                                 format = '<span class="label label-success">%-d día%!d</span> ' + format;
                             }
+                            // Se valida si se debe colocar la palabra semana en plural o no.
                             if(event.offset.weeks > 0) {
                                 format = '<span class="label label-success">%-w semana%!w</span> ' + format;
                             }
+                            // Se coloca el contador en el html
                             $(this).html(event.strftime(format));
-                            console.log(event.offset.totalDays);
+                            // Cuando el total de días es inferior o igual a 3, se coloca en naranja el contador.
                             if(event.offset.totalDays <= 3){
                                 $(this).children("span").removeClass('label-success').addClass('label-warning');
                             }
+                            // Cuando el total de días es inferior o igual a 1, se coloca en rojo el contador.
                             if(event.offset.totalDays < 1 ){
                                 $(this).children("span").removeClass('label-warning').addClass('label-danger');
                             }
                         })
+                        // Cuando finaliza el contador se deja el siguiente mensaje.
                         .on('finish.countdown', function(event) {
                             $(this).html('<div class="alert alert-danger" role="alert">El taller ha expirado, no es posible guardar las respuestas.</div>');
                         });
-            });
+        });
+        // Mensjae cuando el usuario intenta abandonar la página.
+        $(window).on('beforeunload', function(){
+            swal(
+                '¡Cuidado!',
+                'Intentaste abandonar esta pagina. Si abandonas la página de igual forma se contará como un intento de solución del taller.',
+                'warning'
+            );
+            return "Intentaste abandonar esta pagina. Si abandonas la página de igual forma se contará como un intento de solución del taller.";
+        });
     </script>
 @endpush
