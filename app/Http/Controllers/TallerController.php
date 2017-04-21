@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\DB;
 use App\Taller;
 use App\TallerAsientoContable;
 use App\TallerNomina;
@@ -13,6 +12,9 @@ use App\Tarifa;
 use App\DataTables\TallerDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
+use DB;
+use Auth;
+use Redirect;
 use Storage;
 
 class TallerController extends Controller
@@ -50,7 +52,7 @@ class TallerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $curs_id = "")
+    public function store(Request $request, $curs_id)
     {
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso=Curso::find($curs_id);
@@ -428,8 +430,109 @@ class TallerController extends Controller
             ->with('preguntas', $preguntas)
             ->with('taller', $taller)
             ->with('curso', $curso);
+    }
 
+    public function solucionarTallerDiagnosticoPost(Request $request, $curs_id, $tall_id)
+    {
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('estudiante.curso');
+        }
+        $taller = Taller::find($tall_id);
+        // Verificamos que el taller exista en bd, si no es así informamos al usuario y redireccionamos.
+        if (!isset($taller) || $taller->curs_id != $curso->curs_id) {
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('estudiante.curso.ver.talleres', ['curs_id' => $curs_id]);
+        }
+        //verificamos que el taller sea un taller de tipo diagnostico
+        if ($taller->tall_tipo != "diagnostico") {
+            flash('El taller con ID: '.$tall_id.' no es un taller de tipo diagnostico. Verifique por favor.', 'danger');
+            return redirect()->route('estudiante.curso.ver.talleres',['curs_id'=>$curso->curs_id]);
+        }
+        $preguntas = $taller->preguntas;
+        $validaciones = array();
+        $errores = array();
+        foreach ($preguntas as $pregunta) {
+            if ($pregunta->preg_tipo == "unica-multiple"){
+                if ($pregunta->tieneRespuestaMultiple() == true){
+                    // Pregunta de tipo Checkbox
+                    $cantidadRespuestasCorrectas = $pregunta->cantidadRespuestasCorrectas();
+                    $respuestasMultiplesUnicas = $pregunta->respuestasMultiplesUnicas;
+                    $cantidadRespuestasEnSolicitud = 0;
+                    foreach ($respuestasMultiplesUnicas as $respuesta ) {
+                        if(array_key_exists('r_p_'.$pregunta->preg_id.'_o_'.$respuesta->remu_id, $request->all())){
+                            $cantidadRespuestasEnSolicitud++;
+                        }
+                    }
+                    if($cantidadRespuestasEnSolicitud != $cantidadRespuestasCorrectas){
+                        // La cantidad de respuestas seleccionadas en el formulario es distinta de la cantidad de respuestas correctas que tiene la pregunta.
+                        // Ej: la pregunta tiene 2 respuestas correctas de 5 en total, el usuario selecciona 3 respuestas, o 4, o 1, o las 5.
+                        $errores['r_p_'.$pregunta->preg_id] = "La cantidad de respuetas seleccionadas es distinta de la cantidad de respuestas que debe seleccionar.";
+                    }
+                }else{
+                    // Pregunta de tipo Radio Button
+                    if(!array_key_exists('r_p_'.$pregunta->preg_id, $request->all())){
+                        $errores['r_p_'.$pregunta->preg_id] = "Debe seleccionar una respuesta para esta pregunta.";
+                    }
+                }
+            }elseif ($pregunta->preg_tipo == "abierta"){
+                $validaciones['r_p_'.$pregunta->preg_id] = 'required|max:500';
+            }elseif ($pregunta->preg_tipo == "archivo"){
+                $validaciones['r_p_'.$pregunta->preg_id] = 'required';
+            }
+        }
+        $messages = array(
+            'required' => 'El campo es requerido.',
+            'max' => 'El campo debe ser menor que :max caracteres.'
+        );
+        $validator = Validator::make($request->all(), $validaciones,$messages);
+        if ($validator->fails() || !empty($errores))
+        {
+            // Adiciono a $validator los mensajes de error que se encuentren en $errores
+            foreach ($errores as $llave => $valor) {
+                $validator->getMessageBag()->add($llave, $valor);
+            }
+            $intentoTaller = DB::table('IntentoTaller')->select('inta_cantidad', 'inta_id')->where('usua_id', Auth::user()->usua_id)->where('tall_id', $taller->tall_id)->first();
+            // Decremento el valor de inta_cantidad porque al cargar la página de las preguntas, el controlador se encarga de incrementarlo, y si existen errores en el formulario, no debería contar como un intento de guardar las respuestas.
+            DB::table('IntentoTaller')->where('inta_id', $intentoTaller->inta_id)->decrement('inta_cantidad');
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
+        // En este punto, todas las preguntas tienen respuestas, y no hay errores en el formulario.
+        // Se procede a verificar cuales están correctas y cuales no.
+        foreach ($preguntas as $pregunta) {
+            if ($pregunta->preg_tipo == "unica-multiple"){
+                if ($pregunta->tieneRespuestaMultiple() == true){
+                    // Pregunta de tipo Checkbox
+                    $respuestasCorrectas = $pregunta->obtenerRespuestasCorrectas();
+                    $cantidadRespuestasCorrectas = 0;
+                    $cantidadRespuestasIncorrectas = 0;
+                    foreach ($respuestasCorrectas as $rc) {
+                        if (array_key_exists('r_p_'.$pregunta->preg_id.'_o_'.$rc->remu_id, $request->all())) {
+                            // Existe la respuesta correcta dentro de las respuestas que marcó el estudiante en el formulario.
+                            $cantidadRespuestasCorrectas++;
+                        }else{
+                            $cantidadRespuestasIncorrectas++;
+                        }
+                    }
 
+                }else{
+                    // Pregunta de tipo Radio Button
+                    // Capturo la respuesta correcta, obtengo el primer registro, debido a que solo debe haber 1 respuesta correcta, por ser de tipo 'unica'
+                    $respuestaCorrecta = $pregunta->obtenerRespuestasCorrectas()->first();
+                    // Valido si la respuesta que viene en la solicitud es la marcada por el profesor como correcta.
+                    if ($request['r_p_'.$pregunta->preg_id] == $respuestaCorrecta->remu_id ) {
+
+                    }
+                    if (array_key_exists('r_p_'.$pregunta->preg_id.'_o_'.$rc->remu_id, $request->all())) {
+                        if(!array_key_exists('r_p_'.$pregunta->preg_id, $request->all())){
+                            $errores['r_p_'.$pregunta->preg_id] = "Debe seleccionar una respuesta para esta pregunta.";
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

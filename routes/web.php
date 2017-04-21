@@ -85,6 +85,7 @@ Route::group(['prefix' => 'estudiante', 'middleware' => ['auth','estudiante'] ],
     |--------------------------------------------------------------------------
     */
     Route::get('/curso/{curs_id}/talleres', 'CursoController@verTalleresPorCursoEstudiante')->name('estudiante.curso.ver.talleres');
+    Route::post('/curso{curs_id}/taller/{tall_id}/enviar-respuestas', 'TallerController@solucionarTallerDiagnosticoPost')->name('estudiante.curso.taller.solucionar.post');
     /*
     |--------------------------------------------------------------------------
     | Rutas para las preguntas

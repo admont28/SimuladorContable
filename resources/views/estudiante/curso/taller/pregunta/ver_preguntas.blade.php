@@ -14,48 +14,79 @@
         </div>
     </div>
     <div class="row">
-        <form class="form-horizontal" action="" method="post">
+        <div class="bs-callout bs-callout-danger">
+            <h4><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> ¡Atención Estudiante!</h4>
+            <p class="lead">Tenga en cuenta que debe responder todas las preguntas antes de presionar el botón 'Enviar solución del taller'. Si no envía la solución del taller antes de que el taller finalice, sus respuestas no serán guardadas. Por favor no espere hasta el último segundo para enviar las respuestas ya que el sistema se puede demorar en realizar las validaciones necesarias y guardar las respuestas.</p>
+        </div>
+    </div>
+    <div class="row">
+        <form class="form-horizontal" action="{{ route('estudiante.curso.taller.solucionar.post', ['curs_id' => $curso->curs_id, 'tall_id' => $taller->tall_id]) }}" method="post">
+            {{ csrf_field() }}
+            @if($errors->any())
+               @foreach ($errors->all() as $error)
+                  <div>{{ $error }}</div>
+              @endforeach
+            @endif
             @foreach ($preguntas as $pregunta)
                 <p class="lead"><strong>{{ $loop->iteration }}. {{ $pregunta->preg_texto }}</strong></p>
                 @if ($pregunta->preg_tipo== "unica-multiple")
                     @if ($pregunta->tieneRespuestaMultiple() == true)
-                        @foreach ($pregunta->respuestasMultiplesUnicas as $respuesta)
-                            <div class="form-group">
-                                <div class="col-lg-12">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" id="{{ $respuesta->remu_id }}" name="{{ $respuesta->remu_id }}" > {{ $respuesta->remu_texto}}
-                                        </label>
+                        <div class="{{ $errors->has('r_p_'.$pregunta->preg_id) ? ' has-error' : '' }}">
+                            @if ($errors->has('r_p_'.$pregunta->preg_id))
+                               <span class="help-block">
+                                   <strong>{{ $errors->first('r_p_'.$pregunta->preg_id) }}</strong>
+                               </span>
+                            @endif
+                            @foreach ($pregunta->respuestasMultiplesUnicas as $respuesta)
+                                <div class="form-group {{ $errors->has('r_p_'.$pregunta->preg_id) ? ' has-error' : '' }}">
+                                    <div class="col-lg-12">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" id="{{ $respuesta->remu_id }}" name="r_p_{{ $pregunta->preg_id }}_o_{{ $respuesta->remu_id }}" @if(old('r_p_'.$pregunta->preg_id.'_o_'.$respuesta->remu_id)) {{'checked=checked'}} @endif> {{ $respuesta->remu_texto}}
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        </div>
                     @else
-                        @foreach ($pregunta->respuestasMultiplesUnicas as $respuesta)
-                            <div class="form-group">
-                                <div class="col-lg-12">
-                                    <div class="radio">
-                                        <label>
-                                            <input type="radio" id="{{ $respuesta->remu_id }}" name="{{ $pregunta->preg_id }}" > {{ $respuesta->remu_texto}}
-                                        </label>
+                        <div class="{{ $errors->has('r_p_'.$pregunta->preg_id) ? ' has-error' : '' }}">
+                            @if ($errors->has('r_p_'.$pregunta->preg_id))
+                               <span class="help-block">
+                                   <strong>{{ $errors->first('r_p_'.$pregunta->preg_id) }}</strong>
+                               </span>
+                            @endif
+                            @foreach ($pregunta->respuestasMultiplesUnicas as $respuesta)
+                                <div class="form-group {{ $errors->has('r_p_'.$pregunta->preg_id) ? ' has-error' : '' }}">
+                                    <div class="col-lg-12">
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" id="{{ $respuesta->remu_id }}" name="r_p_{{ $pregunta->preg_id }}" value="{{ $respuesta->remu_id }}" @if(old('r_p_'.$pregunta->preg_id) == $respuesta->remu_id) {{'checked=checked'}} @endif> {{ $respuesta->remu_texto}}
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        </div>
                     @endif
-                @elseif ($pregunta->preg_tipo== "abierta")
-                    <div class="form-group">
+                @elseif ($pregunta->preg_tipo == "abierta")
+                    <div class="form-group {{ $errors->has('r_p_'.$pregunta->preg_id) ? ' has-error' : '' }}">
                         <div class="col-lg-12">
-                           <textarea class="form-control" rows="3" id="{{ $pregunta->preg_id }}" name="{{ $pregunta->preg_id }}" placeholder="Ingrese su respuesta, como máximo 500 caracteres." max="500"></textarea>
+                            <textarea class="form-control" rows="3" id="{{ $pregunta->preg_id }}" name="r_p_{{ $pregunta->preg_id }}" placeholder="Ingrese su respuesta, como máximo 500 caracteres." max="500">{{ old('r_p_'.$pregunta->preg_id) }}</textarea>
+                            @if ($errors->has('r_p_'.$pregunta->preg_id))
+                               <span class="help-block">
+                                   <strong>{{ $errors->first('r_p_'.$pregunta->preg_id) }}</strong>
+                               </span>
+                            @endif
                         </div>
                     </div>
-                @elseif ($pregunta->preg_tipo== "archivo")
-                    <div class="form-group {{ $errors->has( $pregunta->preg_id ) ? ' has-error' : '' }}"
+                @elseif ($pregunta->preg_tipo == "archivo")
+                    <div class="form-group {{ $errors->has('r_p_'.$pregunta->preg_id) ? ' has-error' : '' }}">
                         <div class="col-lg-12">
-                            <input type="file" class="form-control" id="{{ $pregunta->preg_id }}" name="{{ $pregunta->preg_id }}">
-                            @if ($errors->has( $pregunta->preg_id ))
+                            <input type="file" class="form-control" id="{{ $pregunta->preg_id }}" name="r_p_{{ $pregunta->preg_id }}">
+                            @if ($errors->has('r_p_'.$pregunta->preg_id))
                                 <span class="help-block">
-                                    <strong>{{ $errors->first( $pregunta->preg_id ) }}</strong>
+                                    <strong>{{ $errors->first('r_p_'.$pregunta->preg_id) }}</strong>
                                 </span>
                             @endif
                         </div>

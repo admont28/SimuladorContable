@@ -83,12 +83,22 @@ class Pregunta extends Model
         return $values;
     }
 
-    public function  tieneRespuestaMultiple(){
+    public function tieneRespuestaMultiple(){
         $cantidadRespuestaCorrecta = RespuestaMultipleUnica::where('preg_id', $this->preg_id)->where('remu_correcta',true)->count();
         if ($cantidadRespuestaCorrecta>1) {
             return true;
         }
         return false;
+    }
+
+    public function cantidadRespuestasCorrectas()
+    {
+        return RespuestaMultipleUnica::where('preg_id', $this->preg_id)->where('remu_correcta',true)->count();
+    }
+
+    public function obtenerRespuestasCorrectas()
+    {
+        return RespuestaMultipleUnica::where('preg_id', $this->preg_id)->where('remu_correcta',true)->get();
     }
 
     public function calificacion()
