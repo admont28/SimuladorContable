@@ -78,7 +78,7 @@ class PreguntaController extends Controller
         Pregunta::create([
             'preg_texto'=> $request['texto_pregunta'],
             'preg_tipo'=> $request['tipo_pregunta'],
-            'preg_porcentaje'=> $request['porcentaje_pregunta'],
+            'preg_porcentaje'=> $request['porcentaje_pregunta']/100,
             'tall_id'=>$tall_id
         ]);
         flash('Pregunta "'.$request['texto_pregunta'].'" creada con éxito.', 'success');
