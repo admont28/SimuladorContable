@@ -72,13 +72,13 @@ class PreguntaController extends Controller
         Validator::make($request->all(), [
             'texto_pregunta' => 'required|max:500|min:5',
             'tipo_pregunta' => 'required|in:'.$opcionesSeparadasPorComas,
-            'porcentaje_pregunta'=>'required|regex:/^[0-9]([,\.][0-9])?$/'
+            'porcentaje_pregunta'=>'required|regex:/^[0-9][0-9][0]?$/'
         ])->validate();
         // Almaceno en bd la nueva pregunta
         Pregunta::create([
             'preg_texto'=> $request['texto_pregunta'],
             'preg_tipo'=> $request['tipo_pregunta'],
-            'preg_porcentaje'=> $request['porcentaje_pregunta'],
+            'preg_porcentaje'=> $request['porcentaje_pregunta']/100,
             'tall_id'=>$tall_id
         ]);
         flash('Pregunta "'.$request['texto_pregunta'].'" creada con éxito.', 'success');
