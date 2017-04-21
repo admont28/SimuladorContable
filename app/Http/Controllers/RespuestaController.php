@@ -7,7 +7,6 @@ use App\Pregunta;
 use App\RespuestaMultipleUnica;
 use App\Curso;
 use App\Taller;
-use App\RespuestaMultipleUnica;
 use App\DataTables\PreguntaDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
@@ -286,5 +285,5 @@ class RespuestaController extends Controller
         return redirect()->route('profesor.curso.taller.pregunta.ver',['curs_id'=> $curs_id,'tall_id'=>$taller->tall_id, 'preg_id' => $preg_id]);
     }
 
-    
+
 }
