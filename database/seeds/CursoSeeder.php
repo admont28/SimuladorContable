@@ -81,7 +81,7 @@ class CursoSeeder extends Seeder
         $preg_id_multiple = \DB::table('Pregunta')->insertGetId(array(
             'preg_texto' => "Segunda pregunta del taller diagnostico (multiple)",
             'preg_tipo' => "unica-multiple",
-            'preg_porcentaje' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 5),
+            'preg_porcentaje' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0.01, $max = 1),
             'tall_id' => $tall_id_diagnostico
         ));
         /*

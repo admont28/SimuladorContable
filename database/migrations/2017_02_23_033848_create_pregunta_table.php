@@ -17,7 +17,7 @@ class CreatePreguntaTable extends Migration
             $table->increments('preg_id');
             $table->text('preg_texto' , 500);
             $table->enum('preg_tipo', ['unica-multiple','abierta','archivo']);
-            $table->decimal('preg_porcentaje', 2, 1);
+            $table->decimal('preg_porcentaje', 3, 2);
             $table->integer('tall_id')->unsigned();
             $table->foreign('tall_id')->references('tall_id')->on('Taller');
 

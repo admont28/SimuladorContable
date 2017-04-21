@@ -36,7 +36,7 @@
         <div class="form-group {{ $errors->has('porcentaje_pregunta') ? ' has-error' : '' }}">
             <label for="porcentaje_pregunta" class="col-lg-2 control-label">Porcentaje</label>
             <div class="col-lg-10">
-                <input type="number" min="0.1" max="5.0" step="0.1" class="form-control" id="porcentaje_pregunta" placeholder="Ingrese el porcentaje de la pregunta, min: 0,1 - max: 5" name="porcentaje_pregunta" value="{{ old('porcentaje_pregunta') }}">
+                <input type="number" min="1" max="100" step="0.1" class="form-control" id="porcentaje_pregunta" placeholder="Ingrese el porcentaje de la pregunta, min: 1 - max: 100" name="porcentaje_pregunta" value="{{ old('porcentaje_pregunta') }}">
                 @if ($errors->has('porcentaje_pregunta'))
                     <span class="help-block">
                         <strong>{{ $errors->first('porcentaje_pregunta') }}</strong>
