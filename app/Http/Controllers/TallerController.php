@@ -394,6 +394,7 @@ class TallerController extends Controller
                 </form>';
             })
             ->editColumn('preg_tipo', '@if($preg_tipo == "unica-multiple") <span class="label label-info">{{ $preg_tipo }}</span> @elseif($preg_tipo == "abierta") <span class="label label-warning">{{ $preg_tipo }}</span> @else <span class="label label-default">{{ $preg_tipo }}</span> @endif')
+            ->editColumn('preg_porcentaje','{{ $preg_porcentaje * 100 }}%')
             ->make(true);
     }
 
