@@ -182,21 +182,15 @@ class PreguntaController extends Controller
             flash('La pregunta con ID: '.$preg_id.' no existe. Verifique por favor.', 'danger');
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
         }
-        // Obtengo las opciones disponbiles en bd en el campo preg_tipo de tipo enum.
-        $opciones = Pregunta::getPossibleEnumValues();
-        $opcionesSeparadasPorComas = implode(",", $opciones);
         // Para mirar el regex: http://www.regexpal.com/
         Validator::make($request->all(), [
             'texto_pregunta' => 'required|max:500|min:5',
-            'tipo_pregunta' => 'required|in:'.$opcionesSeparadasPorComas,
+            //'tipo_pregunta' => 'required|in:'.$opcionesSeparadasPorComas,
             'porcentaje_pregunta'=>'required|regex:/^[0-9]([,\.][0-9])?$/'
         ])->validate();
-
         $pregunta->preg_texto = $request->input('texto_pregunta');
-        $pregunta->preg_tipo = $request->input('tipo_pregunta');
         $pregunta->preg_porcentaje = $request->input('porcentaje_pregunta');
         $pregunta->save();
-
         flash('La pregunta "'.substr($pregunta->preg_texto, 0, 80).'..." editada con éxito.', 'success');
         return redirect()->route('profesor.curso.taller.ver',['curs_id'=> $curs_id, 'tall_id'=> $tall_id]);
     }
