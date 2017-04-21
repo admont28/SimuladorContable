@@ -224,7 +224,7 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     | Rutas para las calificaciones
     |--------------------------------------------------------------------------
     */
-    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/{preg_id}/respuesta/calificacion', 'CalificacionController@create')->name('profesor.curso.taller.pregunta.respuesta.calificacion');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/pregunta/{preg_id}/respuesta/calificacion', 'CalificacionController@calificarPregunta')->name('profesor.curso.taller.pregunta.respuesta.calificacion');
 
 
 });
