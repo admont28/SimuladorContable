@@ -16,7 +16,7 @@ class CreateRespuestaAbierta extends Migration
         Schema::create('RespuestaAbierta', function (Blueprint $table) {
             $table->increments('reab_id');
             $table->text('reab_textorespuesta' , 500);
-            $table->string('reab_rutaarchivo', 255);
+            // No la considero necesara -> $table->string('reab_rutaarchivo', 255);
             $table->timestamp('reab_fechacreacion')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('reab_fechamodificacion')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });

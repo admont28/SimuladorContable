@@ -8,6 +8,9 @@ use App\TallerAsientoContable;
 use App\TallerNomina;
 use App\Curso;
 use App\Pregunta;
+use App\Respuesta;
+use App\RespuestaAbierta;
+use App\RespuestaArchivo;
 use App\Tarifa;
 use App\DataTables\TallerDataTables;
 use Yajra\Datatables\Datatables;
@@ -502,6 +505,7 @@ class TallerController extends Controller
         }
         // En este punto, todas las preguntas tienen respuestas, y no hay errores en el formulario.
         // Se procede a verificar cuales están correctas y cuales no.
+        $errores = array();
         foreach ($preguntas as $pregunta) {
             if ($pregunta->preg_tipo == "unica-multiple"){
                 if ($pregunta->tieneRespuestaMultiple() == true){
@@ -517,23 +521,48 @@ class TallerController extends Controller
                             $cantidadRespuestasIncorrectas++;
                         }
                     }
-
+                    if($cantidadRespuestasIncorrectas != 0){
+                        $errores['r_p_'.$pregunta->preg_id] = "Respuesta incorrecta.";
+                    }
                 }else{
                     // Pregunta de tipo Radio Button
                     // Capturo la respuesta correcta, obtengo el primer registro, debido a que solo debe haber 1 respuesta correcta, por ser de tipo 'unica'
                     $respuestaCorrecta = $pregunta->obtenerRespuestasCorrectas()->first();
                     // Valido si la respuesta que viene en la solicitud es la marcada por el profesor como correcta.
-                    if ($request['r_p_'.$pregunta->preg_id] == $respuestaCorrecta->remu_id ) {
-
-                    }
-                    if (array_key_exists('r_p_'.$pregunta->preg_id.'_o_'.$rc->remu_id, $request->all())) {
-                        if(!array_key_exists('r_p_'.$pregunta->preg_id, $request->all())){
-                            $errores['r_p_'.$pregunta->preg_id] = "Debe seleccionar una respuesta para esta pregunta.";
-                        }
+                    if (!$request['r_p_'.$pregunta->preg_id] == $respuestaCorrecta->remu_id ) {
+                        $errores['r_p_'.$pregunta->preg_id] = "Respuesta incorrecta.";
                     }
                 }
             }
         }
+        if(empty($errores)){
+            foreach ($preguntas as $pregunta) {
+                if ($pregunta->preg_tipo == "unica-multiple"){
+                    if ($pregunta->tieneRespuestaMultiple() == true){
+                        // Pregunta de tipo Checkbox
+
+                    }else{
+                        // Pregunta de tipo Radio Button
+
+                    }
+                }elseif ($pregunta->preg_tipo == "abierta"){
+                    /*
+                     * TODO: Considero que la tabla respuesta abierta no debería de existir, debido a que solo tendrá un campo, el texto de la respuesta.
+                     */
+                    $respuestaAbierta = RespuestaAbierta::create([
+                        'reab_textorespuesta' => $request['r_p_'.$pregunta->preg_id];
+                    ]);
+                    Respuesta::create([
+                        'usua_id' => Auth::user()->usua_id,
+                        'preg_id' => $pregunta->preg_id,
+                        'reab_id' => $respuestaAbierta->reab_id;
+                    ]);
+                }elseif ($pregunta->preg_tipo == "archivo"){
+                    
+                }
+            }
+        }
+
     }
 
 }

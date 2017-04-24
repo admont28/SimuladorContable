@@ -43,7 +43,7 @@ class Respuesta extends Model
      * @var array
      */
     protected $fillable = [
-        'resp_id'
+        'resp_id', 'usua_id', 'preg_id', 'remu_id', 'rear_id', 'reab_id'
     ];
 
     /**
