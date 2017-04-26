@@ -43,7 +43,7 @@ class Respuesta extends Model
      * @var array
      */
     protected $fillable = [
-        'resp_id', 'usua_id', 'preg_id', 'remu_id', 'rear_id', 'reab_id'
+        'resp_id', 'usua_id', 'preg_id', 'remu_id', 'rear_id', 'resp_abierta'
     ];
 
     /**
@@ -73,23 +73,14 @@ class Respuesta extends Model
     /**
      * Obtener el taller de la pregunta que se esta calificando
      */
-    public function RespuestaMultipleUnica()
+    public function respuestaMultipleUnica()
     {
         // Se pasa el modelo con el que está relacionado, seguido de la llave foranea de la tabla Curso en la tabla Taller
         return $this->belongsTo('App\RespuestaMultipleUnica','remu_id');
     }
-    public function RespuestaAbierta()
-    {
-        // Se pasa el modelo con el que está relacionado, seguido de la llave foranea de la tabla Curso en la tabla Taller
-        return $this->belongsTo('App\RespuestaMultipleUnica','remu_id');
-    }
-    public function RespuestaArchivo()
+    public function respuestaArchivo()
     {
         // Se pasa el modelo con el que está relacionado, seguido de la llave foranea de la tabla Curso en la tabla Taller
         return $this->belongsTo('App\RespuestaArchivo','rear_id');
     }
-
-
-
-
 }
