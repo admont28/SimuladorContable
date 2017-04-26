@@ -101,10 +101,16 @@ class Pregunta extends Model
         return RespuestaMultipleUnica::where('preg_id', $this->preg_id)->where('remu_correcta',true)->get();
     }
 
-    public function calificacion()
+    public function calificaciones()
     {
         //inverso de hasMany tecnicamente no es necesasario pero siempre usar la relación y la inversa. el inverso belongsTo trae un dato y el hasmany trae una coleccion.
         return $this->hasMany('App\Calificacion','preg_id');
+    }
+
+    public function respuestas()
+    {
+        //inverso de hasMany tecnicamente no es necesasario pero siempre usar la relación y la inversa. el inverso belongsTo trae un dato y el hasmany trae una coleccion.
+        return $this->hasMany('App\Respuesta','preg_id');
     }
 
 }
