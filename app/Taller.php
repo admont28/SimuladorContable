@@ -113,4 +113,28 @@ class Taller extends Model
         //inverso de hasMany tecnicamente no es necesasario pero siempre usar la relación y la inversa. el inverso belongsTo trae un dato y el hasmany trae una coleccion.
         return $this->hasMany('App\Calificacion','tall_id');
     }
+
+    /**
+     * Consulta en la base de datos quienes han respondido el taller seleccionado.
+     *  conversion de la consulta  SELECT DISTINCT u.usua_nombre FROM Respuesta r, Pregunta p, Taller t, Usuario u WHERE u.usua_id = r.usua_id and r.preg_id = p.preg_id and p.tall_id = 1
+     * @var [type]
+     */
+    public function usuariosPorTaller()
+    {
+        //$sql = 'SELECT DISTINCT u.usua_nombre FROM Respuesta r, Pregunta p, Taller t, Usuario u WHERE u.usua_id = r.usua_id and r.preg_id = p.preg_id and t.tall_id=';
+        return DB::table('Usuario')
+            ->join('Respuesta','Usuario.usua_id','=','Respuesta.usua_id')
+            ->join('Pregunta','Respuesta.preg_id','=','Pregunta.preg_id')
+            ->join('Taller','Pregunta.tall_id','=','Taller.tall_id')
+            ->where('Taller.tall_id',$this->tall_id)
+            ->get();
+    }
+
+    /**
+     * método para consultar las respuestas que hizo el estudiante en un determinado taller
+     */
+    public function respuestasPorEstudiante()
+    {
+        
+    }
 }

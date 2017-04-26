@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Controllers\DB;
 
 class Calificacion extends Model
 {
@@ -61,24 +62,24 @@ class Calificacion extends Model
     public function usuario()
     {
         //inverso de hasMany tecnicamente no es necesasario pero siempre usar la relación y la inversa. el inverso belongsTo trae un dato y el hasmany trae una coleccion.
-        return $this->hasMany('App\User','usua_id');
+        return $this->belongsTo('App\User','usua_id');
     }
-
     /**
      * Obtener el taller de la pregunta que se esta calificando
      */
     public function taller()
     {
         // Se pasa el modelo con el que está relacionado, seguido de la llave foranea de la tabla Curso en la tabla Taller
-        return $this->hasMany('App\Taller','tall_id');
+        return $this->belongsTo('App\Taller','tall_id');
     }
-
-
     /**
      * Obtener la pregunta del taller que se esta calificando
      */
     public function pregunta()
     {
-        return $this->hasMany('App\Pregunta','preg_id');
+        return $this->belongsTo('App\Pregunta','preg_id');
     }
+
+
+
 }
