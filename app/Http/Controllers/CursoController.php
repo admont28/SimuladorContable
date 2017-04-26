@@ -173,7 +173,7 @@ class CursoController extends Controller
                             $csrf_field = csrf_field();
                             return
                             '<a href="'.route('profesor.curso.materia.editar', ['curs_id' => $materia->curs_id, 'mate_id' => $materia->mate_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
-                            <form action="'.route('profesor.curso.materia.eliminar', ['curs_id' => $materia->curs_id, 'mate_id' => $materia->mate_id]).'" method="POST" class="visible-lg-inline-block">
+                            <form action="'.route('profesor.curso.materia.eliminar', ['curs_id' => $materia->curs_id, 'mate_id' => $materia->mate_id]).'" method="POST" class="visible-lg-inline-block visible-sm-inline-block visible-md-inline-block visible-xs-inline-block">
                                 '.$method_field.'
                                 '.$csrf_field.'
                                 <button type="submit" name="eliminar" class="btn btn-xs btn-danger btn-eliminar"><i class="glyphicon glyphicon-trash"></i> Eliminar</button>
@@ -197,7 +197,7 @@ class CursoController extends Controller
         $curso = Curso::find($curs_id);
         //relaciones entre los modelos
         $talleres = $curso->talleres->where('tall_tipo', 'diagnostico');
-        return view('estudiante.curso.taller.ver_talleres')
+        return view('estudiante.curso.taller.ver_taller')
                     ->with('curso', $curso)
                     ->with('talleres', $talleres);
     }
@@ -224,6 +224,7 @@ class CursoController extends Controller
                                     <button type="submit" name="eliminar" class="btn btn-xs btn-danger btn-eliminar"><i class="glyphicon glyphicon-trash"></i> Eliminar</button>
                                 </form>';
                        })
+                       ->editColumn('tall_tipo', '@if($tall_tipo == "teorico") <span class="label label-info">{{ $tall_tipo }}</span> @elseif($tall_tipo == "diagnostico") <span class="label label-warning">{{ $tall_tipo }}</span> @else <span class="label label-default">{{ $tall_tipo }}</span> @endif')
                        ->editColumn('tall_rutaarchivo', '<a href="{{$tall_rutaarchivo}}">{{$tall_nombrearchivo}}</a>')
                        ->make(true);
    }

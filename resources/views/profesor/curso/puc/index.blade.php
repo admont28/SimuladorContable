@@ -24,6 +24,7 @@
             $('#ver-puc').DataTable({
                 "processing": true,
                 "serverSide": true,
+                "lengthMenu": [ 5, 10, 25, 50, 75, 100 ],
                 "ajax": "{{ route('profesor.curso.puc.verajax', ['curs_id' => $curso->curs_id]) }}",
                 "columns" : [
                     {data: 'puc_id', name: 'puc_id', width: '5%'},

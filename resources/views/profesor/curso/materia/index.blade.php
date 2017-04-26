@@ -3,12 +3,12 @@
 </div>
 <br>
 <div class="row">
-    <div class="table-responsive">
-        <table class="table" id="ver-materias">
+    <div class="col-xs-12">
+        <table class="table" width="100%" id="ver-materias">
             <thead>
                 <tr>
                     <td><strong>ID</strong></td>
-                    <td><strong>Nombre de la materia</strong></td>
+                    <td><strong>Nombre</strong></td>
                     <td><strong>Tema</strong></td>
                     <td><strong>Archivo asociado</strong></td>
                     <td><strong>Opciones</strong></td>
@@ -23,15 +23,16 @@
     <script type="text/javascript">
         $(function() {
             $('#ver-materias').DataTable({
+                "responsive": true,
                 "processing": true,
                 "serverSide": true,
                 "ajax": "{{ route('profesor.curso.materia.verajax', ['curs_id' => $curso->curs_id]) }}",
                 "columns" : [
-                    {data: 'mate_id', name: 'mate_id', width: '5%'},
-                    {data: 'mate_nombre', name: 'mate_nombre', width: '15%'},
-                    {data: 'mate_tema', name: 'mate_tema', width: '45%'},
-                    {data: 'mate_rutaarchivo', name: 'mate_rutaarchivo', width: '20%'},
-                    {data: 'opciones', name: 'action', orderable: false, searchable: false, width: '15%'}
+                    {data: 'mate_id', name: 'mate_id', width: '50px'},
+                    {data: 'mate_nombre', name: 'mate_nombre', width: '200'},
+                    {data: 'mate_tema', name: 'mate_tema', width: '300px'},
+                    {data: 'mate_rutaarchivo', name: 'mate_rutaarchivo', width: '200'},
+                    {data: 'opciones', name: 'action', orderable: false, searchable: false, width: '200px'}
                 ],
                 "language" : {
                     "url" : "//cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"

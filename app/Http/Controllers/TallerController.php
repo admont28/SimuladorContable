@@ -494,34 +494,52 @@ class TallerController extends Controller
             'max' => 'El campo debe ser menor que :max caracteres.'
         );
         $validator = Validator::make($request->all(), $validaciones,$messages);
-        if ($validator->fails() || !empty($errores))
-        {
-            // Adiciono a $validator los mensajes de error que se encuentren en $errores
-            foreach ($errores as $llave => $valor) {
-                $validator->getMessageBag()->add($llave, $valor);
-            }
-            $intentoTaller = DB::table('IntentoTaller')->select('inta_cantidad', 'inta_id')->where('usua_id', Auth::user()->usua_id)->where('tall_id', $taller->tall_id)->first();
-            // Decremento el valor de inta_cantidad porque al cargar la página de las preguntas, el controlador se encarga de incrementarlo, y si existen errores en el formulario, no debería contar como un intento de guardar las respuestas.
-            DB::table('IntentoTaller')->where('inta_id', $intentoTaller->inta_id)->decrement('inta_cantidad');
-            return Redirect::back()->withErrors($validator)->withInput();
-        }
-        // En este punto, todas las preguntas tienen respuestas, y no hay errores en el formulario.
-        // Se procede a verificar cuales están correctas y cuales no.
-        $errores = $this->verificarErroresEnRespuestas($preguntas, $request);
-        $intentoTaller = DB::table('IntentoTaller')->select('inta_cantidad', 'inta_id')->where('usua_id', Auth::user()->usua_id)->where('tall_id', $taller->tall_id)->first();
-        $intentos = $intentoTaller->inta_cantidad;
-        if(!empty($errores)){
-            // Si es el primer intento, aún no guardo las respuestas, le comunico que tiene errores y que envie de nuevo.
-            if($intentos == 1){
+        DB::beginTransaction();
+        try {
+            if ($validator->fails() || !empty($errores))
+            {
+                // Adiciono a $validator los mensajes de error que se encuentren en $errores
                 foreach ($errores as $llave => $valor) {
                     $validator->getMessageBag()->add($llave, $valor);
                 }
-                flash('Usted tiene respuestas incorrectas, sus respuestas aún no se han guardado, por favor intente corregir las respuestas y enviar la solución del taller nuevamente.', 'danger');
+                $intentoTaller = DB::table('IntentoTaller')->select('inta_cantidad', 'inta_id')->where('usua_id', Auth::user()->usua_id)->where('tall_id', $taller->tall_id)->first();
+                // Decremento el valor de inta_cantidad porque al cargar la página de las preguntas, el controlador se encarga de incrementarlo, y si existen errores en el formulario, no debería contar como un intento de guardar las respuestas.
+                DB::table('IntentoTaller')->where('inta_id', $intentoTaller->inta_id)->decrement('inta_cantidad');
+                DB::commit();
                 return Redirect::back()->withErrors($validator)->withInput();
             }
+            // En este punto, todas las preguntas tienen respuestas, y no hay errores en el formulario.
+            // Se procede a verificar cuales están correctas y cuales no.
+            $errores = $this->verificarErroresEnRespuestas($preguntas, $request);
+            $intentoTaller = DB::table('IntentoTaller')->select('inta_cantidad', 'inta_id')->where('usua_id', Auth::user()->usua_id)->where('tall_id', $taller->tall_id)->first();
+            $intentos = $intentoTaller->inta_cantidad;
+            if(!empty($errores)){
+                // Si es el primer intento, aún no guardo las respuestas, le comunico que tiene errores y que envie de nuevo.
+                if($intentos == 1){
+                    foreach ($errores as $llave => $valor) {
+                        $validator->getMessageBag()->add($llave, $valor);
+                    }
+                    flash('Usted tiene respuestas incorrectas, sus respuestas aún no se han guardado, por favor intente corregir las respuestas y enviar la solución del taller nuevamente.', 'danger');
+                    return Redirect::back()->withErrors($validator)->withInput();
+                }
+            }
+            $this->almacenarRespuestas($preguntas,$request);
+            $this->calificarRespuestas($preguntas);
+            if($intentos == 1){
+                DB::table('IntentoTaller')->where('inta_id', $intentoTaller->inta_id)->increment('inta_cantidad');
+            }
+            DB::commit();
+            $success = true;
+        } catch (\Exception $e) {
+            $success = false;
+            DB::rollback();
         }
-        $this->almacenarRespuestas($preguntas,$request);
-        $this->calificarRespuestas($preguntas);
+        if (!$success) {
+            flash('Ha ocurrido un error en el sistema, por favor inténtalo de nuevo.', 'danger');
+            return redirect()->route('estudiante.curso.ver.talleres',['curs_id'=>$curso->curs_id]);
+        }
+        flash('Todas sus respuestas han quedado guardadas.', 'success');
+        return redirect()->route('estudiante.curso.ver.talleres',['curs_id'=>$curso->curs_id]);
     }
 
     private function verificarErroresEnRespuestas($preguntas = array(), $request = null)
