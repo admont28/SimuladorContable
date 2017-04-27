@@ -14,7 +14,7 @@
             <div class="form-group {{ $errors->has('texto_pregunta') ? ' has-error' : '' }}">
                 <label for="texto_pregunta" class="col-lg-2 control-label">Texto de la pregunta</label>
                 <div class="col-lg-10">
-                    <textarea class="form-control" id="texto_pregunta" placeholder="Ingrese el texto de la pregunta, máximo 500 caracteres." name="texto_pregunta" rows="5">@if(old('texto_pregunta') != NULL){{ old('texto_pregunta') }}@else{{ $pregunta->preg_texto }}@endif</textarea>
+                    <textarea class="form-control" id="texto_pregunta" placeholder="Ingrese el texto de la pregunta, máximo 500 caracteres." name="texto_pregunta" rows="5" required="required">@if(old('texto_pregunta') != NULL){{ old('texto_pregunta') }}@else{{ $pregunta->preg_texto }}@endif</textarea>
                     @if ($errors->has('texto_pregunta'))
                         <span class="help-block">
                             <strong>{{ $errors->first('texto_pregunta') }}</strong>
@@ -40,15 +40,15 @@
             <div class="form-group {{ $errors->has('porcentaje_pregunta') ? ' has-error' : '' }}">
                 <label for="porcentaje_pregunta" class="col-lg-2 control-label">Porcentaje</label>
                 <div class="col-lg-10">
-                    <input type="number" min="0.1" max="5.0" step="0.1" class="form-control" id="porcentaje_pregunta" placeholder="Ingrese el porcentaje de la pregunta, min: 0,1 - max: 5" name="porcentaje_pregunta" value="@if(old('porcentaje_pregunta') != NULL){{ old('porcentaje_pregunta') }}@else{{ $pregunta->preg_porcentaje }}@endif">
+                    <div class="input-group">
+                        <input type="number" min="1" max="100" step="1" class="form-control" id="porcentaje_pregunta" placeholder="Ingrese el porcentaje de la pregunta, min: 0,1 - max: 5" name="porcentaje_pregunta" value="@if(old('porcentaje_pregunta') != NULL){{ old('porcentaje_pregunta') }}@else{{ $pregunta->preg_porcentaje*100 }}@endif" required="required">
+                        <span class="input-group-addon"> % </span>
+                    </div>
                     @if ($errors->has('porcentaje_pregunta'))
                         <span class="help-block">
                             <strong>{{ $errors->first('porcentaje_pregunta') }}</strong>
                         </span>
                     @endif
-                    <span class="help-block">
-                        <strong>Use la coma para separar el número entero del número décimal. Ej: 3,0</strong>
-                    </span>
                 </div>
             </div>
 

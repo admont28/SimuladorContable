@@ -12,7 +12,7 @@
         <div class="form-group {{ $errors->has('texto_pregunta') ? ' has-error' : '' }}">
             <label for="texto_pregunta" class="col-lg-2 control-label">Texto de la pregunta</label>
             <div class="col-lg-10">
-                <textarea class="form-control" id="texto_pregunta" placeholder="Ingrese el texto de la pregunta, máximo 500 caracteres." name="texto_pregunta" rows="5">{{ old('texto_pregunta') }}</textarea>
+                <textarea class="form-control" id="texto_pregunta" placeholder="Ingrese el texto de la pregunta, máximo 500 caracteres." name="texto_pregunta" rows="5" required="required">{{ old('texto_pregunta') }}</textarea>
                 @if ($errors->has('texto_pregunta'))
                     <span class="help-block">
                         <strong>{{ $errors->first('texto_pregunta') }}</strong>
@@ -21,9 +21,9 @@
             </div>
         </div>
         <div class="form-group {{ $errors->has('tipo_pregunta') ? ' has-error' : '' }}">
-            <label for="tipo_pregunta" class="col-lg-2 control-label">Tipo</label>
+            <label for="tipo_pregunta" class="col-lg-2 control-label">Tipo de pregunta</label>
             <div class="col-lg-10">
-                <select class="form-control" id="tipo_pregunta" name="tipo_pregunta">
+                <select class="form-control" id="tipo_pregunta" name="tipo_pregunta" required="required">
                     @foreach ($opciones as $opcion)
                         <option value="{{ $opcion }}" @if(old('tipo_pregunta') == $opcion) {{ 'selected=selected'}} @endif>{{ $opcion }}</option>
                     @endforeach
@@ -34,17 +34,17 @@
             </div>
         </div>
         <div class="form-group {{ $errors->has('porcentaje_pregunta') ? ' has-error' : '' }}">
-            <label for="porcentaje_pregunta" class="col-lg-2 control-label">Porcentaje</label>
+            <label for="porcentaje_pregunta" class="col-lg-2 control-label">Porcentaje de la pregunta</label>
             <div class="col-lg-10">
-                <input type="number" min="1" max="100" step="0.1" class="form-control" id="porcentaje_pregunta" placeholder="Ingrese el porcentaje de la pregunta, min: 1 - max: 100" name="porcentaje_pregunta" value="{{ old('porcentaje_pregunta') }}">
+                <div class="input-group">
+                    <input type="number" min="1" max="100" step="1" class="form-control" id="porcentaje_pregunta" placeholder="Ingrese el porcentaje de la pregunta, min: 1 - max: 100" name="porcentaje_pregunta" value="{{ old('porcentaje_pregunta') }}" required="required">
+                    <span class="input-group-addon"> % </span>
+                </div>
                 @if ($errors->has('porcentaje_pregunta'))
                     <span class="help-block">
                         <strong>{{ $errors->first('porcentaje_pregunta') }}</strong>
                     </span>
                 @endif
-                <span class="help-block">
-                    <strong>Use la coma para separar el número entero del número décimal. Ej: 3,0</strong>
-                </span>
             </div>
         </div>
         <div class="form-group">
