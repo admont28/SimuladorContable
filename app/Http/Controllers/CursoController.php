@@ -208,8 +208,20 @@ class CursoController extends Controller
                     ->with('talleres', $talleres)
                     ->with('talleresDiagnosticoCompletos', $talleresDiagnosticoCompletos);
     }
+
+    public function verTalleresTeoricosPorCursoEstudiante($curs_id)
+    {
+        $curso = Curso::find($curs_id);
+        //relaciones entre los modelos
+        $talleres = $curso->talleres->where('tall_tipo', 'teorico');
+        $talleresTeoricosCompletos = false;
+        if($talleres->count() == $curso->talleresTeoricoFinalizadosUsuario()->count()){
+            $talleresTeoricosCompletos = true;
+        }
+        return view('estudiante.curso.taller.ver_tallerteorico')
                     ->with('curso', $curso)
-                    ->with('talleres', $talleres);
+                    ->with('talleres', $talleres)
+                    ->with('talleresTeoricosCompletos', $talleresTeoricosCompletos);
     }
 
     /**

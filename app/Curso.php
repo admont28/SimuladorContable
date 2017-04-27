@@ -94,4 +94,23 @@ class Curso extends Model
                 ->where('Respuesta.usua_id',Auth::user()->usua_id)
                 ->get();
     }
+
+    public function talleresTeoricoFinalizadosUsuario()
+    {
+        // SELECT Distinct t.tall_id
+        // FROM Respuesta r, Pregunta p, Taller t
+        // WHERE
+        //  r.preg_id = p.preg_id
+        //  AND p.tall_id = t.tall_id
+        //  AND t.tall_tipo = 'teorico'
+        //  AND r.usua_id = 2
+        return DB::table('Respuesta')
+                ->join('Pregunta', 'Respuesta.preg_id', '=', 'Pregunta.preg_id')
+                ->join('Taller', 'Pregunta.tall_id', '=', 'Taller.tall_id')
+                ->select('Taller.tall_id')
+                ->distinct()
+                ->where('Taller.tall_tipo','teorico')
+                ->where('Respuesta.usua_id',Auth::user()->usua_id)
+                ->get();
+    }
 }

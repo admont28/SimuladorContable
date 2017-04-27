@@ -1,6 +1,6 @@
 @extends('estudiante.template.main')
 
-@section('title-head', 'Ver talleres de un curso')
+@section('title-head', 'Ver talleres teóricos de un curso')
 
 @section('title',' Curso: <strong>'.$curso->curs_nombre.'</strong>')
 
@@ -8,11 +8,58 @@
 
 @section('content')
     <div class="row">
-        <h2 class="text-center"><strong>TALLERES</strong></h2>
+        <h2 class="text-center"><strong>TALLERES TEÓRICOS</strong></h2>
     </div>
     <div class="row">
-        <div id="accordion" class="panel-group">
+        <div>
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs responsive" role="tablist">
             @foreach ($talleres as $taller)
+                <li role="presentation"><a href="#taller_{{ $taller->tall_id }}" role="tab" data-toggle="tab">{{ $taller->tall_nombre }}</a></li>
+            @endforeach
+            </ul>
+            <div class="tab-content responsive">
+            @foreach ($talleres as $taller)
+                <!-- Tab panes -->
+                <div role="tabpanel" class="tab-pane" id="#taller_{{ $taller->tall_id }}">
+                    <div class="col-lg-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Tipo de taller</div>
+                            <div class="panel-body">
+                                <span class="label label-info">{{ $taller->tall_tipo }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Finaliza en</div>
+                            <div class="panel-body">
+                                <div data-countdown="{{ $taller->tall_tiempo }}" class="fs-18"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Archivo asociado al taller</div>
+                            <div class="panel-body">
+                                <a href="{{ $taller->tall_rutaarchivo }}">{{ $taller->tall_nombrearchivo }}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <br>
+                    <div class="col-lg-12 text-center">
+                        <a href="{{ route('estudiante.curso.ver.talleres.ver.preguntas',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id]) }}" class="btn btn-primary solucionar-taller">Solucionar Taller</a>
+                    </div>
+                </div>
+            @endforeach
+            </div>
+        </div>
+
+
+
+
+
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
@@ -21,35 +68,8 @@
                     </div>
                     <div id="collapse-{{ $taller->tall_id }}" class="panel-collapse collapse">
                         <div class="panel-body">
-                            <div class="col-lg-4">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">Tipo de taller</div>
-                                    <div class="panel-body">
-                                        {{ $taller->tall_tipo }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">Finaliza en</div>
-                                    <div class="panel-body">
-                                        <div data-countdown="{{ $taller->tall_tiempo }}" class="fs-18"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">Archivo asociado al taller</div>
-                                    <div class="panel-body">
-                                        <a href="{{ $taller->tall_rutaarchivo }}">{{ $taller->tall_nombrearchivo }}</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-                            <br>
-                            <div class="col-lg-12 text-center">
-                                <a href="{{ route('estudiante.curso.ver.talleres.ver.preguntas',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id]) }}" class="btn btn-primary solucionar-taller">Solucionar Taller</a>
-                            </div>
+
+
                         </div>
                     </div>
                 </div>
@@ -59,6 +79,9 @@
     <div class="row">
         <div class="col-lg-12 text-center">
             <a type="reset" class="btn btn-default" href="{{ route('estudiante.curso.ver.materias', ['curs_id' => $curso->curs_id]) }}">Regresar</a>
+            @if ($talleresTeoricosCompletos)
+                <a type="reset" class="btn btn-primary" href="{{ route('estudiante.curso.ver.talleresteorico', ['curs_id' => $curso->curs_id]) }}">Siguiente</a>
+            @endif
         </div>
     </div>
 @endsection

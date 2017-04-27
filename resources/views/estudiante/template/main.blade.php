@@ -49,10 +49,11 @@
         <script type="text/javascript" src="{{ asset('plugins/Buttons-1.2.4/js/buttons.print.min.js') }}" charset="utf-8"></script>
         <script type="text/javascript" src="{{ asset('plugins/Responsive-2.1.1/js/dataTables.responsive.min.js') }}" charset="utf-8"></script>
         <script type="text/javascript" src="{{ asset('plugins/Responsive-2.1.1/js/responsive.bootstrap.min.js') }}" charset="utf-8"></script>
-        <script type="text/javascript" src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('plugins/sweetalert2/js/es6-promise.auto.min.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('plugins/sweetalert2/js/sweetalert2.min.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('plugins/countdown/js/jquery.countdown.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('vendor/datatables/buttons.server-side.js') }}" charset="utf-8"></script>
+        <script type="text/javascript" src="{{ asset('plugins/sweetalert2/js/es6-promise.auto.min.js') }}" charset="utf-8"></script>
+        <script type="text/javascript" src="{{ asset('plugins/sweetalert2/js/sweetalert2.min.js') }}" charset="utf-8"></script>
+        <script type="text/javascript" src="{{ asset('plugins/countdown/js/jquery.countdown.min.js') }}" charset="utf-8"></script>
+        <script type="text/javascript" src="{{ asset('plugins/responsivetabs/js/responsive-tabs.js') }}" charset="utf-8"></script>
         <script type="text/javascript">
         $(document).ready(function() {
             $("@yield('active','')").addClass('active');
