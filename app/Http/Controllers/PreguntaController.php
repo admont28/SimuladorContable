@@ -15,8 +15,6 @@ use Validator;
 
 class PreguntaController extends Controller
 {
-
-
     /**
      * Show the form for creating a new resource.
      *
@@ -265,13 +263,18 @@ class PreguntaController extends Controller
         $taller = Taller::find($tall_id);
         // Verificamos que el taller exista en bd, si no es así informamos al usuario y redireccionamos.
         if (!isset($taller) || $taller->curs_id != $curso->curs_id) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
-            return redirect()->route('estudiante.curso.ver.talleresdiagnostico', ['curs_id' => $curs_id]);
+            flash('El taller con ID: '.$tall_id.' no pertenece al curso seleccionado. Verifique por favor.', 'danger');
+            return redirect()->route('estudiante.curso');
         }
-        //verificamos que el taller sea un taller de tipo diagnostico
-        if ($taller->tall_tipo != "diagnostico") {
-            flash('El taller con ID: '.$tall_id.' no es un taller de tipo diagnostico. Verifique por favor.', 'danger');
-            return redirect()->route('estudiante.curso.ver.talleresdiagnostico',['curs_id'=>$curso->curs_id]);
+        //verificamos que el taller sea un taller de tipo diagnóstico o teórico
+        if ( ! ($taller->tall_tipo == "diagnostico" ||  $taller->tall_tipo == "teorico") ) {
+            flash('El taller con ID: '.$tall_id.' no es un taller de tipo diagnóstico o teórico. Verifique por favor.', 'danger');
+            return redirect()->route('estudiante.curso');
+        }
+        //verificamos que el taller contenga preguntas
+        if ($taller->preguntas->isEmpty()) {
+            flash('El taller con ID: '.$tall_id.' no posee preguntas. Verifique por favor.', 'danger');
+            return $this->redireccionarSegunTipoTaller($taller, $curso);
         }
         $preguntas = $taller->preguntas;
         $intentoTaller = DB::table('IntentoTaller')->select('inta_cantidad', 'inta_id')->where('usua_id', Auth::user()->usua_id)->where('tall_id', $taller->tall_id)->first();
@@ -285,7 +288,7 @@ class PreguntaController extends Controller
             $intentos = $intentoTaller->inta_cantidad + 1;
             if($intentos >= 3){
                 flash('Ha superado el número de intentos permitidos para este taller.', 'danger');
-                return redirect()->route('estudiante.curso.ver.talleresdiagnostico',['curs_id'=>$curso->curs_id]);
+                return $this->redireccionarSegunTipoTaller($taller, $curso);
             }else{
                 DB::table('IntentoTaller')->where('inta_id', $intentoTaller->inta_id)->increment('inta_cantidad');
             }
@@ -296,7 +299,16 @@ class PreguntaController extends Controller
                     ->with('preguntas', $preguntas);
     }
 
-
-
+    private function redireccionarSegunTipoTaller($taller, $curso)
+    {
+        if($taller->tall_tipo == "diagnostico"){
+            return redirect()->route('estudiante.curso.ver.talleresdiagnostico',['curs_id'=>$curso->curs_id]);
+        }
+        elseif($taller->tall_tipo == "teorico")
+            return redirect()->route('estudiante.curso.ver.talleresteorico',['curs_id'=>$curso->curs_id]);
+        else {
+            return redirect()->route('estudiante.curso');
+        }
+    }
 
 }

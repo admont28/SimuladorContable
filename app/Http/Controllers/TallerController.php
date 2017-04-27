@@ -439,7 +439,7 @@ class TallerController extends Controller
             ->with('curso', $curso);
     }
 
-    public function solucionarTallerDiagnosticoPost(Request $request, $curs_id, $tall_id)
+    public function solucionarTallerDiagnosticoTeoricoPost(Request $request, $curs_id, $tall_id)
     {
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
@@ -450,19 +450,24 @@ class TallerController extends Controller
         $taller = Taller::find($tall_id);
         // Verificamos que el taller exista en bd, si no es así informamos al usuario y redireccionamos.
         if (!isset($taller) || $taller->curs_id != $curso->curs_id) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
-            return redirect()->route('estudiante.curso.ver.talleresdiagnostico', ['curs_id' => $curs_id]);
+            flash('El taller con ID: '.$tall_id.' no pertenece al curso seleccionado. Verifique por favor.', 'danger');
+            return redirect()->route('estudiante.curso');
         }
-        //verificamos que el taller sea un taller de tipo diagnostico
-        if ($taller->tall_tipo != "diagnostico") {
-            flash('El taller con ID: '.$tall_id.' no es un taller de tipo diagnostico. Verifique por favor.', 'danger');
-            return redirect()->route('estudiante.curso.ver.talleresdiagnostico',['curs_id'=>$curso->curs_id]);
+        //verificamos que el taller sea un taller de tipo diagnóstico o teórico
+        if ( ! ($taller->tall_tipo == "diagnostico" ||  $taller->tall_tipo == "teorico") ) {
+            flash('El taller con ID: '.$tall_id.' no es un taller de tipo diagnóstico o teórico. Verifique por favor.', 'danger');
+            return redirect()->route('estudiante.curso');
+        }
+        //verificamos que el taller contenga preguntas
+        if ($taller->preguntas->count() == 0) {
+            flash('El taller con ID: '.$tall_id.' no posee preguntas. Verifique por favor.', 'danger');
+            return $this->redireccionarSegunTipoTaller($taller, $curso);
         }
         $fechaActual = new DateTime();
         $fechaTaller = new DateTime($taller->tall_tiempo);
         if($fechaActual > $fechaTaller){
             flash('El taller ha expirado, no se han podido guardar las respuestas.', 'danger');
-            return redirect()->route('estudiante.curso.ver.talleresdiagnostico',['curs_id'=>$curso->curs_id]);
+            return $this->redireccionarSegunTipoTaller($taller, $curso);
         }
         $preguntas = $taller->preguntas;
         $validaciones = array();
@@ -526,7 +531,7 @@ class TallerController extends Controller
                     foreach ($errores as $llave => $valor) {
                         $validator->getMessageBag()->add($llave, $valor);
                     }
-                    flash('Usted tiene respuestas incorrectas, sus respuestas aún no se han guardado, por favor intente corregir las respuestas y enviar la solución del taller nuevamente.', 'danger');
+                    flash('Usted tiene respuestas incorrectas, sus respuestas aún no se han guardado, por favor intente corregir las respuestas y enviar la solución del taller nuevamente. Este es su segundo intento de solución, ya no tendrá más intentos disponibles.', 'danger');
                     return Redirect::back()->withErrors($validator)->withInput();
                 }
             }
@@ -543,10 +548,10 @@ class TallerController extends Controller
         }
         if (!$success) {
             flash('Ha ocurrido un error en el sistema, por favor inténtalo de nuevo.', 'danger');
-            return redirect()->route('estudiante.curso.ver.talleresdiagnostico',['curs_id'=>$curso->curs_id]);
+            return $this->redireccionarSegunTipoTaller($taller, $curso);
         }
         flash('Todas sus respuestas han quedado guardadas.', 'success');
-        return redirect()->route('estudiante.curso.ver.talleresdiagnostico',['curs_id'=>$curso->curs_id]);
+        return $this->redireccionarSegunTipoTaller($taller, $curso);
     }
 
     private function verificarErroresEnRespuestas($preguntas = array(), $request = null)
@@ -689,6 +694,18 @@ class TallerController extends Controller
                     ]);
                 }
             }
+        }
+    }
+
+    private function redireccionarSegunTipoTaller($taller, $curso)
+    {
+        if($taller->tall_tipo == "diagnostico"){
+            return redirect()->route('estudiante.curso.ver.talleresdiagnostico',['curs_id'=>$curso->curs_id]);
+        }
+        elseif($taller->tall_tipo == "teorico")
+            return redirect()->route('estudiante.curso.ver.talleresteorico',['curs_id'=>$curso->curs_id]);
+        else {
+            return redirect()->route('estudiante.curso');
         }
     }
 

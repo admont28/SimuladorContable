@@ -14,7 +14,6 @@ use Validator;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Auth;
 
-
 class CursoController extends Controller
 {
     /**
@@ -196,32 +195,57 @@ class CursoController extends Controller
     public function verTalleresDiagnosticoPorCursoEstudiante($curs_id)
     {
         $curso = Curso::find($curs_id);
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('estudiante.curso');
+        }
+        // Verificamos que el curso tenga talleres
+        if ($curso->talleres->isEmpty()) {
+            flash('El curso con ID: '.$curs_id.' no posee talleres. Verifique por favor.', 'danger');
+            return redirect()->route('estudiante.curso');
+        }
         //relaciones entre los modelos
-        $talleres = $curso->talleres->where('tall_tipo', 'diagnostico');
+        $talleresDiagnostico = $curso->talleres->where('tall_tipo', 'diagnostico');
         $talleresDiagnosticoCompletos = false;
-        //dd($curso->talleresDiagnosticoFinalizadosUsuario(),$talleres);
-        if($talleres->count() == $curso->talleresDiagnosticoFinalizadosUsuario()->count()){
+        if($talleresDiagnostico->count() == $curso->talleresDiagnosticoFinalizadosUsuario()->count()){
             $talleresDiagnosticoCompletos = true;
         }
         return view('estudiante.curso.taller.ver_tallerdiagnostico')
                     ->with('curso', $curso)
-                    ->with('talleres', $talleres)
+                    ->with('talleresDiagnostico', $talleresDiagnostico)
                     ->with('talleresDiagnosticoCompletos', $talleresDiagnosticoCompletos);
     }
 
     public function verTalleresTeoricosPorCursoEstudiante($curs_id)
     {
         $curso = Curso::find($curs_id);
-        //relaciones entre los modelos
-        $talleres = $curso->talleres->where('tall_tipo', 'teorico');
-        $talleresTeoricosCompletos = false;
-        if($talleres->count() == $curso->talleresTeoricoFinalizadosUsuario()->count()){
-            $talleresTeoricosCompletos = true;
+        $curso = Curso::find($curs_id);
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('estudiante.curso');
         }
-        return view('estudiante.curso.taller.ver_tallerteorico')
-                    ->with('curso', $curso)
-                    ->with('talleres', $talleres)
-                    ->with('talleresTeoricosCompletos', $talleresTeoricosCompletos);
+        // Verificamos que el curso tenga talleres
+        if ($curso->talleres->isEmpty()) {
+            flash('El curso con ID: '.$curs_id.' no posee talleres. Verifique por favor.', 'danger');
+            return redirect()->route('estudiante.curso');
+        }
+        $talleresDiagnostico = $curso->talleres->where('tall_tipo', 'diagnostico');
+        if($talleresDiagnostico->count() == $curso->talleresDiagnosticoFinalizadosUsuario()->count()){
+            //relaciones entre los modelos
+            $talleresTeoricos = $curso->talleres->where('tall_tipo', 'teorico');
+            $talleresTeoricosCompletos = false;
+            if($talleresTeoricos->count() == $curso->talleresTeoricoFinalizadosUsuario()->count()){
+                $talleresTeoricosCompletos = true;
+            }
+            return view('estudiante.curso.taller.ver_tallerteorico')
+                        ->with('curso', $curso)
+                        ->with('talleresTeoricos', $talleresTeoricos)
+                        ->with('talleresTeoricosCompletos', $talleresTeoricosCompletos);
+        }
+        flash('Para visualizar los talleres teóricos usted debe haber completado primero los talleres diagnóstico. Verifique por favor.','danger');
+        return redirect()->route('estudiante.curso.ver.talleresdiagnostico', ['curs_id' => $curso->curs_id]);
     }
 
     /**
@@ -266,10 +290,6 @@ class CursoController extends Controller
            })->make(true);
    }
 
-
-
-
-
     /**
      * [verPucPorCursoAjax description]
      * @param  [type] $curs_id [description]
@@ -281,6 +301,5 @@ class CursoController extends Controller
        $pucs  = $curso->pucs;
        return Datatables::of($pucs)->make(true);
    }
-
 
 }
