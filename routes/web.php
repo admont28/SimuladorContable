@@ -87,25 +87,28 @@ Route::group(['prefix' => 'estudiante', 'middleware' => ['auth','estudiante'] ],
     Route::get('/curso/{curs_id}/talleres-diagnosticos', 'CursoController@verTalleresDiagnosticoPorCursoEstudiante')->name('estudiante.curso.ver.talleresdiagnostico');
     Route::post('/curso/{curs_id}/taller/{tall_id}/enviar-respuestas', 'TallerController@solucionarTallerDiagnosticoTeoricoPost')->name('estudiante.curso.taller.solucionar.post');
     Route::get('/curso/{curs_id}/talleres-teoricos', 'CursoController@verTalleresTeoricosPorCursoEstudiante')->name('estudiante.curso.ver.talleresteorico');
+    Route::get('/curso/{curs_id}/talleres-practicos', 'CursoController@verTalleresPracticosPorCursoEstudiante')->name('estudiante.curso.ver.tallerespractico');
     /*
     |--------------------------------------------------------------------------
     | Rutas para las preguntas
     |--------------------------------------------------------------------------
     */
     Route::get('/curso/{curs_id}/taller/{tall_id}/preguntas', 'PreguntaController@verPreguntasPorTaller')->name('estudiante.curso.ver.talleres.ver.preguntas');
-
-
-
-
+    /*
+    |--------------------------------------------------------------------------
+    | Rutas para los PUC
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/curso/{curs_id}/puc/ajax', 'CursoController@verPucPorCursoAjax')->name('estudiante.curso.puc.verajax');
+    /*
+    |--------------------------------------------------------------------------
+    | Rutas para las tarifas
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/curso/{curs_id}/taller/{tall_id}/tarifa/ajax', 'TallerController@verTarifasPorTaller')->name('estudiante.curso.taller.tarifa.verajax');
 
     /* Ver las materias con DataTables, este responde un objeto Datatables */
     Route::get('/curso/{curs_id}/materias/ajax', 'CursoController@verMateriasPorCursoAjaxEstudiante')->name('estudiante.curso.materia.verajax');
-
-
-
-
-
-
 });
 
 /*

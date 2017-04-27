@@ -132,3 +132,8 @@ code {
     height: 80px;
     overflow: auto;
 }
+
+.tab-content{
+    border: 1px solid #ddd;
+    padding : 10px 15px;
+}

@@ -220,7 +220,6 @@ class CursoController extends Controller
     public function verTalleresTeoricosPorCursoEstudiante($curs_id)
     {
         $curso = Curso::find($curs_id);
-        $curso = Curso::find($curs_id);
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         if (!isset($curso)) {
             flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
@@ -243,6 +242,31 @@ class CursoController extends Controller
                         ->with('curso', $curso)
                         ->with('talleresTeoricos', $talleresTeoricos)
                         ->with('talleresTeoricosCompletos', $talleresTeoricosCompletos);
+        }
+        flash('Para visualizar los talleres teóricos usted debe haber completado primero los talleres diagnóstico. Verifique por favor.','danger');
+        return redirect()->route('estudiante.curso.ver.talleresdiagnostico', ['curs_id' => $curso->curs_id]);
+    }
+
+    public function verTalleresPracticosPorCursoEstudiante($curs_id)
+    {
+        $curso = Curso::find($curs_id);
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('estudiante.curso');
+        }
+        // Verificamos que el curso tenga talleres
+        if ($curso->talleres->isEmpty()) {
+            flash('El curso con ID: '.$curs_id.' no posee talleres. Verifique por favor.', 'danger');
+            return redirect()->route('estudiante.curso');
+        }
+        $talleresTeoricos = $curso->talleres->where('tall_tipo', 'teorico');
+        if($talleresTeoricos->count() == $curso->talleresTeoricoFinalizadosUsuario()->count()){
+            //relaciones entre los modelos
+            $talleresPracticos = $curso->talleres->where('tall_tipo', 'practico');
+            return view('estudiante.curso.taller.ver_tallerpractico')
+                        ->with('curso', $curso)
+                        ->with('talleresPracticos', $talleresPracticos);
         }
         flash('Para visualizar los talleres teóricos usted debe haber completado primero los talleres diagnóstico. Verifique por favor.','danger');
         return redirect()->route('estudiante.curso.ver.talleresdiagnostico', ['curs_id' => $curso->curs_id]);
@@ -273,14 +297,14 @@ class CursoController extends Controller
                        ->editColumn('tall_tipo', '@if($tall_tipo == "teorico") <span class="label label-info">{{ $tall_tipo }}</span> @elseif($tall_tipo == "diagnostico") <span class="label label-warning">{{ $tall_tipo }}</span> @else <span class="label label-default">{{ $tall_tipo }}</span> @endif')
                        ->editColumn('tall_rutaarchivo', '<a href="{{$tall_rutaarchivo}}">{{$tall_nombrearchivo}}</a>')
                        ->make(true);
-   }
+    }
 
-   /**
+    /**
     * [verCursosEstudiantesAjax description]
     * @return [type] [description]
     */
-   public function verCursosEstudiantesAjax()
-   {
+    public function verCursosEstudiantesAjax()
+    {
        $cursos = Curso::select(['curs_id','curs_nombre','curs_introduccion']);
               return Datatables::of($cursos)
            ->addColumn('opciones', function ($curso) {
@@ -288,18 +312,18 @@ class CursoController extends Controller
                 '<a href="'.route('estudiante.curso.ver.introduccion',['curs_id' => $curso->curs_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
                //<a href="'.route('profesor.curso.tema.ver', ['curs_id' => $curso->curs_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-zoom-out"></i> Ver temas</a>';
            })->make(true);
-   }
+    }
 
     /**
      * [verPucPorCursoAjax description]
      * @param  [type] $curs_id [description]
      * @return [type]          [description]
      */
-   public function verPucPorCursoAjax($curs_id)
-   {
+    public function verPucPorCursoAjax($curs_id)
+    {
        $curso = Curso::find($curs_id);
        $pucs  = $curso->pucs;
        return Datatables::of($pucs)->make(true);
-   }
+    }
 
 }
