@@ -180,6 +180,7 @@ class CursoController extends Controller
                             </form>';
                         })
                         ->editColumn('mate_rutaarchivo', '<a href="{{$mate_rutaarchivo}}">{{$mate_nombrearchivo}}</a>')
+                        ->editColumn('mate_tema','<div class="inner-cell">{{$mate_tema}}</div>')
                         ->make(true);
     }
 

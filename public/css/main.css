@@ -127,6 +127,8 @@ code {
 .fs-18{
     font-size: 18px;
 }
-.dataTable tbody tr td{
-    height: 50px;
+
+.inner-cell {
+    height: 80px;
+    overflow: auto;
 }
