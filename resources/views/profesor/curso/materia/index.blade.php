@@ -26,13 +26,14 @@
                 "responsive": true,
                 "processing": true,
                 "serverSide": true,
+                "lengthMenu": [5, 10, 25, 50, 75, 100],
                 "ajax": "{{ route('profesor.curso.materia.verajax', ['curs_id' => $curso->curs_id]) }}",
                 "columns" : [
-                    {data: 'mate_id', name: 'mate_id', width: '50px'},
-                    {data: 'mate_nombre', name: 'mate_nombre', width: '200'},
-                    {data: 'mate_tema', name: 'mate_tema', width: '300px'},
-                    {data: 'mate_rutaarchivo', name: 'mate_rutaarchivo', width: '200'},
-                    {data: 'opciones', name: 'action', orderable: false, searchable: false, width: '200px'}
+                    {data: 'mate_id', name: 'mate_id', width: '5%'},
+                    {data: 'mate_nombre', name: 'mate_nombre', width: '15%'},
+                    {data: 'mate_tema', name: 'mate_tema', width: '45%'},
+                    {data: 'mate_rutaarchivo', name: 'mate_rutaarchivo', width: '20%'},
+                    {data: 'opciones', name: 'action', orderable: false, searchable: false, width: '15%'}
                 ],
                 "language" : {
                     "url" : "//cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"

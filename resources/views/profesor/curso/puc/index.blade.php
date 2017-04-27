@@ -5,8 +5,8 @@
 </div>
 <br>
 <div class="row">
-    <div class="table-responsive">
-        <table class="table" id="ver-puc">
+    <div class="col-xs-12">
+        <table class="table" width="100%" id="ver-puc">
             <thead>
                 <tr>
                     <td><strong>ID</strong></td>
@@ -22,9 +22,10 @@
     <script type="text/javascript">
         $(function() {
             $('#ver-puc').DataTable({
+                "responsive": true,
                 "processing": true,
                 "serverSide": true,
-                "lengthMenu": [ 5, 10, 25, 50, 75, 100 ],
+                "lengthMenu": [5, 10, 25, 50, 75, 100],
                 "ajax": "{{ route('profesor.curso.puc.verajax', ['curs_id' => $curso->curs_id]) }}",
                 "columns" : [
                     {data: 'puc_id', name: 'puc_id', width: '5%'},

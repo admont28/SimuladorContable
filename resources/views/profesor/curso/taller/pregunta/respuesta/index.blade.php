@@ -3,8 +3,8 @@
 </div>
 <br>
 <div class="row">
-    <div class="table-responsive">
-        <table class="table" id="ver-respuestas">
+    <div class="col-xs-12">
+        <table class="table" width="100%" id="ver-respuestas">
             <thead>
                 <tr>
                     <td><strong>ID</strong></td>
@@ -22,8 +22,10 @@
 <script type="text/javascript">
     $(function() {
         $('#ver-respuestas').DataTable({
+            "responsive": true,
             "processing": true,
             "serverSide": true,
+            "lengthMenu": [5, 10, 25, 50, 75, 100],
             "ajax": "{{ route('profesor.curso.taller.pregunta.respuesta.verajax', ['curs_id' => $curso->curs_id, 'tall_id' => $taller->tall_id, 'preg_id' => $pregunta->preg_id]) }}",
             "columns" : [
                 {data: 'remu_id', name: 'remu_id', width: '5%'},
