@@ -84,7 +84,7 @@ Route::group(['prefix' => 'estudiante', 'middleware' => ['auth','estudiante'] ],
     | Rutas para los talleres
     |--------------------------------------------------------------------------
     */
-    Route::get('/curso/{curs_id}/talleres', 'CursoController@verTalleresPorCursoEstudiante')->name('estudiante.curso.ver.talleres');
+    Route::get('/curso/{curs_id}/talleres-diagnosticos', 'CursoController@verTalleresDiagnosticoPorCursoEstudiante')->name('estudiante.curso.ver.talleresdiagnostico');
     Route::post('/curso{curs_id}/taller/{tall_id}/enviar-respuestas', 'TallerController@solucionarTallerDiagnosticoPost')->name('estudiante.curso.taller.solucionar.post');
     /*
     |--------------------------------------------------------------------------

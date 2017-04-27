@@ -35,7 +35,7 @@
     <div class="row">
         <div class="col-lg-12 text-center">
             <a type="reset" class="btn btn-default" href="{{ route('estudiante.curso.ver.introduccion', ['curs_id' => $curso->curs_id]) }}">Regresar</a>
-            <a type="button" class="btn btn-primary" href="{{ route('estudiante.curso.ver.talleres',['curs_id'=> $curso->curs_id]) }}">Siguiente</a>
+            <a type="button" class="btn btn-primary" href="{{ route('estudiante.curso.ver.talleresdiagnostico',['curs_id'=> $curso->curs_id]) }}">Siguiente</a>
         </div>
     </div>
 @endsection

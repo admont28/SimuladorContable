@@ -20,6 +20,7 @@ use DB;
 use Auth;
 use Redirect;
 use Storage;
+use DateTime;
 
 class TallerController extends Controller
 {
@@ -450,12 +451,18 @@ class TallerController extends Controller
         // Verificamos que el taller exista en bd, si no es así informamos al usuario y redireccionamos.
         if (!isset($taller) || $taller->curs_id != $curso->curs_id) {
             flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
-            return redirect()->route('estudiante.curso.ver.talleres', ['curs_id' => $curs_id]);
+            return redirect()->route('estudiante.curso.ver.talleresdiagnostico', ['curs_id' => $curs_id]);
         }
         //verificamos que el taller sea un taller de tipo diagnostico
         if ($taller->tall_tipo != "diagnostico") {
             flash('El taller con ID: '.$tall_id.' no es un taller de tipo diagnostico. Verifique por favor.', 'danger');
-            return redirect()->route('estudiante.curso.ver.talleres',['curs_id'=>$curso->curs_id]);
+            return redirect()->route('estudiante.curso.ver.talleresdiagnostico',['curs_id'=>$curso->curs_id]);
+        }
+        $fechaActual = new DateTime();
+        $fechaTaller = new DateTime($taller->tall_tiempo);
+        if($fechaActual > $fechaTaller){
+            flash('El taller ha expirado, no se han podido guardar las respuestas.', 'danger');
+            return redirect()->route('estudiante.curso.ver.talleresdiagnostico',['curs_id'=>$curso->curs_id]);
         }
         $preguntas = $taller->preguntas;
         $validaciones = array();
@@ -536,10 +543,10 @@ class TallerController extends Controller
         }
         if (!$success) {
             flash('Ha ocurrido un error en el sistema, por favor inténtalo de nuevo.', 'danger');
-            return redirect()->route('estudiante.curso.ver.talleres',['curs_id'=>$curso->curs_id]);
+            return redirect()->route('estudiante.curso.ver.talleresdiagnostico',['curs_id'=>$curso->curs_id]);
         }
         flash('Todas sus respuestas han quedado guardadas.', 'success');
-        return redirect()->route('estudiante.curso.ver.talleres',['curs_id'=>$curso->curs_id]);
+        return redirect()->route('estudiante.curso.ver.talleresdiagnostico',['curs_id'=>$curso->curs_id]);
     }
 
     private function verificarErroresEnRespuestas($preguntas = array(), $request = null)
