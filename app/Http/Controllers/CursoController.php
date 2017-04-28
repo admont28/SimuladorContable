@@ -8,6 +8,7 @@ use App\Curso;
 use App\Materia;
 use App\Taller;
 use App\Pregunta;
+use App\Puc;
 use App\DataTables\CursoDataTables;
 use App\DataTables\MateriaDataTables;
 use Validator;
@@ -324,6 +325,12 @@ class CursoController extends Controller
        $curso = Curso::find($curs_id);
        $pucs  = $curso->pucs;
        return Datatables::of($pucs)->make(true);
+    }
+
+    public function buscarPucPorCursoAjax(Request $request, $curs_id)
+    {
+        $pucs = Puc::select('puc_id', 'puc_nombre', 'puc_codigo')->where('puc_codigo','LIKE',''.$request["q"].'%')->get();
+        return $pucs->jsonSerialize();
     }
 
 }

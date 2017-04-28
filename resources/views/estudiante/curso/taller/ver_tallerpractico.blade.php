@@ -62,7 +62,39 @@
                             </div>
                         @endif
                         @if (isset($tallerPractico->tallerAsientoContable))
-                            Asientos contables
+                            <div class="row">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <td colspan="4" class="text-center">CONTABILIZACIÓN DE LA PROVISIÓN</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center" width="20%">CÓDIGO</td>
+                                            <td class="text-center" width="20%">CUENTAS</td>
+                                            <td class="text-center" width="30%">DÉBITO</td>
+                                            <td class="text-center" width="30%">CRÉDITO</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for ($i = 1; $i <= $tallerPractico->tallerAsientoContable->taac_cantidadfilas; $i++)
+                                            <tr id="fila_{{ $i }}">
+                                                <td class="text-center" contenteditable="true" width="20%">
+                                                                <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true" data-fila="{{$i}}">
+                										        </select>
+                                                </td>
+                                                <td class="text-center columna_cuentas" width="20%">2</td>
+                                                <td class="text-center" contenteditable="true" width="30%">3</td>
+                                                <td class="text-center" contenteditable="true" width="30%">4</td>
+                                            </tr>
+                                        @endfor
+                                            <tr>
+                                                <td colspan="2">SUMAS IGUALES</td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         @endif
                         <div class="row">
                             <div class="col-lg-12 text-center">
@@ -142,6 +174,49 @@
                         return false;
                     }
                 })
+            });
+
+            var options = {
+                    "ajax": {
+                        "type": "GET",
+                        "url": '{{ route('estudiante.curso.puc.buscar.ajax', ['curs_id' => $curso->curs_id]) }}',
+                        "data": {
+                            "q": '@{{{q}}}'
+                        }
+                    },
+                    "locale": {
+                        "emptyTitle": 'Buscar un puc por su código'
+                    },
+                    "log": 3,
+                    preprocessData: function(data){
+                        var i, l = data.length, array = [];
+                        if (l) {
+                            for (i = 0; i < l; i++) {
+                                array.push($.extend(true, data[i], {
+                                    text : data[i].puc_codigo,
+                                    value: data[i].puc_id,
+                                    data : {
+                                        subtext: data[i].puc_nombre
+                                    }
+                                }));
+                            }
+                        }
+                        // You must always return a valid array when processing data. The
+                        // data argument passed is a clone and cannot be modified directly.
+                        return array;
+                    },
+                    "preserveSelected": false
+                };
+                $('.selectpicker').selectpicker().filter('.with-ajax').ajaxSelectPicker(options);
+                $('select').trigger('change');
+
+            $('select').change(function(event) {
+                // Obtengo la fila en la que se modificó el select.
+                var fila = $(this).data('fila');
+                // Obtengo el nombre del puc, este se encuentra en el atributo data-subtext de la opción seleccionada por el usuario.
+                var nombre = $(this).find('option:selected').data('subtext');
+                // Cambio el nombre de la columna CUENTAS en la fila en que se modificó el select.
+                $('#fila_'+fila).find('td.columna_cuentas').text(nombre);
             });
         });
     </script>

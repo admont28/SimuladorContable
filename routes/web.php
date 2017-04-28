@@ -100,6 +100,7 @@ Route::group(['prefix' => 'estudiante', 'middleware' => ['auth','estudiante'] ],
     |--------------------------------------------------------------------------
     */
     Route::get('/curso/{curs_id}/puc/ajax', 'CursoController@verPucPorCursoAjax')->name('estudiante.curso.puc.verajax');
+    Route::get('/curso/{curs_id}/puc/buscar/ajax/', 'CursoController@buscarPucPorCursoAjax')->name('estudiante.curso.puc.buscar.ajax');
     /*
     |--------------------------------------------------------------------------
     | Rutas para las tarifas

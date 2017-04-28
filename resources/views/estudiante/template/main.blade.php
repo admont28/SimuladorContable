@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title-head', 'Título por defecto.') | Simulador Contable</title>
-    <link rel="stylesheet" href="{{ asset('plugins/bootstrap/css/bootstrap-lumen.min.css') }}" media="screen" title="no title">
-    <link rel="stylesheet" href="{{ asset('css/main.css') }}" media="screen" title="no title">
-    <link rel="stylesheet" href="{{ asset('plugins/datetimepicker/css/bootstrap-datetimepicker.min.css') }}"  media="screen" title="no title">
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/bootstrap/css/bootstrap-lumen.min.css') }}" media="screen" title="no title">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}" media="screen" title="no title">
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/datetimepicker/css/bootstrap-datetimepicker.min.css') }}"  media="screen" title="no title">
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/DataTables-1.10.13/css/dataTables.bootstrap.min.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/Buttons-1.2.4/css/buttons.bootstrap.min.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/Responsive-2.1.1/css/responsive.bootstrap.min.css') }} "/>
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/sweetalert2/css/sweetalert2.min.css') }} "/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/bootstrap-select/css/bootstrap-select.min.css') }} "/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/ajax-bootstrap-select/css/ajax-bootstrap-select.css') }}"/>
     @yield('styelsheet')
   </head>
   <body>
@@ -54,6 +56,9 @@
         <script type="text/javascript" src="{{ asset('plugins/sweetalert2/js/sweetalert2.min.js') }}" charset="utf-8"></script>
         <script type="text/javascript" src="{{ asset('plugins/countdown/js/jquery.countdown.min.js') }}" charset="utf-8"></script>
         <script type="text/javascript" src="{{ asset('plugins/responsivetabs/js/responsive-tabs.js') }}" charset="utf-8"></script>
+		<script type="text/javascript" src="{{ asset('plugins/bootstrap-select/js/bootstrap-select.min.js') }}" charset="utf-8"></script>
+        <script type="text/javascript" src="{{ asset('plugins/ajax-bootstrap-select/js/ajax-bootstrap-select.js') }}" charset="utf-8"></script>
+        <script type="text/javascript" src="{{ asset('plugins/ajax-bootstrap-select/js/locale/ajax-bootstrap-select.es-ES.js') }}" charset="utf-8"></script>
         <script type="text/javascript">
         $(document).ready(function() {
             $("@yield('active','')").addClass('active');
