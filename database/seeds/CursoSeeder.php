@@ -72,7 +72,7 @@ class CursoSeeder extends Seeder
         $preg_id = \DB::table('Pregunta')->insertGetId(array(
             'preg_texto' => "Primer pregunta del taller diagnostico (abierta)",
             'preg_tipo' => "abierta",
-            'preg_porcentaje' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 5),
+            'preg_porcentaje' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0.01, $max = 1),
             'tall_id' => $tall_id_diagnostico
         ));
         /*
@@ -113,7 +113,7 @@ class CursoSeeder extends Seeder
         $preg_id_unica = \DB::table('Pregunta')->insertGetId(array(
             'preg_texto' => "Tercera pregunta del taller diagnostico (unica)",
             'preg_tipo' => "unica-multiple",
-            'preg_porcentaje' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 5),
+            'preg_porcentaje' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0.01, $max = 1),
             'tall_id' => $tall_id_diagnostico
         ));
         /*
@@ -145,7 +145,7 @@ class CursoSeeder extends Seeder
         $preg_id = \DB::table('Pregunta')->insertGetId(array(
             'preg_texto' => "Cuarta pregunta del taller diagnostico (archivo)",
             'preg_tipo' => "archivo",
-            'preg_porcentaje' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 5),
+            'preg_porcentaje' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0.01, $max = 1),
             'tall_id' => $tall_id_diagnostico
         ));
 
@@ -175,7 +175,7 @@ class CursoSeeder extends Seeder
             $preg_id = \DB::table('Pregunta')->insertGetId(array(
                 'preg_texto' => $faker->realText(rand(10,45)),
                 'preg_tipo' => $faker->randomElement(array ('unica-multiple','abierta','archivo')),
-                'preg_porcentaje' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 5),
+                'preg_porcentaje' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0.01, $max = 1),
                 'tall_id' =>$tall_id
             ));
         }

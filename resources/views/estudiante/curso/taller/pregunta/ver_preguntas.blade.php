@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="row">
-        <form class="form-horizontal" action="{{ route('estudiante.curso.taller.solucionar.post', ['curs_id' => $curso->curs_id, 'tall_id' => $taller->tall_id]) }}" method="post">
+        <form class="form-horizontal" action="{{ route('estudiante.curso.taller.solucionar.post', ['curs_id' => $curso->curs_id, 'tall_id' => $taller->tall_id]) }}" method="post" enctype="multipart/form-data">
             {{ csrf_field() }}
             @if($errors->any())
                @foreach ($errors->all() as $error)

@@ -44,7 +44,7 @@ class Calificacion extends Model
      * @var array
      */
     protected $fillable = [
-        'cali_id', 'cali_calificacion', 'cali_ponderado'
+        'cali_id', 'cali_calificacion', 'cali_ponderado', 'usua_id', 'tall_id', 'preg_id'
     ];
 
     /**

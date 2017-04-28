@@ -149,5 +149,12 @@
             </div>
         </div>
         @include('profesor.curso.taller.pregunta.index')
-    @endif
+        <div class="row">
+            <div class="page-header">
+                <h1>Usuarios que han respondido el taller</h1>
+            </div>
+        </div>
+        @include('profesor.curso.taller.pregunta.calificacion.ver_calificacion')
+@endif
+
 @endsection

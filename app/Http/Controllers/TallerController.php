@@ -12,6 +12,7 @@ use App\Respuesta;
 use App\RespuestaAbierta;
 use App\RespuestaArchivo;
 use App\Tarifa;
+use App\Calificacion;
 use App\DataTables\TallerDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
@@ -80,7 +81,7 @@ class TallerController extends Controller
         // Almaceno en el dicso talleres el archivo cargado por el usuario.
         $path = Storage::disk('talleres')->put('/', $file);
         // Almaceno en bd el nuevo taller.
-        Taller::create([
+        $taller = Taller::create([
             'tall_nombre' => $request['nombre_taller'],
             'tall_tipo' => $request['tipo_taller'],
             'tall_tiempo' => $request['tiempo_taller'],
@@ -88,6 +89,7 @@ class TallerController extends Controller
             'tall_nombrearchivo' => $nombreArchivo,
             'curs_id' => $curs_id
         ]);
+        Storage::disk('talleres')->makeDirectory($taller->tall_id);
         // Informo al usuario y redireccionamos.
         flash('El taller "'.$request['nombre_taller'].'" ha sido creado con éxito.', 'success');
         return redirect()->route('profesor.curso.ver',['curs_id'=> $curso->curs_id]);
@@ -188,7 +190,7 @@ class TallerController extends Controller
             // Obtengo más información del archivo de la materia. ver: http://php.net/manual/es/function.pathinfo.php
             $infoArchivo = pathinfo($taller->mate_rutaarchivo);
             $eliminacionArchivo = true;
-            // Compruebo que exista el archivo en el disco de materias.
+            // Compruebo que exista el archivo en el disco de talleres.
             if(Storage::disk('talleres')->exists($infoArchivo['basename'])){
                 // Si existe el archivo procedo a eliminarlo, retorna true si fue exitoso, de lo contrario retorna false.
                 $eliminacionArchivo = Storage::disk('talleres')->delete($infoArchivo['basename']);
@@ -505,6 +507,25 @@ class TallerController extends Controller
         }
         // En este punto, todas las preguntas tienen respuestas, y no hay errores en el formulario.
         // Se procede a verificar cuales están correctas y cuales no.
+        $errores = $this->verificarErroresEnRespuestas($preguntas, $request);
+        $intentoTaller = DB::table('IntentoTaller')->select('inta_cantidad', 'inta_id')->where('usua_id', Auth::user()->usua_id)->where('tall_id', $taller->tall_id)->first();
+        $intentos = $intentoTaller->inta_cantidad;
+        if(!empty($errores)){
+            // Si es el primer intento, aún no guardo las respuestas, le comunico que tiene errores y que envie de nuevo.
+            if($intentos == 1){
+                foreach ($errores as $llave => $valor) {
+                    $validator->getMessageBag()->add($llave, $valor);
+                }
+                flash('Usted tiene respuestas incorrectas, sus respuestas aún no se han guardado, por favor intente corregir las respuestas y enviar la solución del taller nuevamente.', 'danger');
+                return Redirect::back()->withErrors($validator)->withInput();
+            }
+        }
+        $this->almacenarRespuestas($preguntas,$request);
+        $this->calificarRespuestas($preguntas);
+    }
+
+    private function verificarErroresEnRespuestas($preguntas = array(), $request = null)
+    {
         $errores = array();
         foreach ($preguntas as $pregunta) {
             if ($pregunta->preg_tipo == "unica-multiple"){
@@ -529,40 +550,121 @@ class TallerController extends Controller
                     // Capturo la respuesta correcta, obtengo el primer registro, debido a que solo debe haber 1 respuesta correcta, por ser de tipo 'unica'
                     $respuestaCorrecta = $pregunta->obtenerRespuestasCorrectas()->first();
                     // Valido si la respuesta que viene en la solicitud es la marcada por el profesor como correcta.
-                    if (!$request['r_p_'.$pregunta->preg_id] == $respuestaCorrecta->remu_id ) {
+                    if ($request['r_p_'.$pregunta->preg_id] != $respuestaCorrecta->remu_id ) {
                         $errores['r_p_'.$pregunta->preg_id] = "Respuesta incorrecta.";
                     }
                 }
             }
         }
-        if(empty($errores)){
-            foreach ($preguntas as $pregunta) {
-                if ($pregunta->preg_tipo == "unica-multiple"){
-                    if ($pregunta->tieneRespuestaMultiple() == true){
-                        // Pregunta de tipo Checkbox
+        return $errores;
+    }
 
-                    }else{
-                        // Pregunta de tipo Radio Button
-
+    private function almacenarRespuestas($preguntas, $request)
+    {
+        foreach ($preguntas as $pregunta) {
+            if ($pregunta->preg_tipo == "unica-multiple"){
+                if ($pregunta->tieneRespuestaMultiple() == true){
+                    // Pregunta de tipo Checkbox
+                    $respuestaAnterior = $pregunta->obtenerRespuestaUsuario();
+                    if(isset($respuestaAnterior) && $respuestaAnterior->isEmpty()){
+                        $respuestasMultiplesUnicas = $pregunta->respuestasMultiplesUnicas;
+                        foreach ($respuestasMultiplesUnicas as $respuesta ) {
+                            if($request['r_p_'.$pregunta->preg_id.'_o_'.$respuesta->remu_id]){
+                                Respuesta::create([
+                                    'usua_id' => Auth::user()->usua_id,
+                                    'preg_id' => $pregunta->preg_id,
+                                    'remu_id' => $respuesta->remu_id
+                                ]);
+                            }
+                        }
                     }
-                }elseif ($pregunta->preg_tipo == "abierta"){
-                    /*
-                     * TODO: Considero que la tabla respuesta abierta no debería de existir, debido a que solo tendrá un campo, el texto de la respuesta.
-                     */
-                    $respuestaAbierta = RespuestaAbierta::create([
-                        'reab_textorespuesta' => $request['r_p_'.$pregunta->preg_id];
+                }else{
+                    // Pregunta de tipo Radio Button
+                    $respuestaAnterior = $pregunta->obtenerRespuestaUsuario()->first();
+                    if(!isset($respuestaAnterior)){
+                        Respuesta::create([
+                            'usua_id' => Auth::user()->usua_id,
+                            'preg_id' => $pregunta->preg_id,
+                            'remu_id' => $request['r_p_'.$pregunta->preg_id]
+                        ]);
+                    }
+                }
+            }elseif ($pregunta->preg_tipo == "abierta"){
+                $respuestaAnterior = $pregunta->obtenerRespuestaUsuario()->first();
+                if(!isset($respuestaAnterior)){
+                    Respuesta::create([
+                        'usua_id' => Auth::user()->usua_id,
+                        'preg_id' => $pregunta->preg_id,
+                        'resp_abierta' => $request['r_p_'.$pregunta->preg_id]
+                    ]);
+                }
+            }elseif ($pregunta->preg_tipo == "archivo"){
+                $respuestaAnterior = $pregunta->obtenerRespuestaUsuario()->first();
+                if(!isset($respuestaAnterior)){
+                    //obtenemos el campo file definido en el formulario
+                    $file = $request->file('r_p_'.$pregunta->preg_id);
+                    //obtenemos el nombre del archivo
+                    $nombreArchivo = $file->getClientOriginalName();
+                    // Almaceno en el dicso talleres el archivo cargado por el usuario.
+                    $path = Storage::disk('talleres')->put('/'.$pregunta->tall_id.'/'.Auth::user()->usua_id, $file);
+                    $respuestaArchivo = RespuestaArchivo::create([
+                        'rear_rutaarchivo' => asset('storage/talleres/'.$path),
+                        'rear_nombre'      => $nombreArchivo
                     ]);
                     Respuesta::create([
                         'usua_id' => Auth::user()->usua_id,
                         'preg_id' => $pregunta->preg_id,
-                        'reab_id' => $respuestaAbierta->reab_id;
+                        'rear_id' => $respuestaArchivo->rear_id
                     ]);
-                }elseif ($pregunta->preg_tipo == "archivo"){
-                    
                 }
             }
         }
+    }
 
+    public function calificarRespuestas($preguntas = array())
+    {
+        foreach ($preguntas as $pregunta) {
+            if ($pregunta->preg_tipo == "unica-multiple"){
+                if ($pregunta->tieneRespuestaMultiple() == true){
+                    // Pregunta de tipo Checkbox
+                    $respuestasCorrectas = $pregunta->obtenerRespuestasCorrectas();
+                    $respuestaUsuario = $pregunta->obtenerRespuestaUsuario();
+                    $cantidadRespuestasCorrectasUsuario = 0;
+                    foreach ($respuestaUsuario as $ru) {
+                        if ($ru->respuestaMultipleUnica->remu_correcta == true) {
+                            $cantidadRespuestasCorrectasUsuario++;
+                        }
+                    }
+                    $cantidadRespuestasCorrectasPregunta = $pregunta->cantidadRespuestasCorrectas();
+                    $calificacion = ($cantidadRespuestasCorrectasUsuario * 5) / $cantidadRespuestasCorrectasPregunta;
+                    //dd($cantidadRespuestasCorrectasUsuario,$cantidadRespuestasCorrectasPregunta, $calificacion, round($calificacion * $pregunta->preg_porcentaje, 1));
+                    Calificacion::create([
+                        'cali_calificacion' => $calificacion,
+                        'cali_ponderado'    => round($calificacion * $pregunta->preg_porcentaje, 1),
+                        'usua_id'           => Auth::user()->usua_id,
+                        'tall_id'           => $pregunta->tall_id,
+                        'preg_id'           => $pregunta->preg_id
+                    ]);
+                }else{
+                    // Pregunta de tipo Radio Button
+                    $respuestaUsuario = $pregunta->obtenerRespuestaUsuario()->first();
+                    // Capturo la respuesta correcta, obtengo el primer registro, debido a que solo debe haber 1 respuesta correcta, por ser de tipo 'unica'
+                    $respuestaCorrecta = $pregunta->obtenerRespuestasCorrectas()->first();
+                    $calificacion = 0;
+                    // Valido si la respuesta que viene en la solicitud es la marcada por el profesor como correcta.
+                    if ($respuestaUsuario->remu_id == $respuestaCorrecta->remu_id ) {
+                        $calificacion = 5;
+                    }
+                    Calificacion::create([
+                        'cali_calificacion' => $calificacion,
+                        'cali_ponderado'    => $calificacion * $pregunta->preg_porcentaje,
+                        'usua_id'           => Auth::user()->usua_id,
+                        'tall_id'           => $pregunta->tall_id,
+                        'preg_id'           => $pregunta->preg_id
+                    ]);
+                }
+            }
+        }
     }
 
 }

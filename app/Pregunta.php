@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Auth;
 
 class Pregunta extends Model
 {
@@ -107,10 +108,15 @@ class Pregunta extends Model
         return $this->hasMany('App\Calificacion','preg_id');
     }
 
+
     public function respuestas()
     {
         //inverso de hasMany tecnicamente no es necesasario pero siempre usar la relación y la inversa. el inverso belongsTo trae un dato y el hasmany trae una coleccion.
         return $this->hasMany('App\Respuesta','preg_id');
+
+    public function obtenerRespuestaUsuario()
+    {
+        return Respuesta::where('usua_id',Auth::user()->usua_id)->where('preg_id',$this->preg_id)->get();
     }
 
 }
