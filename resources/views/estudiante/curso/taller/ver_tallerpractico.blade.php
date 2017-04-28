@@ -23,8 +23,51 @@
                 @foreach ($talleresPracticos as $tallerPractico)
                     <!-- Tab panes -->
                     <div role="tabpanel" class="tab-pane fade @if ($loop->first) active in @endif" id="taller_{{ $tallerPractico->tall_id }}">
-                        <div class="">
-                            asientosw
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Tipo de taller</div>
+                                    <div class="panel-body">
+                                        <div class="fs-18"><span class="label label-default">{{ $tallerPractico->tall_tipo }}</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Finaliza en</div>
+                                    <div class="panel-body">
+                                        <div data-countdown="{{ $tallerPractico->tall_tiempo }}" class="fs-18"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Archivo asociado al taller</div>
+                                    <div class="panel-body">
+                                        <a href="{{ $tallerPractico->tall_rutaarchivo }}">{{ $tallerPractico->tall_nombrearchivo }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @if ($tallerPractico->tarifas->isNotEmpty())
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">Tarifas</div>
+                                        <div class="panel-body">
+                                            @include('estudiante.curso.taller.tarifa.index')
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        @if (isset($tallerPractico->tallerAsientoContable))
+                            Asientos contables
+                        @endif
+                        <div class="row">
+                            <div class="col-lg-12 text-center">
+                                <a href="{{ route('estudiante.curso.ver.talleres.ver.preguntas',['curs_id'=>$curso->curs_id,'tall_id'=>$tallerPractico->tall_id]) }}" class="btn btn-primary solucionar-taller">Solucionar Taller</a>
+                            </div>
                         </div>
                     </div>
                 @endforeach
