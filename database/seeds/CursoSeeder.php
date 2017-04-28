@@ -178,7 +178,7 @@ class CursoSeeder extends Seeder
             'preg_id' => $preg_id_unica
         ));
         /*
-         * PREGUNTA ARCHIVO DEL TALLER DIAGNOSTICO O TALLER TEORICO
+         * PREGUNTA ARCHIVO DEL TALLER DIAGNOSTICO O TALLER TEORICO - PIPE
          */
         $preg_id = \DB::table('Pregunta')->insertGetId(array(
             'preg_texto' => "Cuarta pregunta del taller (archivo)",
