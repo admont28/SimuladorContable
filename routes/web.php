@@ -84,27 +84,31 @@ Route::group(['prefix' => 'estudiante', 'middleware' => ['auth','estudiante'] ],
     | Rutas para los talleres
     |--------------------------------------------------------------------------
     */
-    Route::get('/curso/{curs_id}/talleres', 'CursoController@verTalleresPorCursoEstudiante')->name('estudiante.curso.ver.talleres');
-    Route::post('/curso{curs_id}/taller/{tall_id}/enviar-respuestas', 'TallerController@solucionarTallerDiagnosticoPost')->name('estudiante.curso.taller.solucionar.post');
+    Route::get('/curso/{curs_id}/talleres-diagnosticos', 'CursoController@verTalleresDiagnosticoPorCursoEstudiante')->name('estudiante.curso.ver.talleresdiagnostico');
+    Route::post('/curso/{curs_id}/taller/{tall_id}/enviar-respuestas', 'TallerController@solucionarTallerDiagnosticoTeoricoPost')->name('estudiante.curso.taller.solucionar.post');
+    Route::get('/curso/{curs_id}/talleres-teoricos', 'CursoController@verTalleresTeoricosPorCursoEstudiante')->name('estudiante.curso.ver.talleresteorico');
+    Route::get('/curso/{curs_id}/talleres-practicos', 'CursoController@verTalleresPracticosPorCursoEstudiante')->name('estudiante.curso.ver.tallerespractico');
     /*
     |--------------------------------------------------------------------------
     | Rutas para las preguntas
     |--------------------------------------------------------------------------
     */
     Route::get('/curso/{curs_id}/taller/{tall_id}/preguntas', 'PreguntaController@verPreguntasPorTaller')->name('estudiante.curso.ver.talleres.ver.preguntas');
-
-
-
-
+    /*
+    |--------------------------------------------------------------------------
+    | Rutas para los PUC
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/curso/{curs_id}/puc/ajax', 'CursoController@verPucPorCursoAjax')->name('estudiante.curso.puc.verajax');
+    /*
+    |--------------------------------------------------------------------------
+    | Rutas para las tarifas
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/curso/{curs_id}/taller/{tall_id}/tarifa/ajax', 'TallerController@verTarifasPorTaller')->name('estudiante.curso.taller.tarifa.verajax');
 
     /* Ver las materias con DataTables, este responde un objeto Datatables */
     Route::get('/curso/{curs_id}/materias/ajax', 'CursoController@verMateriasPorCursoAjaxEstudiante')->name('estudiante.curso.materia.verajax');
-
-
-
-
-
-
 });
 
 /*
@@ -134,8 +138,23 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     Route::get('/curso/{curs_id}/taller/editar/{tall_id}', 'TallerController@edit')->name('profesor.curso.taller.editar');
     Route::put('/curso/{curs_id}/taller/editar/{tall_id}', 'TallerController@update')->name('profesor.curso.taller.editar.put');
     Route::delete('/curso/{curs_id}/taller/eliminar/{tall_id}', 'TallerController@destroy')->name('profesor.curso.taller.eliminar');
-    Route::get('/curso/{curs_id}/taller/{tall_id}/crear-taller-asientos-contables', 'TallerController@crearTallerAsientosContables')->name('profesor.curso.taller.crear.tallerasientoscontables');
-    Route::post('/curso/{curs_id}/taller/{tall_id}/crear-taller-asientos-contables', 'TallerController@crearTallerAsientosContablesPost')->name('profesor.curso.taller.crear.tallerasientoscontables.post');
+    /*
+    |--------------------------------------------------------------------------
+    | Rutas para los talleres de asientos contables
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/curso/{curs_id}/taller/{tall_id}/crear-taller-asientos-contables', 'TallerController@crearTallerAsientosContables')->name('profesor.curso.taller.crear.tallerasientocontable');
+    Route::post('/curso/{curs_id}/taller/{tall_id}/crear-taller-asientos-contables-post', 'TallerController@crearTallerAsientosContablesPost')->name('profesor.curso.taller.crear.tallerasientocontable.post');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Rutas para los talleres de nomina
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/curso/{curs_id}/taller/{tall_id}/crear-taller-nomina', 'TallerController@crearTallerNomina')->name('profesor.curso.taller.crear.tallernomina');
+    Route::post('/curso/{curs_id}/taller/{tall_id}/crear-taller-nomina-post', 'TallerController@crearTallerNominaPost')->name('profesor.curso.taller.crear.tallernomina.post');
 
     /*
     |--------------------------------------------------------------------------

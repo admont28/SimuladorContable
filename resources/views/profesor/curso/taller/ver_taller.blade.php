@@ -123,8 +123,9 @@
             </div>
         @else
             <div class="row">
-                <div class="col-lg-12">
-                    <p class="lead">Marcar el taller actual con uno de los siguientes tipos (Esta acción no se podrá deshacer):</p>
+                <div class="bs-callout bs-callout-danger">
+                    <h4><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> ¡Atención Profesor!</h4>
+                    <p class="lead">Al Marcar el taller actual con uno de los tipos de taller abajo ilustrados, usted no podrá deshacer esta acción.</p>
                 </div>
             </div>
             <div class="row">

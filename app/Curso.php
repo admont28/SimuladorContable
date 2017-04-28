@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Auth;
+use DB;
 
 class Curso extends Model
 {
@@ -72,5 +74,62 @@ class Curso extends Model
     public function pucs()
     {
         return $this->hasMany('App\Puc','curs_id');
+    }
+
+    public function talleresDiagnosticoFinalizadosUsuario()
+    {
+        // SELECT Distinct t.tall_id
+        // FROM Respuesta r, Pregunta p, Taller t
+        // WHERE
+        //  r.preg_id = p.preg_id
+        //  AND p.tall_id = t.tall_id
+        //  AND t.tall_tipo = 'diagnostico'
+        //  AND r.usua_id = 2
+        return DB::table('Respuesta')
+                ->join('Pregunta', 'Respuesta.preg_id', '=', 'Pregunta.preg_id')
+                ->join('Taller', 'Pregunta.tall_id', '=', 'Taller.tall_id')
+                ->select('Taller.tall_id')
+                ->distinct()
+                ->where('Taller.tall_tipo','diagnostico')
+                ->where('Respuesta.usua_id',Auth::user()->usua_id)
+                ->get();
+    }
+
+    public function talleresTeoricoFinalizadosUsuario()
+    {
+        // SELECT Distinct t.tall_id
+        // FROM Respuesta r, Pregunta p, Taller t
+        // WHERE
+        //  r.preg_id = p.preg_id
+        //  AND p.tall_id = t.tall_id
+        //  AND t.tall_tipo = 'teorico'
+        //  AND r.usua_id = 2
+        return DB::table('Respuesta')
+                ->join('Pregunta', 'Respuesta.preg_id', '=', 'Pregunta.preg_id')
+                ->join('Taller', 'Pregunta.tall_id', '=', 'Taller.tall_id')
+                ->select('Taller.tall_id')
+                ->distinct()
+                ->where('Taller.tall_tipo','teorico')
+                ->where('Respuesta.usua_id',Auth::user()->usua_id)
+                ->get();
+    }
+
+    public function talleresPracticoFinalizadosUsuario()
+    {
+        // SELECT Distinct t.tall_id
+        // FROM Respuesta r, Pregunta p, Taller t
+        // WHERE
+        //  r.preg_id = p.preg_id
+        //  AND p.tall_id = t.tall_id
+        //  AND t.tall_tipo = 'practico'
+        //  AND r.usua_id = 2
+        return DB::table('Respuesta')
+                ->join('Pregunta', 'Respuesta.preg_id', '=', 'Pregunta.preg_id')
+                ->join('Taller', 'Pregunta.tall_id', '=', 'Taller.tall_id')
+                ->select('Taller.tall_id')
+                ->distinct()
+                ->where('Taller.tall_tipo','practico')
+                ->where('Respuesta.usua_id',Auth::user()->usua_id)
+                ->get();
     }
 }

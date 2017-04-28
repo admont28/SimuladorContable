@@ -123,3 +123,17 @@ code {
     color: #5bc0de;
 }
 /* ---- Cierre Boostrap Callout - Para mostrar mensajes de alerta de otra forma. */
+
+.fs-18{
+    font-size: 18px;
+}
+
+.inner-cell {
+    height: 80px;
+    overflow: auto;
+}
+
+.tab-content{
+    border: 1px solid #ddd;
+    padding : 10px 15px;
+}

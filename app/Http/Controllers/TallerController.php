@@ -20,6 +20,7 @@ use DB;
 use Auth;
 use Redirect;
 use Storage;
+use DateTime;
 
 class TallerController extends Controller
 {
@@ -394,7 +395,7 @@ class TallerController extends Controller
                 '<a href="'.route('profesor.curso.taller.pregunta.ver', ['curs_id'=>$pregunta->taller->curs_id,'tall_id' =>$pregunta->taller->tall_id,'preg_id'=>$pregunta->preg_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>
                 '.$opcionAdicionarRespuesta.'
                 <a href="'.route('profesor.curso.taller.pregunta.editar', ['curs_id'=>$pregunta->taller->curs_id,'tall_id' => $pregunta->taller->tall_id,'preg_id'=>$pregunta->preg_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
-                <form action="'.route('profesor.curso.taller.pregunta.eliminar', ['curs_id'=>$pregunta->taller->curs_id,'tall_id' => $pregunta->taller->tall_id,'preg_id'=>$pregunta->preg_id]).'" method="POST" class="visible-lg-inline-block">
+                <form action="'.route('profesor.curso.taller.pregunta.eliminar', ['curs_id'=>$pregunta->taller->curs_id,'tall_id' => $pregunta->taller->tall_id,'preg_id'=>$pregunta->preg_id]).'" method="POST" class="visible-lg-inline-block visible-sm-inline-block visible-md-inline-block visible-xs-inline-block">
                     '.$method_field.'
                     '.$csrf_field.'
                     <button type="submit" name="eliminar" class="btn btn-xs btn-danger btn-eliminar"><i class="glyphicon glyphicon-trash"></i> Eliminar</button>
@@ -415,7 +416,7 @@ class TallerController extends Controller
                 $csrf_field = csrf_field();
                 return
                     '<a href="'.route('profesor.curso.taller.tarifa.editar', ['curs_id'=>$tarifa->taller->curs_id,'tall_id' => $tarifa->taller->tall_id,'tari_id'=>$tarifa->tari_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
-                    <form action="'.route('profesor.curso.taller.tarifa.eliminar', ['curs_id'=>$tarifa->taller->curs_id,'tall_id' => $tarifa->taller->tall_id,'tari_if'=>$tarifa->tari_id]).'" method="POST" class="visible-lg-inline-block">
+                    <form action="'.route('profesor.curso.taller.tarifa.eliminar', ['curs_id'=>$tarifa->taller->curs_id,'tall_id' => $tarifa->taller->tall_id,'tari_if'=>$tarifa->tari_id]).'" method="POST" class="visible-lg-inline-block visible-sm-inline-block visible-md-inline-block visible-xs-inline-block">
                         '.$method_field.'
                         '.$csrf_field.'
                         <button type="submit" name="eliminar" class="btn btn-xs btn-danger btn-eliminar"><i class="glyphicon glyphicon-trash"></i> Eliminar</button>
@@ -438,7 +439,7 @@ class TallerController extends Controller
             ->with('curso', $curso);
     }
 
-    public function solucionarTallerDiagnosticoPost(Request $request, $curs_id, $tall_id)
+    public function solucionarTallerDiagnosticoTeoricoPost(Request $request, $curs_id, $tall_id)
     {
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
@@ -449,13 +450,24 @@ class TallerController extends Controller
         $taller = Taller::find($tall_id);
         // Verificamos que el taller exista en bd, si no es así informamos al usuario y redireccionamos.
         if (!isset($taller) || $taller->curs_id != $curso->curs_id) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
-            return redirect()->route('estudiante.curso.ver.talleres', ['curs_id' => $curs_id]);
+            flash('El taller con ID: '.$tall_id.' no pertenece al curso seleccionado. Verifique por favor.', 'danger');
+            return redirect()->route('estudiante.curso');
         }
-        //verificamos que el taller sea un taller de tipo diagnostico
-        if ($taller->tall_tipo != "diagnostico") {
-            flash('El taller con ID: '.$tall_id.' no es un taller de tipo diagnostico. Verifique por favor.', 'danger');
-            return redirect()->route('estudiante.curso.ver.talleres',['curs_id'=>$curso->curs_id]);
+        //verificamos que el taller sea un taller de tipo diagnóstico o teórico
+        if ( ! ($taller->tall_tipo == "diagnostico" ||  $taller->tall_tipo == "teorico") ) {
+            flash('El taller con ID: '.$tall_id.' no es un taller de tipo diagnóstico o teórico. Verifique por favor.', 'danger');
+            return redirect()->route('estudiante.curso');
+        }
+        //verificamos que el taller contenga preguntas
+        if ($taller->preguntas->count() == 0) {
+            flash('El taller con ID: '.$tall_id.' no posee preguntas. Verifique por favor.', 'danger');
+            return $this->redireccionarSegunTipoTaller($taller, $curso);
+        }
+        $fechaActual = new DateTime();
+        $fechaTaller = new DateTime($taller->tall_tiempo);
+        if($fechaActual > $fechaTaller){
+            flash('El taller ha expirado, no se han podido guardar las respuestas.', 'danger');
+            return $this->redireccionarSegunTipoTaller($taller, $curso);
         }
         $preguntas = $taller->preguntas;
         $validaciones = array();
@@ -494,34 +506,52 @@ class TallerController extends Controller
             'max' => 'El campo debe ser menor que :max caracteres.'
         );
         $validator = Validator::make($request->all(), $validaciones,$messages);
-        if ($validator->fails() || !empty($errores))
-        {
-            // Adiciono a $validator los mensajes de error que se encuentren en $errores
-            foreach ($errores as $llave => $valor) {
-                $validator->getMessageBag()->add($llave, $valor);
-            }
-            $intentoTaller = DB::table('IntentoTaller')->select('inta_cantidad', 'inta_id')->where('usua_id', Auth::user()->usua_id)->where('tall_id', $taller->tall_id)->first();
-            // Decremento el valor de inta_cantidad porque al cargar la página de las preguntas, el controlador se encarga de incrementarlo, y si existen errores en el formulario, no debería contar como un intento de guardar las respuestas.
-            DB::table('IntentoTaller')->where('inta_id', $intentoTaller->inta_id)->decrement('inta_cantidad');
-            return Redirect::back()->withErrors($validator)->withInput();
-        }
-        // En este punto, todas las preguntas tienen respuestas, y no hay errores en el formulario.
-        // Se procede a verificar cuales están correctas y cuales no.
-        $errores = $this->verificarErroresEnRespuestas($preguntas, $request);
-        $intentoTaller = DB::table('IntentoTaller')->select('inta_cantidad', 'inta_id')->where('usua_id', Auth::user()->usua_id)->where('tall_id', $taller->tall_id)->first();
-        $intentos = $intentoTaller->inta_cantidad;
-        if(!empty($errores)){
-            // Si es el primer intento, aún no guardo las respuestas, le comunico que tiene errores y que envie de nuevo.
-            if($intentos == 1){
+        DB::beginTransaction();
+        try {
+            if ($validator->fails() || !empty($errores))
+            {
+                // Adiciono a $validator los mensajes de error que se encuentren en $errores
                 foreach ($errores as $llave => $valor) {
                     $validator->getMessageBag()->add($llave, $valor);
                 }
-                flash('Usted tiene respuestas incorrectas, sus respuestas aún no se han guardado, por favor intente corregir las respuestas y enviar la solución del taller nuevamente.', 'danger');
+                $intentoTaller = DB::table('IntentoTaller')->select('inta_cantidad', 'inta_id')->where('usua_id', Auth::user()->usua_id)->where('tall_id', $taller->tall_id)->first();
+                // Decremento el valor de inta_cantidad porque al cargar la página de las preguntas, el controlador se encarga de incrementarlo, y si existen errores en el formulario, no debería contar como un intento de guardar las respuestas.
+                DB::table('IntentoTaller')->where('inta_id', $intentoTaller->inta_id)->decrement('inta_cantidad');
+                DB::commit();
                 return Redirect::back()->withErrors($validator)->withInput();
             }
+            // En este punto, todas las preguntas tienen respuestas, y no hay errores en el formulario.
+            // Se procede a verificar cuales están correctas y cuales no.
+            $errores = $this->verificarErroresEnRespuestas($preguntas, $request);
+            $intentoTaller = DB::table('IntentoTaller')->select('inta_cantidad', 'inta_id')->where('usua_id', Auth::user()->usua_id)->where('tall_id', $taller->tall_id)->first();
+            $intentos = $intentoTaller->inta_cantidad;
+            if(!empty($errores)){
+                // Si es el primer intento, aún no guardo las respuestas, le comunico que tiene errores y que envie de nuevo.
+                if($intentos == 1){
+                    foreach ($errores as $llave => $valor) {
+                        $validator->getMessageBag()->add($llave, $valor);
+                    }
+                    flash('Usted tiene respuestas incorrectas, sus respuestas aún no se han guardado, por favor intente corregir las respuestas y enviar la solución del taller nuevamente. Este es su segundo intento de solución, ya no tendrá más intentos disponibles.', 'danger');
+                    return Redirect::back()->withErrors($validator)->withInput();
+                }
+            }
+            $this->almacenarRespuestas($preguntas,$request);
+            $this->calificarRespuestas($preguntas);
+            if($intentos == 1){
+                DB::table('IntentoTaller')->where('inta_id', $intentoTaller->inta_id)->increment('inta_cantidad');
+            }
+            DB::commit();
+            $success = true;
+        } catch (\Exception $e) {
+            $success = false;
+            DB::rollback();
         }
-        $this->almacenarRespuestas($preguntas,$request);
-        $this->calificarRespuestas($preguntas);
+        if (!$success) {
+            flash('Ha ocurrido un error en el sistema, por favor inténtalo de nuevo.', 'danger');
+            return $this->redireccionarSegunTipoTaller($taller, $curso);
+        }
+        flash('Todas sus respuestas han quedado guardadas.', 'success');
+        return $this->redireccionarSegunTipoTaller($taller, $curso);
     }
 
     private function verificarErroresEnRespuestas($preguntas = array(), $request = null)
@@ -664,6 +694,18 @@ class TallerController extends Controller
                     ]);
                 }
             }
+        }
+    }
+
+    private function redireccionarSegunTipoTaller($taller, $curso)
+    {
+        if($taller->tall_tipo == "diagnostico"){
+            return redirect()->route('estudiante.curso.ver.talleresdiagnostico',['curs_id'=>$curso->curs_id]);
+        }
+        elseif($taller->tall_tipo == "teorico")
+            return redirect()->route('estudiante.curso.ver.talleresteorico',['curs_id'=>$curso->curs_id]);
+        else {
+            return redirect()->route('estudiante.curso');
         }
     }
 

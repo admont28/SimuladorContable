@@ -15,10 +15,8 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li id="estudiante-index"><a href="{{ route('estudiante.index') }}">{{ trans('messages.inicio') }}</a></li>
-         <li><a href="{{ route('estudiante.curso')  }}">{{trans('messages.curso') }}</a></li>
+        <li id="estudiante-curso"><a href="{{ route('estudiante.curso') }}">{{ trans('messages.curso') }}</a></li>
       </ul>
-
-
 
         <!-- Right Side Of Navbar -->
         <ul class="nav navbar-nav navbar-right">
@@ -26,13 +24,11 @@
             @if (Auth::guest())
                 <li><a href="{{ url('/login') }}">{{ trans('messages.iniciar_sesion') }}</a></li>
                 <li><a href="{{ url('/register') }}">{{ trans('messages.registrarme') }}</a></li>
-
             @else
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                         {{ Auth::user()->usua_nombre }} <span class="caret"></span>
                     </a>
-
                     <ul class="dropdown-menu" role="menu">
                         <li>
                             <a href="{{ route(Auth::user()->usua_rol.'.index') }}"> {{ trans('messages.perfil') }}</a>
@@ -43,7 +39,6 @@
                                        document.getElementById('logout-form').submit();">
                               {{ trans('messages.logout') }}
                             </a>
-
                             <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
                               {{ csrf_field() }}
                             </form>

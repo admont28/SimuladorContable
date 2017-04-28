@@ -15,8 +15,6 @@ use Validator;
 
 class PreguntaController extends Controller
 {
-
-
     /**
      * Show the form for creating a new resource.
      *
@@ -68,11 +66,10 @@ class PreguntaController extends Controller
         // Obtengo las opciones disponbiles en bd en el campo preg_tipo de tipo enum.
         $opciones = Pregunta::getPossibleEnumValues();
         $opcionesSeparadasPorComas = implode(",", $opciones);
-        // Para mirar el regex: http://www.regexpal.com/
         Validator::make($request->all(), [
             'texto_pregunta' => 'required|max:500|min:5',
             'tipo_pregunta' => 'required|in:'.$opcionesSeparadasPorComas,
-            'porcentaje_pregunta'=>'required|regex:/^[0-9][0-9][0]?$/'
+            'porcentaje_pregunta'=>'required|numeric|min:1|max:100'
         ])->validate();
         // Almaceno en bd la nueva pregunta
         Pregunta::create([
@@ -182,16 +179,14 @@ class PreguntaController extends Controller
             flash('La pregunta con ID: '.$preg_id.' no existe. Verifique por favor.', 'danger');
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
         }
-        // Para mirar el regex: http://www.regexpal.com/
         Validator::make($request->all(), [
             'texto_pregunta' => 'required|max:500|min:5',
-            //'tipo_pregunta' => 'required|in:'.$opcionesSeparadasPorComas,
-            'porcentaje_pregunta'=>'required|regex:/^[0-9]([,\.][0-9])?$/'
+            'porcentaje_pregunta'=>'required|numeric|min:1|max:100'
         ])->validate();
         $pregunta->preg_texto = $request->input('texto_pregunta');
-        $pregunta->preg_porcentaje = $request->input('porcentaje_pregunta');
+        $pregunta->preg_porcentaje = $request->input('porcentaje_pregunta')/100;
         $pregunta->save();
-        flash('La pregunta "'.substr($pregunta->preg_texto, 0, 80).'..." editada con éxito.', 'success');
+        flash('La pregunta "'.substr($pregunta->preg_texto, 0, 80).'..." ha sido editada con éxito.', 'success');
         return redirect()->route('profesor.curso.taller.ver',['curs_id'=> $curs_id, 'tall_id'=> $tall_id]);
     }
 
@@ -241,7 +236,7 @@ class PreguntaController extends Controller
                 $csrf_field = csrf_field();
                 return
                     '<a href="'.route('profesor.curso.taller.pregunta.respuesta.editar', ['curs_id'=>$respuesta->pregunta->taller->curs_id,'tall_id' => $respuesta->pregunta->taller->tall_id,'preg_id'=>$respuesta->pregunta->preg_id, 'remu_id' => $respuesta->remu_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>
-                    <form action="'.route('profesor.curso.taller.pregunta.respuesta.eliminar', ['curs_id'=>$respuesta->pregunta->taller->curs_id,'tall_id' => $respuesta->pregunta->taller->tall_id,'preg_id'=>$respuesta->pregunta->preg_id, 'remu_id' => $respuesta->remu_id]).'" method="POST" class="visible-lg-inline-block">
+                    <form action="'.route('profesor.curso.taller.pregunta.respuesta.eliminar', ['curs_id'=>$respuesta->pregunta->taller->curs_id,'tall_id' => $respuesta->pregunta->taller->tall_id,'preg_id'=>$respuesta->pregunta->preg_id, 'remu_id' => $respuesta->remu_id]).'" method="POST" class="visible-lg-inline-block visible-sm-inline-block visible-md-inline-block visible-xs-inline-block">
                         '.$method_field.'
                         '.$csrf_field.'
                         <button type="submit" name="eliminar" class="btn btn-xs btn-danger btn-eliminar"><i class="glyphicon glyphicon-trash"></i> Eliminar</button>
@@ -268,13 +263,18 @@ class PreguntaController extends Controller
         $taller = Taller::find($tall_id);
         // Verificamos que el taller exista en bd, si no es así informamos al usuario y redireccionamos.
         if (!isset($taller) || $taller->curs_id != $curso->curs_id) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
-            return redirect()->route('estudiante.curso.ver.talleres', ['curs_id' => $curs_id]);
+            flash('El taller con ID: '.$tall_id.' no pertenece al curso seleccionado. Verifique por favor.', 'danger');
+            return redirect()->route('estudiante.curso');
         }
-        //verificamos que el taller sea un taller de tipo diagnostico
-        if ($taller->tall_tipo != "diagnostico") {
-            flash('El taller con ID: '.$tall_id.' no es un taller de tipo diagnostico. Verifique por favor.', 'danger');
-            return redirect()->route('estudiante.curso.ver.talleres',['curs_id'=>$curso->curs_id]);
+        //verificamos que el taller sea un taller de tipo diagnóstico o teórico
+        if ( ! ($taller->tall_tipo == "diagnostico" ||  $taller->tall_tipo == "teorico") ) {
+            flash('El taller con ID: '.$tall_id.' no es un taller de tipo diagnóstico o teórico. Verifique por favor.', 'danger');
+            return redirect()->route('estudiante.curso');
+        }
+        //verificamos que el taller contenga preguntas
+        if ($taller->preguntas->isEmpty()) {
+            flash('El taller con ID: '.$tall_id.' no posee preguntas. Verifique por favor.', 'danger');
+            return $this->redireccionarSegunTipoTaller($taller, $curso);
         }
         $preguntas = $taller->preguntas;
         $intentoTaller = DB::table('IntentoTaller')->select('inta_cantidad', 'inta_id')->where('usua_id', Auth::user()->usua_id)->where('tall_id', $taller->tall_id)->first();
@@ -288,7 +288,7 @@ class PreguntaController extends Controller
             $intentos = $intentoTaller->inta_cantidad + 1;
             if($intentos >= 3){
                 flash('Ha superado el número de intentos permitidos para este taller.', 'danger');
-                return redirect()->route('estudiante.curso.ver.talleres',['curs_id'=>$curso->curs_id]);
+                return $this->redireccionarSegunTipoTaller($taller, $curso);
             }else{
                 DB::table('IntentoTaller')->where('inta_id', $intentoTaller->inta_id)->increment('inta_cantidad');
             }
@@ -299,7 +299,16 @@ class PreguntaController extends Controller
                     ->with('preguntas', $preguntas);
     }
 
-
-
+    private function redireccionarSegunTipoTaller($taller, $curso)
+    {
+        if($taller->tall_tipo == "diagnostico"){
+            return redirect()->route('estudiante.curso.ver.talleresdiagnostico',['curs_id'=>$curso->curs_id]);
+        }
+        elseif($taller->tall_tipo == "teorico")
+            return redirect()->route('estudiante.curso.ver.talleresteorico',['curs_id'=>$curso->curs_id]);
+        else {
+            return redirect()->route('estudiante.curso');
+        }
+    }
 
 }

@@ -72,18 +72,18 @@ class RespuestaController extends Controller
         $taller = Taller::find($tall_id);
         if (!isset($taller)) {
             flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
-            return redirect()->route('estudiante.curso.ver.talleres', ['curs_id' => $curs_id]);
+            return redirect()->route('estudiante.curso.ver.talleresdiagnostico', ['curs_id' => $curs_id]);
         }
         // Verificamos que exista la pregunta en bd, si no es así, informamos al usuario y redireccionamos.
         $pregunta = Pregunta::find($preg_id);
         if (!isset($pregunta)) {
             flash('La pregunta con ID: '.$preg_id.' no existe. Verifique por favor.', 'danger');
-            return redirect()->route('estudiante.curso.ver.talleres', ['curs_id' => $curs_id]);
+            return redirect()->route('estudiante.curso.ver.talleresdiagnostico', ['curs_id' => $curs_id]);
         }
         // Verificamos que la pregunta sea de tipo unica-multiple para poder añadirle respuestas, si no es así, informamos y redireccionamos.
         if($pregunta->preg_tipo != 'unica-multiple'){
             flash('La pregunta con ID: '.$preg_id.' no es una pregunta de tipo: unica-multiple. Verifique por favor.', 'danger');
-            return redirect()->route('estudiante.curso.ver.talleres', ['curs_id' => $curs_id]);
+            return redirect()->route('estudiante.curso.ver.talleresdiagnostico', ['curs_id' => $curs_id]);
         }
         return View('estudiante.curso.taller.pregunta.ver_preguntas')
                     ->with('curso', $curso)
