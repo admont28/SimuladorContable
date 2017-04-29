@@ -57,8 +57,11 @@
         <script type="text/javascript" src="{{ asset('plugins/countdown/js/jquery.countdown.min.js') }}" charset="utf-8"></script>
         <script type="text/javascript" src="{{ asset('plugins/responsivetabs/js/responsive-tabs.js') }}" charset="utf-8"></script>
 		<script type="text/javascript" src="{{ asset('plugins/bootstrap-select/js/bootstrap-select.min.js') }}" charset="utf-8"></script>
-        <script type="text/javascript" src="{{ asset('plugins/ajax-bootstrap-select/js/ajax-bootstrap-select.js') }}" charset="utf-8"></script>
-        <script type="text/javascript" src="{{ asset('plugins/ajax-bootstrap-select/js/locale/ajax-bootstrap-select.es-ES.js') }}" charset="utf-8"></script>
+        <script type="text/javascript" src="{{ asset('plugins/ajax-bootstrap-select/js/ajax-bootstrap-select.min.js') }}" charset="utf-8"></script>
+        <script type="text/javascript" src="{{ asset('plugins/ajax-bootstrap-select/js/locale/ajax-bootstrap-select.es-ES.min.js') }}" charset="utf-8"></script>
+        <script type="text/javascript" src="{{ asset('plugins/numeral/js/numeral.js') }}" charset="utf-8"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+
         <script type="text/javascript">
         $(document).ready(function() {
             $("@yield('active','')").addClass('active');

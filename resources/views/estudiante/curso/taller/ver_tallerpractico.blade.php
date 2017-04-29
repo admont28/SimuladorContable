@@ -66,31 +66,33 @@
                                 <table class="table table-striped table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <td colspan="4" class="text-center">CONTABILIZACIÓN DE LA PROVISIÓN</td>
+                                            <td colspan="4" class="text-center"><strong>CONTABILIZACIÓN DE LA PROVISIÓN</strong></td>
                                         </tr>
                                         <tr>
-                                            <td class="text-center" width="20%">CÓDIGO</td>
-                                            <td class="text-center" width="20%">CUENTAS</td>
-                                            <td class="text-center" width="30%">DÉBITO</td>
-                                            <td class="text-center" width="30%">CRÉDITO</td>
+                                            <td class="text-center" width="20%"><strong>CÓDIGO</strong></td>
+                                            <td class="text-center" width="20%"><strong>CUENTAS</strong></td>
+                                            <td class="text-center" width="30%"><strong>DÉBITO</strong></td>
+                                            <td class="text-center" width="30%"><strong>CRÉDITO</strong></td>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @for ($i = 1; $i <= $tallerPractico->tallerAsientoContable->taac_cantidadfilas; $i++)
                                             <tr id="fila_{{ $i }}">
-                                                <td class="text-center" contenteditable="true" width="20%">
-                                                                <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true" data-fila="{{$i}}">
-                										        </select>
+                                                <td class="text-center" width="20%">
+                                                    <form class="form-inline">
+                                                        <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true" data-fila="{{$i}}">
+                                                        </select>
+                                                    </form>
                                                 </td>
-                                                <td class="text-center columna_cuentas" width="20%">2</td>
-                                                <td class="text-center" contenteditable="true" width="30%">3</td>
-                                                <td class="text-center" contenteditable="true" width="30%">4</td>
+                                                <td class="text-center columna_cuentas" width="20%"></td>
+                                                <td class="text-center columna_debito" contenteditable="true" width="30%">$ 0</td>
+                                                <td class="text-center columna_credito" contenteditable="true" width="30%">$ 0</td>
                                             </tr>
                                         @endfor
                                             <tr>
-                                                <td colspan="2">SUMAS IGUALES</td>
-                                                <td></td>
-                                                <td></td>
+                                                <td colspan="2" class="text-center"><strong>SUMAS IGUALES</strong></td>
+                                                <td class="text-center" id="total_debito">$ 0</td>
+                                                <td class="text-center" id="total_credito">$ 0</td>
                                             </tr>
                                     </tbody>
                                 </table>
@@ -121,6 +123,28 @@
 @push('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
+            // load a locale
+            numeral.register('locale', 'es_CO', {
+                delimiters: {
+                    thousands: '.',
+                    decimal: ','
+                },
+                abbreviations: {
+                    thousand: 'k',
+                    million: 'm',
+                    billion: 'b',
+                    trillion: 't'
+                },
+                ordinal : function (number) {
+                    return number === 1 ? 'er' : 'ème';
+                },
+                currency: {
+                    symbol: '$ '
+                }
+            });
+            // switch between locales
+            numeral.locale('es_CO');
+            // '$1,000.00'
             // Función para activar el contador.
             $('[data-countdown]').each(function() {
                 var $this = $(this);
@@ -175,7 +199,6 @@
                     }
                 })
             });
-
             var options = {
                     "ajax": {
                         "type": "GET",
@@ -187,7 +210,7 @@
                     "locale": {
                         "emptyTitle": 'Buscar un puc por su código'
                     },
-                    "log": 3,
+                    "log": 4,
                     preprocessData: function(data){
                         var i, l = data.length, array = [];
                         if (l) {
@@ -209,7 +232,6 @@
                 };
                 $('.selectpicker').selectpicker().filter('.with-ajax').ajaxSelectPicker(options);
                 $('select').trigger('change');
-
             $('select').change(function(event) {
                 // Obtengo la fila en la que se modificó el select.
                 var fila = $(this).data('fila');
@@ -217,6 +239,52 @@
                 var nombre = $(this).find('option:selected').data('subtext');
                 // Cambio el nombre de la columna CUENTAS en la fila en que se modificó el select.
                 $('#fila_'+fila).find('td.columna_cuentas').text(nombre);
+            });
+            $(".columna_debito[contenteditable=true]").blur(function() {
+                var valorTdActual = $(this).text();
+                valorTdActual = parseInt(numeral(valorTdActual).format('0'));
+                if(isNaN(valorTdActual)){
+                    swal(
+                        '¡Error!',
+                        'Debes introducir un número.',
+                        'error'
+                    );
+                    valorTdActual = 0;;
+                }
+                var total_debito = 0;
+                $('.columna_debito').each(function(index, el) {
+                    var number = numeral($(el).text()).format('0');
+                    var valorTd = parseInt(number);
+                    if(!isNaN(valorTd)){
+                        total_debito += valorTd;
+                    }
+                });
+                valorTdActual = numeral(valorTdActual).format('$0,0');
+                $(this).text(valorTdActual);
+                $("#total_debito").text(numeral(total_debito).format('$0,0'));
+            });
+            $(".columna_credito[contenteditable=true]").blur(function() {
+                var valorTdActual = $(this).text();
+                valorTdActual = parseInt(numeral(valorTdActual).format('0'));
+                if(isNaN(valorTdActual)){
+                    swal(
+                        '¡Error!',
+                        'Debes introducir un número.',
+                        'error'
+                    );
+                    valorTdActual = 0;;
+                }
+                var total_credito = 0;
+                $('.columna_credito').each(function(index, el) {
+                    var number = numeral($(el).text()).format('0');
+                    var valorTd = parseInt(number);
+                    if(!isNaN(valorTd)){
+                        total_credito += valorTd;
+                    }
+                });
+                valorTdActual = numeral(valorTdActual).format('$0,0');
+                $(this).text(valorTdActual);
+                $("#total_credito").text(numeral(total_credito).format('$0,0'));
             });
         });
     </script>
