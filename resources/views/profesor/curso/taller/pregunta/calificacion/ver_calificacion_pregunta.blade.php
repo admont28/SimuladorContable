@@ -1,8 +1,8 @@
 @extends('profesor.template.main')
 
-@section('title-head', 'Sección de cursos')
+@section('title-head', 'Sección de Preguntas Calificadas')
 
-@section('title', 'Sección de cursos')
+@section('title', 'Sección de Preguntas Calificadas')
 
 @section('active','#profesor-curso')
 
@@ -16,7 +16,7 @@
                 <tr>
                     <td><strong>Pregunta</strong></td>
                     <td><strong>Tipo</strong></td>
-                    <td><strong>Calificacion</strong></td>
+                    <td><strong>Calificación</strong></td>
                     <td><strong>Ponderado</strong></td>
                     <td><strong>Opciones</strong></td>
                 </tr>
@@ -33,7 +33,7 @@
             $('#usuario-table').DataTable({
                 "processing": true,
                 "serverSide": true,
-                "ajax": "{{ route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['tall_id' => $taller->tall_id,'curs_id'=>$taller->curs_id]) }}",
+                "ajax": "{{ route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante.ajax',['tall_id' => $taller->tall_id,'curs_id'=>$curso->curs_id, 'usua_id'=>$usuario->usua_id]) }}",
                 "columns" : [
                     {data: 'preg_texto', name: 'preg_texto', width: '45%'},
                     {data: 'preg_tipo', name: 'preg_tipo', width: '30%'},

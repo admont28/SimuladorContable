@@ -6,6 +6,7 @@
                 <tr>
                     <td><strong>ID</strong></td>
                     <td><strong>Nombre</strong></td>
+                    <td><strong>Correo</strong></td>
                     <td><strong>Opciones</strong></td>
                 </tr>
             </thead>
@@ -24,6 +25,7 @@
                 "columns" : [
                     {data: 'usua_id', name: 'usua_id', width: '5%'},
                     {data: 'usua_nombre', name: 'usua_nombre', width: '50%'},
+                    {data: 'usua_correo', name: 'usua_correo', width: '50%'},
                     {data: 'opciones', name: 'action', orderable: false, searchable: false, width: '30%'}
                 ],
                 "language" : {
