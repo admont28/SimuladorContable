@@ -329,7 +329,7 @@ class CursoController extends Controller
 
     public function buscarPucPorCursoAjax(Request $request, $curs_id)
     {
-        $pucs = Puc::select('puc_id', 'puc_nombre', 'puc_codigo')->where('puc_codigo','LIKE',''.$request["q"].'%')->get();
+        $pucs = Puc::select('puc_id', 'puc_nombre', 'puc_codigo')->where('curs_id', $curs_id)->where('puc_codigo','LIKE',''.$request["q"].'%')->get();
         return $pucs->jsonSerialize();
     }
 
