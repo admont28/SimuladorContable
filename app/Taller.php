@@ -130,11 +130,5 @@ class Taller extends Model
             ->get();
     }
 
-    /**
-     * método para consultar las respuestas que hizo el estudiante en un determinado taller
-     */
-    public function respuestasPorEstudiante()
-    {
-        
-    }
+
 }

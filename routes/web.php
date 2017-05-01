@@ -246,7 +246,7 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     |--------------------------------------------------------------------------
     */
     Route::get('/curso/{curs_id}/taller/{tall_id}/usuarios/calificaciones', 'CalificacionController@mostrarUsuariosTaller')->name('profesor.curso.taller.pregunta.respuesta.calificacion');
-    Route::get('/curso/{curs_id}/taller/{tall_id}/usuario/{usua_id}/calificaciones', 'CalificacionController@')->name('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/usuario/ver-preguntas-calificaciones', 'CalificacionController@mostrarPreguntasUsuario')->name('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante');
 
 
 });

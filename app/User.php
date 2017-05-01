@@ -86,4 +86,21 @@ class User extends Authenticatable
         //inverso de hasMany tecnicamente no es necesasario pero siempre usar la relación y la inversa. el inverso belongsTo trae un dato y el hasmany trae una coleccion.
         return $this->hasMany('App\Calificacion','usua_id');
     }
+
+    /**
+     * método para consultar las respuestas que hizo el estudiante en un determinado taller
+     * SELECT DISTINCT `pregunta`.`preg_texto`, `calificacion`.`cali_ponderado`, `usuario`.`usua_nombre`
+     * FROM `pregunta` JOIN `respuesta` ON `pregunta`.`preg_id` = `respuesta`.`preg_id` JOIN `usuario` ON `respuesta`.`usua_id` = `usuario`.`usua_id`
+     * JOIN `calificacion` ON `usuario`.`usua_id` = `calificacion`.`usua_id`
+     * WHERE `usuario`.`usua_id`= 3
+     */
+    public function respuestasPorEstudiante()
+    {
+        return DB::table('Pregunta')
+        ->join('Respuesta','Pregunta.preg_id','=','Respuesta.preg_id')
+        ->join('Usuario','Respuesta.usua_id','=','Usuario.usua_id')
+        ->join('Calificacion','Usuario.usua_id','=','Calificacion.usua_id')
+        ->where('usua_id',$this->usua_id)
+        ->get();
+    }
 }

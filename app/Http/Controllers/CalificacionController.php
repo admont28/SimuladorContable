@@ -169,11 +169,31 @@ class CalificacionController extends Controller
         return Datatables::of($usuarios)
                         ->addColumn('opciones', function ($usuario) {
                             return
+                            '<a href="'.route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id' =>$curs_id, 'tall_id'=>$tall_id ]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>Ver</a>';
+                        })
+                        ->make(true);
+
+    }
+
+    /**
+     * metodo para traer las preguntas que han respondido un usuario.
+     */
+    public function mostrarPreguntasUsuario($curs_id, $tall_id)
+    {
+        $taller = Taller::find($tall_id);
+        $usuario =Auth::user()->usua_id;
+        $preguntas= $usuario->respuestasPorEstudiante();
+        //$preguntas = $taller->preguntas;
+        //$calificaciones=Calificacion::find($tall_id);
+        return Datatables::of($preguntas)
+                        ->addColumn('opciones', function ($pregunta) {
+                            return
                             '<a href="#" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>Ver</a>';
                         })
                         ->make(true);
 
     }
+
 
 
 
