@@ -49,7 +49,7 @@
                                 </div>
                             </div>
                         </div>
-                        @if ($tallerPractico->tarifas->isNotEmpty())
+                        @if (isset($tallerPractico->tarifas) && $tallerPractico->tarifas->isNotEmpty())
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="panel panel-default">
@@ -63,7 +63,7 @@
                         @endif
                         @if (isset($tallerPractico->tallerAsientoContable))
                             <div class="row">
-                                <table class="table table-striped table-bordered table-hover">
+                                <table class="table table-striped table-bordered table-hover" id="taller-asiento-contable">
                                     <thead>
                                         <tr>
                                             <td colspan="4" class="text-center"><strong>CONTABILIZACIÓN DE LA PROVISIÓN</strong></td>
@@ -77,7 +77,7 @@
                                     </thead>
                                     <tbody>
                                         @for ($i = 1; $i <= $tallerPractico->tallerAsientoContable->taac_cantidadfilas; $i++)
-                                            <tr id="fila_{{ $i }}">
+                                            <tr>
                                                 <td class="text-center" width="20%">
                                                     <form class="form-inline">
                                                         <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true" data-fila="{{$i}}">
@@ -85,8 +85,8 @@
                                                     </form>
                                                 </td>
                                                 <td class="text-center columna_cuentas" width="20%"></td>
-                                                <td class="text-center columna_debito" contenteditable="true" width="30%">$ 0</td>
-                                                <td class="text-center columna_credito" contenteditable="true" width="30%">$ 0</td>
+                                                <td class="text-center columna_debito" contenteditable="true" width="30%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>
+                                                <td class="text-center columna_credito" contenteditable="true" width="30%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>
                                             </tr>
                                         @endfor
                                             <tr>
@@ -97,12 +97,13 @@
                                     </tbody>
                                 </table>
                             </div>
-                        @endif
-                        <div class="row">
-                            <div class="col-lg-12 text-center">
-                                <a href="{{ route('estudiante.curso.ver.talleres.ver.preguntas',['curs_id'=>$curso->curs_id,'tall_id'=>$tallerPractico->tall_id]) }}" class="btn btn-primary solucionar-taller">Solucionar Taller</a>
+                            <div class="row">
+                                <div class="col-lg-12 text-center">
+                                    <a href="#" class="btn btn-default" id="adicionar-fila-asiento-contable">Adicionar fila</a>
+                                    <a href="{{ route('estudiante.curso.ver.talleres.ver.preguntas',['curs_id'=>$curso->curs_id,'tall_id'=>$tallerPractico->tall_id]) }}" class="btn btn-primary solucionar-taller">Guardar solución</a>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                 @endforeach
                 <!-- Tab panes -->
@@ -210,7 +211,7 @@
                     "locale": {
                         "emptyTitle": 'Buscar un puc por su código'
                     },
-                    "log": 4,
+                    "log": 0,
                     preprocessData: function(data){
                         var i, l = data.length, array = [];
                         if (l) {
@@ -232,15 +233,19 @@
                 };
                 $('.selectpicker').selectpicker().filter('.with-ajax').ajaxSelectPicker(options);
                 $('select').trigger('change');
-            $('select').change(function(event) {
+            $('#taller-asiento-contable').on('change', 'select',function(event) {
+                event.preventDefault();
+                /* Act on the event */
                 // Obtengo la fila en la que se modificó el select.
                 var fila = $(this).data('fila');
                 // Obtengo el nombre del puc, este se encuentra en el atributo data-subtext de la opción seleccionada por el usuario.
                 var nombre = $(this).find('option:selected').data('subtext');
                 // Cambio el nombre de la columna CUENTAS en la fila en que se modificó el select.
-                $('#fila_'+fila).find('td.columna_cuentas').text(nombre);
+                $(this).parents('tr').find('td.columna_cuentas').text(nombre);
+                console.log($(this).parents('tr'));
+
             });
-            $(".columna_debito[contenteditable=true]").blur(function() {
+            $('#taller-asiento-contable').on('blur', '.columna_debito[contenteditable=true]',function(event) {
                 var valorTdActual = $(this).text();
                 valorTdActual = parseInt(numeral(valorTdActual).format('0'));
                 if(isNaN(valorTdActual)){
@@ -263,7 +268,7 @@
                 $(this).text(valorTdActual);
                 $("#total_debito").text(numeral(total_debito).format('$0,0'));
             });
-            $(".columna_credito[contenteditable=true]").blur(function() {
+            $('#taller-asiento-contable').on('blur', '.columna_credito[contenteditable=true]',function(event) {
                 var valorTdActual = $(this).text();
                 valorTdActual = parseInt(numeral(valorTdActual).format('0'));
                 if(isNaN(valorTdActual)){
@@ -285,6 +290,29 @@
                 valorTdActual = numeral(valorTdActual).format('$0,0');
                 $(this).text(valorTdActual);
                 $("#total_credito").text(numeral(total_credito).format('$0,0'));
+            });
+            $("#adicionar-fila-asiento-contable").click(function(event) {
+                event.preventDefault();
+                var sumasIguales = $("#taller-asiento-contable > tbody").children().last();
+                sumasIguales.remove();
+                var tr = '<tr><td class="text-center" width="20%">'+
+                                '<form class="form-inline">'+
+                                    '<select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true" data-fila=""></select>'+
+                                '</form>'+
+                                '</td>'+
+                                '<td class="text-center columna_cuentas" width="20%"></td>'+
+                                '<td class="text-center columna_debito" contenteditable="true" width="30%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td> '+
+                                '<td class="text-center columna_credito" contenteditable="true" width="30%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>'+
+                            '</tr>';
+                $('#taller-asiento-contable > tbody:last-child').append(tr);
+                $('#taller-asiento-contable > tbody:last-child').append(sumasIguales);
+                $('.selectpicker').selectpicker('refresh');
+                $('.selectpicker').selectpicker().filter('.with-ajax').ajaxSelectPicker(options);
+
+            });
+            $('body').tooltip({
+                'selector': '[data-toggle="tooltip"]',
+                'container' : 'body'
             });
         });
     </script>
