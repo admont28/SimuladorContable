@@ -80,7 +80,7 @@
                                             <tr>
                                                 <td class="text-center" width="20%">
                                                     <form class="form-inline">
-                                                        <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true" data-fila="{{$i}}">
+                                                        <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true">
                                                         </select>
                                                     </form>
                                                 </td>
@@ -100,9 +100,93 @@
                             <div class="row">
                                 <div class="col-lg-12 text-center">
                                     <a href="#" class="btn btn-default" id="adicionar-fila-asiento-contable">Adicionar fila</a>
-                                    <a href="{{ route('estudiante.curso.ver.talleres.ver.preguntas',['curs_id'=>$curso->curs_id,'tall_id'=>$tallerPractico->tall_id]) }}" class="btn btn-primary solucionar-taller">Guardar solución</a>
+                                    <a href="#" class="btn btn-primary" id="solucionar-taller-asiento-contable">Guardar taller</a>
                                 </div>
                             </div>
+                            @push('scripts')
+                                <script type="text/javascript">
+                                    $(document).ready(function() {
+                                        $('#solucionar-taller-asiento-contable').click(function(event) {
+                                            event.preventDefault();
+                                            $("#solucionar-taller-asiento-contable").attr('disabled', 'disabled').text('ENVIANDO DATOS...');
+                                            if(xhr && xhr.readyState != 4) {
+                                                xhr.abort();
+                                                console.log("Abortando");
+                                                swal({
+                                                    title: '¡Error!',
+                                                    text: 'Tus datos se están enviando al servidor, por favor espera a que sean almacenados.',
+                                                    type: 'error'
+                                                });
+                                            }
+                                            var filas = [];
+                                            $('#taller-asiento-contable > tbody > tr ').each(function(index, el) {
+                                                var codigo = $(this).find('.columna_codigo option:selected').val();
+                                                var cuentas = $(this).find('.columna_cuentas').text();
+                                                var debito = parseInt(numeral($(this).find('.columna_debito').text()).format('0'));
+                                                var credito = parseInt(numeral($(this).find('.columna_credito').text()).format('0'));
+                                                var fila = {
+                                                    "codigo" : codigo,
+                                                    "cuentas" : cuentas,
+                                                    "debito" : debito,
+                                                    "credito" : credito
+                                                };
+                                                filas.push(fila);
+                                            });
+                                            var sumasIguales = {
+                                                "total_debito" : parseInt(numeral($('#total_debito').text()).format('0')),
+                                                "total_credito" : parseInt(numeral($('#total_credito').text()).format('0'))
+                                            }
+                                            var datos = new Object();
+                                            datos.filas = filas;
+                                            datos.sumasIguales = sumasIguales;
+                                            console.log(datos);
+                                            console.log(JSON.stringify(filas));
+
+                                            setTimeout(function(){
+
+                                            }, 2000);
+                                            var xhr =
+                                                $.ajax({
+                                                    url: '{{ route('estudiante.curso.taller.solucionar.asientocontable.post', ['curs_id' => $curso->curs_id, 'tall_id' => $tallerPractico->tall_id]) }}',
+                                                    type: 'POST',
+                                                     headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                                                    dataType: 'JSON',
+                                                    data: datos,
+                                                    beforeSend: function () {
+                                                    },
+                                                    success: function(data) {
+                                                        if(data.state == "error"){
+                                                            swal({
+                                                                title: '¡Error!',
+                                                                text: data.message,
+                                                                type: 'error'
+                                                            });
+                                                        }else if(data.state == "success"){
+                                                            swal({
+                                                                title: '¡Éxito!',
+                                                                text: data.message,
+                                                                type: 'success'
+                                                            });
+                                                        }
+                                                        console.log(data);
+                                                    }
+                                                })
+                                                .done(function() {
+                                                    console.log("success");
+                                                })
+                                                .fail(function() {
+                                                    console.log("error");
+                                                })
+                                                .always(function() {
+                                                    console.log("complete");
+                                                    $("#solucionar-taller-asiento-contable").attr('disabled', false).text('GUARDAR TALLER');
+                                                });
+
+
+                                        });
+                                    });
+                                </script>
+                            @endpush
                         @endif
                     </div>
                 @endforeach
@@ -178,28 +262,7 @@
                         $(this).html('<div class="alert alert-danger" role="alert">El taller ha expirado, no es posible guardar las respuestas.</div>');
                     });
             });
-            $('.solucionar-taller').click(function(event) {
-                event.preventDefault();
-                //accedemos a la ruta del boton que se dio click
-                var hrefBoton = $(this).attr('href');
-                swal({
-                    title: '¿Está seguro de esta acción?',
-                    text: 'Si continúa a solucionar el taller se le contará como el primer intento de solución, usted posee 2 intentos como máximo. Por favor confirme.',
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Si, continuar',
-                    cancelButtonText: 'No, cancelar'
-                }).then(function (option) {
-                    if(option === true){
-                        window.location.href = hrefBoton;
-                        return true;
-                    }else{
-                        return false;
-                    }
-                })
-            });
+
             var options = {
                     "ajax": {
                         "type": "GET",

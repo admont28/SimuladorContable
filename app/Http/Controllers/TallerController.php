@@ -651,7 +651,7 @@ class TallerController extends Controller
         }
     }
 
-    public function calificarRespuestas($preguntas = array())
+    private function calificarRespuestas($preguntas = array())
     {
         foreach ($preguntas as $pregunta) {
             if ($pregunta->preg_tipo == "unica-multiple"){
@@ -709,4 +709,65 @@ class TallerController extends Controller
         }
     }
 
+    public function solucionarTallerAsientoContablePost(Request $request, $curs_id, $tall_id)
+    {
+        sleep(10);
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            $respuesta = array('state' => 'error', 'message' => 'El curso con ID: '.$curs_id.' no existe. Verifique por favor.');
+            echo json_encode($respuesta);
+            die;
+        }
+        $taller = Taller::find($tall_id);
+        // Verificamos que el taller exista en bd, si no es así informamos al usuario y redireccionamos.
+        if (!isset($taller) || $taller->curs_id != $curso->curs_id) {
+            $respuesta = array('state' => 'error', 'message' => 'El taller con ID: '.$tall_id.' no pertenece al curso seleccionado. Verifique por favor.');
+            echo json_encode($respuesta);
+            die;
+        }
+        //verificamos que el taller sea un taller de tipo diagnóstico o teórico
+        if ( $taller->tall_tipo != "practico" ) {
+            $respuesta = array('state' => 'error', 'message' => 'El taller con ID: '.$tall_id.' no es un taller de tipo práctico. Verifique por favor.');
+            echo json_encode($respuesta);
+            die;
+        }
+        $fechaActual = new DateTime();
+        $fechaTaller = new DateTime($taller->tall_tiempo);
+        if($fechaActual > $fechaTaller){
+            $respuesta = array('state' => 'error', 'message' => 'El taller ha expirado, no se han podido guardar las respuestas.');
+            echo json_encode($respuesta);
+            die;
+        }
+        $tallerAsientoContable = $taller->tallerAsientoContable;
+        $tallerAsientoContableRespuestas = json_decode($request->all());
+        $i = 1;
+        DB::beginTransaction();
+        try {
+            foreach ($tallerAsientoContableRespuestas->filas as $fila) {
+                if(isset($fila->codigo, $fila->debito, $fila->credito)){
+                    DB::table('RespuestaTallerAsientoContable')->insert([
+                        'taac' => $tallerAsientoContable->taac_id,
+                        'usua_id' => Auth::user()->usua_id,
+                        'puc_id' => $fila->codigo,
+                        'rtac_valordebito' => $fila->debito,
+                        'rtac_valorcredito' => $fila->credito,
+                        'rtac_fila' => $i
+                    ]);
+                    $i++;
+                }
+            }
+            DB::commit();
+            $success = true;
+        } catch (\Exception $e) {
+            $success = false;
+            DB::rollback();
+        }
+        if (!$success) {
+            $respuesta = array('state' => 'error', 'message' => 'Ha ocurrido un error inesperado, por favor inténtelo de nuevo.');
+        }else{
+            $respuesta = array('state' => 'success', 'message' => 'Se ha guardado su información con éxito.');
+        }
+        echo json_encode($respuesta);
+    }
 }
