@@ -162,18 +162,78 @@ class CalificacionController extends Controller
      */
     public function mostrarUsuariosTaller($curs_id, $tall_id)
     {
+        $curso = Curso::find($curs_id);
         $taller = Taller::find($tall_id);
         $usuarios = $taller->usuariosPorTaller();
         //$preguntas = $taller->preguntas;
         //$calificaciones=Calificacion::find($tall_id);
         return Datatables::of($usuarios)
-                        ->addColumn('opciones', function ($usuario) {
+                        ->addColumn('opciones', function ($usuario) use($taller,$curso) {
                             return
-                            '<a href="#" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>Ver</a>';
+                            '<a href="'.route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id' =>$curso->curs_id, 'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->usua_id ]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>Ver</a>';
                         })
                         ->make(true);
 
     }
+
+    /**
+     * metodo para cargar la vista
+     */
+    public function mostrarCalificacionesUsuario($curs_id, $tall_id,$usua_id)
+    {
+        $curso = Curso::find($curs_id);
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso');
+        }
+        $taller = Taller::find($tall_id);
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
+        if (!isset($taller)) {
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso.ver',['curs_id' => $taller->tall_id]);
+        }
+        $usuario = User::find($usua_id);
+        if (!isset($usuario)) {
+            flash('El usuario con ID: '.$usua_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso.taller.pregunta.respuesta.calificacion',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id]);
+        }
+        return view('profesor.curso.taller.pregunta.calificacion.ver_calificacion_pregunta')
+            ->with('curso', $curso)
+            ->with('taller', $taller)
+            ->with('usuario', $usuario);
+    }
+
+    /**
+     * metodo para traer las preguntas que han respondido un usuario.
+     */
+    public function mostrarCalificacionesUsuarioAjax($curs_id, $tall_id,$usua_id)
+    {
+        $taller = Taller::find($tall_id);
+        $usuario =User::find($usua_id);
+        $respuestas= $usuario->respuestasTallerPorEstudiante($tall_id);
+        //$preguntas = $taller->preguntas;
+        //$calificaciones=Calificacion::find($tall_id);
+        return Datatables::of($respuestas)
+                        ->addColumn('opciones', function ($respuestas) use ($taller, $usuario) {
+                            $botonCalificar = "";
+                            if(!isset($respuestas->cali_calificacion)){
+                                $botonCalificar = '<a href="'.route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante.calificar.pregunta').'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>Calificar</a>';
+                            }
+                            return
+                            '<a href="'.route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante.calificar.pregunta').'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>Ver</a>'
+                            .$botonCalificar;
+                        })
+                        ->editColumn('cali_calificacion', '@if(isset($cali_calificacion)) {{ $cali_calificacion }} @else <span class="label label-danger">SIN CALIFICACIÓN</span> @endif')
+                        ->editColumn('preg_tipo', '@if($preg_tipo == "unica-multiple") <span class="label label-info">{{ $preg_tipo }}</span> @elseif($preg_tipo == "abierta") <span class="label label-warning">{{ $preg_tipo }}</span> @else <span class="label label-default">{{ $preg_tipo }}</span> @endif')
+                        ->editColumn('cali_ponderado', '@if(isset($cali_ponderado)) {{ $cali_ponderado }} @else <span class="label label-danger">SIN PONDERADO</span> @endif')
+                        ->make(true);
+
+    }
+
+
+
+
 
 
 

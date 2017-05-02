@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
+use DB;
 
 class Taller extends Model
 {
@@ -123,6 +123,8 @@ class Taller extends Model
     {
         //$sql = 'SELECT DISTINCT u.usua_nombre FROM Respuesta r, Pregunta p, Taller t, Usuario u WHERE u.usua_id = r.usua_id and r.preg_id = p.preg_id and t.tall_id=';
         return DB::table('Usuario')
+            ->select('Usuario.usua_id','usua_nombre', 'usua_correo')
+            ->distinct()
             ->join('Respuesta','Usuario.usua_id','=','Respuesta.usua_id')
             ->join('Pregunta','Respuesta.preg_id','=','Pregunta.preg_id')
             ->join('Taller','Pregunta.tall_id','=','Taller.tall_id')
@@ -130,11 +132,5 @@ class Taller extends Model
             ->get();
     }
 
-    /**
-     * método para consultar las respuestas que hizo el estudiante en un determinado taller
-     */
-    public function respuestasPorEstudiante()
-    {
-        
-    }
+
 }
