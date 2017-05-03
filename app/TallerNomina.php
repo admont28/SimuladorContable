@@ -70,4 +70,16 @@ class TallerNomina extends Model
     {
         return $this->belongsTo('App\Taller', 'tall_id');
     }
+
+    public function cantidadDeducciones()
+    {
+        $cantidad = 0;
+        if(isset($this->tano_deduccionuno) && $this->tano_deduccionuno != "")
+            $cantidad++;
+        if(isset($this->tano_deducciondos) && $this->tano_deducciondos != "")
+            $cantidad++;
+        if(isset($this->tano_deducciontres) && $this->tano_deducciontres != "")
+            $cantidad++;
+        return $cantidad;
+    }
 }

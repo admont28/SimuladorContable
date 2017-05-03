@@ -124,6 +124,7 @@ code {
 }
 /* ---- Cierre Boostrap Callout - Para mostrar mensajes de alerta de otra forma. */
 
+/* ---- Estilos propios - ADMA */
 .fs-18{
     font-size: 18px;
 }
@@ -137,3 +138,9 @@ code {
     border: 1px solid #ddd;
     padding : 10px 15px;
 }
+
+.vcenter {
+    vertical-align: middle !important;
+}
+
+/* ---- Cierre Estilos propios - ADMA */

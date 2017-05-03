@@ -28,7 +28,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Tipo de taller</div>
                                     <div class="panel-body">
-                                        <div class="fs-18"><span class="label label-default">{{ $tallerPractico->tall_tipo }}</span>@if(isset($tallerPractico->tallerAsientoContable)) <span class="label label-warning">asientos contables</span> @endif</div>
+                                        <div class="fs-18"><span class="label label-default">{{ $tallerPractico->tall_tipo }}</span>@if(isset($tallerPractico->tallerAsientoContable)) <span class="label label-warning">asientos contables</span> @elseif(isset($tallerPractico->tallerNomina)) <span class="label label-info">nómina</span> @endif</div>
                                     </div>
                                 </div>
                             </div>
@@ -80,10 +80,8 @@
                                         @if($tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuario()->isEmpty())
                                             <tr>
                                                 <td class="text-center" width="20%">
-                                                    <form class="form-inline">
-                                                        <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true">
-                                                        </select>
-                                                    </form>
+                                                    <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true">
+                                                    </select>
                                                 </td>
                                                 <td class="text-center columna_cuentas" width="20%"></td>
                                                 <td class="text-center columna_debito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>
@@ -216,7 +214,158 @@
                                     });
                                 </script>
                             @endpush
+                        @elseif(isset($tallerPractico->tallerNomina))
+                            <div class="row">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered table-hover" id="taller-nomina">
+                                        <thead>
+                                            <tr>
+                                                <td rowspan="2" class="text-center vcenter"><strong>NOMBRES Y APELLIDOS</strong></td>
+                                                <td rowspan="2" class="text-center vcenter"><strong>DOCUMENTO</strong></td>
+                                                <td rowspan="2" class="text-center vcenter"><strong>DÍAS TRABAJADOS</strong></td>
+                                                <td rowspan="2" class="text-center vcenter"><strong>SALARIO</strong></td>
+                                                <td colspan="7" class="text-center vcenter"><strong>DEVENGADOS</strong></td>
+                                                <td colspan="{{ $tallerPractico->tallerNomina->cantidadDeducciones() + 3 }}" class="text-center vcenter"><strong>DEDUCCIONES</strong></td>
+                                                <td rowspan="2" class="text-center vcenter"><strong>NETO A PAGAR</strong></td>
+                                                <td colspan="2" class="text-center vcenter" data-toggle="tooltip" title="Salario básico por la cantidad de horas extra por el porcentaje 1.25  dividido 240"><strong>HORA EXTRA DIURNA</strong></td>
+                                                <td colspan="2" class="text-center vcenter" data-toggle="tooltip" title="Salario básico por la cantidad de horas extra por el porcentaje 1.75  dividido 240"><strong>HORA EXTRA NOCTURNA</strong></td>
+                                                <td colspan="2" class="text-center vcenter" data-toggle="tooltip" title="Salario básico por la cantidad de horas extra por el porcentaje 0.35 dividido 240"><strong>RECARGO NOCTURNO</strong></td>
+                                                <td colspan="2" class="text-center vcenter" data-toggle="tooltip" title="Salario básico por la cantidad de horas extra por el porcentaje 1.75 dividido 240"><strong>HORA FESTIVA DIURNA</strong></td>
+                                                <td colspan="2" class="text-center vcenter" data-toggle="tooltip" title="Salario básico por la cantidad de horas extra por el porcentaje 2.1 dividido 240"><strong>HORA FESTIVA NOCTURNA</strong></td>
+                                                <td colspan="2" class="text-center vcenter" data-toggle="tooltip" title="Salario básico por la cantidad de horas extra por el porcentaje 2.0 dividido 240"><strong>HORA EXTRA FESTIVA DIURNA</strong></td>
+                                                <td colspan="2" class="text-center vcenter" data-toggle="tooltip" title="Salario básico por la cantidad de horas extra por el porcentaje 2.5 dividido 240"><strong>HORA EXTRA FESTIVA NOCTURNA</strong></td>
+                                                <td rowspan="2" class="text-center vcenter" data-toggle="tooltip" title="Suma de todos los valores de las horas extras"><strong>VALOR TOTAL DE HORAS EXTRAS</strong></td>
+                                                <td rowspan="2" class="text-center vcenter"><strong>OPCIÓN</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center vcenter"><strong>SALARIO BÁSICO</strong></td>
+                                                <td class="text-center vcenter"><strong>HORAS EXTRAS Y RECARGOS</strong></td>
+                                                <td class="text-center vcenter"><strong>COMISIONES</strong></td>
+                                                <td class="text-center vcenter"><strong>BONIFICACIONES</strong></td>
+                                                <td class="text-center vcenter"><strong>TOTAL DEVENGADO</strong></td>
+                                                <td class="text-center vcenter"><strong>AUX DE TRANSPORTE</strong></td>
+                                                <td class="text-center vcenter"><strong>TOTAL DEVENGADO CON AUXILIO DE TRANSPORTE</strong></td>
+                                                <td class="text-center vcenter"><strong>SALUD</strong></td>
+                                                <td class="text-center vcenter"><strong>PENSIÓN</strong></td>
+                                                @if (isset($tallerPractico->tallerNomina->tano_deduccionuno) && $tallerPractico->tallerNomina->tano_deduccionuno != "")
+                                                    <td class="text-center vcenter"><strong>{{ $tallerPractico->tallerNomina->tano_deduccionuno }}</strong></td>
+                                                @endif
+                                                @if (isset($tallerPractico->tallerNomina->tano_deducciondos) && $tallerPractico->tallerNomina->tano_deducciondos != "")
+                                                    <td class="text-center vcenter"><strong>{{ $tallerPractico->tallerNomina->tano_deducciondos }}</strong></td>
+                                                @endif
+                                                @if (isset($tallerPractico->tallerNomina->tano_deducciontres) && $tallerPractico->tallerNomina->tano_deducciontres != "")
+                                                    <td class="text-center vcenter"><strong>{{ $tallerPractico->tallerNomina->tano_deducciontres }}</strong></td>
+                                                @endif
+                                                <td class="text-center vcenter"><strong>TOTAL DEDUCCIONES</strong></td>
+                                                <td class="text-center vcenter"><strong>CANTIDAD</strong></td>
+                                                <td class="text-center vcenter"><strong>VALOR</strong></td>
+                                                <td class="text-center vcenter"><strong>CANTIDAD</strong></td>
+                                                <td class="text-center vcenter"><strong>VALOR</strong></td>
+                                                <td class="text-center vcenter"><strong>CANTIDAD</strong></td>
+                                                <td class="text-center vcenter"><strong>VALOR</strong></td>
+                                                <td class="text-center vcenter"><strong>CANTIDAD</strong></td>
+                                                <td class="text-center vcenter"><strong>VALOR</strong></td>
+                                                <td class="text-center vcenter"><strong>CANTIDAD</strong></td>
+                                                <td class="text-center vcenter"><strong>VALOR</strong></td>
+                                                <td class="text-center vcenter"><strong>CANTIDAD</strong></td>
+                                                <td class="text-center vcenter"><strong>VALOR</strong></td>
+                                                <td class="text-center vcenter"><strong>CANTIDAD</strong></td>
+                                                <td class="text-center vcenter"><strong>VALOR</strong></td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @for ($i = 0; $i < 2; $i++)
+                                                <tr>
+                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter"></td>
+                                                    <td class="text-center vcenter"></td>
+                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter"></td>
+                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter"></td>
+                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    @if (isset($tallerPractico->tallerNomina->tano_deduccionuno) && $tallerPractico->tallerNomina->tano_deduccionuno != "")
+                                                        <td class="text-center vcenter vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    @endif
+                                                    @if (isset($tallerPractico->tallerNomina->tano_deducciondos) && $tallerPractico->tallerNomina->tano_deducciondos != "")
+                                                        <td class="text-center vcenter vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    @endif
+                                                    @if (isset($tallerPractico->tallerNomina->tano_deducciontres) && $tallerPractico->tallerNomina->tano_deducciontres != "")
+                                                        <td class="text-center vcenter vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."</td>
+                                                    @endif
+                                                    <td class="text-center vcenter"></td>
+                                                    <td class="text-center vcenter"></td>
+                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter"></td>
+                                                    <td class="text-center"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
+                                                </tr>
+                                            @endfor
+                                            <tr>
+                                                <td colspan="2" class="text-center">TOTAL</td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                                <td class="text-center"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-lg-12 text-center">
+                                    <button class="btn btn-default" id="adicionar-fila-nomina">Adicionar fila</button>
+                                    <button class="btn btn-primary" id="solucionar-taller-nomina">Guardar taller</button>
+                                </div>
+                            </div>
                         @endif
+
                     </div>
                 @endforeach
                 <!-- Tab panes -->
@@ -403,7 +552,17 @@
                 $('#taller-asiento-contable > tbody:last-child').append(filaSumasIguales);
                 $('.selectpicker').selectpicker('refresh');
                 $('.selectpicker').selectpicker().filter('.with-ajax').ajaxSelectPicker(options);
-
+            });
+            $("#adicionar-fila-nomina").click(function(event) {
+                event.preventDefault();
+                var filaTotal = $("#taller-nomina > tbody").children().last();
+                var primerFilaClonada = $("#taller-nomina > tbody").children().first().clone(true);
+                var botonEliminarClonado =  $("#taller-nomina > tbody > tr > td > button.eliminar-fila").first().clone(true);
+                primerFilaClonada.find('td').text('');
+                primerFilaClonada.find('td').last().append(botonEliminarClonado);
+                filaTotal.remove();
+                $('#taller-nomina > tbody:last-child').append(primerFilaClonada);
+                $('#taller-nomina > tbody:last-child').append(filaTotal);
             });
             $('body').tooltip({
                 'selector': '[data-toggle="tooltip"]',
