@@ -15,7 +15,6 @@ class CreateTallerAsientoContableTable extends Migration
     {
         Schema::create('TallerAsientoContable', function (Blueprint $table) {
             $table->increments('taac_id');
-            $table->integer('taac_cantidadfilas');
             $table->integer('tall_id')->unsigned();
             $table->foreign('tall_id')->references('tall_id')->on('Taller');
             $table->unique('tall_id');

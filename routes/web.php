@@ -146,8 +146,7 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/curso/{curs_id}/taller/{tall_id}/crear-taller-asientos-contables', 'TallerController@crearTallerAsientosContables')->name('profesor.curso.taller.crear.tallerasientocontable');
-    Route::post('/curso/{curs_id}/taller/{tall_id}/crear-taller-asientos-contables-post', 'TallerController@crearTallerAsientosContablesPost')->name('profesor.curso.taller.crear.tallerasientocontable.post');
+    Route::post('/curso/{curs_id}/taller/{tall_id}/crear-taller-asientos-contables', 'TallerController@crearTallerAsientosContablesPost')->name('profesor.curso.taller.crear.tallerasientocontable.post');
 
     /*
     |--------------------------------------------------------------------------

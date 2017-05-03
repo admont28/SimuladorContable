@@ -44,7 +44,7 @@ class TallerAsientoContable extends Model
      * @var array
      */
     protected $fillable = [
-        'taac_id', 'taac_cantidadfilas','tall_id'
+        'taac_id','tall_id'
     ];
 
     /**

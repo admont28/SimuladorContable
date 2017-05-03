@@ -118,6 +118,7 @@ class TallerController extends Controller
         }
         $tallerAsientoContable = $taller->tallerAsientoContable;
         return View('profesor.curso.taller.ver_taller')
+                    ->with('curso', $curso)
                     ->with('taller', $taller)
                     ->with('tallerAsientoContable', $tallerAsientoContable);
     }
@@ -246,32 +247,6 @@ class TallerController extends Controller
         return redirect()->route('profesor.curso.ver', ['id' => $curs_id]);
     }
 
-    public function crearTallerAsientosContables($curs_id, $tall_id)
-    {
-        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
-        $curso = Curso::find($curs_id);
-        if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
-            return redirect()->route('profesor.curso');
-        }
-        // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
-        $taller = Taller::find($tall_id);
-        if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
-            return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
-        }
-        // Verificamos que el taller no tenga asiganado ya un sub-tipo.
-        $tallerAsientoContable = $taller->tallerAsientoContable;
-        $tallerNomina = $taller->tallerNomina;
-        if(isset($tallerAsientoContable) || isset($tallerNomina)){
-            flash('El taller con ID: '.$tall_id.' ya tiene relacionado un sub-tipo. Verifique por favor.', 'danger');
-            return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
-        }
-        return View('profesor.curso.taller.asientocontable.crear')
-                ->with('curso', $curso)
-                ->with('taller', $taller);
-    }
-
     public function crearTallerAsientosContablesPost(Request $request, $curs_id, $tall_id)
     {
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
@@ -293,14 +268,9 @@ class TallerController extends Controller
             flash('El taller con ID: '.$tall_id.' ya tiene relacionado un sub-tipo. Verifique por favor.', 'danger');
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
         }
-        // Validamos los campos del formulario.
-        Validator::make($request->all(),[
-            'cantidad_filas_tabla' => 'required|integer'
-        ])->validate();
         // Creo el taller de asiento contable en bd y lo relaciono con el taller que sería el padre
         TallerAsientoContable::create([
-            'taac_cantidadfilas' => $request['cantidad_filas_tabla'],
-            'tall_id'            => $taller->tall_id
+            'tall_id' => $taller->tall_id
         ]);
         // Informo al usuario y redireccionamos.
         flash('El taller "'.$taller->tall_nombre.'" ha sido marcado con el sub-tipo: "Taller Asientos Contables" con éxito.', 'success');
