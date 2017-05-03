@@ -92,10 +92,8 @@
                                             </tr>
                                             <tr>
                                                 <td class="text-center" width="20%">
-                                                    <form class="form-inline">
-                                                        <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true">
-                                                        </select>
-                                                    </form>
+                                                    <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true">
+                                                    </select>
                                                 </td>
                                                 <td class="text-center columna_cuentas" width="20%"></td>
                                                 <td class="text-center columna_debito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>
@@ -106,11 +104,9 @@
                                             @foreach ($tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuario() as $rtac)
                                                 <tr>
                                                     <td class="text-center" width="20%">
-                                                        <form class="form-inline">
-                                                            <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true">
-                                                                <option value="{{ $rtac->puc_id }}" data-subtext="{{ $rtac->puc->puc_nombre }}" selected="selected">{{ $rtac->puc->puc_codigo }}</option>
-                                                            </select>
-                                                        </form>
+                                                        <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true">
+                                                            <option value="{{ $rtac->puc_id }}" data-subtext="{{ $rtac->puc->puc_nombre }}" selected="selected">{{ $rtac->puc->puc_codigo }}</option>
+                                                        </select>
                                                     </td>
                                                     <td class="text-center columna_cuentas" width="20%">{{ $rtac->puc->puc_nombre }}</td>
                                                     <td class="text-center columna_debito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">{{ $rtac->rtac_valordebito }}</td>
@@ -295,9 +291,11 @@
                         $(this).html('<div class="alert alert-danger" role="alert">El taller ha expirado, no es posible guardar las respuestas.</div>');
                     });
             });
-            $('#taller-asiento-contable').on('click', '.eliminar-fila', function(event) {
+            $('body').on('click', '.eliminar-fila', function(event) {
                 event.preventDefault();
                 $(this).parents('tr').remove();
+                $('.columna_debito[contenteditable=true]').trigger('blur');
+                $('.columna_credito[contenteditable=true]').trigger('blur');
             });
             var options = {
                     "ajax": {
@@ -392,20 +390,17 @@
             });
             $("#adicionar-fila-asiento-contable").click(function(event) {
                 event.preventDefault();
-                var sumasIguales = $("#taller-asiento-contable > tbody").children().last();
-                sumasIguales.remove();
-                var tr = '<tr><td class="text-center" width="20%">'+
-                                '<form class="form-inline">'+
-                                    '<select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true"></select>'+
-                                '</form>'+
-                                '</td>'+
-                                '<td class="text-center columna_cuentas" width="20%"></td>'+
-                                '<td class="text-center columna_debito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td> '+
-                                '<td class="text-center columna_credito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>'+
-                                '<td class="text-center" width="10%"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>'+
-                            '</tr>';
-                $('#taller-asiento-contable > tbody:last-child').append(tr);
-                $('#taller-asiento-contable > tbody:last-child').append(sumasIguales);
+                var filaSumasIguales = $("#taller-asiento-contable > tbody").children().last();
+                var primerFilaClonada = $("#taller-asiento-contable > tbody").children().first().clone(true);
+                var botonEliminarClonado =  $("#taller-asiento-contable > tbody > tr > td > button.eliminar-fila").first().clone(true);
+                primerFilaClonada.children('td').eq(0).text('');
+                primerFilaClonada.children('td').eq(1).text('');
+                primerFilaClonada.children('td').eq(2).text('$ 0');
+                primerFilaClonada.children('td').eq(3).text('$ 0');
+                primerFilaClonada.children('td').eq(0).append('<select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true"></select>');
+                filaSumasIguales.remove();
+                $('#taller-asiento-contable > tbody:last-child').append(primerFilaClonada);
+                $('#taller-asiento-contable > tbody:last-child').append(filaSumasIguales);
                 $('.selectpicker').selectpicker('refresh');
                 $('.selectpicker').selectpicker().filter('.with-ajax').ajaxSelectPicker(options);
 
