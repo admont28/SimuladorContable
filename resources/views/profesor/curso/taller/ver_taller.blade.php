@@ -126,7 +126,6 @@
                         {{ csrf_field() }}
                         <button type="submit" class="btn btn-info" id="btn-taller-asiento-contable">Taller para asientos contables</button>
                     </form>
-                    <a href="{{ route('profesor.curso.taller.crear.tallerasientocontable', ['curs_id'=>$taller->curs_id,'tall_id' => $taller->tall_id]) }}" class="btn btn-info">Taller para asientos contables</a>
                     <a href="{{ route('profesor.curso.taller.crear.tallernomina', ['curs_id'=>$taller->curs_id,'tall_id' => $taller->tall_id]) }}" class="btn btn-success">Taller de nómina</a>
                     <a href="#" class="btn btn-warning">Taller de kardex</a>
                     <a href="#" class="btn btn-default">Taller de estados financieros NIF</a>
