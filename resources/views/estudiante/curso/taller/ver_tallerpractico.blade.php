@@ -28,7 +28,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Tipo de taller</div>
                                     <div class="panel-body">
-                                        <div class="fs-18"><span class="label label-default">{{ $tallerPractico->tall_tipo }}</span></div>
+                                        <div class="fs-18"><span class="label label-default">{{ $tallerPractico->tall_tipo }}</span>@if(isset($tallerPractico->tallerAsientoContable)) <span class="label label-warning">asientos contables</span> @endif</div>
                                     </div>
                                 </div>
                             </div>
@@ -49,7 +49,7 @@
                                 </div>
                             </div>
                         </div>
-                        @if ($tallerPractico->tarifas->isNotEmpty())
+                        @if (isset($tallerPractico->tarifas) && $tallerPractico->tarifas->isNotEmpty())
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="panel panel-default">
@@ -63,46 +63,164 @@
                         @endif
                         @if (isset($tallerPractico->tallerAsientoContable))
                             <div class="row">
-                                <table class="table table-striped table-bordered table-hover">
+                                <table class="table table-striped table-bordered table-hover" id="taller-asiento-contable">
                                     <thead>
                                         <tr>
-                                            <td colspan="4" class="text-center"><strong>CONTABILIZACIÓN DE LA PROVISIÓN</strong></td>
+                                            <td colspan="5" class="text-center"><strong>CONTABILIZACIÓN DE LA PROVISIÓN</strong></td>
                                         </tr>
                                         <tr>
                                             <td class="text-center" width="20%"><strong>CÓDIGO</strong></td>
                                             <td class="text-center" width="20%"><strong>CUENTAS</strong></td>
-                                            <td class="text-center" width="30%"><strong>DÉBITO</strong></td>
-                                            <td class="text-center" width="30%"><strong>CRÉDITO</strong></td>
+                                            <td class="text-center" width="25%"><strong>DÉBITO</strong></td>
+                                            <td class="text-center" width="25%"><strong>CRÉDITO</strong></td>
+                                            <td class="text-center" width="10%"><strong>OPCIÓN</strong></td>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @for ($i = 1; $i <= $tallerPractico->tallerAsientoContable->taac_cantidadfilas; $i++)
-                                            <tr id="fila_{{ $i }}">
+                                        @if($tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuario()->isEmpty())
+                                            <tr>
                                                 <td class="text-center" width="20%">
                                                     <form class="form-inline">
-                                                        <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true" data-fila="{{$i}}">
+                                                        <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true">
                                                         </select>
                                                     </form>
                                                 </td>
                                                 <td class="text-center columna_cuentas" width="20%"></td>
-                                                <td class="text-center columna_debito" contenteditable="true" width="30%">$ 0</td>
-                                                <td class="text-center columna_credito" contenteditable="true" width="30%">$ 0</td>
+                                                <td class="text-center columna_debito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>
+                                                <td class="text-center columna_credito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>
+                                                <td class="text-center" width="10%"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
                                             </tr>
-                                        @endfor
                                             <tr>
-                                                <td colspan="2" class="text-center"><strong>SUMAS IGUALES</strong></td>
-                                                <td class="text-center" id="total_debito">$ 0</td>
-                                                <td class="text-center" id="total_credito">$ 0</td>
+                                                <td class="text-center" width="20%">
+                                                    <form class="form-inline">
+                                                        <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true">
+                                                        </select>
+                                                    </form>
+                                                </td>
+                                                <td class="text-center columna_cuentas" width="20%"></td>
+                                                <td class="text-center columna_debito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>
+                                                <td class="text-center columna_credito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>
+                                                <td class="text-center" width="10%"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
                                             </tr>
+                                        @else
+                                            @foreach ($tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuario() as $rtac)
+                                                <tr>
+                                                    <td class="text-center" width="20%">
+                                                        <form class="form-inline">
+                                                            <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true">
+                                                                <option value="{{ $rtac->puc_id }}" data-subtext="{{ $rtac->puc->puc_nombre }}" selected="selected">{{ $rtac->puc->puc_codigo }}</option>
+                                                            </select>
+                                                        </form>
+                                                    </td>
+                                                    <td class="text-center columna_cuentas" width="20%">{{ $rtac->puc->puc_nombre }}</td>
+                                                    <td class="text-center columna_debito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">{{ $rtac->rtac_valordebito }}</td>
+                                                    <td class="text-center columna_credito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">{{ $rtac->rtac_valorcredito }}</td>
+                                                    <td class="text-center" width="10%"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                        <tr id="sumas-iguales">
+                                            <td colspan="2" class="text-center"><strong>SUMAS IGUALES</strong></td>
+                                            <td class="text-center" id="total_debito">$ 0</td>
+                                            <td class="text-center" id="total_credito">$ 0</td>
+                                            <td class="text-center"></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
-                        @endif
-                        <div class="row">
-                            <div class="col-lg-12 text-center">
-                                <a href="{{ route('estudiante.curso.ver.talleres.ver.preguntas',['curs_id'=>$curso->curs_id,'tall_id'=>$tallerPractico->tall_id]) }}" class="btn btn-primary solucionar-taller">Solucionar Taller</a>
+                            <div class="row">
+                                <div class="col-lg-12 text-center">
+                                    <button class="btn btn-default" id="adicionar-fila-asiento-contable">Adicionar fila</button>
+                                    <button class="btn btn-primary" id="solucionar-taller-asiento-contable">Guardar taller</button>
+                                </div>
                             </div>
-                        </div>
+                            @push('scripts')
+                                <script type="text/javascript">
+                                    $(document).ready(function() {
+                                        $('#solucionar-taller-asiento-contable').click(function(event) {
+                                            event.preventDefault();
+                                            $("#solucionar-taller-asiento-contable").attr('disabled', true).text('ENVIANDO DATOS...');
+                                            $("#adicionar-fila-asiento-contable").attr('disabled', true);
+                                            if(xhr && xhr.readyState != 4) {
+                                                xhr.abort();
+                                                console.log("Abortando");
+                                                swal({
+                                                    title: '¡Error!',
+                                                    text: 'Tus datos se están enviando al servidor, por favor espera a que sean almacenados.',
+                                                    type: 'error'
+                                                });
+                                            }
+                                            var filas = [];
+                                            $('#taller-asiento-contable > tbody > tr ').each(function(index, el) {
+                                                var codigo = $(this).find('.columna_codigo option:selected').val();
+                                                var cuentas = $(this).find('.columna_cuentas').text();
+                                                var debito = parseInt(numeral($(this).find('.columna_debito').text()).format('0'));
+                                                var credito = parseInt(numeral($(this).find('.columna_credito').text()).format('0'));
+                                                console.log(codigo);
+                                                if((codigo === undefined || codigo == "" ) && $(this).attr('id') != "sumas-iguales"){
+                                                    console.log($(this));
+                                                    $(this).remove();
+                                                }else{
+                                                    var fila = {
+                                                        "codigo" : codigo,
+                                                        "cuentas" : cuentas,
+                                                        "debito" : debito,
+                                                        "credito" : credito
+                                                    };
+                                                    filas.push(fila);
+                                                }
+                                            });
+                                            var sumasIguales = {
+                                                "total_debito" : parseInt(numeral($('#total_debito').text()).format('0')),
+                                                "total_credito" : parseInt(numeral($('#total_credito').text()).format('0'))
+                                            }
+                                            var datos = new Object();
+                                            datos.filas = filas;
+                                            datos.sumasIguales = sumasIguales;
+                                            console.log(datos);
+                                            console.log(JSON.stringify(filas));
+                                            var xhr =
+                                                $.ajax({
+                                                    url: '{{ route('estudiante.curso.taller.solucionar.asientocontable.post', ['curs_id' => $curso->curs_id, 'tall_id' => $tallerPractico->tall_id]) }}',
+                                                    type: 'POST',
+                                                     headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                                                    dataType: 'JSON',
+                                                    data: datos,
+                                                    beforeSend: function () {
+                                                    },
+                                                    success: function(data) {
+                                                        if(data.state == "error"){
+                                                            swal({
+                                                                title: '¡Error!',
+                                                                text: data.message,
+                                                                type: 'error'
+                                                            });
+                                                        }else if(data.state == "success"){
+                                                            swal({
+                                                                title: '¡Éxito!',
+                                                                text: data.message,
+                                                                type: 'success'
+                                                            });
+                                                        }
+                                                        console.log(data);
+                                                    }
+                                                })
+                                                .done(function() {
+                                                    console.log("success");
+                                                })
+                                                .fail(function() {
+                                                    console.log("error");
+                                                })
+                                                .always(function() {
+                                                    console.log("complete");
+                                                    $("#solucionar-taller-asiento-contable").attr('disabled', false).text('GUARDAR TALLER');
+                                                    $("#adicionar-fila-asiento-contable").attr('disabled', false);
+                                                });
+                                        });
+                                    });
+                                </script>
+                            @endpush
+                        @endif
                     </div>
                 @endforeach
                 <!-- Tab panes -->
@@ -177,27 +295,9 @@
                         $(this).html('<div class="alert alert-danger" role="alert">El taller ha expirado, no es posible guardar las respuestas.</div>');
                     });
             });
-            $('.solucionar-taller').click(function(event) {
+            $('#taller-asiento-contable').on('click', '.eliminar-fila', function(event) {
                 event.preventDefault();
-                //accedemos a la ruta del boton que se dio click
-                var hrefBoton = $(this).attr('href');
-                swal({
-                    title: '¿Está seguro de esta acción?',
-                    text: 'Si continúa a solucionar el taller se le contará como el primer intento de solución, usted posee 2 intentos como máximo. Por favor confirme.',
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Si, continuar',
-                    cancelButtonText: 'No, cancelar'
-                }).then(function (option) {
-                    if(option === true){
-                        window.location.href = hrefBoton;
-                        return true;
-                    }else{
-                        return false;
-                    }
-                })
+                $(this).parents('tr').remove();
             });
             var options = {
                     "ajax": {
@@ -210,7 +310,7 @@
                     "locale": {
                         "emptyTitle": 'Buscar un puc por su código'
                     },
-                    "log": 4,
+                    "log": 0,
                     preprocessData: function(data){
                         var i, l = data.length, array = [];
                         if (l) {
@@ -232,15 +332,19 @@
                 };
                 $('.selectpicker').selectpicker().filter('.with-ajax').ajaxSelectPicker(options);
                 $('select').trigger('change');
-            $('select').change(function(event) {
+            $('#taller-asiento-contable').on('change', 'select',function(event) {
+                event.preventDefault();
+                /* Act on the event */
                 // Obtengo la fila en la que se modificó el select.
                 var fila = $(this).data('fila');
                 // Obtengo el nombre del puc, este se encuentra en el atributo data-subtext de la opción seleccionada por el usuario.
                 var nombre = $(this).find('option:selected').data('subtext');
                 // Cambio el nombre de la columna CUENTAS en la fila en que se modificó el select.
-                $('#fila_'+fila).find('td.columna_cuentas').text(nombre);
+                $(this).parents('tr').find('td.columna_cuentas').text(nombre);
+                console.log($(this).parents('tr'));
+
             });
-            $(".columna_debito[contenteditable=true]").blur(function() {
+            $('#taller-asiento-contable').on('blur', '.columna_debito[contenteditable=true]',function(event) {
                 var valorTdActual = $(this).text();
                 valorTdActual = parseInt(numeral(valorTdActual).format('0'));
                 if(isNaN(valorTdActual)){
@@ -263,7 +367,7 @@
                 $(this).text(valorTdActual);
                 $("#total_debito").text(numeral(total_debito).format('$0,0'));
             });
-            $(".columna_credito[contenteditable=true]").blur(function() {
+            $('#taller-asiento-contable').on('blur', '.columna_credito[contenteditable=true]',function(event) {
                 var valorTdActual = $(this).text();
                 valorTdActual = parseInt(numeral(valorTdActual).format('0'));
                 if(isNaN(valorTdActual)){
@@ -285,6 +389,30 @@
                 valorTdActual = numeral(valorTdActual).format('$0,0');
                 $(this).text(valorTdActual);
                 $("#total_credito").text(numeral(total_credito).format('$0,0'));
+            });
+            $("#adicionar-fila-asiento-contable").click(function(event) {
+                event.preventDefault();
+                var sumasIguales = $("#taller-asiento-contable > tbody").children().last();
+                sumasIguales.remove();
+                var tr = '<tr><td class="text-center" width="20%">'+
+                                '<form class="form-inline">'+
+                                    '<select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true"></select>'+
+                                '</form>'+
+                                '</td>'+
+                                '<td class="text-center columna_cuentas" width="20%"></td>'+
+                                '<td class="text-center columna_debito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td> '+
+                                '<td class="text-center columna_credito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>'+
+                                '<td class="text-center" width="10%"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>'+
+                            '</tr>';
+                $('#taller-asiento-contable > tbody:last-child').append(tr);
+                $('#taller-asiento-contable > tbody:last-child').append(sumasIguales);
+                $('.selectpicker').selectpicker('refresh');
+                $('.selectpicker').selectpicker().filter('.with-ajax').ajaxSelectPicker(options);
+
+            });
+            $('body').tooltip({
+                'selector': '[data-toggle="tooltip"]',
+                'container' : 'body'
             });
         });
     </script>

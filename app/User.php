@@ -94,12 +94,13 @@ class User extends Authenticatable
         return $this->hasMany('App\Respuesta','usua_id');
     }
 
+    public function respuestasTallerAsientoContable()
+    {
+        return $this->hasMany('App\RespuestaTallerAsientoContable', 'puc_id');
+    }
+
     /**
      * método para consultar las respuestas que hizo el estudiante en un determinado taller
-     * SELECT DISTINCT `pregunta`.`preg_texto`, `calificacion`.`cali_ponderado`, `usuario`.`usua_nombre`
-     * FROM `pregunta` JOIN `respuesta` ON `pregunta`.`preg_id` = `respuesta`.`preg_id` JOIN `usuario` ON `respuesta`.`usua_id` = `usuario`.`usua_id`
-     * JOIN `calificacion` ON `usuario`.`usua_id` = `calificacion`.`usua_id`
-     * WHERE `usuario`.`usua_id`= 3
      *
      * SELECT DISTINCT pregunta.preg_texto, calificacion.cali_calificacion, calificacion.cali_ponderado
      * FROM respuesta r

@@ -38,7 +38,7 @@ class CursoSeeder extends Seeder
         $tall_id_diagnostico = \DB::table('Taller')->insertGetId(array(
             'tall_nombre' => "Primer taller, de tipo diagnostico.",
             'tall_tipo' => "diagnostico",
-            'tall_tiempo' => "2017-05-01 00:00:00",
+            'tall_tiempo' => "2017-05-27 00:00:00",
             'tall_rutaarchivo' => $faker->imageUrl(640, 480),
             'tall_nombrearchivo' => $faker->word(),
             'curs_id' => $curs_id
@@ -49,7 +49,7 @@ class CursoSeeder extends Seeder
         $tall_id_teorico = \DB::table('Taller')->insertGetId(array(
             'tall_nombre' => "Segundo taller, de tipo teorico.",
             'tall_tipo' => "teorico",
-            'tall_tiempo' => "2017-05-01 00:00:00",
+            'tall_tiempo' => "2017-05-27 00:00:00",
             'tall_rutaarchivo' => $faker->imageUrl(640, 480),
             'tall_nombrearchivo' => $faker->word(),
             'curs_id' => $curs_id
@@ -60,7 +60,7 @@ class CursoSeeder extends Seeder
         $tall_id_practico = \DB::table('Taller')->insertGetId(array(
             'tall_nombre' => "Tercer taller, de tipo practico.",
             'tall_tipo' => "practico",
-            'tall_tiempo' => "2017-05-01 00:00:00",
+            'tall_tiempo' => "2017-05-27 00:00:00",
             'tall_rutaarchivo' => $faker->imageUrl(640, 480),
             'tall_nombrearchivo' => $faker->word(),
             'curs_id' => $curs_id
