@@ -16,17 +16,6 @@
                     <p class="form-control-static">{{ $taller->tall_nombre }}</p>
                 </div>
             </div>
-            <div class="form-group {{ $errors->has('cantidad_filas_tabla') ? ' has-error' : '' }}">
-                <label for="cantidad_filas_tabla" class="col-lg-2 control-label">Cantidad de filas de la tabla</label>
-                <div class="col-lg-10">
-                    <input type="number" min="1" step="1" class="form-control" id="cantidad_filas_tabla" placeholder="Ingrese la cantidad de filas que tendrá la tabla del taller de asientos contables para ser solucionado" name="cantidad_filas_tabla" value="{{ old('cantidad_filas_tabla') }}">
-                    @if ($errors->has('cantidad_filas_tabla'))
-                        <span class="help-block">
-                            <strong>{{ $errors->first('cantidad_filas_tabla') }}</strong>
-                        </span>
-                    @endif
-                </div>
-            </div>
             <div class="form-group {{ $errors->has('deduccion_uno') ? ' has-error' : '' }}">
                 <label for="deduccion_uno" class="col-lg-2 control-label">¿Deducción uno?</label>
                 <div class="col-lg-10">

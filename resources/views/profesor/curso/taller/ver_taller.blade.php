@@ -58,7 +58,7 @@
                 <h1>Sub-tipo del taller</h1>
             </div>
         </div>
-        @if(isset($tallerAsientoContable))
+        @if(isset($taller->tallerAsientoContable))
             <div class="row">
                 <div class="col-lg-3">
                     <strong>Sub-tipo:</strong>
@@ -68,7 +68,7 @@
                 </div>
             </div>
             <br>
-        @elseif (isset($tallerNomina))
+        @elseif (isset($taller->tallerNomina))
             <div class="row">
                 <div class="col-lg-3">
                     <strong>Sub-tipo:</strong>
@@ -80,19 +80,10 @@
             <br>
             <div class="row">
                 <div class="col-lg-3">
-                    <strong>Cantidad de filas de la tabla:</strong>
+                    <strong>¿Deducción uno?:</strong>
                 </div>
                 <div class="col-lg-9 text-justify">
-                    {{ $tallerNomina->tano_cantidadfilas }}
-                </div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-lg-3">
-                    <strong>¿Deducciones en prestamo?:</strong>
-                </div>
-                <div class="col-lg-9 text-justify">
-                    {{ $tallerNomina->tano_deduccionuno }}
+                    {{ $taller->tallerNomina->tano_deduccionuno != "" ? $taller->tallerNomina->tano_deduccionuno : 'SIN DEDUCCIÓN' }}
                 </div>
             </div>
             <br>
@@ -101,7 +92,7 @@
                     <strong>¿Deducción dos?:</strong>
                 </div>
                 <div class="col-lg-9 text-justify">
-                    {{ $tallerNomina->tano_deducciondos }}
+                    {{ $taller->tallerNomina->tano_deducciondos != "" ? $taller->tallerNomina->tano_deducciondos : 'SIN DEDUCCIÓN' }}
                 </div>
             </div>
             <br>
@@ -110,7 +101,7 @@
                     <strong>¿Deducción tres?:</strong>
                 </div>
                 <div class="col-lg-9 text-justify">
-                    {{ $tallerNomina->tano_deducciontres }}
+                    {{ $taller->tallerNomina->tano_deducciontres != "" ? $taller->tallerNomina->tano_deducciontres : 'SIN DEDUCCIÓN' }}
                 </div>
             </div>
         @else

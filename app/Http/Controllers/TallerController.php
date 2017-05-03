@@ -116,11 +116,9 @@ class TallerController extends Controller
             flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
             return redirect()->route('profesor.curso.ver', ['id' => $curs_id]);
         }
-        $tallerAsientoContable = $taller->tallerAsientoContable;
         return View('profesor.curso.taller.ver_taller')
                     ->with('curso', $curso)
-                    ->with('taller', $taller)
-                    ->with('tallerAsientoContable', $tallerAsientoContable);
+                    ->with('taller', $taller);
     }
 
     /**
@@ -326,14 +324,12 @@ class TallerController extends Controller
         }
         // Validamos los campos del formulario.
         Validator::make($request->all(),[
-            'cantidad_filas_tabla' => 'required|integer',
-            'deduccion_uno'   => '',
-            'deduccion_dos'          => '',
-            'deduccion_tres'          => ''
+            'deduccion_uno'   => 'string|nullable',
+            'deduccion_dos'   => 'string|nullable',
+            'deduccion_tres'  => 'string|nullable'
         ])->validate();
         // Creo el taller de nómina en bd y lo relaciono con el taller que sería el padre
         TallerNomina::create([
-            'tano_cantidadfilas'     => $request['cantidad_filas_tabla'],
             'tano_deduccionuno'      => $request['deduccion_uno'],
             'tano_deducciondos'      => $request['deduccion_dos'],
             'tano_deducciontres'     => $request['deduccion_tres'],
