@@ -28,7 +28,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Tipo de taller</div>
                                     <div class="panel-body">
-                                        <div class="fs-18"><span class="label label-default">{{ $tallerPractico->tall_tipo }}</span></div>
+                                        <div class="fs-18"><span class="label label-default">{{ $tallerPractico->tall_tipo }}</span>@if(isset($tallerPractico->tallerAsientoContable)) <span class="label label-warning">asientos contables</span> @endif</div>
                                     </div>
                                 </div>
                             </div>
@@ -66,17 +66,18 @@
                                 <table class="table table-striped table-bordered table-hover" id="taller-asiento-contable">
                                     <thead>
                                         <tr>
-                                            <td colspan="4" class="text-center"><strong>CONTABILIZACIÓN DE LA PROVISIÓN</strong></td>
+                                            <td colspan="5" class="text-center"><strong>CONTABILIZACIÓN DE LA PROVISIÓN</strong></td>
                                         </tr>
                                         <tr>
                                             <td class="text-center" width="20%"><strong>CÓDIGO</strong></td>
                                             <td class="text-center" width="20%"><strong>CUENTAS</strong></td>
-                                            <td class="text-center" width="30%"><strong>DÉBITO</strong></td>
-                                            <td class="text-center" width="30%"><strong>CRÉDITO</strong></td>
+                                            <td class="text-center" width="25%"><strong>DÉBITO</strong></td>
+                                            <td class="text-center" width="25%"><strong>CRÉDITO</strong></td>
+                                            <td class="text-center" width="10%"><strong>OPCIÓN</strong></td>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @for ($i = 1; $i <= $tallerPractico->tallerAsientoContable->taac_cantidadfilas; $i++)
+                                        @if($tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuario()->isEmpty())
                                             <tr>
                                                 <td class="text-center" width="20%">
                                                     <form class="form-inline">
@@ -85,22 +86,52 @@
                                                     </form>
                                                 </td>
                                                 <td class="text-center columna_cuentas" width="20%"></td>
-                                                <td class="text-center columna_debito" contenteditable="true" width="30%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>
-                                                <td class="text-center columna_credito" contenteditable="true" width="30%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>
+                                                <td class="text-center columna_debito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>
+                                                <td class="text-center columna_credito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>
+                                                <td class="text-center" width="10%"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
                                             </tr>
-                                        @endfor
                                             <tr>
-                                                <td colspan="2" class="text-center"><strong>SUMAS IGUALES</strong></td>
-                                                <td class="text-center" id="total_debito">$ 0</td>
-                                                <td class="text-center" id="total_credito">$ 0</td>
+                                                <td class="text-center" width="20%">
+                                                    <form class="form-inline">
+                                                        <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true">
+                                                        </select>
+                                                    </form>
+                                                </td>
+                                                <td class="text-center columna_cuentas" width="20%"></td>
+                                                <td class="text-center columna_debito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>
+                                                <td class="text-center columna_credito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>
+                                                <td class="text-center" width="10%"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
                                             </tr>
+                                        @else
+                                            @foreach ($tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuario() as $rtac)
+                                                <tr>
+                                                    <td class="text-center" width="20%">
+                                                        <form class="form-inline">
+                                                            <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true">
+                                                                <option value="{{ $rtac->puc_id }}" data-subtext="{{ $rtac->puc->puc_nombre }}" selected="selected">{{ $rtac->puc->puc_codigo }}</option>
+                                                            </select>
+                                                        </form>
+                                                    </td>
+                                                    <td class="text-center columna_cuentas" width="20%">{{ $rtac->puc->puc_nombre }}</td>
+                                                    <td class="text-center columna_debito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">{{ $rtac->rtac_valordebito }}</td>
+                                                    <td class="text-center columna_credito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">{{ $rtac->rtac_valorcredito }}</td>
+                                                    <td class="text-center" width="10%"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                        <tr id="sumas-iguales">
+                                            <td colspan="2" class="text-center"><strong>SUMAS IGUALES</strong></td>
+                                            <td class="text-center" id="total_debito">$ 0</td>
+                                            <td class="text-center" id="total_credito">$ 0</td>
+                                            <td class="text-center"></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
                             <div class="row">
                                 <div class="col-lg-12 text-center">
-                                    <a href="#" class="btn btn-default" id="adicionar-fila-asiento-contable">Adicionar fila</a>
-                                    <a href="#" class="btn btn-primary" id="solucionar-taller-asiento-contable">Guardar taller</a>
+                                    <button class="btn btn-default" id="adicionar-fila-asiento-contable">Adicionar fila</button>
+                                    <button class="btn btn-primary" id="solucionar-taller-asiento-contable">Guardar taller</button>
                                 </div>
                             </div>
                             @push('scripts')
@@ -108,7 +139,8 @@
                                     $(document).ready(function() {
                                         $('#solucionar-taller-asiento-contable').click(function(event) {
                                             event.preventDefault();
-                                            $("#solucionar-taller-asiento-contable").attr('disabled', 'disabled').text('ENVIANDO DATOS...');
+                                            $("#solucionar-taller-asiento-contable").attr('disabled', true).text('ENVIANDO DATOS...');
+                                            $("#adicionar-fila-asiento-contable").attr('disabled', true);
                                             if(xhr && xhr.readyState != 4) {
                                                 xhr.abort();
                                                 console.log("Abortando");
@@ -124,13 +156,19 @@
                                                 var cuentas = $(this).find('.columna_cuentas').text();
                                                 var debito = parseInt(numeral($(this).find('.columna_debito').text()).format('0'));
                                                 var credito = parseInt(numeral($(this).find('.columna_credito').text()).format('0'));
-                                                var fila = {
-                                                    "codigo" : codigo,
-                                                    "cuentas" : cuentas,
-                                                    "debito" : debito,
-                                                    "credito" : credito
-                                                };
-                                                filas.push(fila);
+                                                console.log(codigo);
+                                                if((codigo === undefined || codigo == "" ) && $(this).attr('id') != "sumas-iguales"){
+                                                    console.log($(this));
+                                                    $(this).remove();
+                                                }else{
+                                                    var fila = {
+                                                        "codigo" : codigo,
+                                                        "cuentas" : cuentas,
+                                                        "debito" : debito,
+                                                        "credito" : credito
+                                                    };
+                                                    filas.push(fila);
+                                                }
                                             });
                                             var sumasIguales = {
                                                 "total_debito" : parseInt(numeral($('#total_debito').text()).format('0')),
@@ -141,10 +179,6 @@
                                             datos.sumasIguales = sumasIguales;
                                             console.log(datos);
                                             console.log(JSON.stringify(filas));
-
-                                            setTimeout(function(){
-
-                                            }, 2000);
                                             var xhr =
                                                 $.ajax({
                                                     url: '{{ route('estudiante.curso.taller.solucionar.asientocontable.post', ['curs_id' => $curso->curs_id, 'tall_id' => $tallerPractico->tall_id]) }}',
@@ -180,9 +214,8 @@
                                                 .always(function() {
                                                     console.log("complete");
                                                     $("#solucionar-taller-asiento-contable").attr('disabled', false).text('GUARDAR TALLER');
+                                                    $("#adicionar-fila-asiento-contable").attr('disabled', false);
                                                 });
-
-
                                         });
                                     });
                                 </script>
@@ -262,7 +295,10 @@
                         $(this).html('<div class="alert alert-danger" role="alert">El taller ha expirado, no es posible guardar las respuestas.</div>');
                     });
             });
-
+            $('#taller-asiento-contable').on('click', '.eliminar-fila', function(event) {
+                event.preventDefault();
+                $(this).parents('tr').remove();
+            });
             var options = {
                     "ajax": {
                         "type": "GET",
@@ -360,12 +396,13 @@
                 sumasIguales.remove();
                 var tr = '<tr><td class="text-center" width="20%">'+
                                 '<form class="form-inline">'+
-                                    '<select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true" data-fila=""></select>'+
+                                    '<select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true"></select>'+
                                 '</form>'+
                                 '</td>'+
                                 '<td class="text-center columna_cuentas" width="20%"></td>'+
-                                '<td class="text-center columna_debito" contenteditable="true" width="30%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td> '+
-                                '<td class="text-center columna_credito" contenteditable="true" width="30%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>'+
+                                '<td class="text-center columna_debito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td> '+
+                                '<td class="text-center columna_credito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>'+
+                                '<td class="text-center" width="10%"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>'+
                             '</tr>';
                 $('#taller-asiento-contable > tbody:last-child').append(tr);
                 $('#taller-asiento-contable > tbody:last-child').append(sumasIguales);

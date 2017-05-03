@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Auth;
 
 class TallerAsientoContable extends Model
 {
@@ -69,5 +70,10 @@ class TallerAsientoContable extends Model
     public function taller()
     {
         return $this->belongsTo('App\Taller', 'tall_id');
+    }
+
+    public function respuestasTallerAsientoContableUsuario()
+    {
+        return RespuestaTallerAsientoContable::where('usua_id', Auth::user()->usua_id)->where('taac_id', $this->taac_id)->get();
     }
 }

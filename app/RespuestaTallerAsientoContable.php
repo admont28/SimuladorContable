@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Puc extends Model
+class RespuestaTallerAsientoContable extends Model
 {
     /**
      * El nombre de la tabla asociada al modelo.
      *
      * @var string
      */
-    protected $table = 'Puc';
+    protected $table = 'RespuestaTallerAsientoContable';
 
     /**
      * El nombre de la llave primaria de la tabla.
@@ -19,7 +19,7 @@ class Puc extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'puc_id';
+    protected $primaryKey = 'rtac_id';
 
     /**
      * El nombre del campo equivalente a CREATE_AT en la base de datos.
@@ -27,7 +27,7 @@ class Puc extends Model
      *
      * @var string
      */
-    const CREATED_AT = 'puc_fechacreacion';
+    const CREATED_AT = 'rtac_fechacreacion';
 
     /**
      * El nombre del campo equivalente a UPDATED_AT en la base de datos.
@@ -35,7 +35,7 @@ class Puc extends Model
      *
      * @var string
      */
-    const UPDATED_AT = 'puc_fechamodificacion';
+    const UPDATED_AT = 'rtac_fechamodificacion';
 
     /**
      * The attributes that are mass assignable.
@@ -43,7 +43,7 @@ class Puc extends Model
      * @var array
      */
     protected $fillable = [
-        'puc_id', 'puc_codigo', 'puc_nombre', 'curs_id'
+        'rtac_id', 'taac_id', 'usua_id', 'puc_id', 'rtac_valordebito', 'rtac_valorcredito', 'rtac_fila'
     ];
 
     /**
@@ -56,16 +56,16 @@ class Puc extends Model
     ];
 
     /**
-     * Obtener el curso que es dueño del taller.
+     * Obtener la pregunta dueña de la respuesta multiple unica
      */
-    public function curso()
+    public function puc()
     {
-        // La foranea de Curso en la tabla Puc relacionada con la tabla Curso.
-        return $this->belongsTo('App\Curso', 'curs_id');
+        return $this->belongsTo('App\Puc','puc_id');
     }
 
-    public function respuestasTallerAsientoContable()
+    public function usuario()
     {
-        return $this->hasMany('App\RespuestaTallerAsientoContable', 'puc_id');
+        return $this->belongsTo('App\User','usua_id');
     }
+
 }

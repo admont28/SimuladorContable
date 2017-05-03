@@ -23,6 +23,7 @@ class CreateRespuestaTallerAsientoContableTable extends Migration
             $table->foreign('puc_id')->references('puc_id')->on('Puc');
             $table->integer('rtac_valordebito');
             $table->integer('rtac_valorcredito');
+            $table->integer('rtac_fila');
             $table->timestamp('rtac_fechacreacion')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('rtac_fechamodificacion')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });

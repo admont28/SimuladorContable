@@ -13,6 +13,7 @@ use App\RespuestaAbierta;
 use App\RespuestaArchivo;
 use App\Tarifa;
 use App\Calificacion;
+use App\RespuestaTallerAsientoContable;
 use App\DataTables\TallerDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
@@ -711,7 +712,6 @@ class TallerController extends Controller
 
     public function solucionarTallerAsientoContablePost(Request $request, $curs_id, $tall_id)
     {
-        sleep(10);
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
@@ -740,14 +740,17 @@ class TallerController extends Controller
             die;
         }
         $tallerAsientoContable = $taller->tallerAsientoContable;
-        $tallerAsientoContableRespuestas = json_decode($request->all());
+        $tallerAsientoContableRespuestas = json_decode(json_encode($request->all()));
         $i = 1;
         DB::beginTransaction();
         try {
+            $tallerAsientoContable->respuestasTallerAsientosContables()->where('usua_id', Auth::user()->usua_id)->delete();
             foreach ($tallerAsientoContableRespuestas->filas as $fila) {
-                if(isset($fila->codigo, $fila->debito, $fila->credito)){
-                    DB::table('RespuestaTallerAsientoContable')->insert([
-                        'taac' => $tallerAsientoContable->taac_id,
+                $fila = json_decode(json_encode($fila));
+                //dd(isset($fila->codigo));
+                if(isset($fila->codigo, $fila->debito, $fila->credito) && $fila->codigo != "" && $fila->debito != "" && $fila->credito != ""){
+                    RespuestaTallerAsientoContable::create([
+                        'taac_id' => $tallerAsientoContable->taac_id,
                         'usua_id' => Auth::user()->usua_id,
                         'puc_id' => $fila->codigo,
                         'rtac_valordebito' => $fila->debito,
@@ -762,11 +765,12 @@ class TallerController extends Controller
         } catch (\Exception $e) {
             $success = false;
             DB::rollback();
+            dd($e->getMessage());
         }
         if (!$success) {
             $respuesta = array('state' => 'error', 'message' => 'Ha ocurrido un error inesperado, por favor inténtelo de nuevo.');
         }else{
-            $respuesta = array('state' => 'success', 'message' => 'Se ha guardado su información con éxito.');
+            $respuesta = array('state' => 'success', 'message' => 'Se ha guardado su información con éxito, las filas sin código PUC se han omitido.');
         }
         echo json_encode($respuesta);
     }
