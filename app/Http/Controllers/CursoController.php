@@ -269,7 +269,7 @@ class CursoController extends Controller
                         ->with('curso', $curso)
                         ->with('talleresPracticos', $talleresPracticos);
         }
-        flash('Para visualizar los talleres teóricos usted debe haber completado primero los talleres diagnóstico. Verifique por favor.','danger');
+        flash('Para visualizar los talleres prácticos usted debe haber completado primero los talleres diagnóstico. Verifique por favor.','danger');
         return redirect()->route('estudiante.curso.ver.talleresdiagnostico', ['curs_id' => $curso->curs_id]);
     }
 
