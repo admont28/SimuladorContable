@@ -276,46 +276,46 @@
                                         <tbody>
                                             @for ($i = 0; $i < 2; $i++)
                                                 <tr>
-                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter"></td>
-                                                    <td class="text-center vcenter"></td>
-                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter"></td>
-                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter"></td>
-                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter td-nombres-y-apellidos" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter td-documento" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter td-dias-trabajados cambiar-salario-basico" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter td-salario cambiar-salario-basico" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>
+                                                    <td class="text-center vcenter td-salario-basico cambiar-total-devengado"></td>
+                                                    <td class="text-center vcenter td-horas-extras-y-recargos cambiar-total-devengado"></td>
+                                                    <td class="text-center vcenter td-comisiones cambiar-total-devengado" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter td-bonificaciones cambiar-total-devengado" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter td-total-devengado cambiar-total-devengado-con-auxilio-de-transporte">$ 0,00</td>
+                                                    <td class="text-center vcenter td-aux-de-transporte cambiar-total-devengado-con-auxilio-de-transporte" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter td-total-devengado-con-auxilio-de-transporte cambiar-neto-a-pagar">$ 0,00</td>
+                                                    <td class="text-center vcenter td-salud cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter td-pension cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
                                                     @if (isset($tallerPractico->tallerNomina->tano_deduccionuno) && $tallerPractico->tallerNomina->tano_deduccionuno != "")
-                                                        <td class="text-center vcenter vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                        <td class="text-center vcenter td-deduccionuno cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
                                                     @endif
                                                     @if (isset($tallerPractico->tallerNomina->tano_deducciondos) && $tallerPractico->tallerNomina->tano_deducciondos != "")
-                                                        <td class="text-center vcenter vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                        <td class="text-center vcenter td-deducciondos cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
                                                     @endif
                                                     @if (isset($tallerPractico->tallerNomina->tano_deducciontres) && $tallerPractico->tallerNomina->tano_deducciontres != "")
-                                                        <td class="text-center vcenter vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."</td>
+                                                        <td class="text-center vcenter td-deducciontres cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."</td>
                                                     @endif
-                                                    <td class="text-center vcenter"></td>
-                                                    <td class="text-center vcenter"></td>
-                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter"></td>
-                                                    <td class="text-center"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
+                                                    <td class="text-center vcenter td-total-deducciones cambiar-neto-a-pagar"></td>
+                                                    <td class="text-center vcenter td-neto-a-pagar"></td>
+                                                    <td class="text-center vcenter td-hora-extra-diurna-cantidad" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter td-hora-extra-diurna-valor" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter td-hora-extra-nocturna-cantidad" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter td-hora-extra-diurna-valor" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter td-recargo-nocturno-cantidad" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter td-recargo-nocturno-valor" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter td-hora-festiva-diurna-cantidad" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter td-hora-festiva-diurna-valor" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter td-hora-festiva-nocturna-cantidad" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter td-hora-festiva-nocturna-valor" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter td-hora-extra-festiva-diurna-cantidad" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter td-hora-extra-festiva-diurna-valor" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter td-hora-extra-festiva-nocturna-cantidad" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter td-hora-extra-festiva-nocturna-valor" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                    <td class="text-center vcenter td-valor-total-de-horas-extras"></td>
+                                                    <td class="text-center td-opcion"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
                                                 </tr>
                                             @endfor
                                             <tr>
@@ -442,7 +442,16 @@
             });
             $('body').on('click', '.eliminar-fila', function(event) {
                 event.preventDefault();
-                $(this).parents('tr').remove();
+                var cantidadFilas = $(this).parents('tbody').find('tr').length;
+                if(cantidadFilas > 2){
+                    $(this).parents('tr').remove();
+                }else {
+                    swal(
+                        '¡Cuidado!',
+                        'La tabla no puede quedar con menos de una fila.',
+                        'warning'
+                    );
+                }
                 $('.columna_debito[contenteditable=true]').trigger('blur');
                 $('.columna_credito[contenteditable=true]').trigger('blur');
             });
@@ -553,6 +562,11 @@
                 $('.selectpicker').selectpicker('refresh');
                 $('.selectpicker').selectpicker().filter('.with-ajax').ajaxSelectPicker(options);
             });
+            /*
+                --------------------------------------------------------------------------------
+                Eventos para Taller Nomina
+                --------------------------------------------------------------------------------
+             */
             $("#adicionar-fila-nomina").click(function(event) {
                 event.preventDefault();
                 var filaTotal = $("#taller-nomina > tbody").children().last();
@@ -563,6 +577,69 @@
                 filaTotal.remove();
                 $('#taller-nomina > tbody:last-child').append(primerFilaClonada);
                 $('#taller-nomina > tbody:last-child').append(filaTotal);
+            });
+            $("#taller-nomina").on('blur', '.cambiar-salario-basico[contenteditable=true]', function(event) {
+                console.log("Cambiando Salario Basico");
+                var filaActual = $(this).parents('tr');
+                var salario = parseInt(numeral(filaActual.find($(".td-salario")).text()).format('0'));
+                var diasTrabajados = parseInt(numeral(filaActual.find($(".td-dias-trabajados")).text()).format('0'));
+                if(diasTrabajados != 0 && salario != 0){
+                    var total = (salario / 30) * diasTrabajados;
+                    filaActual.find($(".td-salario-basico")).text(numeral(total).format('$0,0.00'));
+                }
+                if($(this).hasClass('td-salario')){
+                    $(this).text(numeral($(this).text()).format('$0,0'));
+                }else if($(this).hasClass('td-dias-trabajados')){
+                    $(this).text(numeral($(this).text()).format('0'));
+                }
+                console.log("------- Lanzando -> Cambiar Total Devengado ------ Lanzado desde -> Cambiando Salario Basico -------- ");
+                $(".cambiar-total-devengado").trigger('blur');
+            });
+            $("#taller-nomina").on('blur', '.cambiar-total-devengado', function(event) {
+                console.log("Cambiando Total Devengado");
+                var filaActual = $(this).parents('tr');
+                var comisiones = parseInt(numeral(filaActual.find($(".td-comisiones")).text()).format('0'));
+                var bonificaciones = parseInt(numeral(filaActual.find($(".td-bonificaciones")).text()).format('0'));
+                var valorTotalHorasExtras = parseInt(numeral(filaActual.find($(".td-valor-total-de-horas-extras")).text()).format('0'));
+                var salarioBasico = parseInt(numeral(filaActual.find($(".td-salario-basico")).text()).format('0'));
+                var totalDevengado = salarioBasico + valorTotalHorasExtras + comisiones + bonificaciones;
+                filaActual.find($(".td-total-devengado")).text(numeral(totalDevengado).format('$0,0.00'));
+                $(this).text(numeral($(this).text()).format('$0,0'));
+                console.log("------- Lanzando -> Cambiar Total Devengado Con Auxilio de Transporte ------ Lanzado desde -> Cambiando Total Devengado -------- ");
+                $(".cambiar-total-devengado-con-auxilio-de-transporte").trigger('blur');
+            });
+            $("#taller-nomina").on('blur', '.cambiar-total-devengado-con-auxilio-de-transporte', function(event) {
+                console.log("Cambiando Total Devengado Con Aux de Transporte");
+                var filaActual = $(this).parents('tr');
+                var totalDevengado = parseInt(numeral(filaActual.find($(".td-total-devengado")).text()).format('0'));
+                var auxTransporte = parseInt(numeral(filaActual.find($(".td-aux-de-transporte")).text()).format('0'));
+                var totalDevengadoConAuxTransporte = totalDevengado + auxTransporte;
+                filaActual.find($(".td-total-devengado-con-auxilio-de-transporte")).text(numeral(totalDevengadoConAuxTransporte).format('$0,0.00'));
+                $(this).text(numeral($(this).text()).format('$0,0'));
+                console.log("------- Lanzando -> Cambiar Neto A Pagar ------ Lanzado desde -> Cambiando Total Devengado Con Auxilio de Transporte -------- ");
+                $(".cambiar-neto-a-pagar").trigger('blur');
+            });
+            $("#taller-nomina").on('blur', '.cambiar-total-deducciones', function(event) {
+                console.log("Cambiando Total Deducciones");
+                var filaActual = $(this).parents('tr');
+                var salud = parseInt(numeral(filaActual.find($(".td-salud")).text()).format('0'));
+                var pension = parseInt(numeral(filaActual.find($(".td-pension")).text()).format('0'));
+                var deduccionUno = parseInt(numeral(filaActual.find($(".td-deduccionuno")).text()).format('0'));
+                var deduccionDos = parseInt(numeral(filaActual.find($(".td-deducciondos")).text()).format('0'));
+                var deduccionTres = parseInt(numeral(filaActual.find($(".td-deducciontres")).text()).format('0'));
+                var totalDeducciones = salud + pension + deduccionUno + deduccionDos + deduccionTres;
+                filaActual.find($(".td-total-deducciones")).text(numeral(totalDeducciones).format('$0,0.00'));
+                $(this).text(numeral($(this).text()).format('$0,0'));
+                console.log("------- Lanzando -> Cambiar Neto A Pagar ------ Lanzado desde -> Cambiando Total Deducciones -------- ");
+                $(".cambiar-neto-a-pagar").trigger('blur');
+            });
+            $("#taller-nomina").on('blur', '.cambiar-neto-a-pagar', function(event) {
+                console.log("Cambiando Neto a Pagar");
+                var filaActual = $(this).parents('tr');
+                var totalDevengadoConAuxTransporte = parseInt(numeral(filaActual.find($(".td-total-devengado-con-auxilio-de-transporte")).text()).format('0'));
+                var totalDeducciones = parseInt(numeral(filaActual.find($(".td-total-deducciones")).text()).format('0'));
+                var netoAPagar = totalDevengadoConAuxTransporte - totalDeducciones;
+                filaActual.find($(".td-neto-a-pagar")).text(numeral(netoAPagar).format('$0,0.00'));
             });
             $('body').tooltip({
                 'selector': '[data-toggle="tooltip"]',
