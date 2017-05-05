@@ -178,24 +178,13 @@
                                             event.preventDefault();
                                             $("#solucionar-taller-asiento-contable").attr('disabled', true).text('ENVIANDO DATOS...');
                                             $("#adicionar-fila-asiento-contable").attr('disabled', true);
-                                            if(xhr && xhr.readyState != 4) {
-                                                xhr.abort();
-                                                console.log("Abortando");
-                                                swal({
-                                                    title: '¡Error!',
-                                                    text: 'Tus datos se están enviando al servidor, por favor espera a que sean almacenados.',
-                                                    type: 'error'
-                                                });
-                                            }
                                             var filas = [];
                                             $('#taller-asiento-contable > tbody > tr ').each(function(index, el) {
                                                 var codigo = $(this).find('.columna_codigo option:selected').val();
                                                 var cuentas = $(this).find('.columna_cuentas').text();
                                                 var debito = parseInt(numeral($(this).find('.columna_debito').text()).format('0'));
                                                 var credito = parseInt(numeral($(this).find('.columna_credito').text()).format('0'));
-                                                console.log(codigo);
                                                 if((codigo === undefined || codigo == "" ) && $(this).attr('id') != "sumas-iguales"){
-                                                    console.log($(this));
                                                     $(this).remove();
                                                 }else{
                                                     var fila = {
@@ -214,8 +203,6 @@
                                             var datos = new Object();
                                             datos.filas = filas;
                                             datos.sumasIguales = sumasIguales;
-                                            console.log(datos);
-                                            console.log(JSON.stringify(filas));
                                             var xhr =
                                                 $.ajax({
                                                     url: '{{ route('estudiante.curso.taller.solucionar.asientocontable.post', ['curs_id' => $curso->curs_id, 'tall_id' => $tallerPractico->tall_id]) }}',
@@ -239,7 +226,6 @@
                                                                 type: 'success'
                                                             });
                                                         }
-                                                        console.log(data);
                                                     }
                                                 })
                                                 .done(function() {
@@ -420,50 +406,8 @@
                                             event.preventDefault();
                                             $("#solucionar-taller-nomina").attr('disabled', true).text('ENVIANDO DATOS...');
                                             $("#adicionar-fila-nomina").attr('disabled', true);
-                                            if(xhr && xhr.readyState != 4) {
-                                                xhr.abort();
-                                                console.log("Abortando");
-                                                swal({
-                                                    title: '¡Error!',
-                                                    text: 'Tus datos se están enviando al servidor, por favor espera a que sean almacenados.',
-                                                    type: 'error'
-                                                });
-                                            }
                                             var filas = [];
                                             $('#taller-nomina > tbody > tr:not(:last)').each(function(index, el) {
-                                                /*var nombresYApellidos = $(this).children('.td-nombres-y-apellidos').text();
-                                                var documento = $(this).children('.td-documento').text();
-                                                var diasTrabajados = parseInt(numeral($(this).children('.td-dias-trabajados').text()).format('0'));
-                                                var salario = parseInt(numeral($(this).children('.td-salario').text()).format('0'));
-                                                var salarioBasico = parseInt(numeral($(this).children('.td-salario-basico').text()).format('0'));
-                                                var horasExtrasYRecargos = parseInt(numeral($(this).children('.td-horas-extras-y-recargos').text()).format('0'));
-                                                var comisiones = parseInt(numeral($(this).children('.td-comisiones').text()).format('0'));
-                                                var bonificaciones = parseInt(numeral($(this).children('.td-bonificaciones').text()).format('0'));
-                                                var totalDevengado = parseInt(numeral($(this).children('.td-total-devengado').text()).format('0'));
-                                                var auxDeTransporte = parseInt(numeral($(this).children('.td-aux-de-transporte').text()).format('0'));
-                                                var totalDevengadoConAuxTransporte = parseInt(numeral($(this).children('.td-total-devengado-con-auxilio-de-transporte').text()).format('0'));
-                                                var sald = parseInt(numeral($(this).children('.td-salud').text()).format('0'));
-                                                var pension = parseInt(numeral($(this).children('.td-pension').text()).format('0'));
-                                                var deduccionUno = parseInt(numeral($(this).children('.td-deduccionuno').text()).format('0'));
-                                                var deduccionDos = parseInt(numeral($(this).children('.td-deducciondos').text()).format('0'));
-                                                var deduccionTres = parseInt(numeral($(this).children('.td-deducciontres').text()).format('0'));
-                                                var totalDeducciones = parseInt(numeral($(this).children('.td-total-deducciones').text()).format('0'));
-                                                var netoAPagar = parseInt(numeral($(this).children('.td-neto-a-pagar').text()).format('0'));
-                                                var horaExtraDiurnaCantidad = parseInt(numeral($(this).children('.td-hora-extra-diurna-cantidad').text()).format('0'));
-                                                var horaExtraDiurnaValor = parseInt(numeral($(this).children('.td-hora-extra-diurna-valor').text()).format('0'));
-                                                var horaExtraNocturnaCantidad = parseInt(numeral($(this).children('.td-hora-extra-nocturna-cantidad').text()).format('0'));
-                                                var horaExtraNocturnaValor = parseInt(numeral($(this).children('.td-hora-extra-nocturna-valor').text()).format('0'));
-                                                var recargoNocturnoCantidad = parseInt(numeral($(this).children('.td-recargo-nocturno-cantidad').text()).format('0'));
-                                                var recargoNocturnoValor = parseInt(numeral($(this).children('.td-recargo-nocturno-valor').text()).format('0'));
-                                                var horaFestivaDiurnaCantidad = parseInt(numeral($(this).children('.td-hora-festiva-diurna-cantidad').text()).format('0'));
-                                                var horaFestivaDiurnaValor = parseInt(numeral($(this).children('.td-hora-festiva-diurna-valor').text()).format('0'));
-                                                var horaFestivaNocturnaCantidad = parseInt(numeral($(this).children('.td-hora-festiva-nocturna-cantidad').text()).format('0'));
-                                                var horaFestivaNocturnaValor = parseInt(numeral($(this).children('.td-hora-festiva-nocturna-valor').text()).format('0'));
-                                                var horaExtraFestivaDiurnaCantidad = parseInt(numeral($(this).children('.td-hora-extra-festiva-diurna-cantidad').text()).format('0'));
-                                                var horaExtraFestivaDiurnaValor = parseInt(numeral($(this).children('.td-hora-extra-festiva-diurna-valor').text()).format('0'));
-                                                var horaExtraFestivaNocturnaCantidad = parseInt(numeral($(this).children('.td-hora-extra-festiva-nocturna-cantidad').text()).format('0'));
-                                                var horaExtraFestivaNocturnaValor = parseInt(numeral($(this).children('.td-hora-extra-festiva-nocturna-valor').text()).format('0'));
-                                                var valorTotalDeHorasExtras = parseInt(numeral($(this).children('.td-valor-total-de-horas-extras').text()).format('0'));*/
                                                 var fila = new Object();
                                                 $(el).find('td').each(function(index2, el2) {
                                                     var clase = $(el2).attr('class').split(' ')[2];
@@ -484,11 +428,8 @@
                                                 });
                                                 filas.push(fila);
                                             });
-
                                             var datos = new Object();
                                             datos.filas = filas;
-                                            console.log(datos);
-                                            console.log(JSON.stringify(filas));
                                             var xhr =
                                                 $.ajax({
                                                     url: '{{ route('estudiante.curso.taller.solucionar.nomina.post', ['curs_id' => $curso->curs_id, 'tall_id' => $tallerPractico->tall_id]) }}',
@@ -638,14 +579,12 @@
                 $('select').trigger('change');
             $('#taller-asiento-contable').on('change', 'select',function(event) {
                 event.preventDefault();
-                /* Act on the event */
                 // Obtengo la fila en la que se modificó el select.
                 var fila = $(this).data('fila');
                 // Obtengo el nombre del puc, este se encuentra en el atributo data-subtext de la opción seleccionada por el usuario.
                 var nombre = $(this).find('option:selected').data('subtext');
                 // Cambio el nombre de la columna CUENTAS en la fila en que se modificó el select.
                 $(this).parents('tr').find('td.columna_cuentas').text(nombre);
-                console.log($(this).parents('tr'));
 
             });
             $('#taller-asiento-contable').on('blur', '.columna_debito[contenteditable=true]',function(event) {
@@ -728,48 +667,6 @@
                 var botonEliminarClonado =  $("#taller-nomina > tbody > tr > td > button.eliminar-fila").first().clone(true);
                 primerFilaClonada.find('td').text('');
                 primerFilaClonada.find('td').last().append(botonEliminarClonado);
-                /*var nuevaFila = '<tr>'+
-                    '<td class="text-center vcenter td-nombres-y-apellidos" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>'+
-                    '<td class="text-center vcenter td-documento" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>'+
-                    '<td class="text-center vcenter td-dias-trabajados cambiar-salario-basico numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>'+
-                    '<td class="text-center vcenter td-salario cambiar-salario-basico" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>'+
-                    '<td class="text-center vcenter td-salario-basico cambiar-total-devengado">$ 0</td>'+
-                    '<td class="text-center vcenter td-horas-extras-y-recargos cambiar-total-devengado">$ 0</td>'+
-                    '<td class="text-center vcenter td-comisiones cambiar-total-devengado" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>'+
-                    '<td class="text-center vcenter td-bonificaciones cambiar-total-devengado" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>'+
-                    '<td class="text-center vcenter td-total-devengado cambiar-total-devengado-con-auxilio-de-transporte">$ 0</td>'+
-                    '<td class="text-center vcenter td-aux-de-transporte cambiar-total-devengado-con-auxilio-de-transporte" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>'+
-                    '<td class="text-center vcenter td-total-devengado-con-auxilio-de-transporte cambiar-neto-a-pagar">$ 0</td>'+
-                    '<td class="text-center vcenter td-salud cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>'+
-                    '<td class="text-center vcenter td-pension cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>'+
-                    '@if (isset($tallerPractico->tallerNomina->tano_deduccionuno) && $tallerPractico->tallerNomina->tano_deduccionuno != "")'+
-                        '<td class="text-center vcenter td-deduccionuno cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>'+
-                    '@endif '+
-                    '@if (isset($tallerPractico->tallerNomina->tano_deducciondos) && $tallerPractico->tallerNomina->tano_deducciondos != "")'+
-                        '<td class="text-center vcenter td-deducciondos cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>'+
-                    '@endif '+
-                    '@if (isset($tallerPractico->tallerNomina->tano_deducciontres) && $tallerPractico->tallerNomina->tano_deducciontres != "")'+
-                        '<td class="text-center vcenter td-deducciontres cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>'+
-                    '@endif '+
-                    '<td class="text-center vcenter td-total-deducciones cambiar-neto-a-pagar">$ 0</td>'+
-                    '<td class="text-center vcenter td-neto-a-pagar">$ 0</td>'+
-                    '<td class="text-center vcenter td-hora-extra-diurna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>'+
-                    '<td class="text-center vcenter td-hora-extra-diurna-valor">$ 0</td>'+
-                    '<td class="text-center vcenter td-hora-extra-nocturna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>'+
-                    '<td class="text-center vcenter td-hora-extra-nocturna-valor">$ 0</td>'+
-                    '<td class="text-center vcenter td-recargo-nocturno-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>'+
-                    '<td class="text-center vcenter td-recargo-nocturno-valor">$ 0</td>'+
-                    '<td class="text-center vcenter td-hora-festiva-diurna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>'+
-                    '<td class="text-center vcenter td-hora-festiva-diurna-valor">$ 0</td>'+
-                    '<td class="text-center vcenter td-hora-festiva-nocturna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>'+
-                    '<td class="text-center vcenter td-hora-festiva-nocturna-valor">$ 0</td>'+
-                    '<td class="text-center vcenter td-hora-extra-festiva-diurna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>'+
-                    '<td class="text-center vcenter td-hora-extra-festiva-diurna-valor">$ 0</td>'+
-                    '<td class="text-center vcenter td-hora-extra-festiva-nocturna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>'+
-                    '<td class="text-center vcenter td-hora-extra-festiva-nocturna-valor">$ 0</td>'+
-                    '<td class="text-center vcenter td-valor-total-de-horas-extras">$ 0</td>'+
-                    '<td class="text-center vcenter td-opcion"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>'+
-                '</tr>';*/
                 filaTotal.remove();
                 $('#taller-nomina > tbody').append(primerFilaClonada);
                 $('#taller-nomina > tbody').append(filaTotal);
@@ -860,7 +757,6 @@
             });
             function cambiarSalarioBasico(elemento) {
                 var promise = new Promise(function (resolve, reject) {
-                    console.log("Cambiando Salario Basico");
                     var filaActual = $(elemento).parents('tr');
                     var salario = parseInt(numeral(filaActual.find($(".td-salario")).text()).format('0'));
                     var diasTrabajados = parseInt(numeral(filaActual.find($(".td-dias-trabajados")).text()).format('0'));
@@ -868,56 +764,30 @@
                         var salarioBasico = (salario / 30) * diasTrabajados;
                         filaActual.children((".td-salario-basico")).text(numeral(salarioBasico).format('$0,0'));
                     }
-                    console.log("------- Lanzando -> Cambiar Total Devengado ------ Lanzado desde -> Cambiando Salario Basico -------- ");
-                    //actualzarHorasExtrasYRecargos(elemento);
-                    //$(".cambiar-total-devengado").trigger('blur');
                     resolve(elemento);
                 });
                 return promise;
             }
             function cambiarTotalDevengado(elemento) {
                 var promise = new Promise(function (resolve, reject) {
-                    console.log("Cambiando Total Devengado");
                     var filaActual = $(elemento).parents('tr');
-                    console.log("------------------------------- AUDITORIA ----------------------------------------------");
-                    console.log(filaActual);
-                    console.log(filaActual.children(".td-comisiones"));
-                    console.log(filaActual.children(".td-comisiones").text());
-                    console.log(filaActual.children(".td-bonificaciones"));
-                    console.log(filaActual.children(".td-bonificaciones").text());
-                    console.log(filaActual.children(".td-valor-total-de-horas-extras"));
-                    console.log(filaActual.children(".td-valor-total-de-horas-extras").text());
-                    console.log(filaActual.children(".td-salario-basico"));
-                    console.log(filaActual.children(".td-salario-basico").text());
-                    console.log(filaActual.children(".td-total-devengado"));
-                    console.log(filaActual.children(".td-total-devengado").text());
-                    console.log("------------------------------- CIERRE AUDITORIA ----------------------------------------------");
                     var salarioBasico = parseInt(numeral(filaActual.children(".td-salario-basico").text()).format('0'));
                     var valorTotalHorasExtras = parseInt(numeral(filaActual.children(".td-horas-extras-y-recargos").text()).format('0'));
                     var comisiones = parseInt(numeral(filaActual.children(".td-comisiones").text()).format('0'));
                     var bonificaciones = parseInt(numeral(filaActual.children(".td-bonificaciones").text()).format('0'));
                     var totalDevengado = salarioBasico + valorTotalHorasExtras + comisiones + bonificaciones;
                     filaActual.children(".td-total-devengado").text(numeral(totalDevengado).format('$0,0'));
-                    //$(elemento).text(numeral($(elemento).text()).format('$0,0'));
-                    console.log("------- Lanzando -> Cambiar Total Devengado Con Auxilio de Transporte ------ Lanzado desde -> Cambiando Total Devengado -------- ");
                     resolve(elemento);
-                    //cambiarTotalDevengadoConAuxilioDeTransporte(elemento);
-                    //$(".cambiar-total-devengado-con-auxilio-de-transporte").trigger('blur');
                 });
                 return promise;
             }
             function cambiarTotalDevengadoConAuxilioDeTransporte(elemento) {
                 var promise = new Promise(function (resolve, reject) {
-                    console.log("Cambiando Total Devengado Con Aux de Transporte");
                     var filaActual = $(elemento).parents('tr');
                     var totalDevengado = parseInt(numeral(filaActual.children((".td-total-devengado")).text()).format('0'));
                     var auxTransporte = parseInt(numeral(filaActual.children((".td-aux-de-transporte")).text()).format('0'));
                     var totalDevengadoConAuxTransporte = totalDevengado + auxTransporte;
                     filaActual.children((".td-total-devengado-con-auxilio-de-transporte")).text(numeral(totalDevengadoConAuxTransporte).format('$0,0'));
-                    //$(elemento).text(numeral($(elemento).text()).format('$0,0'));
-                    //console.log("------- Lanzando -> Cambiar Neto A Pagar ------ Lanzado desde -> Cambiando Total Devengado Con Auxilio de Transporte -------- ");
-                    //cambiarNetoAPagar(elemento);
-                    //$(".cambiar-neto-a-pagar").trigger('blur');
                     resolve(elemento);
                 });
                 return promise;
@@ -925,7 +795,6 @@
             }
             function cambiarTotalDeducciones(elemento) {
                 var promise = new Promise(function (resolve, reject) {
-                    console.log("Cambiando Total Deducciones");
                     var filaActual = $(elemento).parents('tr');
                     var salud = parseInt(numeral(filaActual.children((".td-salud")).text()).format('0'));
                     var pension = parseInt(numeral(filaActual.children((".td-pension")).text()).format('0'));
@@ -934,23 +803,17 @@
                     var deduccionTres = parseInt(numeral(filaActual.children((".td-deducciontres")).text()).format('0'));
                     var totalDeducciones = salud + pension + deduccionUno + deduccionDos + deduccionTres;
                     filaActual.children((".td-total-deducciones")).text(numeral(totalDeducciones).format('$0,0'));
-                    //$(elemento).text(numeral($(elemento).text()).format('$0,0'));
-                    console.log("------- Lanzando -> Cambiar Neto A Pagar ------ Lanzado desde -> Cambiando Total Deducciones -------- ");
-                    //cambiarNetoAPagar(elemento);
-                    //$(".cambiar-neto-a-pagar").trigger('blur');
                     resolve(elemento);
                 });
                 return promise;
             }
             function cambiarNetoAPagar(elemento) {
                 var promise = new Promise(function (resolve, reject) {
-                    console.log("Cambiando Neto a Pagar");
                     var filaActual = $(elemento).parents('tr');
                     var totalDevengadoConAuxTransporte = parseInt(numeral(filaActual.children((".td-total-devengado-con-auxilio-de-transporte")).text()).format('0'));
                     var totalDeducciones = parseInt(numeral(filaActual.children((".td-total-deducciones")).text()).format('0'));
                     var netoAPagar = totalDevengadoConAuxTransporte - totalDeducciones;
                     filaActual.children((".td-neto-a-pagar")).text(numeral(netoAPagar).format('$0,0'));
-                    //darFormatoACampos(elemento);
                     resolve(elemento);
                 });
                 return promise;
@@ -1002,137 +865,93 @@
             }
             function cambiarHoraExtraDiurna(elemento) {
                 var promise = new Promise(function (resolve, reject) {
-                    console.log("Cambiando hora extra diurna");
                     var filaActual = $(elemento).parents('tr');
-                    console.log(filaActual.children((".td-hora-extra-diurna-valor")));
-                    console.log(filaActual.children((".td-hora-extra-diurna-valor")).text());
-                    console.log(filaActual.children((".td-salario-basico")));
-                    console.log(filaActual.children((".td-salario-basico")).text());
-                    console.log(filaActual.children((".td-hora-extra-diurna-cantidad")));
-                    console.log(filaActual.children((".td-hora-extra-diurna-cantidad")).text());
                     var salarioBasico = parseInt(numeral(filaActual.children((".td-salario-basico")).text()).format('0'));
                     var cantidadHorasExtra = parseInt(numeral(filaActual.children(".td-hora-extra-diurna-cantidad").text()).format('0'));
                     var total = (salarioBasico * cantidadHorasExtra * 1.25) / 240;
                     filaActual.children((".td-hora-extra-diurna-valor")).text(numeral(total).format('$0,0'));
-                    //cambiarValorTotalDeHorasExtras(elemento);
-                    //darFormatoACampos(elemento);
                     resolve(elemento);
                 });
                 return promise;
             }
             function cambiarHoraExtraNocturna(elemento) {
                 var promise = new Promise(function (resolve, reject) {
-                    console.log("Cambiando hora extra nocturna");
                     var filaActual = $(elemento).parents('tr');
                     var salarioBasico = parseInt(numeral(filaActual.children((".td-salario-basico")).text()).format('0'));
                     var cantidadHorasExtra = parseInt(numeral(filaActual.children(".td-hora-extra-nocturna-cantidad").text()).format('0'));
                     var total = (salarioBasico * cantidadHorasExtra * 1.75) / 240;
                     filaActual.children((".td-hora-extra-nocturna-valor")).text(numeral(total).format('$0,0'));
-                    //cambiarValorTotalDeHorasExtras(elemento);
-                    //darFormatoACampos(elemento);
                     resolve(elemento);
                 });
                 return promise;
             }
             function cambiarRecargoNocturno(elemento) {
                 var promise = new Promise(function (resolve, reject) {
-                    console.log("Cambiando recargo nocturno");
                     var filaActual = $(elemento).parents('tr');
                     var salarioBasico = parseInt(numeral(filaActual.children((".td-salario-basico")).text()).format('0'));
                     var cantidadHorasExtra = parseInt(numeral(filaActual.children(".td-recargo-nocturno-cantidad").text()).format('0'));
                     var total = (salarioBasico * cantidadHorasExtra * 0.35) / 240;
                     filaActual.children((".td-recargo-nocturno-valor")).text(numeral(total).format('$0,0'));
-                    //cambiarValorTotalDeHorasExtras(elemento);
-                    //darFormatoACampos(elemento);
                     resolve(elemento);
                 });
                 return promise;
             }
             function cambiarHoraFestivaDiurna(elemento) {
                 var promise = new Promise(function (resolve, reject) {
-                    console.log("Cambiando hora festiva Diurna");
                     var filaActual = $(elemento).parents('tr');
                     var salarioBasico = parseInt(numeral(filaActual.children((".td-salario-basico")).text()).format('0'));
                     var cantidadHorasExtra = parseInt(numeral(filaActual.children(".td-hora-festiva-diurna-cantidad").text()).format('0'));
                     var total = (salarioBasico * cantidadHorasExtra * 1.75) / 240;
                     filaActual.children((".td-hora-festiva-diurna-valor")).text(numeral(total).format('$0,0'));
-                    //cambiarValorTotalDeHorasExtras(elemento);
-                    //darFormatoACampos(elemento);
                     resolve(elemento);
                 });
                 return promise;
             }
             function cambiarHoraFestivaNocturna(elemento) {
                 var promise = new Promise(function (resolve, reject) {
-                    console.log("Cambiando hora festiva nocturna");
                     var filaActual = $(elemento).parents('tr');
                     var salarioBasico = parseInt(numeral(filaActual.children((".td-salario-basico")).text()).format('0'));
                     var cantidadHorasExtra = parseInt(numeral(filaActual.children(".td-hora-festiva-nocturna-cantidad").text()).format('0'));
                     var total = (salarioBasico * cantidadHorasExtra * 2.1) / 240;
                     filaActual.children((".td-hora-festiva-nocturna-valor")).text(numeral(total).format('$0,0'));
-                    //cambiarValorTotalDeHorasExtras(elemento);
-                    //darFormatoACampos(elemento);
                     resolve(elemento);
                 });
                 return promise;
             }
             function cambiarHoraExtraFestivaDiurna(elemento) {
                 var promise = new Promise(function (resolve, reject) {
-                    console.log("Cambiando hora extra festiva diurna");
                     var filaActual = $(elemento).parents('tr');
                     var salarioBasico = parseInt(numeral(filaActual.children((".td-salario-basico")).text()).format('0'));
                     var cantidadHorasExtra = parseInt(numeral(filaActual.children(".td-hora-extra-festiva-diurna-cantidad").text()).format('0'));
                     var total = (salarioBasico * cantidadHorasExtra * 2.0) / 240;
                     filaActual.children((".td-hora-extra-festiva-diurna-valor")).text(numeral(total).format('$0,0'));
-                    //cambiarValorTotalDeHorasExtras(elemento);
-                    //darFormatoACampos(elemento);
                     resolve(elemento);
                 });
                 return promise;
             }
             function cambiarHoraExtraFestivaNocturna(elemento) {
                 var promise = new Promise(function (resolve, reject) {
-                    console.log("Cambiando hora extra festiva nocturna");
                     var filaActual = $(elemento).parents('tr');
                     var salarioBasico = parseInt(numeral(filaActual.children((".td-salario-basico")).text()).format('0'));
                     var cantidadHorasExtra = parseInt(numeral(filaActual.children(".td-hora-extra-festiva-nocturna-cantidad").text()).format('0'));
                     var total = (salarioBasico * cantidadHorasExtra * 2.5) / 240;
                     filaActual.children((".td-hora-extra-festiva-nocturna-valor")).text(numeral(total).format('$0,0'));
-                    //cambiarValorTotalDeHorasExtras(elemento);
-                    //darFormatoACampos(elemento);
                     resolve(elemento);
                 });
                 return promise;
             }
             function cambiarValorTotalDeHorasExtras(elemento) {
                 var promise = new Promise(function (resolve, reject) {
-                    console.log("------ INICIO Actualizando valor total de horas extras ---->");
                     var filaActual = $(elemento).parents('tr');
                     var horaExtraDiurnaValor = parseInt(numeral(filaActual.children((".td-hora-extra-diurna-valor")).text()).format('0'));
-                    console.log(filaActual.children((".td-hora-extra-diurna-valor")));
-                    console.log(horaExtraDiurnaValor);
                     var horaExtraNocturnaValor = parseInt(numeral(filaActual.children(".td-hora-extra-nocturna-valor").text()).format('0'));
-                    console.log(filaActual.children((".td-hora-extra-diurna-valor")));
-                    console.log(horaExtraNocturnaValor);
                     var recargoNocturnoValor = parseInt(numeral(filaActual.children((".td-recargo-nocturno-valor")).text()).format('0'));
-                    console.log(filaActual.children((".td-recargo-nocturno-valor")));
-                    console.log(recargoNocturnoValor);
                     var horaFestivaDiurnaValor = parseInt(numeral(filaActual.children((".td-hora-festiva-diurna-valor")).text()).format('0'));
-                    console.log(filaActual.children((".td-hora-festiva-diurna-valor")));
-                    console.log(horaFestivaDiurnaValor);
                     var horaFestivaNocturnaValor = parseInt(numeral(filaActual.children((".td-hora-festiva-nocturna-valor")).text()).format('0'));
-                    console.log(filaActual.children((".td-hora-festiva-nocturna-valor")));
-                    console.log(horaFestivaNocturnaValor);
                     var horaExtraFestivaDiurnaValor = parseInt(numeral(filaActual.children((".td-hora-extra-festiva-diurna-valor")).text()).format('0'));
-                    console.log(filaActual.children((".td-hora-extra-festiva-diurna-valor")));
-                    console.log(horaExtraFestivaDiurnaValor);
                     var horaExtraFestivaNocturnaValor = parseInt(numeral(filaActual.children((".td-hora-extra-festiva-nocturna-valor")).text()).format('0'));
-                    console.log(filaActual.children((".td-hora-extra-festiva-nocturna-valor")));
-                    console.log(horaExtraFestivaNocturnaValor);
                     var total = horaExtraDiurnaValor + horaExtraNocturnaValor + recargoNocturnoValor + horaFestivaDiurnaValor + horaFestivaNocturnaValor + horaExtraFestivaDiurnaValor + horaExtraFestivaNocturnaValor;
                     filaActual.children((".td-valor-total-de-horas-extras")).text(numeral(total).format('$0,0'));
-                    console.log("------ FINAL Actualizando valor total de horas extras ---->");
-                    //darFormatoACampos(elemento);
                     resolve(elemento);
                 });
                 return promise;
@@ -1148,31 +967,23 @@
             }
             function calculatTotales() {
                 var promise = new Promise(function (resolve, reject) {
-                    console.log("-------------------------- calculando totales --------------------------");
                     $("#taller-nomina > tbody > tr:first > td").each(function(index, el) {
-                        // Aquí tengo cada td de la primer fila
                         if ($(el).hasClass('td-nombres-y-apellidos') || $(el).hasClass('td-documento') || $(el).hasClass('td-opcion')) {
                             return; //this is equivalent of 'continue' for jQuery loop
                         }
                         var clase = $(el).attr('class').split(' ')[2];
-                        console.log(clase);
                         var suma = 0;
                         $("#taller-nomina > tbody > tr > td."+clase).each(function(index2, el2) {
                             suma += parseInt(numeral($(el2).text()).format('0'));
                         });
-                        console.log(suma);
                         if($(el).hasClass('numero')){
                             $(".valor-total-"+clase).text(numeral(suma).format('0'));
                         }else{
                             $(".valor-total-"+clase).text(numeral(suma).format('$0,0'));
                         }
                     });
-                    console.log("-------------------------- FIN calculando totales --------------------------");
                 });
                 return promise;
-            }
-            function functionName() {
-
             }
             $('body').tooltip({
                 'selector': '[data-toggle="tooltip"]',
