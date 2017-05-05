@@ -248,8 +248,8 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     Route::get('/curso/{curs_id}/taller/{tall_id}/usuarios/calificaciones', 'CalificacionController@mostrarUsuariosTaller')->name('profesor.curso.taller.pregunta.respuesta.calificacion');
     Route::get('/curso/{curs_id}/taller/{tall_id}/usuario/{usua_id}/calificaciones', 'CalificacionController@mostrarCalificacionesUsuario')->name('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante');
     Route::get('/curso/{curs_id}/taller/{tall_id}/usuario/{usua_id}/calificaciones-ajax', 'CalificacionController@mostrarCalificacionesUsuarioAjax')->name('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante.ajax');
-    Route::get('/curso/{curs_id}/taller/{tall_id}/usuario/{usua_id}/calificar-pregunta', 'CalificacionController@')->name('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante.calificar.pregunta');
-    Route::post('/curso/{curs_id}/taller/{tall_id}/usuario/{usua_id}/calificar-pregunta', 'CalificacionController@')->name('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante.calificar.pregunta.post');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/usuario/{usua_id}/pregunta/{preg_id}/calificar-respuesta/{resp_id}', 'CalificacionController@calificarRespuestaUsuario')->name('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante.calificar.pregunta');
+    Route::post('/curso/{curs_id}/taller/{tall_id}/usuario/{usua_id}/pregunta/{preg_id}/calificar-respuesta/{resp_id}', 'CalificacionController@calificarPreguntaUsuarioPost')->name('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante.calificar.pregunta.post');
 
 });
 

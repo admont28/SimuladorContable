@@ -102,24 +102,25 @@ class User extends Authenticatable
     /**
      * método para consultar las respuestas que hizo el estudiante en un determinado taller
      *
-     * SELECT DISTINCT pregunta.preg_texto, calificacion.cali_calificacion, calificacion.cali_ponderado
-     * FROM respuesta r
-     *  INNER JOIN pregunta ON pregunta.preg_id = r.preg_id
-     *  LEFT OUTER JOIN calificacion ON calificacion.preg_id = pregunta.preg_id
-     *  WHERE pregunta.tall_id = 1 AND r.usua_id = 3
+     * Actualizaciòn:
+     * select distinct `Pregunta`.`preg_id`, `preg_texto`, `preg_tipo`, `cali_calificacion`, `cali_ponderado`, `Respuesta`.`resp_id`
+     * from `Respuesta`
+     * inner join `Pregunta` on `Pregunta`.`preg_id` = `Respuesta`.`preg_id`
+     * left join `Calificacion` on `Calificacion`.`preg_id` = `Pregunta`.`preg_id` and `Calificacion`.`usua_id` = `Respuesta`.`usua_id`
+     * where `Pregunta`.`tall_id` = 1 and `Respuesta`.`usua_id` = 4
      */
     public function respuestasTallerPorEstudiante($tall_id)
     {
         return DB::table('Respuesta')
-        ->select('Pregunta.preg_id','preg_texto','preg_tipo','cali_calificacion','cali_ponderado')
+        ->select('Pregunta.preg_id','preg_texto','preg_tipo','cali_calificacion','cali_ponderado','Respuesta.resp_id')
         ->distinct()
         ->join('Pregunta','Pregunta.preg_id','=','Respuesta.preg_id')
-        ->leftjoin('Calificacion','Calificacion.preg_id','=','Pregunta.preg_id')
+        ->leftjoin('Calificacion', function ($join) {
+            $join->on('Calificacion.preg_id', '=', 'Pregunta.preg_id')
+                ->whereColumn('Calificacion.usua_id', '=', 'Respuesta.usua_id');
+        })
         ->where('Pregunta.tall_id',$tall_id)
         ->where('Respuesta.usua_id',$this->usua_id)
         ->get();
-        /*
-            SELECT DISTINCT p.preg_texto, c.cali_calificacion, c.cali_ponderado FROM respuesta r, pregunta p, usuario u, calificacion c, taller t WHERE r.preg_id = p.preg_id and p.tall_id = t.tall_id and p.preg_id = c.preg_id and r.usua_id = u.usua_id and t.tall_id = 1 and u.usua_id = 3;
-         */
     }
 }
