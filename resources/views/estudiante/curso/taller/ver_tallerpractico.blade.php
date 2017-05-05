@@ -145,7 +145,7 @@
                                                                 if($(el).hasClass('columna_opcion')){
                                                                     return;
                                                                 }
-                                                                else if ($(el).hasClass('columna_codigo') || $(el).hasClass('columna_cuentas') || $(el).hasClass('columna_debito') || $(el).hasClass('columna_credito')) {
+                                                                else if ($(el).hasClass('columna_debito') || $(el).hasClass('columna_credito')) {
                                                                     $(el).text(numeral($(el).text()).format('$0,0'));
                                                                 }
                                                             });
@@ -179,12 +179,12 @@
                                             $("#solucionar-taller-asiento-contable").attr('disabled', true).text('ENVIANDO DATOS...');
                                             $("#adicionar-fila-asiento-contable").attr('disabled', true);
                                             var filas = [];
-                                            $('#taller-asiento-contable > tbody > tr ').each(function(index, el) {
+                                            $('#taller-asiento-contable > tbody > tr:not(:last)').each(function(index, el) {
                                                 var codigo = $(this).find('.columna_codigo option:selected').val();
                                                 var cuentas = $(this).find('.columna_cuentas').text();
                                                 var debito = parseInt(numeral($(this).find('.columna_debito').text()).format('0'));
                                                 var credito = parseInt(numeral($(this).find('.columna_credito').text()).format('0'));
-                                                if((codigo === undefined || codigo == "" ) && $(this).attr('id') != "sumas-iguales"){
+                                                if(codigo == undefined && $('#taller-asiento-contable > tbody > tr:not(:last)').length > 1){
                                                     $(this).remove();
                                                 }else{
                                                     var fila = {
