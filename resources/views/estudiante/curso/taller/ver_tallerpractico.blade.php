@@ -473,7 +473,7 @@
                                                     }
                                                     else if (clase == 'td-nombres-y-apellidos' || clase == 'td-documento') {
                                                         valor = $(el2).text();
-                                                        if(valor == ""){
+                                                        if(valor == "" && $('#taller-nomina > tbody > tr:not(:last)').length > 1){
                                                             $(el).remove();
                                                         }
                                                     }else{
