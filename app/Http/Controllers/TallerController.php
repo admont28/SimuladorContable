@@ -14,6 +14,7 @@ use App\RespuestaArchivo;
 use App\Tarifa;
 use App\Calificacion;
 use App\RespuestaTallerAsientoContable;
+use App\RespuestaTallerNomina;
 use App\DataTables\TallerDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
@@ -737,6 +738,107 @@ class TallerController extends Controller
             $respuesta = array('state' => 'error', 'message' => 'Ha ocurrido un error inesperado, por favor inténtelo de nuevo.');
         }else{
             $respuesta = array('state' => 'success', 'message' => 'Se ha guardado su información con éxito, las filas sin código PUC se han omitido.');
+        }
+        echo json_encode($respuesta);
+    }
+
+    public function solucionarTallerNominaPost(Request $request, $curs_id, $tall_id)
+    {
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            $respuesta = array('state' => 'error', 'message' => 'El curso con ID: '.$curs_id.' no existe. Verifique por favor.');
+            echo json_encode($respuesta);
+            die;
+        }
+        $taller = Taller::find($tall_id);
+        // Verificamos que el taller exista en bd, si no es así informamos al usuario y redireccionamos.
+        if (!isset($taller) || $taller->curs_id != $curso->curs_id) {
+            $respuesta = array('state' => 'error', 'message' => 'El taller con ID: '.$tall_id.' no pertenece al curso seleccionado. Verifique por favor.');
+            echo json_encode($respuesta);
+            die;
+        }
+        //verificamos que el taller sea un taller de tipo diagnóstico o teórico
+        if ( $taller->tall_tipo != "practico" ) {
+            $respuesta = array('state' => 'error', 'message' => 'El taller con ID: '.$tall_id.' no es un taller de tipo práctico. Verifique por favor.');
+            echo json_encode($respuesta);
+            die;
+        }
+        $fechaActual = new DateTime();
+        $fechaTaller = new DateTime($taller->tall_tiempo);
+        if($fechaActual > $fechaTaller){
+            $respuesta = array('state' => 'error', 'message' => 'El taller ha expirado, no se han podido guardar las respuestas.');
+            echo json_encode($respuesta);
+            die;
+        }
+        $tallerNomina = $taller->tallerNomina;
+        if (!isset($tallerNomina)) {
+            $respuesta = array('state' => 'error', 'message' => 'El taller de nómina no existe. Verifique por favor.');
+            echo json_encode($respuesta);
+            die;
+        }
+        $tallerNominaRespuestas = json_decode(json_encode($request->all()));
+        $i = 1;
+        DB::beginTransaction();
+        try {
+            $tallerNomina->respuestasTallerNomina()->where('usua_id', Auth::user()->usua_id)->delete();
+            foreach ($tallerNominaRespuestas->filas as $fila) {
+                $fila = json_decode(json_encode($fila));
+                //dd(isset($fila->codigo));
+                if(isset($fila->td_nombres_y_apellidos, $fila->td_documento) && $fila->td_nombres_y_apellidos != "" && $fila->td_documento != "" ){
+                    RespuestaTallerNomina::create([
+                        'tano_id' => $tallerNomina->tano_id,
+                        'usua_id' => Auth::user()->usua_id,
+                        'retn_nombresyapellidos' => $fila->td_nombres_y_apellidos,
+                        'retn_documento' => $fila->td_documento,
+                        'retn_diastrabajados' => $fila->td_dias_trabajados,
+                        'retn_salario' => $fila->td_salario,
+                        'retn_salariobasico' => $fila->td_salario_basico,
+                        'retn_horasextrasyrecargos' => $fila->td_horas_extras_y_recargos,
+                        'retn_comisiones' => $fila->td_comisiones,
+                        'retn_bonificaciones' => $fila->td_bonificaciones,
+                        'retn_totaldevengado' => $fila->td_total_devengado,
+                        'retn_auxdetransporte' => $fila->td_aux_de_transporte,
+                        'retn_totaldevengadoconauxiliodetransporte' => $fila->td_total_devengado_con_auxilio_de_transporte,
+                        'retn_salud' => $fila->td_salud,
+                        'retn_pension' => $fila->td_pension,
+                        'retn_deduccionuno' => $fila->td_deduccionuno,
+                        'retn_deducciondos' => $fila->td_deducciondos,
+                        'retn_deducciontres' => $fila->td_deducciontres,
+                        'retn_totaldeducciones' => $fila->td_total_deducciones,
+                        'retn_netoapagar' => $fila->td_neto_a_pagar,
+                        'retn_horaextradiurnacantidad' => $fila->td_hora_extra_diurna_cantidad,
+                        'retn_horaextradiurnavalor' => $fila->td_hora_extra_diurna_valor,
+                        'retn_horaextranocturnacantidad' => $fila->td_hora_extra_nocturna_cantidad,
+                        'retn_horaextranocturnavalor' => $fila->td_hora_extra_nocturna_valor,
+                        'retn_recargonocturnocantidad' => $fila->td_recargo_nocturno_cantidad,
+                        'retn_recargonocturnovalor' => $fila->td_recargo_nocturno_valor,
+                        'retn_horafestivadiurnacantidad' => $fila->td_hora_festiva_diurna_cantidad,
+                        'retn_horafestivadiurnavalor' => $fila->td_hora_festiva_diurna_valor,
+                        'retn_horafestivanocturnacantidad' => $fila->td_hora_festiva_nocturna_cantidad,
+                        'retn_horafestivanocturnavalor' => $fila->td_hora_festiva_nocturna_valor,
+                        'retn_horaextrafestivadiurnacantidad' => $fila->td_hora_extra_festiva_diurna_cantidad,
+                        'retn_horaextrafestivadiurnavalor' => $fila->td_hora_extra_festiva_diurna_valor,
+                        'retn_horaextradestivanocturnacantidad' => $fila->td_hora_extra_festiva_nocturna_cantidad,
+                        'retn_horaextrafestivanocturnavalor' => $fila->td_hora_extra_festiva_nocturna_valor,
+                        'retn_valortotaldehorasextras' => $fila->td_valor_total_de_horas_extras,
+                        'retn_rutaarchivo' => 'SIN ARCHIVO',
+                        'retn_fila' => $i
+                    ]);
+                    $i++;
+                }
+            }
+            DB::commit();
+            $success = true;
+        } catch (\Exception $e) {
+            $success = false;
+            DB::rollback();
+            dd($e->getMessage());
+        }
+        if (!$success) {
+            $respuesta = array('state' => 'error', 'message' => 'Ha ocurrido un error inesperado, por favor inténtelo de nuevo.');
+        }else{
+            $respuesta = array('state' => 'success', 'message' => 'Se ha guardado su información con éxito, las filas sin nombres y apellidos ni documento se han omitido');
         }
         echo json_encode($respuesta);
     }

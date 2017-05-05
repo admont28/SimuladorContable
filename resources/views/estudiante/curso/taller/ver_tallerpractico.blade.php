@@ -319,39 +319,45 @@
                                                 </tr>
                                             @endfor
                                             <tr>
-                                                <td colspan="2" class="text-center">TOTAL</td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
+                                                <td colspan="2" class="text-center vcenter valor-total-">TOTAL</td>
+                                                <td class="text-center vcenter valor-total-td-dias-trabajados numero"></td>
+                                                <td class="text-center vcenter valor-total-td-salario"></td>
+                                                <td class="text-center vcenter valor-total-td-salario-basico"></td>
+                                                <td class="text-center vcenter valor-total-td-horas-extras-y-recargos"></td>
+                                                <td class="text-center vcenter valor-total-td-comisiones"></td>
+                                                <td class="text-center vcenter valor-total-td-bonificaciones"></td>
+                                                <td class="text-center vcenter valor-total-td-total-devengado"></td>
+                                                <td class="text-center vcenter valor-total-td-aux-de-transporte"></td>
+                                                <td class="text-center vcenter valor-total-td-total-devengado-con-auxilio-de-transporte"></td>
+                                                <td class="text-center vcenter valor-total-td-salud"></td>
+                                                <td class="text-center vcenter valor-total-td-pension"></td>
+                                                @if (isset($tallerPractico->tallerNomina->tano_deduccionuno) && $tallerPractico->tallerNomina->tano_deduccionuno != "")
+                                                    <td class="text-center vcenter valor-total-td-deduccionuno"></td>
+                                                @endif
+                                                @if (isset($tallerPractico->tallerNomina->tano_deducciondos) && $tallerPractico->tallerNomina->tano_deducciondos != "")
+                                                    <td class="text-center vcenter valor-total-td-deducciondos"></td>
+                                                @endif
+                                                @if (isset($tallerPractico->tallerNomina->tano_deducciontres) && $tallerPractico->tallerNomina->tano_deducciontres != "")
+                                                    <td class="text-center vcenter valor-total-td-deducciontres"></td>
+                                                @endif
+                                                <td class="text-center vcenter valor-total-td-total-deducciones"></td>
+                                                <td class="text-center vcenter valor-total-td-neto-a-pagar"></td>
+                                                <td class="text-center vcenter valor-total-td-hora-extra-diurna-cantidad numero"></td>
+                                                <td class="text-center vcenter valor-total-td-hora-extra-diurna-valor"></td>
+                                                <td class="text-center vcenter valor-total-td-hora-extra-nocturna-cantidad numero"></td>
+                                                <td class="text-center vcenter valor-total-td-hora-extra-nocturna-valor"></td>
+                                                <td class="text-center vcenter valor-total-td-recargo-nocturno-cantidad numero"></td>
+                                                <td class="text-center vcenter valor-total-td-recargo-nocturno-valor"></td>
+                                                <td class="text-center vcenter valor-total-td-hora-festiva-diurna-cantidad numero"></td>
+                                                <td class="text-center vcenter valor-total-td-hora-festiva-diurna-valor"></td>
+                                                <td class="text-center vcenter valor-total-td-hora-festiva-nocturna-cantidad numero"></td>
+                                                <td class="text-center vcenter valor-total-td-hora-festiva-nocturna-valor"></td>
+                                                <td class="text-center vcenter valor-total-td-hora-extra-festiva-diurna-cantidad numero"></td>
+                                                <td class="text-center vcenter valor-total-td-hora-extra-festiva-diurna-valor"></td>
+                                                <td class="text-center vcenter valor-total-td-hora-extra-festiva-nocturna-cantidad numero"></td>
+                                                <td class="text-center vcenter valor-total-td-hora-extra-festiva-nocturna-valor"></td>
+                                                <td class="text-center vcenter valor-total-td-valor-total-de-horas-extras"></td>
+                                                <td></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -364,8 +370,124 @@
                                     <button class="btn btn-primary" id="solucionar-taller-nomina">Guardar taller</button>
                                 </div>
                             </div>
-                        @endif
+                            @push('scripts')
+                                <script type="text/javascript">
+                                    $(document).ready(function() {
+                                        $('#solucionar-taller-nomina').click(function(event) {
+                                            event.preventDefault();
+                                            $("#solucionar-taller-nomina").attr('disabled', true).text('ENVIANDO DATOS...');
+                                            $("#adicionar-fila-nomina").attr('disabled', true);
+                                            if(xhr && xhr.readyState != 4) {
+                                                xhr.abort();
+                                                console.log("Abortando");
+                                                swal({
+                                                    title: '¡Error!',
+                                                    text: 'Tus datos se están enviando al servidor, por favor espera a que sean almacenados.',
+                                                    type: 'error'
+                                                });
+                                            }
+                                            var filas = [];
+                                            $('#taller-nomina > tbody > tr:not(:last)').each(function(index, el) {
+                                                /*var nombresYApellidos = $(this).children('.td-nombres-y-apellidos').text();
+                                                var documento = $(this).children('.td-documento').text();
+                                                var diasTrabajados = parseInt(numeral($(this).children('.td-dias-trabajados').text()).format('0'));
+                                                var salario = parseInt(numeral($(this).children('.td-salario').text()).format('0'));
+                                                var salarioBasico = parseInt(numeral($(this).children('.td-salario-basico').text()).format('0'));
+                                                var horasExtrasYRecargos = parseInt(numeral($(this).children('.td-horas-extras-y-recargos').text()).format('0'));
+                                                var comisiones = parseInt(numeral($(this).children('.td-comisiones').text()).format('0'));
+                                                var bonificaciones = parseInt(numeral($(this).children('.td-bonificaciones').text()).format('0'));
+                                                var totalDevengado = parseInt(numeral($(this).children('.td-total-devengado').text()).format('0'));
+                                                var auxDeTransporte = parseInt(numeral($(this).children('.td-aux-de-transporte').text()).format('0'));
+                                                var totalDevengadoConAuxTransporte = parseInt(numeral($(this).children('.td-total-devengado-con-auxilio-de-transporte').text()).format('0'));
+                                                var sald = parseInt(numeral($(this).children('.td-salud').text()).format('0'));
+                                                var pension = parseInt(numeral($(this).children('.td-pension').text()).format('0'));
+                                                var deduccionUno = parseInt(numeral($(this).children('.td-deduccionuno').text()).format('0'));
+                                                var deduccionDos = parseInt(numeral($(this).children('.td-deducciondos').text()).format('0'));
+                                                var deduccionTres = parseInt(numeral($(this).children('.td-deducciontres').text()).format('0'));
+                                                var totalDeducciones = parseInt(numeral($(this).children('.td-total-deducciones').text()).format('0'));
+                                                var netoAPagar = parseInt(numeral($(this).children('.td-neto-a-pagar').text()).format('0'));
+                                                var horaExtraDiurnaCantidad = parseInt(numeral($(this).children('.td-hora-extra-diurna-cantidad').text()).format('0'));
+                                                var horaExtraDiurnaValor = parseInt(numeral($(this).children('.td-hora-extra-diurna-valor').text()).format('0'));
+                                                var horaExtraNocturnaCantidad = parseInt(numeral($(this).children('.td-hora-extra-nocturna-cantidad').text()).format('0'));
+                                                var horaExtraNocturnaValor = parseInt(numeral($(this).children('.td-hora-extra-nocturna-valor').text()).format('0'));
+                                                var recargoNocturnoCantidad = parseInt(numeral($(this).children('.td-recargo-nocturno-cantidad').text()).format('0'));
+                                                var recargoNocturnoValor = parseInt(numeral($(this).children('.td-recargo-nocturno-valor').text()).format('0'));
+                                                var horaFestivaDiurnaCantidad = parseInt(numeral($(this).children('.td-hora-festiva-diurna-cantidad').text()).format('0'));
+                                                var horaFestivaDiurnaValor = parseInt(numeral($(this).children('.td-hora-festiva-diurna-valor').text()).format('0'));
+                                                var horaFestivaNocturnaCantidad = parseInt(numeral($(this).children('.td-hora-festiva-nocturna-cantidad').text()).format('0'));
+                                                var horaFestivaNocturnaValor = parseInt(numeral($(this).children('.td-hora-festiva-nocturna-valor').text()).format('0'));
+                                                var horaExtraFestivaDiurnaCantidad = parseInt(numeral($(this).children('.td-hora-extra-festiva-diurna-cantidad').text()).format('0'));
+                                                var horaExtraFestivaDiurnaValor = parseInt(numeral($(this).children('.td-hora-extra-festiva-diurna-valor').text()).format('0'));
+                                                var horaExtraFestivaNocturnaCantidad = parseInt(numeral($(this).children('.td-hora-extra-festiva-nocturna-cantidad').text()).format('0'));
+                                                var horaExtraFestivaNocturnaValor = parseInt(numeral($(this).children('.td-hora-extra-festiva-nocturna-valor').text()).format('0'));
+                                                var valorTotalDeHorasExtras = parseInt(numeral($(this).children('.td-valor-total-de-horas-extras').text()).format('0'));*/
+                                                var fila = new Object();
+                                                $(el).find('td').each(function(index2, el2) {
+                                                    var clase = $(el2).attr('class').split(' ')[2];
+                                                    var valor = "0";
+                                                    if(clase== undefined || clase == 'td-opcion'){
+                                                        return;
+                                                    }
+                                                    else if (clase == 'td-nombres-y-apellidos' || clase == 'td-documento') {
+                                                        valor = $(el2).text();
+                                                        if(valor == ""){
+                                                            $(el).remove();
+                                                        }
+                                                    }else{
+                                                        valor = parseInt(numeral($(el2).text()).format('0'));
+                                                    }
+                                                    var variable = clase.replace(/-/g,"_");
+                                                    Object.defineProperty(fila,variable,{ value: valor, writable: true, enumerable: true, configurable: true });
+                                                });
+                                                filas.push(fila);
+                                            });
 
+                                            var datos = new Object();
+                                            datos.filas = filas;
+                                            console.log(datos);
+                                            console.log(JSON.stringify(filas));
+                                            var xhr =
+                                                $.ajax({
+                                                    url: '{{ route('estudiante.curso.taller.solucionar.nomina.post', ['curs_id' => $curso->curs_id, 'tall_id' => $tallerPractico->tall_id]) }}',
+                                                    type: 'POST',
+                                                    headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                                                    dataType: 'JSON',
+                                                    data: datos,
+                                                    beforeSend: function () {
+                                                    },
+                                                    success: function(data) {
+                                                        if(data.state == "error"){
+                                                            swal({
+                                                                title: '¡Error!',
+                                                                text: data.message,
+                                                                type: 'error'
+                                                            });
+                                                        }else if(data.state == "success"){
+                                                            swal({
+                                                                title: '¡Éxito!',
+                                                                text: data.message,
+                                                                type: 'success'
+                                                            });
+                                                        }
+                                                        console.log(data);
+                                                    }
+                                                })
+                                                .done(function() {
+                                                    console.log("success");
+                                                })
+                                                .fail(function() {
+                                                    console.log("error");
+                                                })
+                                                .always(function() {
+                                                    console.log("complete");
+                                                    $("#solucionar-taller-nomina").attr('disabled', false).text('GUARDAR TALLER');
+                                                    $("#adicionar-fila-nomina").attr('disabled', false);
+                                                });
+                                        });
+                                    });
+                                </script>
+                            @endpush
+                        @endif
                     </div>
                 @endforeach
                 <!-- Tab panes -->
@@ -569,7 +691,7 @@
              */
             $("#adicionar-fila-nomina").click(function(event) {
                 event.preventDefault();
-                var filaTotal = $("#taller-nomina > tbody").children().last();
+                var filaTotal = $("#taller-nomina > tbody").children('tr').last();
                 var primerFilaClonada = $("#taller-nomina > tbody").children().first().clone();
                 var botonEliminarClonado =  $("#taller-nomina > tbody > tr > td > button.eliminar-fila").first().clone(true);
                 primerFilaClonada.find('td').text('');
@@ -619,28 +741,93 @@
                 filaTotal.remove();
                 $('#taller-nomina > tbody').append(primerFilaClonada);
                 $('#taller-nomina > tbody').append(filaTotal);
+                darFormatoACampos();
             });
             $("#taller-nomina").on('blur', '.cambiar-salario-basico[contenteditable=true]', function(event) {
-                cambiarSalarioBasico(this);
+                var elemento = this;
+                cambiarSalarioBasico(elemento)
+                    .then(function () {
+                        return cambiarTotalDevengado(elemento);
+                    })
+                    .then(function () {
+                        return cambiarTotalDevengadoConAuxilioDeTransporte(elemento);
+                    })
+                    .then(function () {
+                        return cambiarNetoAPagar(elemento);
+                    })
+                    .then(function functionName() {
+                        return actualzarHorasExtrasYRecargos(elemento);
+                    })
+                    .then(function functionName() {
+                        return darFormatoACampos(elemento);
+                    })
+                    .then(function () {
+                        return calculatTotales();
+                    });
             });
             $("#taller-nomina").on('blur', '.cambiar-total-devengado[contenteditable=true]', function(event) {
-                cambiarTotalDevengado(this);
+                var elemento = this;
+                cambiarTotalDevengado(elemento)
+                    .then(function () {
+                        return cambiarTotalDevengadoConAuxilioDeTransporte(elemento);
+                    })
+                    .then(function () {
+                        return cambiarNetoAPagar(elemento);
+                    })
+                    .then(function () {
+                        return darFormatoACampos(elemento);
+                    })
+                    .then(function () {
+                        return calculatTotales();
+                    });
             });
             $("#taller-nomina").on('blur', '.cambiar-total-devengado-con-auxilio-de-transporte[contenteditable=true]', function(event) {
-                cambiarTotalDevengadoConAuxilioDeTransporte(this);
+                var elemento = this;
+                cambiarTotalDevengadoConAuxilioDeTransporte(elemento)
+                    .then(function () {
+                        return cambiarNetoAPagar(elemento);
+                    })
+                    .then(function () {
+                        return darFormatoACampos(elemento);
+                    })
+                    .then(function () {
+                        return calculatTotales();
+                    });
             });
             $("#taller-nomina").on('blur', '.cambiar-total-deducciones[contenteditable=true]', function(event) {
-                cambiarTotalDeducciones(this);
+                var elemento = this;
+                cambiarTotalDeducciones(elemento)
+                    .then(function () {
+                        return cambiarNetoAPagar(elemento);
+                    })
+                    .then(function () {
+                        return darFormatoACampos(elemento);
+                    })
+                    .then(function () {
+                        return calculatTotales();
+                    });
             });
-            $("#taller-nomina").on('blur', '.cambiar-neto-a-pagar[contenteditable=true]', function(event) {
+            /*$("#taller-nomina").on('blur', '.cambiar-neto-a-pagar[contenteditable=true]', function(event) {
                 cambiarNetoAPagar(this);
-            });
+            });*/
             $("#taller-nomina").on('blur', '.actualizar-horas-extras-y-valor-total', function(event) {
                 //cambiarHoraExtraDiurna(this);
                 var elemento = this;
                 actualzarHorasExtrasYRecargos(elemento)
                     .then(function () {
+                        return cambiarTotalDevengado(elemento);
+                    })
+                    .then(function () {
+                        return cambiarTotalDevengadoConAuxilioDeTransporte(elemento);
+                    })
+                    .then(function () {
+                        return cambiarNetoAPagar(elemento);
+                    })
+                    .then(function () {
                         return darFormatoACampos(elemento);
+                    })
+                    .then(function () {
+                        return calculatTotales();
                     });
             });
             /*$("#taller-nomina").on('blur', '.cambiar-hora-extra-nocturna[contenteditable=true]', function(event) {
@@ -668,30 +855,21 @@
                 actualzarHorasExtrasYRecargos(this);
             });*/
             function cambiarSalarioBasico(elemento) {
-                console.log("Cambiando Salario Basico");
-                var filaActual = $(elemento).parents('tr');
-                var salario = parseInt(numeral(filaActual.find($(".td-salario")).text()).format('0'));
-                var diasTrabajados = parseInt(numeral(filaActual.find($(".td-dias-trabajados")).text()).format('0'));
-                if(diasTrabajados != 0 && salario != 0){
-                    var salarioBasico = (salario / 30) * diasTrabajados;
-                    filaActual.children((".td-salario-basico")).text(numeral(salarioBasico).format('$0,0'));
-                }
-                console.log("------- Lanzando -> Cambiar Total Devengado ------ Lanzado desde -> Cambiando Salario Basico -------- ");
-                cambiarTotalDevengado(elemento)
-                    .then(function () {
-                        return cambiarTotalDevengadoConAuxilioDeTransporte(elemento);
-                    })
-                    .then(function () {
-                        return cambiarNetoAPagar(elemento);
-                    })
-                    .then(function functionName() {
-                        return actualzarHorasExtrasYRecargos(elemento);
-                    })
-                    .then(function functionName() {
-                        return darFormatoACampos(elemento);
-                    });
-                //actualzarHorasExtrasYRecargos(elemento);
-                //$(".cambiar-total-devengado").trigger('blur');
+                var promise = new Promise(function (resolve, reject) {
+                    console.log("Cambiando Salario Basico");
+                    var filaActual = $(elemento).parents('tr');
+                    var salario = parseInt(numeral(filaActual.find($(".td-salario")).text()).format('0'));
+                    var diasTrabajados = parseInt(numeral(filaActual.find($(".td-dias-trabajados")).text()).format('0'));
+                    if(diasTrabajados != 0 && salario != 0){
+                        var salarioBasico = (salario / 30) * diasTrabajados;
+                        filaActual.children((".td-salario-basico")).text(numeral(salarioBasico).format('$0,0'));
+                    }
+                    console.log("------- Lanzando -> Cambiar Total Devengado ------ Lanzado desde -> Cambiando Salario Basico -------- ");
+                    //actualzarHorasExtrasYRecargos(elemento);
+                    //$(".cambiar-total-devengado").trigger('blur');
+                    resolve(elemento);
+                });
+                return promise;
             }
             function cambiarTotalDevengado(elemento) {
                 var promise = new Promise(function (resolve, reject) {
@@ -710,14 +888,12 @@
                     console.log(filaActual.children(".td-total-devengado"));
                     console.log(filaActual.children(".td-total-devengado").text());
                     console.log("------------------------------- CIERRE AUDITORIA ----------------------------------------------");
-
-                    var comisiones = parseInt(numeral(filaActual.children((".td-comisiones")).text()).format('0'));
-                    var bonificaciones = parseInt(numeral(filaActual.children((".td-bonificaciones")).text()).format('0'));
-                    var valorTotalHorasExtras = parseInt(numeral(filaActual.children((".td-valor-total-de-horas-extras")).text()).format('0'));
-                    var salarioBasico = parseInt(numeral(filaActual.children((".td-salario-basico")).text()).format('0'));
+                    var salarioBasico = parseInt(numeral(filaActual.children(".td-salario-basico").text()).format('0'));
+                    var valorTotalHorasExtras = parseInt(numeral(filaActual.children(".td-horas-extras-y-recargos").text()).format('0'));
+                    var comisiones = parseInt(numeral(filaActual.children(".td-comisiones").text()).format('0'));
+                    var bonificaciones = parseInt(numeral(filaActual.children(".td-bonificaciones").text()).format('0'));
                     var totalDevengado = salarioBasico + valorTotalHorasExtras + comisiones + bonificaciones;
-                    filaActual.children((".td-total-devengado")).text(numeral(totalDevengado).format('$0,0'));
-
+                    filaActual.children(".td-total-devengado").text(numeral(totalDevengado).format('$0,0'));
                     //$(elemento).text(numeral($(elemento).text()).format('$0,0'));
                     console.log("------- Lanzando -> Cambiar Total Devengado Con Auxilio de Transporte ------ Lanzado desde -> Cambiando Total Devengado -------- ");
                     resolve(elemento);
@@ -744,19 +920,23 @@
 
             }
             function cambiarTotalDeducciones(elemento) {
-                console.log("Cambiando Total Deducciones");
-                var filaActual = $(elemento).parents('tr');
-                var salud = parseInt(numeral(filaActual.children((".td-salud")).text()).format('0'));
-                var pension = parseInt(numeral(filaActual.children((".td-pension")).text()).format('0'));
-                var deduccionUno = parseInt(numeral(filaActual.children((".td-deduccionuno")).text()).format('0'));
-                var deduccionDos = parseInt(numeral(filaActual.children((".td-deducciondos")).text()).format('0'));
-                var deduccionTres = parseInt(numeral(filaActual.children((".td-deducciontres")).text()).format('0'));
-                var totalDeducciones = salud + pension + deduccionUno + deduccionDos + deduccionTres;
-                filaActual.children((".td-total-deducciones")).text(numeral(totalDeducciones).format('$0,0'));
-                //$(elemento).text(numeral($(elemento).text()).format('$0,0'));
-                console.log("------- Lanzando -> Cambiar Neto A Pagar ------ Lanzado desde -> Cambiando Total Deducciones -------- ");
-                //cambiarNetoAPagar(elemento);
-                //$(".cambiar-neto-a-pagar").trigger('blur');
+                var promise = new Promise(function (resolve, reject) {
+                    console.log("Cambiando Total Deducciones");
+                    var filaActual = $(elemento).parents('tr');
+                    var salud = parseInt(numeral(filaActual.children((".td-salud")).text()).format('0'));
+                    var pension = parseInt(numeral(filaActual.children((".td-pension")).text()).format('0'));
+                    var deduccionUno = parseInt(numeral(filaActual.children((".td-deduccionuno")).text()).format('0'));
+                    var deduccionDos = parseInt(numeral(filaActual.children((".td-deducciondos")).text()).format('0'));
+                    var deduccionTres = parseInt(numeral(filaActual.children((".td-deducciontres")).text()).format('0'));
+                    var totalDeducciones = salud + pension + deduccionUno + deduccionDos + deduccionTres;
+                    filaActual.children((".td-total-deducciones")).text(numeral(totalDeducciones).format('$0,0'));
+                    //$(elemento).text(numeral($(elemento).text()).format('$0,0'));
+                    console.log("------- Lanzando -> Cambiar Neto A Pagar ------ Lanzado desde -> Cambiando Total Deducciones -------- ");
+                    //cambiarNetoAPagar(elemento);
+                    //$(".cambiar-neto-a-pagar").trigger('blur');
+                    resolve(elemento);
+                });
+                return promise;
             }
             function cambiarNetoAPagar(elemento) {
                 var promise = new Promise(function (resolve, reject) {
@@ -771,14 +951,19 @@
                 });
                 return promise;
             }
-            function darFormatoACampos(elemento) {
-                console.log("Dando formato a:");
-                console.log(elemento);
-                if($(elemento).hasClass('numero')){
-                    $(elemento).text(numeral($(elemento).text()).format('0'));
-                }else{
-                    $(elemento).text(numeral($(elemento).text()).format('$0,0'));
-                }
+            function darFormatoACampos() {
+                $("#taller-nomina > tbody > tr:not(:last-child) > td").each(function(index, el) {
+                    if($(el).hasClass('numero')){
+                        $(el).text(numeral($(el).text()).format('0'));
+                    }else if ($(el).hasClass('td-nombres-y-apellidos') || $(el).hasClass('td-documento') || $(el).hasClass('td-opcion')) {
+                        return; //this is equivalent of 'continue' for jQuery loop
+                    }
+                    else{
+                        $(el).text(numeral($(el).text()).format('$0,0'));
+                    }
+                });
+                //$("#taller-nomina > tbody > tr:last > td").text('');
+                //$("#taller-nomina > tbody > tr:last > td:first").text('TOTAL');
             }
             function actualzarHorasExtrasYRecargos(elemento) {
                 var promise = new Promise(function (resolve, reject) {
@@ -803,6 +988,9 @@
                         })
                         .then(function () {
                             return cambiarValorTotalDeHorasExtras(elemento);
+                        })
+                        .then(function () {
+                            return cambiarCeldaHorasExtrasYRecargosEnDevengados(elemento);
                         })
                         .then(function functionName() {
                             resolve(elemento);
@@ -946,6 +1134,43 @@
                     resolve(elemento);
                 });
                 return promise;
+            }
+            function cambiarCeldaHorasExtrasYRecargosEnDevengados(elemento) {
+                var promise = new Promise(function (resolve, reject) {
+                    var filaActual = $(elemento).parents('tr');
+                    var valorTotalDeHorasExtras = parseInt(numeral(filaActual.children(".td-valor-total-de-horas-extras").text()).format('0'));
+                    filaActual.children(".td-horas-extras-y-recargos").text(numeral(valorTotalDeHorasExtras).format('$0,0'));
+                    resolve(elemento);
+                });
+                return promise;
+            }
+            function calculatTotales() {
+                var promise = new Promise(function (resolve, reject) {
+                    console.log("-------------------------- calculando totales --------------------------");
+                    $("#taller-nomina > tbody > tr:first > td").each(function(index, el) {
+                        // Aquí tengo cada td de la primer fila
+                        if ($(el).hasClass('td-nombres-y-apellidos') || $(el).hasClass('td-documento') || $(el).hasClass('td-opcion')) {
+                            return; //this is equivalent of 'continue' for jQuery loop
+                        }
+                        var clase = $(el).attr('class').split(' ')[2];
+                        console.log(clase);
+                        var suma = 0;
+                        $("#taller-nomina > tbody > tr > td."+clase).each(function(index2, el2) {
+                            suma += parseInt(numeral($(el2).text()).format('0'));
+                        });
+                        console.log(suma);
+                        if($(el).hasClass('numero')){
+                            $(".valor-total-"+clase).text(numeral(suma).format('0'));
+                        }else{
+                            $(".valor-total-"+clase).text(numeral(suma).format('$0,0'));
+                        }
+                    });
+                    console.log("-------------------------- FIN calculando totales --------------------------");
+                });
+                return promise;
+            }
+            function functionName() {
+
             }
             $('body').tooltip({
                 'selector': '[data-toggle="tooltip"]',
