@@ -6,6 +6,35 @@
 
 @section('active','#estudiante-curso')
 
+@push('scripts')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // load a locale
+            numeral.register('locale', 'es_CO', {
+                delimiters: {
+                    thousands: '.',
+                    decimal: ','
+                },
+                abbreviations: {
+                    thousand: 'k',
+                    million: 'm',
+                    billion: 'b',
+                    trillion: 't'
+                },
+                ordinal : function (number) {
+                    return number === 1 ? 'er' : 'ème';
+                },
+                currency: {
+                    symbol: '$ '
+                }
+            });
+            // switch between locales
+            numeral.locale('es_CO');
+            // '$1,000.00'*/
+        });
+    </script>
+@endpush
+
 @section('content')
     <div class="row">
         <h2 class="text-center"><strong>TALLERES PRÁCTICOS</strong></h2>
@@ -78,47 +107,61 @@
                                     </thead>
                                     <tbody>
                                         @if($tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuario()->isEmpty())
-                                            <tr>
-                                                <td class="text-center" width="20%">
-                                                    <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true">
-                                                    </select>
-                                                </td>
-                                                <td class="text-center columna_cuentas" width="20%"></td>
-                                                <td class="text-center columna_debito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>
-                                                <td class="text-center columna_credito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>
-                                                <td class="text-center" width="10%"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center" width="20%">
-                                                    <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true">
-                                                    </select>
-                                                </td>
-                                                <td class="text-center columna_cuentas" width="20%"></td>
-                                                <td class="text-center columna_debito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>
-                                                <td class="text-center columna_credito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>
-                                                <td class="text-center" width="10%"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
+                                            @for ($i = 0; $i < 2; $i++)
+                                                <tr>
+                                                    <td class="text-center vcenter" width="20%">
+                                                        <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true">
+                                                        </select>
+                                                    </td>
+                                                    <td class="text-center vcenter columna_cuentas" width="20%"></td>
+                                                    <td class="text-center vcenter columna_debito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>
+                                                    <td class="text-center vcenter columna_credito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>
+                                                    <td class="text-center vcenter columna_opcion" width="10%"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
+                                                </tr>
+                                            @endfor
+                                            <tr id="sumas-iguales">
+                                                <td colspan="2" class="text-center"><strong>SUMAS IGUALES</strong></td>
+                                                <td class="text-center" id="total_debito">$ 0</td>
+                                                <td class="text-center" id="total_credito">$ 0</td>
+                                                <td class="text-center"></td>
                                             </tr>
                                         @else
                                             @foreach ($tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuario() as $rtac)
                                                 <tr>
-                                                    <td class="text-center" width="20%">
+                                                    <td class="text-center vcenter" width="20%">
                                                         <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true">
                                                             <option value="{{ $rtac->puc_id }}" data-subtext="{{ $rtac->puc->puc_nombre }}" selected="selected">{{ $rtac->puc->puc_codigo }}</option>
                                                         </select>
                                                     </td>
-                                                    <td class="text-center columna_cuentas" width="20%">{{ $rtac->puc->puc_nombre }}</td>
-                                                    <td class="text-center columna_debito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">{{ $rtac->rtac_valordebito }}</td>
-                                                    <td class="text-center columna_credito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">{{ $rtac->rtac_valorcredito }}</td>
-                                                    <td class="text-center" width="10%"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
+                                                    <td class="text-center vcenter columna_cuentas" width="20%">{{ $rtac->puc->puc_nombre }}</td>
+                                                    <td class="text-center vcenter columna_debito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">{{ $rtac->rtac_valordebito }}</td>
+                                                    <td class="text-center vcenter columna_credito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">{{ $rtac->rtac_valorcredito }}</td>
+                                                    <td class="text-center vcenter columna_opcion" width="10%"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
                                                 </tr>
+                                                @push('scripts')
+                                                    <script type="text/javascript">
+                                                        $(document).ready(function() {
+                                                            $("#taller-asiento-contable > tbody > tr > td").each(function(index, el) {
+                                                                if($(el).hasClass('columna_opcion')){
+                                                                    return;
+                                                                }
+                                                                else if ($(el).hasClass('columna_codigo') || $(el).hasClass('columna_cuentas') || $(el).hasClass('columna_debito') || $(el).hasClass('columna_credito')) {
+                                                                    $(el).text(numeral($(el).text()).format('$0,0'));
+                                                                }
+                                                            });
+                                                            $("#total_debito").text(numeral($("#total_debito").text()).format('$0,0'));
+                                                            $("#total_credito").text(numeral($("#total_credito").text()).format('$0,0'));
+                                                        });
+                                                    </script>
+                                                @endpush
                                             @endforeach
+                                            <tr id="sumas-iguales">
+                                                <td colspan="2" class="text-center"><strong>SUMAS IGUALES</strong></td>
+                                                <td class="text-center" id="total_debito">{{ $tallerPractico->tallerAsientoContable->calcularTotalDebito() }}</td>
+                                                <td class="text-center" id="total_credito">{{ $tallerPractico->tallerAsientoContable->calcularTotalCredito() }}</td>
+                                                <td class="text-center"></td>
+                                            </tr>
                                         @endif
-                                        <tr id="sumas-iguales">
-                                            <td colspan="2" class="text-center"><strong>SUMAS IGUALES</strong></td>
-                                            <td class="text-center" id="total_debito">$ 0</td>
-                                            <td class="text-center" id="total_credito">$ 0</td>
-                                            <td class="text-center"></td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -315,7 +358,7 @@
                                                     <td class="text-center vcenter td-hora-extra-festiva-nocturna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>
                                                     <td class="text-center vcenter td-hora-extra-festiva-nocturna-valor">$ 0</td>
                                                     <td class="text-center vcenter td-valor-total-de-horas-extras">$ 0</td>
-                                                    <td class="text-center td-opcion"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
+                                                    <td class="text-center vcenter td-opcion"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
                                                 </tr>
                                             @endfor
                                             <tr>
@@ -508,28 +551,6 @@
 @push('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
-            // load a locale
-            numeral.register('locale', 'es_CO', {
-                delimiters: {
-                    thousands: '.',
-                    decimal: ','
-                },
-                abbreviations: {
-                    thousand: 'k',
-                    million: 'm',
-                    billion: 'b',
-                    trillion: 't'
-                },
-                ordinal : function (number) {
-                    return number === 1 ? 'er' : 'ème';
-                },
-                currency: {
-                    symbol: '$ '
-                }
-            });
-            // switch between locales
-            numeral.locale('es_CO');
-            // '$1,000.00'
             // Función para activar el contador.
             $('[data-countdown]').each(function() {
                 var $this = $(this);
@@ -577,6 +598,11 @@
                 $('.columna_debito[contenteditable=true]').trigger('blur');
                 $('.columna_credito[contenteditable=true]').trigger('blur');
             });
+            /*
+                --------------------------------------------------------------------------------
+                Eventos para Taller Asiento Contable
+                --------------------------------------------------------------------------------
+             */
             var options = {
                     "ajax": {
                         "type": "GET",
@@ -623,7 +649,13 @@
 
             });
             $('#taller-asiento-contable').on('blur', '.columna_debito[contenteditable=true]',function(event) {
-                var valorTdActual = $(this).text();
+                calcularColumnaDebito(this);
+            });
+            $('#taller-asiento-contable').on('blur', '.columna_credito[contenteditable=true]',function(event) {
+                calcularColumnaCredito(this);
+            });
+            function calcularColumnaDebito(elemento) {
+                var valorTdActual = $(elemento).text();
                 valorTdActual = parseInt(numeral(valorTdActual).format('0'));
                 if(isNaN(valorTdActual)){
                     swal(
@@ -642,11 +674,11 @@
                     }
                 });
                 valorTdActual = numeral(valorTdActual).format('$0,0');
-                $(this).text(valorTdActual);
+                $(elemento).text(valorTdActual);
                 $("#total_debito").text(numeral(total_debito).format('$0,0'));
-            });
-            $('#taller-asiento-contable').on('blur', '.columna_credito[contenteditable=true]',function(event) {
-                var valorTdActual = $(this).text();
+            }
+            function calcularColumnaCredito(elemento) {
+                var valorTdActual = $(elemento).text();
                 valorTdActual = parseInt(numeral(valorTdActual).format('0'));
                 if(isNaN(valorTdActual)){
                     swal(
@@ -665,9 +697,9 @@
                     }
                 });
                 valorTdActual = numeral(valorTdActual).format('$0,0');
-                $(this).text(valorTdActual);
+                $(elemento).text(valorTdActual);
                 $("#total_credito").text(numeral(total_credito).format('$0,0'));
-            });
+            }
             $("#adicionar-fila-asiento-contable").click(function(event) {
                 event.preventDefault();
                 var filaSumasIguales = $("#taller-asiento-contable > tbody").children().last();
@@ -679,8 +711,8 @@
                 primerFilaClonada.children('td').eq(3).text('$ 0');
                 primerFilaClonada.children('td').eq(0).append('<select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true"></select>');
                 filaSumasIguales.remove();
-                $('#taller-asiento-contable > tbody:last-child').append(primerFilaClonada);
-                $('#taller-asiento-contable > tbody:last-child').append(filaSumasIguales);
+                $('#taller-asiento-contable > tbody').append(primerFilaClonada);
+                $('#taller-asiento-contable > tbody').append(filaSumasIguales);
                 $('.selectpicker').selectpicker('refresh');
                 $('.selectpicker').selectpicker().filter('.with-ajax').ajaxSelectPicker(options);
             });
@@ -736,7 +768,7 @@
                     '<td class="text-center vcenter td-hora-extra-festiva-nocturna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>'+
                     '<td class="text-center vcenter td-hora-extra-festiva-nocturna-valor">$ 0</td>'+
                     '<td class="text-center vcenter td-valor-total-de-horas-extras">$ 0</td>'+
-                    '<td class="text-center td-opcion"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>'+
+                    '<td class="text-center vcenter td-opcion"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>'+
                 '</tr>';*/
                 filaTotal.remove();
                 $('#taller-nomina > tbody').append(primerFilaClonada);
@@ -807,11 +839,7 @@
                         return calculatTotales();
                     });
             });
-            /*$("#taller-nomina").on('blur', '.cambiar-neto-a-pagar[contenteditable=true]', function(event) {
-                cambiarNetoAPagar(this);
-            });*/
             $("#taller-nomina").on('blur', '.actualizar-horas-extras-y-valor-total', function(event) {
-                //cambiarHoraExtraDiurna(this);
                 var elemento = this;
                 actualzarHorasExtrasYRecargos(elemento)
                     .then(function () {
@@ -830,30 +858,6 @@
                         return calculatTotales();
                     });
             });
-            /*$("#taller-nomina").on('blur', '.cambiar-hora-extra-nocturna[contenteditable=true]', function(event) {
-                //cambiarHoraExtraNocturna(this);
-                actualzarHorasExtrasYRecargos(this);
-            });
-            $("#taller-nomina").on('blur', '.cambiar-recargo-nocturno[contenteditable=true]', function(event) {
-                //cambiarRecargoNocturno(this);
-                actualzarHorasExtrasYRecargos(this);
-            });
-            $("#taller-nomina").on('blur', '.cambiar-hora-festiva-diurna[contenteditable=true]', function(event) {
-                //cambiarHoraFestivaDiurna(this);
-                actualzarHorasExtrasYRecargos(this);
-            });
-            $("#taller-nomina").on('blur', '.cambiar-hora-festiva-nocturna[contenteditable=true]', function(event) {
-                //cambiarHoraFestivaNocturna(this);
-                actualzarHorasExtrasYRecargos(this);
-            });
-            $("#taller-nomina").on('blur', '.cambiar-hora-extra-festiva-diurna[contenteditable=true]', function(event) {
-                //cambiarHoraExtraFestivaDiurna(this);
-                actualzarHorasExtrasYRecargos(this);
-            });
-            $("#taller-nomina").on('blur', '.cambiar-hora-extra-festiva-nocturna[contenteditable=true]', function(event) {
-                //cambiarHoraExtraFestivaNocturna(this);
-                actualzarHorasExtrasYRecargos(this);
-            });*/
             function cambiarSalarioBasico(elemento) {
                 var promise = new Promise(function (resolve, reject) {
                     console.log("Cambiando Salario Basico");
@@ -962,8 +966,6 @@
                         $(el).text(numeral($(el).text()).format('$0,0'));
                     }
                 });
-                //$("#taller-nomina > tbody > tr:last > td").text('');
-                //$("#taller-nomina > tbody > tr:last > td:first").text('TOTAL');
             }
             function actualzarHorasExtrasYRecargos(elemento) {
                 var promise = new Promise(function (resolve, reject) {
