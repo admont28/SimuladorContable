@@ -92,7 +92,7 @@
                         @endif
                         @if (isset($tallerPractico->tallerAsientoContable))
                             <div class="row">
-                                <table class="table table-striped table-bordered table-hover" id="taller-asiento-contable">
+                                <table class="table table-striped table-bordered table-hover taller-asiento-contable" id="taller-asiento-contable">
                                     <thead>
                                         <tr>
                                             <td colspan="5" class="text-center"><strong>CONTABILIZACIÓN DE LA PROVISIÓN</strong></td>
@@ -121,8 +121,8 @@
                                             @endfor
                                             <tr id="sumas-iguales">
                                                 <td colspan="2" class="text-center"><strong>SUMAS IGUALES</strong></td>
-                                                <td class="text-center" id="total_debito">$ 0</td>
-                                                <td class="text-center" id="total_credito">$ 0</td>
+                                                <td class="text-center total_debito" id="total_debito">$ 0</td>
+                                                <td class="text-center total_credito" id="total_credito">$ 0</td>
                                                 <td class="text-center"></td>
                                             </tr>
                                         @else
@@ -157,8 +157,8 @@
                                             @endforeach
                                             <tr id="sumas-iguales">
                                                 <td colspan="2" class="text-center"><strong>SUMAS IGUALES</strong></td>
-                                                <td class="text-center" id="total_debito">{{ $tallerPractico->tallerAsientoContable->calcularTotalDebito() }}</td>
-                                                <td class="text-center" id="total_credito">{{ $tallerPractico->tallerAsientoContable->calcularTotalCredito() }}</td>
+                                                <td class="text-center total_debito" id="total_debito">{{ $tallerPractico->tallerAsientoContable->calcularTotalDebito() }}</td>
+                                                <td class="text-center total_credito" id="total_credito">{{ $tallerPractico->tallerAsientoContable->calcularTotalCredito() }}</td>
                                                 <td class="text-center"></td>
                                             </tr>
                                         @endif
@@ -167,7 +167,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-lg-12 text-center">
-                                    <button class="btn btn-default" id="adicionar-fila-asiento-contable">Adicionar fila</button>
+                                    <button class="btn btn-default adicionar-fila-asiento-contable" id="adicionar-fila-asiento-contable">Adicionar fila</button>
                                     <button class="btn btn-primary" id="solucionar-taller-asiento-contable">Guardar taller</button>
                                 </div>
                             </div>
@@ -575,10 +575,24 @@
                     },
                     "preserveSelected": false
                 };
-                $('.selectpicker').selectpicker().filter('.with-ajax').ajaxSelectPicker(options);
-                $('select').trigger('change');
-            $('#taller-asiento-contable').on('change', 'select',function(event) {
+            $('.selectpicker').selectpicker().filter('.with-ajax').ajaxSelectPicker(options);
+            $('select').trigger('change');
+            var activeTab = null;
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                activeTab = e.target;
+                console.log(activeTab);
+                activeTab = $(activeTab).attr('href');
+                console.log(activeTab);
+                console.log($('.tab-content:visible'));
+                console.log($('.tab-content:visible .taller-asiento-contable'));
+                console.log($('.tab-content:visible').find('.taller-asiento-contable'));
+            });
+
+            //var tab_selected = $("li.tab.ui-tabs-selected a").attr("href");
+            //console.log(tab_selected);
+            $('.tab-content:visible').find('.taller-asiento-contable').on('change', 'select',function(event) {
                 event.preventDefault();
+                console.log(this);
                 // Obtengo la fila en la que se modificó el select.
                 var fila = $(this).data('fila');
                 // Obtengo el nombre del puc, este se encuentra en el atributo data-subtext de la opción seleccionada por el usuario.
@@ -587,14 +601,16 @@
                 $(this).parents('tr').find('td.columna_cuentas').text(nombre);
 
             });
-            $('#taller-asiento-contable').on('blur', '.columna_debito[contenteditable=true]',function(event) {
+            $('.tab-content:visible').find('.taller-asiento-contable').on('blur', '.columna_debito[contenteditable=true]',function(event) {
+                console.log(this);
                 calcularColumnaDebito(this);
             });
-            $('#taller-asiento-contable').on('blur', '.columna_credito[contenteditable=true]',function(event) {
+            $('.tab-content:visible').find('.taller-asiento-contable').on('blur', '.columna_credito[contenteditable=true]',function(event) {
                 calcularColumnaCredito(this);
             });
             function calcularColumnaDebito(elemento) {
                 var valorTdActual = $(elemento).text();
+                var tablaActual = $(elemento).parents('table');
                 valorTdActual = parseInt(numeral(valorTdActual).format('0'));
                 if(isNaN(valorTdActual)){
                     swal(
@@ -605,7 +621,8 @@
                     valorTdActual = 0;;
                 }
                 var total_debito = 0;
-                $('.columna_debito').each(function(index, el) {
+                console.log(tablaActual);
+                tablaActual.find('.columna_debito').each(function(index, el) {
                     var number = numeral($(el).text()).format('0');
                     var valorTd = parseInt(number);
                     if(!isNaN(valorTd)){
@@ -614,10 +631,11 @@
                 });
                 valorTdActual = numeral(valorTdActual).format('$0,0');
                 $(elemento).text(valorTdActual);
-                $("#total_debito").text(numeral(total_debito).format('$0,0'));
+                tablaActual.find(".total_debito").text(numeral(total_debito).format('$0,0'));
             }
             function calcularColumnaCredito(elemento) {
                 var valorTdActual = $(elemento).text();
+                var tablaActual = $(elemento).parents('table');
                 valorTdActual = parseInt(numeral(valorTdActual).format('0'));
                 if(isNaN(valorTdActual)){
                     swal(
@@ -628,7 +646,7 @@
                     valorTdActual = 0;;
                 }
                 var total_credito = 0;
-                $('.columna_credito').each(function(index, el) {
+                tablaActual.find('.columna_credito').each(function(index, el) {
                     var number = numeral($(el).text()).format('0');
                     var valorTd = parseInt(number);
                     if(!isNaN(valorTd)){
@@ -637,21 +655,22 @@
                 });
                 valorTdActual = numeral(valorTdActual).format('$0,0');
                 $(elemento).text(valorTdActual);
-                $("#total_credito").text(numeral(total_credito).format('$0,0'));
+                tablaActual.find(".total_credito").text(numeral(total_credito).format('$0,0'));
             }
-            $("#adicionar-fila-asiento-contable").click(function(event) {
+            $('.tab-content:visible').find('.adicionar-fila-asiento-contable').click(function(event) {
                 event.preventDefault();
-                var filaSumasIguales = $("#taller-asiento-contable > tbody").children().last();
-                var primerFilaClonada = $("#taller-asiento-contable > tbody").children().first().clone(true);
-                var botonEliminarClonado =  $("#taller-asiento-contable > tbody > tr > td > button.eliminar-fila").first().clone(true);
+                console.log($(this).parents('div.tab-pane').find('table'));
+                var filaSumasIguales = $(this).parents('div.tab-pane').find('table').find("tbody").children().last();
+                var primerFilaClonada =$(this).parents('div.tab-pane').find('table').find("tbody").children().first().clone(true);
+                var botonEliminarClonado = $(this).parents('div.tab-pane').find('table').find("tbody > tr > td > button.eliminar-fila").first().clone(true);
                 primerFilaClonada.children('td').eq(0).text('');
                 primerFilaClonada.children('td').eq(1).text('');
                 primerFilaClonada.children('td').eq(2).text('$ 0');
                 primerFilaClonada.children('td').eq(3).text('$ 0');
                 primerFilaClonada.children('td').eq(0).append('<select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true"></select>');
                 filaSumasIguales.remove();
-                $('#taller-asiento-contable > tbody').append(primerFilaClonada);
-                $('#taller-asiento-contable > tbody').append(filaSumasIguales);
+                $(this).parents('div.tab-pane').find('table').find('tbody').append(primerFilaClonada);
+                $(this).parents('div.tab-pane').find('table').find('tbody').append(filaSumasIguales);
                 $('.selectpicker').selectpicker('refresh');
                 $('.selectpicker').selectpicker().filter('.with-ajax').ajaxSelectPicker(options);
             });
