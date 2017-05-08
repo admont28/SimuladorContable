@@ -138,22 +138,6 @@
                                                     <td class="text-center vcenter columna_credito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">{{ $rtac->rtac_valorcredito }}</td>
                                                     <td class="text-center vcenter columna_opcion" width="10%"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
                                                 </tr>
-                                                @push('scripts')
-                                                    <script type="text/javascript">
-                                                        $(document).ready(function() {
-                                                            $("#taller-asiento-contable > tbody > tr > td").each(function(index, el) {
-                                                                if($(el).hasClass('columna_opcion')){
-                                                                    return;
-                                                                }
-                                                                else if ($(el).hasClass('columna_debito') || $(el).hasClass('columna_credito')) {
-                                                                    $(el).text(numeral($(el).text()).format('$0,0'));
-                                                                }
-                                                            });
-                                                            $("#total_debito").text(numeral($("#total_debito").text()).format('$0,0'));
-                                                            $("#total_credito").text(numeral($("#total_credito").text()).format('$0,0'));
-                                                        });
-                                                    </script>
-                                                @endpush
                                             @endforeach
                                             <tr id="sumas-iguales">
                                                 <td colspan="2" class="text-center"><strong>SUMAS IGUALES</strong></td>
@@ -161,6 +145,22 @@
                                                 <td class="text-center total_credito" id="total_credito">{{ $tallerPractico->tallerAsientoContable->calcularTotalCredito() }}</td>
                                                 <td class="text-center"></td>
                                             </tr>
+                                            @push('scripts')
+                                                <script type="text/javascript">
+                                                    $(document).ready(function() {
+                                                        $("#taller-asiento-contable > tbody > tr > td").each(function(index, el) {
+                                                            if($(el).hasClass('columna_opcion')){
+                                                                return;
+                                                            }
+                                                            else if ($(el).hasClass('columna_debito') || $(el).hasClass('columna_credito')) {
+                                                                $(el).text(numeral($(el).text()).format('$0,0'));
+                                                            }
+                                                        });
+                                                        $("#total_debito").text(numeral($("#total_debito").text()).format('$0,0'));
+                                                        $("#total_credito").text(numeral($("#total_credito").text()).format('$0,0'));
+                                                    });
+                                                </script>
+                                            @endpush
                                         @endif
                                     </tbody>
                                 </table>
@@ -168,78 +168,13 @@
                             <div class="row">
                                 <div class="col-lg-12 text-center">
                                     <button class="btn btn-default adicionar-fila-asiento-contable" id="adicionar-fila-asiento-contable">Adicionar fila</button>
-                                    <button class="btn btn-primary" id="solucionar-taller-asiento-contable">Guardar taller</button>
+                                    <button class="btn btn-primary solucionar-taller-asiento-contable" id="solucionar-taller-asiento-contable" data-ruta="{{ route('estudiante.curso.taller.solucionar.asientocontable.post', ['curs_id' => $curso->curs_id, 'tall_id' => $tallerPractico->tall_id]) }}">Guardar taller</button>
                                 </div>
                             </div>
                             @push('scripts')
                                 <script type="text/javascript">
                                     $(document).ready(function() {
-                                        $('#solucionar-taller-asiento-contable').click(function(event) {
-                                            event.preventDefault();
-                                            $("#solucionar-taller-asiento-contable").attr('disabled', true).text('ENVIANDO DATOS...');
-                                            $("#adicionar-fila-asiento-contable").attr('disabled', true);
-                                            var filas = [];
-                                            $('#taller-asiento-contable > tbody > tr:not(:last)').each(function(index, el) {
-                                                var codigo = $(this).find('.columna_codigo option:selected').val();
-                                                var cuentas = $(this).find('.columna_cuentas').text();
-                                                var debito = parseInt(numeral($(this).find('.columna_debito').text()).format('0'));
-                                                var credito = parseInt(numeral($(this).find('.columna_credito').text()).format('0'));
-                                                if(codigo == undefined && $('#taller-asiento-contable > tbody > tr:not(:last)').length > 1){
-                                                    $(this).remove();
-                                                }else{
-                                                    var fila = {
-                                                        "codigo" : codigo,
-                                                        "cuentas" : cuentas,
-                                                        "debito" : debito,
-                                                        "credito" : credito
-                                                    };
-                                                    filas.push(fila);
-                                                }
-                                            });
-                                            var sumasIguales = {
-                                                "total_debito" : parseInt(numeral($('#total_debito').text()).format('0')),
-                                                "total_credito" : parseInt(numeral($('#total_credito').text()).format('0'))
-                                            }
-                                            var datos = new Object();
-                                            datos.filas = filas;
-                                            datos.sumasIguales = sumasIguales;
-                                            var xhr =
-                                                $.ajax({
-                                                    url: '{{ route('estudiante.curso.taller.solucionar.asientocontable.post', ['curs_id' => $curso->curs_id, 'tall_id' => $tallerPractico->tall_id]) }}',
-                                                    type: 'POST',
-                                                     headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                                                    dataType: 'JSON',
-                                                    data: datos,
-                                                    beforeSend: function () {
-                                                    },
-                                                    success: function(data) {
-                                                        if(data.state == "error"){
-                                                            swal({
-                                                                title: '¡Error!',
-                                                                text: data.message,
-                                                                type: 'error'
-                                                            });
-                                                        }else if(data.state == "success"){
-                                                            swal({
-                                                                title: '¡Éxito!',
-                                                                text: data.message,
-                                                                type: 'success'
-                                                            });
-                                                        }
-                                                    }
-                                                })
-                                                .done(function() {
-                                                    console.log("success");
-                                                })
-                                                .fail(function() {
-                                                    console.log("error");
-                                                })
-                                                .always(function() {
-                                                    console.log("complete");
-                                                    $("#solucionar-taller-asiento-contable").attr('disabled', false).text('GUARDAR TALLER');
-                                                    $("#adicionar-fila-asiento-contable").attr('disabled', false);
-                                                });
-                                        });
+
                                     });
                                 </script>
                             @endpush
@@ -659,20 +594,90 @@
             }
             $('.tab-content:visible').find('.adicionar-fila-asiento-contable').click(function(event) {
                 event.preventDefault();
-                console.log($(this).parents('div.tab-pane').find('table'));
-                var filaSumasIguales = $(this).parents('div.tab-pane').find('table').find("tbody").children().last();
-                var primerFilaClonada =$(this).parents('div.tab-pane').find('table').find("tbody").children().first().clone(true);
-                var botonEliminarClonado = $(this).parents('div.tab-pane').find('table').find("tbody > tr > td > button.eliminar-fila").first().clone(true);
+                var tabla = $(this).parents('div.tab-pane').find('table');
+                var filaSumasIguales = tabla.find("tbody").children().last();
+                var primerFilaClonada = tabla.find("tbody").children().first().clone(true);
+                var botonEliminarClonado = tabla.find("tbody > tr > td > button.eliminar-fila").first().clone(true);
                 primerFilaClonada.children('td').eq(0).text('');
                 primerFilaClonada.children('td').eq(1).text('');
                 primerFilaClonada.children('td').eq(2).text('$ 0');
                 primerFilaClonada.children('td').eq(3).text('$ 0');
                 primerFilaClonada.children('td').eq(0).append('<select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true"></select>');
                 filaSumasIguales.remove();
-                $(this).parents('div.tab-pane').find('table').find('tbody').append(primerFilaClonada);
-                $(this).parents('div.tab-pane').find('table').find('tbody').append(filaSumasIguales);
+                tabla.find('tbody').append(primerFilaClonada);
+                tabla.find('tbody').append(filaSumasIguales);
                 $('.selectpicker').selectpicker('refresh');
                 $('.selectpicker').selectpicker().filter('.with-ajax').ajaxSelectPicker(options);
+            });
+            $('.tab-content:visible').find('.solucionar-taller-asiento-contable').click(function(event) {
+                event.preventDefault();
+                var botonPulsado = $(this);
+                var tabla = botonPulsado.parents('div.tab-pane').find('table');
+                botonPulsado.attr('disabled', true).text('ENVIANDO DATOS...');
+                botonPulsado.parents("div").find(".adicionar-fila-asiento-contable").attr('disabled', true);
+                var ruta = botonPulsado.data("ruta");
+                var filas = [];
+                tabla.find('tbody > tr:not(:last)').each(function(index, el) {
+                    var tr = $(this);
+                    var codigo = tr.find('.columna_codigo option:selected').val();
+                    var cuentas = tr.find('.columna_cuentas').text();
+                    var debito = parseInt(numeral(tr.find('.columna_debito').text()).format('0'));
+                    var credito = parseInt(numeral(tr.find('.columna_credito').text()).format('0'));
+                    if((codigo == undefined || codigo == "") && tabla.find('tbody > tr:not(:last)').length > 1){
+                        tr.remove();
+                    }else{
+                        var fila = {
+                            "codigo" : codigo,
+                            "cuentas" : cuentas,
+                            "debito" : debito,
+                            "credito" : credito
+                        };
+                        filas.push(fila);
+                    }
+                });
+                var sumasIguales = {
+                    "total_debito" : parseInt(numeral(tabla.find('.total_debito').text()).format('0')),
+                    "total_credito" : parseInt(numeral(tabla.find('.total_credito').text()).format('0'))
+                }
+                var datos = new Object();
+                datos.filas = filas;
+                datos.sumasIguales = sumasIguales;
+                var xhr =
+                    $.ajax({
+                        url: ruta,
+                        type: 'POST',
+                         headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                        dataType: 'JSON',
+                        data: datos,
+                        beforeSend: function () {
+                        },
+                        success: function(data) {
+                            if(data.state == "error"){
+                                swal({
+                                    title: '¡Error!',
+                                    text: data.message,
+                                    type: 'error'
+                                });
+                            }else if(data.state == "success"){
+                                swal({
+                                    title: '¡Éxito!',
+                                    text: data.message,
+                                    type: 'success'
+                                });
+                            }
+                        }
+                    })
+                    .done(function() {
+                        console.log("success");
+                    })
+                    .fail(function() {
+                        console.log("error");
+                    })
+                    .always(function() {
+                        console.log("complete");
+                        botonPulsado.attr('disabled', false).text('GUARDAR TALLER');
+                        botonPulsado.parents("div").find(".adicionar-fila-asiento-contable").attr('disabled', false);
+                    });
             });
             /*
                 --------------------------------------------------------------------------------
