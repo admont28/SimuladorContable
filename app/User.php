@@ -112,7 +112,7 @@ class User extends Authenticatable
     public function respuestasTallerPorEstudiante($tall_id)
     {
         return DB::table('Respuesta')
-        ->select('Pregunta.preg_id','preg_texto','preg_tipo','cali_calificacion','cali_ponderado','Respuesta.resp_id')
+        ->select('Pregunta.preg_id','preg_texto','preg_tipo','cali_calificacion','preg_porcentaje','cali_ponderado')
         ->distinct()
         ->join('Pregunta','Pregunta.preg_id','=','Respuesta.preg_id')
         ->leftjoin('Calificacion', function ($join) {

@@ -208,12 +208,14 @@ class CalificacionController extends Controller
                         ->addColumn('opciones', function ($respuestas) use ($taller, $usuario) {
                             $botonCalificar = "";
                             if(!isset($respuestas->cali_calificacion)){
-                                $botonCalificar = '<a href="'.route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante.calificar.pregunta',['curs_id'=>$taller->curs_id,'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->usua_id,'preg_id'=>$respuestas->preg_id,'resp_id'=>$respuestas->resp_id ]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>Calificar</a>';
+                                $resp_id = Respuesta::where('preg_id',$respuestas->preg_id)->where('usua_id', $usuario->usua_id)->get()->first();
+                                $botonCalificar = '<a href="'.route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante.calificar.pregunta',['curs_id'=>$taller->curs_id,'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->usua_id,'preg_id'=>$respuestas->preg_id,'resp_id'=>$resp_id ]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>Calificar</a>';
                             }
                             return $botonCalificar;
                         })
                         ->editColumn('cali_calificacion', '@if(isset($cali_calificacion)) {{ $cali_calificacion }} @else <span class="label label-danger">SIN CALIFICACIÓN</span> @endif')
                         ->editColumn('preg_tipo', '@if($preg_tipo == "unica-multiple") <span class="label label-info">{{ $preg_tipo }}</span> @elseif($preg_tipo == "abierta") <span class="label label-warning">{{ $preg_tipo }}</span> @else <span class="label label-default">{{ $preg_tipo }}</span> @endif')
+                        ->editColumn('preg_porcentaje','{{ $preg_porcentaje * 100 }}%')
                         ->editColumn('cali_ponderado', '@if(isset($cali_ponderado)) {{ $cali_ponderado }} @else <span class="label label-danger">SIN PONDERADO</span> @endif')
                         ->make(true);
     }
