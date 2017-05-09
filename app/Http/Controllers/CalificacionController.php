@@ -163,7 +163,7 @@ class CalificacionController extends Controller
         return Datatables::of($usuarios)
                         ->addColumn('opciones', function ($usuario) use($taller,$curso) {
                             return
-                            '<a href="'.route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id' =>$curso->curs_id, 'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->usua_id ]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>Ver</a>';
+                            '<a href="'.route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id' =>$curso->curs_id, 'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->usua_id ]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
                         })
                         ->make(true);
     }

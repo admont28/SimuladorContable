@@ -1,8 +1,8 @@
 @extends('profesor.template.main')
 
-@section('title-head', 'Sección de Preguntas Calificadas')
+@section('title-head', 'Calificar respuesta de un usuario')
 
-@section('title', 'Calificar Pregunta')
+@section('title', 'Calificar respuesta para el usuario: <strong>'.$usuario->usua_nombre.'</strong>')
 
 @section('active','#profesor-curso')
 
@@ -46,7 +46,7 @@
 
             <div class="form-group">
                 <div class="col-lg-10 col-lg-offset-2">
-                    <a href="{{ route('profesor.curso.taller.ver',['curs_id'=> $taller->curs_id,'tall_id'=>$taller->tall_id]) }}"  class="btn btn-default">Regresar</a>
+                    <a href="{{ route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id'=> $curso->curs_id,'tall_id'=>$taller->tall_id, 'usua_id' => $usuario->usua_id]) }}"  class="btn btn-default">Regresar</a>
                     <button type="submit" class="btn btn-primary">Calificar</button>
                 </div>
             </div>

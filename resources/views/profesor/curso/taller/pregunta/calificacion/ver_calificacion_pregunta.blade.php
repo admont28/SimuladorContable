@@ -1,8 +1,8 @@
 @extends('profesor.template.main')
 
-@section('title-head', 'Sección de Preguntas Calificadas')
+@section('title-head', 'Calificaciones de un usuario')
 
-@section('title', 'Sección de Preguntas Calificadas')
+@section('title', 'Calificaciones del usuario: <strong>'.$usuario->usua_nombre.'</strong>')
 
 @section('active','#profesor-curso')
 
@@ -26,6 +26,13 @@
     </div>
 </div>
 <br>
+<div class="row">
+    <div class="col-lg-12 text-center">
+        <a href="{{ route('profesor.curso.taller.ver',['curs_id'=>$curso->curs_id, 'tall_id'=>$taller->tall_id]) }}"  class="btn btn-default">Regresar</a>
+    </div>
+</div>
+<br>
+
 @endsection
 
 @push('scripts')
