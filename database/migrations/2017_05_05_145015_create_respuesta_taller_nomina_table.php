@@ -49,7 +49,7 @@ class CreateRespuestaTallerNominaTable extends Migration
             $table->integer('retn_horafestivanocturnavalor');
             $table->integer('retn_horaextrafestivadiurnacantidad');
             $table->integer('retn_horaextrafestivadiurnavalor');
-            $table->integer('retn_horaextradestivanocturnacantidad');
+            $table->integer('retn_horaextrafestivanocturnacantidad');
             $table->integer('retn_horaextrafestivanocturnavalor');
             $table->integer('retn_valortotaldehorasextras');
             $table->string('retn_rutaarchivo', 255)->nullable();

@@ -148,16 +148,7 @@
                                             @push('scripts')
                                                 <script type="text/javascript">
                                                     $(document).ready(function() {
-                                                        $("#taller-asiento-contable > tbody > tr > td").each(function(index, el) {
-                                                            if($(el).hasClass('columna_opcion')){
-                                                                return;
-                                                            }
-                                                            else if ($(el).hasClass('columna_debito') || $(el).hasClass('columna_credito')) {
-                                                                $(el).text(numeral($(el).text()).format('$0,0'));
-                                                            }
-                                                        });
-                                                        $("#total_debito").text(numeral($("#total_debito").text()).format('$0,0'));
-                                                        $("#total_credito").text(numeral($("#total_credito").text()).format('$0,0'));
+
                                                     });
                                                 </script>
                                             @endpush
@@ -171,13 +162,6 @@
                                     <button class="btn btn-primary solucionar-taller-asiento-contable" id="solucionar-taller-asiento-contable" data-ruta="{{ route('estudiante.curso.taller.solucionar.asientocontable.post', ['curs_id' => $curso->curs_id, 'tall_id' => $tallerPractico->tall_id]) }}">Guardar taller</button>
                                 </div>
                             </div>
-                            @push('scripts')
-                                <script type="text/javascript">
-                                    $(document).ready(function() {
-
-                                    });
-                                </script>
-                            @endpush
                         @elseif(isset($tallerPractico->tallerNomina))
                             <div class="row">
                                 <div class="table-responsive">
@@ -238,91 +222,179 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @for ($i = 0; $i < 2; $i++)
+                                            @if ($tallerPractico->tallerNomina->respuestasTallerNominaUsuarioAutenticado()->isEmpty())
+                                                @for ($i = 0; $i < 2; $i++)
+                                                    <tr>
+                                                        <td class="text-center vcenter td-nombres-y-apellidos" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                        <td class="text-center vcenter td-documento" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
+                                                        <td class="text-center vcenter td-dias-trabajados cambiar-salario-basico numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>
+                                                        <td class="text-center vcenter td-salario cambiar-salario-basico" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>
+                                                        <td class="text-center vcenter td-salario-basico cambiar-total-devengado">$ 0</td>
+                                                        <td class="text-center vcenter td-horas-extras-y-recargos cambiar-total-devengado">$ 0</td>
+                                                        <td class="text-center vcenter td-comisiones cambiar-total-devengado" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>
+                                                        <td class="text-center vcenter td-bonificaciones cambiar-total-devengado" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>
+                                                        <td class="text-center vcenter td-total-devengado cambiar-total-devengado-con-auxilio-de-transporte">$ 0</td>
+                                                        <td class="text-center vcenter td-aux-de-transporte cambiar-total-devengado-con-auxilio-de-transporte" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>
+                                                        <td class="text-center vcenter td-total-devengado-con-auxilio-de-transporte cambiar-neto-a-pagar">$ 0</td>
+                                                        <td class="text-center vcenter td-salud cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>
+                                                        <td class="text-center vcenter td-pension cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>
+                                                        @if (isset($tallerPractico->tallerNomina->tano_deduccionuno) && $tallerPractico->tallerNomina->tano_deduccionuno != "")
+                                                            <td class="text-center vcenter td-deduccionuno cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>
+                                                        @endif
+                                                        @if (isset($tallerPractico->tallerNomina->tano_deducciondos) && $tallerPractico->tallerNomina->tano_deducciondos != "")
+                                                            <td class="text-center vcenter td-deducciondos cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>
+                                                        @endif
+                                                        @if (isset($tallerPractico->tallerNomina->tano_deducciontres) && $tallerPractico->tallerNomina->tano_deducciontres != "")
+                                                            <td class="text-center vcenter td-deducciontres cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>
+                                                        @endif
+                                                        <td class="text-center vcenter td-total-deducciones cambiar-neto-a-pagar">$ 0</td>
+                                                        <td class="text-center vcenter td-neto-a-pagar">$ 0</td>
+                                                        <td class="text-center vcenter td-hora-extra-diurna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>
+                                                        <td class="text-center vcenter td-hora-extra-diurna-valor">$ 0</td>
+                                                        <td class="text-center vcenter td-hora-extra-nocturna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>
+                                                        <td class="text-center vcenter td-hora-extra-nocturna-valor">$ 0</td>
+                                                        <td class="text-center vcenter td-recargo-nocturno-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>
+                                                        <td class="text-center vcenter td-recargo-nocturno-valor">$ 0</td>
+                                                        <td class="text-center vcenter td-hora-festiva-diurna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>
+                                                        <td class="text-center vcenter td-hora-festiva-diurna-valor">$ 0</td>
+                                                        <td class="text-center vcenter td-hora-festiva-nocturna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>
+                                                        <td class="text-center vcenter td-hora-festiva-nocturna-valor">$ 0</td>
+                                                        <td class="text-center vcenter td-hora-extra-festiva-diurna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>
+                                                        <td class="text-center vcenter td-hora-extra-festiva-diurna-valor">$ 0</td>
+                                                        <td class="text-center vcenter td-hora-extra-festiva-nocturna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>
+                                                        <td class="text-center vcenter td-hora-extra-festiva-nocturna-valor">$ 0</td>
+                                                        <td class="text-center vcenter td-valor-total-de-horas-extras">$ 0</td>
+                                                        <td class="text-center vcenter td-opcion"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
+                                                    </tr>
+                                                @endfor
                                                 <tr>
-                                                    <td class="text-center vcenter td-nombres-y-apellidos" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter td-documento" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar."></td>
-                                                    <td class="text-center vcenter td-dias-trabajados cambiar-salario-basico numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>
-                                                    <td class="text-center vcenter td-salario cambiar-salario-basico" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>
-                                                    <td class="text-center vcenter td-salario-basico cambiar-total-devengado">$ 0</td>
-                                                    <td class="text-center vcenter td-horas-extras-y-recargos cambiar-total-devengado">$ 0</td>
-                                                    <td class="text-center vcenter td-comisiones cambiar-total-devengado" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>
-                                                    <td class="text-center vcenter td-bonificaciones cambiar-total-devengado" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>
-                                                    <td class="text-center vcenter td-total-devengado cambiar-total-devengado-con-auxilio-de-transporte">$ 0</td>
-                                                    <td class="text-center vcenter td-aux-de-transporte cambiar-total-devengado-con-auxilio-de-transporte" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>
-                                                    <td class="text-center vcenter td-total-devengado-con-auxilio-de-transporte cambiar-neto-a-pagar">$ 0</td>
-                                                    <td class="text-center vcenter td-salud cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>
-                                                    <td class="text-center vcenter td-pension cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>
+                                                    <td colspan="2" class="text-center vcenter valor-total-">TOTAL</td>
+                                                    <td class="text-center vcenter valor-total-td-dias-trabajados numero"></td>
+                                                    <td class="text-center vcenter valor-total-td-salario"></td>
+                                                    <td class="text-center vcenter valor-total-td-salario-basico"></td>
+                                                    <td class="text-center vcenter valor-total-td-horas-extras-y-recargos"></td>
+                                                    <td class="text-center vcenter valor-total-td-comisiones"></td>
+                                                    <td class="text-center vcenter valor-total-td-bonificaciones"></td>
+                                                    <td class="text-center vcenter valor-total-td-total-devengado"></td>
+                                                    <td class="text-center vcenter valor-total-td-aux-de-transporte"></td>
+                                                    <td class="text-center vcenter valor-total-td-total-devengado-con-auxilio-de-transporte"></td>
+                                                    <td class="text-center vcenter valor-total-td-salud"></td>
+                                                    <td class="text-center vcenter valor-total-td-pension"></td>
                                                     @if (isset($tallerPractico->tallerNomina->tano_deduccionuno) && $tallerPractico->tallerNomina->tano_deduccionuno != "")
-                                                        <td class="text-center vcenter td-deduccionuno cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>
+                                                        <td class="text-center vcenter valor-total-td-deduccionuno"></td>
                                                     @endif
                                                     @if (isset($tallerPractico->tallerNomina->tano_deducciondos) && $tallerPractico->tallerNomina->tano_deducciondos != "")
-                                                        <td class="text-center vcenter td-deducciondos cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>
+                                                        <td class="text-center vcenter valor-total-td-deducciondos"></td>
                                                     @endif
                                                     @if (isset($tallerPractico->tallerNomina->tano_deducciontres) && $tallerPractico->tallerNomina->tano_deducciontres != "")
-                                                        <td class="text-center vcenter td-deducciontres cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">$ 0</td>
+                                                        <td class="text-center vcenter valor-total-td-deducciontres"></td>
                                                     @endif
-                                                    <td class="text-center vcenter td-total-deducciones cambiar-neto-a-pagar">$ 0</td>
-                                                    <td class="text-center vcenter td-neto-a-pagar">$ 0</td>
-                                                    <td class="text-center vcenter td-hora-extra-diurna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>
-                                                    <td class="text-center vcenter td-hora-extra-diurna-valor">$ 0</td>
-                                                    <td class="text-center vcenter td-hora-extra-nocturna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>
-                                                    <td class="text-center vcenter td-hora-extra-nocturna-valor">$ 0</td>
-                                                    <td class="text-center vcenter td-recargo-nocturno-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>
-                                                    <td class="text-center vcenter td-recargo-nocturno-valor">$ 0</td>
-                                                    <td class="text-center vcenter td-hora-festiva-diurna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>
-                                                    <td class="text-center vcenter td-hora-festiva-diurna-valor">$ 0</td>
-                                                    <td class="text-center vcenter td-hora-festiva-nocturna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>
-                                                    <td class="text-center vcenter td-hora-festiva-nocturna-valor">$ 0</td>
-                                                    <td class="text-center vcenter td-hora-extra-festiva-diurna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>
-                                                    <td class="text-center vcenter td-hora-extra-festiva-diurna-valor">$ 0</td>
-                                                    <td class="text-center vcenter td-hora-extra-festiva-nocturna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">0</td>
-                                                    <td class="text-center vcenter td-hora-extra-festiva-nocturna-valor">$ 0</td>
-                                                    <td class="text-center vcenter td-valor-total-de-horas-extras">$ 0</td>
-                                                    <td class="text-center vcenter td-opcion"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
+                                                    <td class="text-center vcenter valor-total-td-total-deducciones"></td>
+                                                    <td class="text-center vcenter valor-total-td-neto-a-pagar"></td>
+                                                    <td class="text-center vcenter valor-total-td-hora-extra-diurna-cantidad numero"></td>
+                                                    <td class="text-center vcenter valor-total-td-hora-extra-diurna-valor"></td>
+                                                    <td class="text-center vcenter valor-total-td-hora-extra-nocturna-cantidad numero"></td>
+                                                    <td class="text-center vcenter valor-total-td-hora-extra-nocturna-valor"></td>
+                                                    <td class="text-center vcenter valor-total-td-recargo-nocturno-cantidad numero"></td>
+                                                    <td class="text-center vcenter valor-total-td-recargo-nocturno-valor"></td>
+                                                    <td class="text-center vcenter valor-total-td-hora-festiva-diurna-cantidad numero"></td>
+                                                    <td class="text-center vcenter valor-total-td-hora-festiva-diurna-valor"></td>
+                                                    <td class="text-center vcenter valor-total-td-hora-festiva-nocturna-cantidad numero"></td>
+                                                    <td class="text-center vcenter valor-total-td-hora-festiva-nocturna-valor"></td>
+                                                    <td class="text-center vcenter valor-total-td-hora-extra-festiva-diurna-cantidad numero"></td>
+                                                    <td class="text-center vcenter valor-total-td-hora-extra-festiva-diurna-valor"></td>
+                                                    <td class="text-center vcenter valor-total-td-hora-extra-festiva-nocturna-cantidad numero"></td>
+                                                    <td class="text-center vcenter valor-total-td-hora-extra-festiva-nocturna-valor"></td>
+                                                    <td class="text-center vcenter valor-total-td-valor-total-de-horas-extras"></td>
+                                                    <td></td>
                                                 </tr>
-                                            @endfor
-                                            <tr>
-                                                <td colspan="2" class="text-center vcenter valor-total-">TOTAL</td>
-                                                <td class="text-center vcenter valor-total-td-dias-trabajados numero"></td>
-                                                <td class="text-center vcenter valor-total-td-salario"></td>
-                                                <td class="text-center vcenter valor-total-td-salario-basico"></td>
-                                                <td class="text-center vcenter valor-total-td-horas-extras-y-recargos"></td>
-                                                <td class="text-center vcenter valor-total-td-comisiones"></td>
-                                                <td class="text-center vcenter valor-total-td-bonificaciones"></td>
-                                                <td class="text-center vcenter valor-total-td-total-devengado"></td>
-                                                <td class="text-center vcenter valor-total-td-aux-de-transporte"></td>
-                                                <td class="text-center vcenter valor-total-td-total-devengado-con-auxilio-de-transporte"></td>
-                                                <td class="text-center vcenter valor-total-td-salud"></td>
-                                                <td class="text-center vcenter valor-total-td-pension"></td>
-                                                @if (isset($tallerPractico->tallerNomina->tano_deduccionuno) && $tallerPractico->tallerNomina->tano_deduccionuno != "")
-                                                    <td class="text-center vcenter valor-total-td-deduccionuno"></td>
-                                                @endif
-                                                @if (isset($tallerPractico->tallerNomina->tano_deducciondos) && $tallerPractico->tallerNomina->tano_deducciondos != "")
-                                                    <td class="text-center vcenter valor-total-td-deducciondos"></td>
-                                                @endif
-                                                @if (isset($tallerPractico->tallerNomina->tano_deducciontres) && $tallerPractico->tallerNomina->tano_deducciontres != "")
-                                                    <td class="text-center vcenter valor-total-td-deducciontres"></td>
-                                                @endif
-                                                <td class="text-center vcenter valor-total-td-total-deducciones"></td>
-                                                <td class="text-center vcenter valor-total-td-neto-a-pagar"></td>
-                                                <td class="text-center vcenter valor-total-td-hora-extra-diurna-cantidad numero"></td>
-                                                <td class="text-center vcenter valor-total-td-hora-extra-diurna-valor"></td>
-                                                <td class="text-center vcenter valor-total-td-hora-extra-nocturna-cantidad numero"></td>
-                                                <td class="text-center vcenter valor-total-td-hora-extra-nocturna-valor"></td>
-                                                <td class="text-center vcenter valor-total-td-recargo-nocturno-cantidad numero"></td>
-                                                <td class="text-center vcenter valor-total-td-recargo-nocturno-valor"></td>
-                                                <td class="text-center vcenter valor-total-td-hora-festiva-diurna-cantidad numero"></td>
-                                                <td class="text-center vcenter valor-total-td-hora-festiva-diurna-valor"></td>
-                                                <td class="text-center vcenter valor-total-td-hora-festiva-nocturna-cantidad numero"></td>
-                                                <td class="text-center vcenter valor-total-td-hora-festiva-nocturna-valor"></td>
-                                                <td class="text-center vcenter valor-total-td-hora-extra-festiva-diurna-cantidad numero"></td>
-                                                <td class="text-center vcenter valor-total-td-hora-extra-festiva-diurna-valor"></td>
-                                                <td class="text-center vcenter valor-total-td-hora-extra-festiva-nocturna-cantidad numero"></td>
-                                                <td class="text-center vcenter valor-total-td-hora-extra-festiva-nocturna-valor"></td>
-                                                <td class="text-center vcenter valor-total-td-valor-total-de-horas-extras"></td>
-                                                <td></td>
-                                            </tr>
+                                            @else
+                                                @foreach ($tallerPractico->tallerNomina->respuestasTallerNominaUsuarioAutenticado() as $rtno)
+                                                    <tr>
+                                                        <td class="text-center vcenter td-nombres-y-apellidos" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $rtno->retn_nombresyapellidos }}</td>
+                                                        <td class="text-center vcenter td-documento" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $rtno->retn_documento }}</td>
+                                                        <td class="text-center vcenter td-dias-trabajados cambiar-salario-basico numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $rtno->retn_diastrabajados }}</td>
+                                                        <td class="text-center vcenter td-salario cambiar-salario-basico" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $rtno->retn_salario }}</td>
+                                                        <td class="text-center vcenter td-salario-basico cambiar-total-devengado">{{ $rtno->retn_salariobasico }}</td>
+                                                        <td class="text-center vcenter td-horas-extras-y-recargos cambiar-total-devengado">{{ $rtno->retn_horasextrasyrecargos }}</td>
+                                                        <td class="text-center vcenter td-comisiones cambiar-total-devengado" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $rtno->retn_comisiones }}</td>
+                                                        <td class="text-center vcenter td-bonificaciones cambiar-total-devengado" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $rtno->retn_bonificaciones }}</td>
+                                                        <td class="text-center vcenter td-total-devengado cambiar-total-devengado-con-auxilio-de-transporte">{{ $rtno->retn_totaldevengado }}</td>
+                                                        <td class="text-center vcenter td-aux-de-transporte cambiar-total-devengado-con-auxilio-de-transporte" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $rtno->retn_auxdetransporte }}</td>
+                                                        <td class="text-center vcenter td-total-devengado-con-auxilio-de-transporte cambiar-neto-a-pagar">{{ $rtno->retn_totaldevengadoconauxiliodetransporte }}</td>
+                                                        <td class="text-center vcenter td-salud cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $rtno->retn_salud }}</td>
+                                                        <td class="text-center vcenter td-pension cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $rtno->retn_pension }}</td>
+                                                        @if (isset($tallerPractico->tallerNomina->tano_deduccionuno) && $tallerPractico->tallerNomina->tano_deduccionuno != "")
+                                                            <td class="text-center vcenter td-deduccionuno cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $rtno->retn_deduccionuno }}</td>
+                                                        @endif
+                                                        @if (isset($tallerPractico->tallerNomina->tano_deducciondos) && $tallerPractico->tallerNomina->tano_deducciondos != "")
+                                                            <td class="text-center vcenter td-deducciondos cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $rtno->retn_deducciondos }}</td>
+                                                        @endif
+                                                        @if (isset($tallerPractico->tallerNomina->tano_deducciontres) && $tallerPractico->tallerNomina->tano_deducciontres != "")
+                                                            <td class="text-center vcenter td-deducciontres cambiar-total-deducciones" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $rtno->retn_deducciontres }}</td>
+                                                        @endif
+                                                        <td class="text-center vcenter td-total-deducciones cambiar-neto-a-pagar">{{ $rtno->retn_totaldeducciones }}</td>
+                                                        <td class="text-center vcenter td-neto-a-pagar">{{ $rtno->retn_netoapagar }}</td>
+                                                        <td class="text-center vcenter td-hora-extra-diurna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $rtno->retn_horaextradiurnacantidad }}</td>
+                                                        <td class="text-center vcenter td-hora-extra-diurna-valor">{{ $rtno->retn_horaextradiurnavalor }}</td>
+                                                        <td class="text-center vcenter td-hora-extra-nocturna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $rtno->retn_horaextranocturnacantidad }}</td>
+                                                        <td class="text-center vcenter td-hora-extra-nocturna-valor">{{ $rtno->retn_horaextranocturnavalor }}</td>
+                                                        <td class="text-center vcenter td-recargo-nocturno-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $rtno->retn_recargonocturnocantidad }}</td>
+                                                        <td class="text-center vcenter td-recargo-nocturno-valor">{{ $rtno->retn_recargonocturnovalor }}</td>
+                                                        <td class="text-center vcenter td-hora-festiva-diurna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $rtno->retn_horafestivadiurnacantidad }}</td>
+                                                        <td class="text-center vcenter td-hora-festiva-diurna-valor">{{ $rtno->retn_horafestivadiurnavalor }}</td>
+                                                        <td class="text-center vcenter td-hora-festiva-nocturna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $rtno->retn_horafestivanocturnacantidad }}</td>
+                                                        <td class="text-center vcenter td-hora-festiva-nocturna-valor">{{ $rtno->retn_horafestivanocturnavalor }}</td>
+                                                        <td class="text-center vcenter td-hora-extra-festiva-diurna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $rtno->retn_horaextrafestivadiurnacantidad }}</td>
+                                                        <td class="text-center vcenter td-hora-extra-festiva-diurna-valor">{{ $rtno->retn_horaextrafestivadiurnavalor }}</td>
+                                                        <td class="text-center vcenter td-hora-extra-festiva-nocturna-cantidad actualizar-horas-extras-y-valor-total numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $rtno->retn_horaextrafestivanocturnacantidad }}</td>
+                                                        <td class="text-center vcenter td-hora-extra-festiva-nocturna-valor">{{ $rtno->retn_horaextrafestivanocturnavalor }}</td>
+                                                        <td class="text-center vcenter td-valor-total-de-horas-extras">{{ $rtno->retn_valortotaldehorasextras }}</td>
+                                                        <td class="text-center vcenter td-opcion"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
+                                                    </tr>
+                                                @endforeach
+                                                <tr>
+                                                    <td colspan="2" class="text-center vcenter td-total">TOTAL</td>
+                                                    <td class="text-center vcenter valor-total-td-dias-trabajados numero">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_diastrabajados') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-salario">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_salario') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-salario-basico">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_salariobasico') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-horas-extras-y-recargos">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_horasextrasyrecargos') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-comisiones">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_comisiones') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-bonificaciones">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_bonificaciones') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-total-devengado">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_totaldevengado') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-aux-de-transporte">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_auxdetransporte') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-total-devengado-con-auxilio-de-transporte">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_totaldevengadoconauxiliodetransporte') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-salud">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_salud') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-pension">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_pension') }}</td>
+                                                    @if (isset($tallerPractico->tallerNomina->tano_deduccionuno) && $tallerPractico->tallerNomina->tano_deduccionuno != "")
+                                                        <td class="text-center vcenter valor-total-td-deduccionuno">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_deduccionuno') }}</td>
+                                                    @endif
+                                                    @if (isset($tallerPractico->tallerNomina->tano_deducciondos) && $tallerPractico->tallerNomina->tano_deducciondos != "")
+                                                        <td class="text-center vcenter valor-total-td-deducciondos">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_deducciondos') }}</td>
+                                                    @endif
+                                                    @if (isset($tallerPractico->tallerNomina->tano_deducciontres) && $tallerPractico->tallerNomina->tano_deducciontres != "")
+                                                        <td class="text-center vcenter valor-total-td-deducciontres">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_deducciontres') }}</td>
+                                                    @endif
+                                                    <td class="text-center vcenter valor-total-td-total-deducciones">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_totaldeducciones') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-neto-a-pagar">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_netoapagar') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-hora-extra-diurna-cantidad numero">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_horaextradiurnacantidad') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-hora-extra-diurna-valor">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_horaextradiurnavalor') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-hora-extra-nocturna-cantidad numero">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_horaextranocturnacantidad') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-hora-extra-nocturna-valor">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_horaextranocturnavalor') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-recargo-nocturno-cantidad numero">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_recargonocturnocantidad') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-recargo-nocturno-valor">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_recargonocturnovalor') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-hora-festiva-diurna-cantidad numero">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_horafestivadiurnacantidad') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-hora-festiva-diurna-valor">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_horafestivadiurnavalor') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-hora-festiva-nocturna-cantidad numero">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_horafestivanocturnacantidad') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-hora-festiva-nocturna-valor">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_horafestivanocturnavalor') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-hora-extra-festiva-diurna-cantidad numero">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_horaextrafestivadiurnacantidad') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-hora-extra-festiva-diurna-valor">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_horaextrafestivadiurnavalor') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-hora-extra-festiva-nocturna-cantidad numero">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_horaextrafestivanocturnacantidad') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-hora-extra-festiva-nocturna-valor">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_horaextrafestivanocturnavalor') }}</td>
+                                                    <td class="text-center vcenter valor-total-td-valor-total-de-horas-extras">{{ $tallerPractico->tallerNomina->calcularTotalColumna('retn_valortotaldehorasextras') }}</td>
+                                                    <td class="td-vacio"></td>
+                                                </tr>
+                                            @endif
                                         </tbody>
                                     </table>
                                 </div>
@@ -595,6 +667,25 @@
                 valorTdActual = numeral(valorTdActual).format('$0,0');
                 $(elemento).text(valorTdActual);
                 tablaActual.find(".total_credito").text(numeral(total_credito).format('$0,0'));
+            }
+            darFormatoACamposTallerAsientoContable();
+            function darFormatoACamposTallerAsientoContable() {
+                $(".taller-asiento-contable > tbody > tr > td").each(function(index, el) {
+                    if($(el).hasClass('columna_opcion')){
+                        return;
+                    }
+                    else if ($(el).hasClass('columna_debito') || $(el).hasClass('columna_credito') || $(el).hasClass('total_debito') || $(el).hasClass('total_credito')) {
+                        $(el).text(numeral($(el).text()).format('$0,0'));
+                    }
+                });
+                /*$(".taller-asiento-contable .total_debito").each(function(index, el) {
+                    $(el).text(numeral($(el).text()).format('$0,0'));
+                });
+                $(".taller-asiento-contable .total_credito").each(function(index, el) {
+                    $(el).text(numeral($(el).text()).format('$0,0'));
+                });*/
+                //$(".taller-asiento-contable .total_debito").text(numeral($(".taller-asiento-contable .total_debito").text()).format('$0,0'));
+                //$(".taller-asiento-contable .total_credito").text(numeral($(".taller-asiento-contable .total_credito").text()).format('$0,0'));
             }
             /*
                 --------------------------------------------------------------------------------
@@ -1000,6 +1091,19 @@
                     });
                 });
                 return promise;
+            }
+            darFomatoACamposTallerNomina();
+            function darFomatoACamposTallerNomina() {
+                $(".taller-nomina > tbody > tr > td").each(function(index, el) {
+                    if($(el).hasClass('numero')){
+                        $(el).text(numeral($(el).text()).format('0'));
+                    }else if ($(el).hasClass('td-nombres-y-apellidos') || $(el).hasClass('td-documento') || $(el).hasClass('td-opcion') || $(el).hasClass('td-total') || $(el).hasClass('td-vacio')) {
+                        return; //this is equivalent of 'continue' for jQuery loop
+                    }
+                    else{
+                        $(el).text(numeral($(el).text()).format('$0,0'));
+                    }
+                });
             }
             $('body').tooltip({
                 'selector': '[data-toggle="tooltip"]',

@@ -818,7 +818,7 @@ class TallerController extends Controller
                         'retn_horafestivanocturnavalor' => $fila->td_hora_festiva_nocturna_valor,
                         'retn_horaextrafestivadiurnacantidad' => $fila->td_hora_extra_festiva_diurna_cantidad,
                         'retn_horaextrafestivadiurnavalor' => $fila->td_hora_extra_festiva_diurna_valor,
-                        'retn_horaextradestivanocturnacantidad' => $fila->td_hora_extra_festiva_nocturna_cantidad,
+                        'retn_horaextrafestivanocturnacantidad' => $fila->td_hora_extra_festiva_nocturna_cantidad,
                         'retn_horaextrafestivanocturnavalor' => $fila->td_hora_extra_festiva_nocturna_valor,
                         'retn_valortotaldehorasextras' => $fila->td_valor_total_de_horas_extras,
                         'retn_rutaarchivo' => 'SIN ARCHIVO',

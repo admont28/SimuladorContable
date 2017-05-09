@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Auth;
 
 class TallerNomina extends Model
 {
@@ -81,5 +82,15 @@ class TallerNomina extends Model
         if(isset($this->tano_deducciontres) && $this->tano_deducciontres != "")
             $cantidad++;
         return $cantidad;
+    }
+
+    public function respuestasTallerNominaUsuarioAutenticado()
+    {
+        return RespuestaTallerNomina::where('usua_id', Auth::user()->usua_id)->where('tano_id', $this->tano_id)->get();
+    }
+
+    public function calcularTotalColumna($columna = "")
+    {
+        return RespuestaTallerNomina::where('usua_id', Auth::user()->usua_id)->where('tano_id', $this->tano_id)->sum($columna);
     }
 }
