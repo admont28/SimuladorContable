@@ -330,8 +330,8 @@
                             <br>
                             <div class="row">
                                 <div class="col-lg-12 text-center">
-                                    <button class="btn btn-default" id="adicionar-fila-nomina">Adicionar fila</button>
-                                    <button class="btn btn-primary" id="solucionar-taller-nomina" data-ruta="{{ route('estudiante.curso.taller.solucionar.nomina.post', ['curs_id' => $curso->curs_id, 'tall_id' => $tallerPractico->tall_id]) }}">Guardar taller</button>
+                                    <button class="btn btn-default adicionar-fila-nomina" id="adicionar-fila-nomina">Adicionar fila</button>
+                                    <button class="btn btn-primary solucionar-taller-nomina" id="solucionar-taller-nomina" data-ruta="{{ route('estudiante.curso.taller.solucionar.nomina.post', ['curs_id' => $curso->curs_id, 'tall_id' => $tallerPractico->tall_id]) }}">Guardar taller</button>
                                 </div>
                             </div>
                             @push('scripts')
@@ -474,7 +474,6 @@
                     valorTdActual = 0;;
                 }
                 var total_debito = 0;
-                console.log(tablaActual);
                 tablaActual.find('.columna_debito').each(function(index, el) {
                     var number = numeral($(el).text()).format('0');
                     var valorTd = parseInt(number);
@@ -604,15 +603,16 @@
              */
             $('.tab-content:visible').find(".adicionar-fila-nomina").click(function(event) {
                 event.preventDefault();
-                var filaTotal = $('.tab-content:visible').find(".taller-nomina > tbody").children('tr').last();
-                var primerFilaClonada = $('.tab-content:visible').find(".taller-nomina > tbody").children().first().clone();
-                var botonEliminarClonado =  $('.tab-content:visible').find(".taller-nomina > tbody > tr > td > button.eliminar-fila").first().clone(true);
+                var tabla = $(this).parents('div.tab-pane').find('table');
+                var filaTotal = tabla.find("tbody").children('tr').last();
+                var primerFilaClonada = tabla.find("tbody").children().first().clone();
+                var botonEliminarClonado =  tabla.find("tbody > tr > td > button.eliminar-fila").first().clone(true);
                 primerFilaClonada.find('td').text('');
                 primerFilaClonada.find('td').last().append(botonEliminarClonado);
                 filaTotal.remove();
-                $('#taller-nomina > tbody').append(primerFilaClonada);
-                $('#taller-nomina > tbody').append(filaTotal);
-                darFormatoACampos();
+                tabla.find("tbody").append(primerFilaClonada);
+                tabla.find("tbody").append(filaTotal);
+                darFormatoACampos(filaTotal);
             });
             $('.tab-content:visible').find(".taller-nomina").on('blur', '.cambiar-salario-basico[contenteditable=true]', function(event) {
                 var elemento = this;
@@ -633,7 +633,7 @@
                         return darFormatoACampos(elemento);
                     })
                     .then(function () {
-                        return calculatTotales();
+                        return calcularTotales(elemento);
                     });
             });
             $('.tab-content:visible').find(".taller-nomina").on('blur', '.cambiar-total-devengado[contenteditable=true]', function(event) {
@@ -649,7 +649,7 @@
                         return darFormatoACampos(elemento);
                     })
                     .then(function () {
-                        return calculatTotales();
+                        return calcularTotales(elemento);
                     });
             });
             $('.tab-content:visible').find(".taller-nomina").on('blur', '.cambiar-total-devengado-con-auxilio-de-transporte[contenteditable=true]', function(event) {
@@ -662,7 +662,7 @@
                         return darFormatoACampos(elemento);
                     })
                     .then(function () {
-                        return calculatTotales();
+                        return calcularTotales(elemento);
                     });
             });
             $('.tab-content:visible').find(".taller-nomina").on('blur', '.cambiar-total-deducciones[contenteditable=true]', function(event) {
@@ -675,7 +675,7 @@
                         return darFormatoACampos(elemento);
                     })
                     .then(function () {
-                        return calculatTotales();
+                        return calcularTotales(elemento);
                     });
             });
             $('.tab-content:visible').find(".taller-nomina").on('blur', '.actualizar-horas-extras-y-valor-total', function(event) {
@@ -694,16 +694,22 @@
                         return darFormatoACampos(elemento);
                     })
                     .then(function () {
-                        return calculatTotales();
+                        return calcularTotales(elemento);
                     });
             });
-            $('#solucionar-taller-nomina').click(function(event) {
+            $('.tab-content:visible').find(".solucionar-taller-nomina").click(function(event) {
                 event.preventDefault();
-                $("#solucionar-taller-nomina").attr('disabled', true).text('ENVIANDO DATOS...');
-                $("#adicionar-fila-nomina").attr('disabled', true);
+                var botonPulsado = $(this);
+                var tabla = botonPulsado.parents('div.tab-pane').find('table');
+                var textoOriginal = botonPulsado.text();
+                botonPulsado.attr('disabled', true).text('ENVIANDO DATOS...');
+                botonPulsado.parents("div").find(".adicionar-fila-nomina").attr('disabled', true);
+                var ruta = botonPulsado.data("ruta");
                 var filas = [];
-                $('#taller-nomina > tbody > tr:not(:last)').each(function(index, el) {
+                var ultimaFila = tabla.find('tbody > tr:last');
+                tabla.find('tbody > tr:not(:last)').each(function(index, el) {
                     var fila = new Object();
+                    var tr = $(this);
                     $(el).find('td').each(function(index2, el2) {
                         var clase = $(el2).attr('class').split(' ')[2];
                         var valor = "0";
@@ -712,7 +718,7 @@
                         }
                         else if (clase == 'td-nombres-y-apellidos' || clase == 'td-documento') {
                             valor = $(el2).text();
-                            if(valor == "" && $('#taller-nomina > tbody > tr:not(:last)').length > 1){
+                            if(valor == "" && tabla.find('tbody > tr:not(:last)').length > 1){
                                 $(el).remove();
                             }
                         }else{
@@ -727,7 +733,7 @@
                 datos.filas = filas;
                 var xhr =
                     $.ajax({
-                        url: '',
+                        url: ruta,
                         type: 'POST',
                         headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
                         dataType: 'JSON',
@@ -748,7 +754,6 @@
                                     type: 'success'
                                 });
                             }
-                            console.log(data);
                         }
                     })
                     .done(function() {
@@ -759,8 +764,9 @@
                     })
                     .always(function() {
                         console.log("complete");
-                        $("#solucionar-taller-nomina").attr('disabled', false).text('GUARDAR TALLER');
-                        $("#adicionar-fila-nomina").attr('disabled', false);
+                        calcularTotales(ultimaFila);
+                        botonPulsado.attr('disabled', false).text(textoOriginal);
+                        botonPulsado.parents("div").find(".adicionar-fila-nomina").attr('disabled', false);;
                     });
             });
             function cambiarSalarioBasico(elemento) {
@@ -826,8 +832,9 @@
                 });
                 return promise;
             }
-            function darFormatoACampos() {
-                $("#taller-nomina > tbody > tr:not(:last-child) > td").each(function(index, el) {
+            function darFormatoACampos(elemento) {
+                var tabla = $(elemento).parents("table");
+                tabla.find("tbody > tr:not(:last-child) > td").each(function(index, el) {
                     if($(el).hasClass('numero')){
                         $(el).text(numeral($(el).text()).format('0'));
                     }else if ($(el).hasClass('td-nombres-y-apellidos') || $(el).hasClass('td-documento') || $(el).hasClass('td-opcion')) {
@@ -973,21 +980,22 @@
                 });
                 return promise;
             }
-            function calculatTotales() {
+            function calcularTotales(elemento) {
                 var promise = new Promise(function (resolve, reject) {
-                    $("#taller-nomina > tbody > tr:first > td").each(function(index, el) {
+                    var tabla = $(elemento).parents("table");
+                    tabla.find("tbody > tr:first > td").each(function(index, el) {
                         if ($(el).hasClass('td-nombres-y-apellidos') || $(el).hasClass('td-documento') || $(el).hasClass('td-opcion')) {
                             return; //this is equivalent of 'continue' for jQuery loop
                         }
                         var clase = $(el).attr('class').split(' ')[2];
                         var suma = 0;
-                        $("#taller-nomina > tbody > tr > td."+clase).each(function(index2, el2) {
+                        tabla.find("tbody > tr > td."+clase).each(function(index2, el2) {
                             suma += parseInt(numeral($(el2).text()).format('0'));
                         });
                         if($(el).hasClass('numero')){
-                            $(".valor-total-"+clase).text(numeral(suma).format('0'));
+                            tabla.find(".valor-total-"+clase).text(numeral(suma).format('0'));
                         }else{
-                            $(".valor-total-"+clase).text(numeral(suma).format('$0,0'));
+                            tabla.find(".valor-total-"+clase).text(numeral(suma).format('$0,0'));
                         }
                     });
                 });

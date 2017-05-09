@@ -32,9 +32,9 @@ class CreateRespuestaTallerNominaTable extends Migration
             $table->integer('retn_totaldevengadoconauxiliodetransporte');
             $table->integer('retn_salud');
             $table->integer('retn_pension');
-            $table->integer('retn_deduccionuno');
-            $table->integer('retn_deducciondos');
-            $table->integer('retn_deducciontres');
+            $table->integer('retn_deduccionuno')->nullable();
+            $table->integer('retn_deducciondos')->nullable();
+            $table->integer('retn_deducciontres')->nullable();
             $table->integer('retn_totaldeducciones');
             $table->integer('retn_netoapagar');
             $table->integer('retn_horaextradiurnacantidad');
