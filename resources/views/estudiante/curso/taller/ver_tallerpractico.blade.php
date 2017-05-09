@@ -181,7 +181,7 @@
                         @elseif(isset($tallerPractico->tallerNomina))
                             <div class="row">
                                 <div class="table-responsive">
-                                    <table class="table table-striped table-bordered table-hover" id="taller-nomina">
+                                    <table class="table table-striped table-bordered table-hover taller-nomina" id="taller-nomina">
                                         <thead>
                                             <tr>
                                                 <td rowspan="2" class="text-center vcenter"><strong>NOMBRES Y APELLIDOS</strong></td>
@@ -331,78 +331,12 @@
                             <div class="row">
                                 <div class="col-lg-12 text-center">
                                     <button class="btn btn-default" id="adicionar-fila-nomina">Adicionar fila</button>
-                                    <button class="btn btn-primary" id="solucionar-taller-nomina">Guardar taller</button>
+                                    <button class="btn btn-primary" id="solucionar-taller-nomina" data-ruta="{{ route('estudiante.curso.taller.solucionar.nomina.post', ['curs_id' => $curso->curs_id, 'tall_id' => $tallerPractico->tall_id]) }}">Guardar taller</button>
                                 </div>
                             </div>
                             @push('scripts')
                                 <script type="text/javascript">
                                     $(document).ready(function() {
-                                        $('#solucionar-taller-nomina').click(function(event) {
-                                            event.preventDefault();
-                                            $("#solucionar-taller-nomina").attr('disabled', true).text('ENVIANDO DATOS...');
-                                            $("#adicionar-fila-nomina").attr('disabled', true);
-                                            var filas = [];
-                                            $('#taller-nomina > tbody > tr:not(:last)').each(function(index, el) {
-                                                var fila = new Object();
-                                                $(el).find('td').each(function(index2, el2) {
-                                                    var clase = $(el2).attr('class').split(' ')[2];
-                                                    var valor = "0";
-                                                    if(clase== undefined || clase == 'td-opcion'){
-                                                        return;
-                                                    }
-                                                    else if (clase == 'td-nombres-y-apellidos' || clase == 'td-documento') {
-                                                        valor = $(el2).text();
-                                                        if(valor == "" && $('#taller-nomina > tbody > tr:not(:last)').length > 1){
-                                                            $(el).remove();
-                                                        }
-                                                    }else{
-                                                        valor = parseInt(numeral($(el2).text()).format('0'));
-                                                    }
-                                                    var variable = clase.replace(/-/g,"_");
-                                                    Object.defineProperty(fila,variable,{ value: valor, writable: true, enumerable: true, configurable: true });
-                                                });
-                                                filas.push(fila);
-                                            });
-                                            var datos = new Object();
-                                            datos.filas = filas;
-                                            var xhr =
-                                                $.ajax({
-                                                    url: '{{ route('estudiante.curso.taller.solucionar.nomina.post', ['curs_id' => $curso->curs_id, 'tall_id' => $tallerPractico->tall_id]) }}',
-                                                    type: 'POST',
-                                                    headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                                                    dataType: 'JSON',
-                                                    data: datos,
-                                                    beforeSend: function () {
-                                                    },
-                                                    success: function(data) {
-                                                        if(data.state == "error"){
-                                                            swal({
-                                                                title: '¡Error!',
-                                                                text: data.message,
-                                                                type: 'error'
-                                                            });
-                                                        }else if(data.state == "success"){
-                                                            swal({
-                                                                title: '¡Éxito!',
-                                                                text: data.message,
-                                                                type: 'success'
-                                                            });
-                                                        }
-                                                        console.log(data);
-                                                    }
-                                                })
-                                                .done(function() {
-                                                    console.log("success");
-                                                })
-                                                .fail(function() {
-                                                    console.log("error");
-                                                })
-                                                .always(function() {
-                                                    console.log("complete");
-                                                    $("#solucionar-taller-nomina").attr('disabled', false).text('GUARDAR TALLER');
-                                                    $("#adicionar-fila-nomina").attr('disabled', false);
-                                                });
-                                        });
                                     });
                                 </script>
                             @endpush
@@ -512,32 +446,16 @@
                 };
             $('.selectpicker').selectpicker().filter('.with-ajax').ajaxSelectPicker(options);
             $('select').trigger('change');
-            var activeTab = null;
-            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                activeTab = e.target;
-                console.log(activeTab);
-                activeTab = $(activeTab).attr('href');
-                console.log(activeTab);
-                console.log($('.tab-content:visible'));
-                console.log($('.tab-content:visible .taller-asiento-contable'));
-                console.log($('.tab-content:visible').find('.taller-asiento-contable'));
-            });
-
-            //var tab_selected = $("li.tab.ui-tabs-selected a").attr("href");
-            //console.log(tab_selected);
             $('.tab-content:visible').find('.taller-asiento-contable').on('change', 'select',function(event) {
                 event.preventDefault();
-                console.log(this);
                 // Obtengo la fila en la que se modificó el select.
                 var fila = $(this).data('fila');
                 // Obtengo el nombre del puc, este se encuentra en el atributo data-subtext de la opción seleccionada por el usuario.
                 var nombre = $(this).find('option:selected').data('subtext');
                 // Cambio el nombre de la columna CUENTAS en la fila en que se modificó el select.
                 $(this).parents('tr').find('td.columna_cuentas').text(nombre);
-
             });
             $('.tab-content:visible').find('.taller-asiento-contable').on('blur', '.columna_debito[contenteditable=true]',function(event) {
-                console.log(this);
                 calcularColumnaDebito(this);
             });
             $('.tab-content:visible').find('.taller-asiento-contable').on('blur', '.columna_credito[contenteditable=true]',function(event) {
@@ -684,11 +602,11 @@
                 Eventos para Taller Nomina
                 --------------------------------------------------------------------------------
              */
-            $("#adicionar-fila-nomina").click(function(event) {
+            $('.tab-content:visible').find(".adicionar-fila-nomina").click(function(event) {
                 event.preventDefault();
-                var filaTotal = $("#taller-nomina > tbody").children('tr').last();
-                var primerFilaClonada = $("#taller-nomina > tbody").children().first().clone();
-                var botonEliminarClonado =  $("#taller-nomina > tbody > tr > td > button.eliminar-fila").first().clone(true);
+                var filaTotal = $('.tab-content:visible').find(".taller-nomina > tbody").children('tr').last();
+                var primerFilaClonada = $('.tab-content:visible').find(".taller-nomina > tbody").children().first().clone();
+                var botonEliminarClonado =  $('.tab-content:visible').find(".taller-nomina > tbody > tr > td > button.eliminar-fila").first().clone(true);
                 primerFilaClonada.find('td').text('');
                 primerFilaClonada.find('td').last().append(botonEliminarClonado);
                 filaTotal.remove();
@@ -696,7 +614,7 @@
                 $('#taller-nomina > tbody').append(filaTotal);
                 darFormatoACampos();
             });
-            $("#taller-nomina").on('blur', '.cambiar-salario-basico[contenteditable=true]', function(event) {
+            $('.tab-content:visible').find(".taller-nomina").on('blur', '.cambiar-salario-basico[contenteditable=true]', function(event) {
                 var elemento = this;
                 cambiarSalarioBasico(elemento)
                     .then(function () {
@@ -718,7 +636,7 @@
                         return calculatTotales();
                     });
             });
-            $("#taller-nomina").on('blur', '.cambiar-total-devengado[contenteditable=true]', function(event) {
+            $('.tab-content:visible').find(".taller-nomina").on('blur', '.cambiar-total-devengado[contenteditable=true]', function(event) {
                 var elemento = this;
                 cambiarTotalDevengado(elemento)
                     .then(function () {
@@ -734,7 +652,7 @@
                         return calculatTotales();
                     });
             });
-            $("#taller-nomina").on('blur', '.cambiar-total-devengado-con-auxilio-de-transporte[contenteditable=true]', function(event) {
+            $('.tab-content:visible').find(".taller-nomina").on('blur', '.cambiar-total-devengado-con-auxilio-de-transporte[contenteditable=true]', function(event) {
                 var elemento = this;
                 cambiarTotalDevengadoConAuxilioDeTransporte(elemento)
                     .then(function () {
@@ -747,7 +665,7 @@
                         return calculatTotales();
                     });
             });
-            $("#taller-nomina").on('blur', '.cambiar-total-deducciones[contenteditable=true]', function(event) {
+            $('.tab-content:visible').find(".taller-nomina").on('blur', '.cambiar-total-deducciones[contenteditable=true]', function(event) {
                 var elemento = this;
                 cambiarTotalDeducciones(elemento)
                     .then(function () {
@@ -760,7 +678,7 @@
                         return calculatTotales();
                     });
             });
-            $("#taller-nomina").on('blur', '.actualizar-horas-extras-y-valor-total', function(event) {
+            $('.tab-content:visible').find(".taller-nomina").on('blur', '.actualizar-horas-extras-y-valor-total', function(event) {
                 var elemento = this;
                 actualzarHorasExtrasYRecargos(elemento)
                     .then(function () {
@@ -777,6 +695,72 @@
                     })
                     .then(function () {
                         return calculatTotales();
+                    });
+            });
+            $('#solucionar-taller-nomina').click(function(event) {
+                event.preventDefault();
+                $("#solucionar-taller-nomina").attr('disabled', true).text('ENVIANDO DATOS...');
+                $("#adicionar-fila-nomina").attr('disabled', true);
+                var filas = [];
+                $('#taller-nomina > tbody > tr:not(:last)').each(function(index, el) {
+                    var fila = new Object();
+                    $(el).find('td').each(function(index2, el2) {
+                        var clase = $(el2).attr('class').split(' ')[2];
+                        var valor = "0";
+                        if(clase== undefined || clase == 'td-opcion'){
+                            return;
+                        }
+                        else if (clase == 'td-nombres-y-apellidos' || clase == 'td-documento') {
+                            valor = $(el2).text();
+                            if(valor == "" && $('#taller-nomina > tbody > tr:not(:last)').length > 1){
+                                $(el).remove();
+                            }
+                        }else{
+                            valor = parseInt(numeral($(el2).text()).format('0'));
+                        }
+                        var variable = clase.replace(/-/g,"_");
+                        Object.defineProperty(fila,variable,{ value: valor, writable: true, enumerable: true, configurable: true });
+                    });
+                    filas.push(fila);
+                });
+                var datos = new Object();
+                datos.filas = filas;
+                var xhr =
+                    $.ajax({
+                        url: '',
+                        type: 'POST',
+                        headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                        dataType: 'JSON',
+                        data: datos,
+                        beforeSend: function () {
+                        },
+                        success: function(data) {
+                            if(data.state == "error"){
+                                swal({
+                                    title: '¡Error!',
+                                    text: data.message,
+                                    type: 'error'
+                                });
+                            }else if(data.state == "success"){
+                                swal({
+                                    title: '¡Éxito!',
+                                    text: data.message,
+                                    type: 'success'
+                                });
+                            }
+                            console.log(data);
+                        }
+                    })
+                    .done(function() {
+                        console.log("success");
+                    })
+                    .fail(function() {
+                        console.log("error");
+                    })
+                    .always(function() {
+                        console.log("complete");
+                        $("#solucionar-taller-nomina").attr('disabled', false).text('GUARDAR TALLER');
+                        $("#adicionar-fila-nomina").attr('disabled', false);
                     });
             });
             function cambiarSalarioBasico(elemento) {

@@ -712,7 +712,6 @@ class TallerController extends Controller
         DB::beginTransaction();
         try {
             $tallerAsientoContable->respuestasTallerAsientosContables()->where('usua_id', Auth::user()->usua_id)->delete();
-            dd($tallerAsientoContableRespuestas);
             foreach ($tallerAsientoContableRespuestas->filas as $fila) {
                 $fila = json_decode(json_encode($fila));
                 if(isset($fila->codigo, $fila->debito, $fila->credito) && $fila->codigo != "" && $fila->debito != "" && $fila->credito != ""){
