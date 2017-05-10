@@ -15,6 +15,7 @@ use App\Tarifa;
 use App\Calificacion;
 use App\RespuestaTallerAsientoContable;
 use App\RespuestaTallerNomina;
+use App\FilaTallerNomina;
 use App\DataTables\TallerDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
@@ -776,53 +777,62 @@ class TallerController extends Controller
             echo json_encode($respuesta);
             die;
         }
-        $tallerNominaRespuestas = json_decode(json_encode($request->all()));
+        $tallerNominaRespuestas = json_decode($request->filas);
         $i = 1;
         DB::beginTransaction();
         try {
-            $tallerNomina->respuestasTallerNomina()->where('usua_id', Auth::user()->usua_id)->delete();
-            foreach ($tallerNominaRespuestas->filas as $fila) {
-                $fila = json_decode(json_encode($fila));
-                //dd(isset($fila->codigo));
+            $respuestaTallerNomina = $tallerNomina->respuestasTallerNomina()->where('usua_id', Auth::user()->usua_id)->get()->first();
+            // TODO: debo cargar el archivo y guardar la info en BD
+            if(!isset($respuestaTallerNomina)){
+                $respuestaTallerNomina = RespuestaTallerNomina::create([
+                    'tano_id' => $tallerNomina->tano_id,
+                    'usua_id' => Auth::user()->usua_id,
+                    'rear_id' => isset($respuestaArchivo->rear_id) ? $respuestaArchivo->rear_id : null
+                ]);
+            }
+            //dd($respuestaTallerNomina->filasTallerNomina);
+            if ($respuestaTallerNomina->filasTallerNomina->isNotEmpty()) {
+                $respuestaTallerNomina->filasTallerNomina()->delete();
+            }
+            foreach ($tallerNominaRespuestas as $fila) {
+                //$fila = json_decode(json_encode($fila));
                 if(isset($fila->td_nombres_y_apellidos, $fila->td_documento) && $fila->td_nombres_y_apellidos != "" && $fila->td_documento != "" ){
-                    RespuestaTallerNomina::create([
-                        'tano_id' => $tallerNomina->tano_id,
-                        'usua_id' => Auth::user()->usua_id,
-                        'retn_nombresyapellidos' => $fila->td_nombres_y_apellidos,
-                        'retn_documento' => $fila->td_documento,
-                        'retn_diastrabajados' => $fila->td_dias_trabajados,
-                        'retn_salario' => $fila->td_salario,
-                        'retn_salariobasico' => $fila->td_salario_basico,
-                        'retn_horasextrasyrecargos' => $fila->td_horas_extras_y_recargos,
-                        'retn_comisiones' => $fila->td_comisiones,
-                        'retn_bonificaciones' => $fila->td_bonificaciones,
-                        'retn_totaldevengado' => $fila->td_total_devengado,
-                        'retn_auxdetransporte' => $fila->td_aux_de_transporte,
-                        'retn_totaldevengadoconauxiliodetransporte' => $fila->td_total_devengado_con_auxilio_de_transporte,
-                        'retn_salud' => $fila->td_salud,
-                        'retn_pension' => $fila->td_pension,
-                        'retn_deduccionuno' => isset($fila->td_deduccionuno) ? $fila->td_deduccionuno : null,
-                        'retn_deducciondos' => isset($fila->td_deducciondos) ? $fila->td_deducciondos : null,
-                        'retn_deducciontres' => isset($fila->td_deducciontres) ? $fila->td_deducciontres : null,
-                        'retn_totaldeducciones' => $fila->td_total_deducciones,
-                        'retn_netoapagar' => $fila->td_neto_a_pagar,
-                        'retn_horaextradiurnacantidad' => $fila->td_hora_extra_diurna_cantidad,
-                        'retn_horaextradiurnavalor' => $fila->td_hora_extra_diurna_valor,
-                        'retn_horaextranocturnacantidad' => $fila->td_hora_extra_nocturna_cantidad,
-                        'retn_horaextranocturnavalor' => $fila->td_hora_extra_nocturna_valor,
-                        'retn_recargonocturnocantidad' => $fila->td_recargo_nocturno_cantidad,
-                        'retn_recargonocturnovalor' => $fila->td_recargo_nocturno_valor,
-                        'retn_horafestivadiurnacantidad' => $fila->td_hora_festiva_diurna_cantidad,
-                        'retn_horafestivadiurnavalor' => $fila->td_hora_festiva_diurna_valor,
-                        'retn_horafestivanocturnacantidad' => $fila->td_hora_festiva_nocturna_cantidad,
-                        'retn_horafestivanocturnavalor' => $fila->td_hora_festiva_nocturna_valor,
-                        'retn_horaextrafestivadiurnacantidad' => $fila->td_hora_extra_festiva_diurna_cantidad,
-                        'retn_horaextrafestivadiurnavalor' => $fila->td_hora_extra_festiva_diurna_valor,
-                        'retn_horaextrafestivanocturnacantidad' => $fila->td_hora_extra_festiva_nocturna_cantidad,
-                        'retn_horaextrafestivanocturnavalor' => $fila->td_hora_extra_festiva_nocturna_valor,
-                        'retn_valortotaldehorasextras' => $fila->td_valor_total_de_horas_extras,
-                        'retn_rutaarchivo' => 'SIN ARCHIVO',
-                        'retn_fila' => $i
+                    FilaTallerNomina::create([
+                        'retn_id' => $respuestaTallerNomina->retn_id,
+                        'fitn_nombresyapellidos' => $fila->td_nombres_y_apellidos,
+                        'fitn_documento' => $fila->td_documento,
+                        'fitn_diastrabajados' => $fila->td_dias_trabajados,
+                        'fitn_salario' => $fila->td_salario,
+                        'fitn_salariobasico' => $fila->td_salario_basico,
+                        'fitn_horasextrasyrecargos' => $fila->td_horas_extras_y_recargos,
+                        'fitn_comisiones' => $fila->td_comisiones,
+                        'fitn_bonificaciones' => $fila->td_bonificaciones,
+                        'fitn_totaldevengado' => $fila->td_total_devengado,
+                        'fitn_auxdetransporte' => $fila->td_aux_de_transporte,
+                        'fitn_totaldevengadoconauxiliodetransporte' => $fila->td_total_devengado_con_auxilio_de_transporte,
+                        'fitn_salud' => $fila->td_salud,
+                        'fitn_pension' => $fila->td_pension,
+                        'fitn_deduccionuno' => isset($fila->td_deduccionuno) ? $fila->td_deduccionuno : null,
+                        'fitn_deducciondos' => isset($fila->td_deducciondos) ? $fila->td_deducciondos : null,
+                        'fitn_deducciontres' => isset($fila->td_deducciontres) ? $fila->td_deducciontres : null,
+                        'fitn_totaldeducciones' => $fila->td_total_deducciones,
+                        'fitn_netoapagar' => $fila->td_neto_a_pagar,
+                        'fitn_horaextradiurnacantidad' => $fila->td_hora_extra_diurna_cantidad,
+                        'fitn_horaextradiurnavalor' => $fila->td_hora_extra_diurna_valor,
+                        'fitn_horaextranocturnacantidad' => $fila->td_hora_extra_nocturna_cantidad,
+                        'fitn_horaextranocturnavalor' => $fila->td_hora_extra_nocturna_valor,
+                        'fitn_recargonocturnocantidad' => $fila->td_recargo_nocturno_cantidad,
+                        'fitn_recargonocturnovalor' => $fila->td_recargo_nocturno_valor,
+                        'fitn_horafestivadiurnacantidad' => $fila->td_hora_festiva_diurna_cantidad,
+                        'fitn_horafestivadiurnavalor' => $fila->td_hora_festiva_diurna_valor,
+                        'fitn_horafestivanocturnacantidad' => $fila->td_hora_festiva_nocturna_cantidad,
+                        'fitn_horafestivanocturnavalor' => $fila->td_hora_festiva_nocturna_valor,
+                        'fitn_horaextrafestivadiurnacantidad' => $fila->td_hora_extra_festiva_diurna_cantidad,
+                        'fitn_horaextrafestivadiurnavalor' => $fila->td_hora_extra_festiva_diurna_valor,
+                        'fitn_horaextrafestivanocturnacantidad' => $fila->td_hora_extra_festiva_nocturna_cantidad,
+                        'fitn_horaextrafestivanocturnavalor' => $fila->td_hora_extra_festiva_nocturna_valor,
+                        'fitn_valortotaldehorasextras' => $fila->td_valor_total_de_horas_extras,
+                        'fitn_fila' => $i
                     ]);
                     $i++;
                 }

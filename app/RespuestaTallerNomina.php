@@ -43,8 +43,7 @@ class RespuestaTallerNomina extends Model
      * @var array
      */
     protected $fillable = [
-        'retn_id', 'tano_id', 'usua_id', 'retn_nombresyapellidos', 'retn_documento','retn_diastrabajados','retn_salario','retn_salariobasico','retn_horasextrasyrecargos','retn_comisiones','retn_bonificaciones','retn_totaldevengado','retn_auxdetransporte','retn_totaldevengadoconauxiliodetransporte','retn_salud','retn_pension','retn_deduccionuno','retn_deducciondos','retn_deducciontres','retn_totaldeducciones','retn_netoapagar','retn_horaextradiurnacantidad','retn_horaextradiurnavalor','retn_horaextranocturnacantidad','retn_horaextranocturnavalor',
-        'retn_recargonocturnocantidad','retn_recargonocturnovalor','retn_horafestivadiurnacantidad','retn_horafestivadiurnavalor','retn_horafestivanocturnacantidad','retn_horafestivanocturnavalor','retn_horaextrafestivadiurnacantidad','retn_horaextrafestivadiurnavalor','retn_horaextrafestivanocturnacantidad','retn_horaextrafestivanocturnavalor','retn_valortotaldehorasextras','retn_rutaarchivo','retn_fila'
+        'retn_id', 'tano_id', 'usua_id', 'rear_id'
     ];
 
     /**
@@ -59,5 +58,26 @@ class RespuestaTallerNomina extends Model
     public function usuario()
     {
         return $this->belongsTo('App\User','usua_id');
+    }
+
+    public function tallerNomina()
+    {
+        return $this->belongsTo('App\TallerNomina','tano_id');
+    }
+
+    public function respuestaArchivo()
+    {
+        return $this->belongsTo('App\RespuestaArchivo','rear_id');
+    }
+
+    public function filasTallerNomina()
+    {
+        return $this->hasMany('App\FilaTallerNomina', 'retn_id');
+    }
+
+
+    public function calcularTotalColumna($columna = "")
+    {
+        return FilaTallerNomina::sum($columna);
     }
 }

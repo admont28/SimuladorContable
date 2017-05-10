@@ -84,13 +84,9 @@ class TallerNomina extends Model
         return $cantidad;
     }
 
-    public function respuestasTallerNominaUsuarioAutenticado()
+    public function respuestaTallerNominaUsuarioAutenticado()
     {
-        return RespuestaTallerNomina::where('usua_id', Auth::user()->usua_id)->where('tano_id', $this->tano_id)->get();
+        return RespuestaTallerNomina::where('usua_id', Auth::user()->usua_id)->where('tano_id', $this->tano_id)->get()->first();
     }
 
-    public function calcularTotalColumna($columna = "")
-    {
-        return RespuestaTallerNomina::where('usua_id', Auth::user()->usua_id)->where('tano_id', $this->tano_id)->sum($columna);
-    }
 }

@@ -265,6 +265,7 @@ class CursoController extends Controller
         if($talleresTeoricos->count() == $curso->talleresTeoricoFinalizadosUsuario()->count()){
             //relaciones entre los modelos
             $talleresPracticos = $curso->talleres->where('tall_tipo', 'practico');
+            //dd($talleresPracticos->first()->tallerNomina->respuestaTallerNominaUsuarioAutenticado());
             return view('estudiante.curso.taller.ver_tallerpractico')
                         ->with('curso', $curso)
                         ->with('talleresPracticos', $talleresPracticos);
