@@ -57,7 +57,12 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Tipo de taller</div>
                                     <div class="panel-body">
-                                        <div class="fs-18"><span class="label label-default">{{ $tallerPractico->tall_tipo }}</span>@if(isset($tallerPractico->tallerAsientoContable)) <span class="label label-warning">asientos contables</span> @elseif(isset($tallerPractico->tallerNomina)) <span class="label label-info">nómina</span> @endif</div>
+                                        <div class="fs-18"><span class="label label-default">{{ $tallerPractico->tall_tipo }}</span>
+                                            @if(isset($tallerPractico->tallerAsientoContable)) <span class="label label-info">asientos contables</span>
+                                            @elseif(isset($tallerPractico->tallerNomina)) <span class="label label-success">nómina</span>
+                                            @elseif(isset($tallerPractico->tallerKardex)) <span class="label label-warning">kardex</span>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </div>

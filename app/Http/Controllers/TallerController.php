@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Taller;
 use App\TallerAsientoContable;
 use App\TallerNomina;
+use App\TallerKardex;
 use App\Curso;
 use App\Pregunta;
 use App\Respuesta;
@@ -264,7 +265,8 @@ class TallerController extends Controller
         // Verificamos que el taller no tenga asiganado ya un sub-tipo.
         $tallerAsientoContable = $taller->tallerAsientoContable;
         $tallerNomina = $taller->tallerNomina;
-        if(isset($tallerAsientoContable) || isset($tallerNomina)){
+        $tallerKardex = $taller->tallerKardex;
+        if(isset($tallerAsientoContable) || isset($tallerNomina) || isset($tallerKardex)){
             flash('El taller con ID: '.$tall_id.' ya tiene relacionado un sub-tipo. Verifique por favor.', 'danger');
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
         }
@@ -294,7 +296,8 @@ class TallerController extends Controller
         // Verificamos que el taller no tenga asiganado ya un sub-tipo.
         $tallerAsientoContable = $taller->tallerAsientoContable;
         $tallerNomina = $taller->tallerNomina;
-        if(isset($tallerAsientoContable) || isset($tallerNomina)){
+        $tallerKardex = $taller->tallerKardex;
+        if(isset($tallerAsientoContable) || isset($tallerNomina) || isset($tallerKardex)){
             flash('El taller con ID: '.$tall_id.' ya tiene relacionado un sub-tipo. Verifique por favor.', 'danger');
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
         }
@@ -320,7 +323,8 @@ class TallerController extends Controller
         // Verificamos que el taller no tenga asiganado ya un sub-tipo.
         $tallerAsientoContable = $taller->tallerAsientoContable;
         $tallerNomina = $taller->tallerNomina;
-        if(isset($tallerAsientoContable) || isset($tallerNomina)){
+        $tallerKardex = $taller->tallerKardex;
+        if(isset($tallerAsientoContable) || isset($tallerNomina) || isset($tallerKardex)){
             flash('El taller con ID: '.$tall_id.' ya tiene relacionado un sub-tipo. Verifique por favor.', 'danger');
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
         }
@@ -339,6 +343,37 @@ class TallerController extends Controller
         ]);
         // Informo al usuario y redireccionamos.
         flash('El taller "'.$taller->tall_nombre.'" ha sido marcado con el sub-tipo: "Taller de Nómina" con éxito.', 'success');
+        return redirect()->route('profesor.curso.taller.ver',['curs_id'=> $curso->curs_id,'tall_id' => $taller->tall_id]);
+    }
+
+    public function crearTallerKardexPost(Request $request, $curs_id, $tall_id)
+    {
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso');
+        }
+        // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
+        $taller = Taller::find($tall_id);
+        if (!isset($taller)) {
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
+        }
+        // Verificamos que el taller no tenga asiganado ya un sub-tipo.
+        $tallerAsientoContable = $taller->tallerAsientoContable;
+        $tallerNomina = $taller->tallerNomina;
+        $tallerKardex = $taller->tallerKardex;
+        if(isset($tallerAsientoContable) || isset($tallerNomina) || isset($tallerKardex)){
+            flash('El taller con ID: '.$tall_id.' ya tiene relacionado un sub-tipo. Verifique por favor.', 'danger');
+            return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
+        }
+        // Creo el taller de asiento contable en bd y lo relaciono con el taller que sería el padre
+        TallerKardex::create([
+            'tall_id' => $taller->tall_id
+        ]);
+        // Informo al usuario y redireccionamos.
+        flash('El taller "'.$taller->tall_nombre.'" ha sido marcado con el sub-tipo: "Taller Kardex" con éxito.', 'success');
         return redirect()->route('profesor.curso.taller.ver',['curs_id'=> $curso->curs_id,'tall_id' => $taller->tall_id]);
     }
 

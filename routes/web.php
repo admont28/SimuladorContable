@@ -160,6 +160,14 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
 
     /*
     |--------------------------------------------------------------------------
+    | Rutas para los talleres de kardex
+    |--------------------------------------------------------------------------
+    */
+
+    Route::post('/curso/{curs_id}/taller/{tall_id}/crear-taller-kardex-post', 'TallerController@crearTallerKardexPost')->name('profesor.curso.taller.crear.tallerkardex.post');
+
+    /*
+    |--------------------------------------------------------------------------
     | Rutas para las preguntas
     |--------------------------------------------------------------------------
     */

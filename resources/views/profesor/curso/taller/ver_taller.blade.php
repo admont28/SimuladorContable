@@ -64,7 +64,7 @@
                     <strong>Sub-tipo:</strong>
                 </div>
                 <div class="col-lg-9 text-justify">
-                    Taller Asientos Contables
+                    <span class="label label-info">Taller Asientos Contables</span>
                 </div>
             </div>
             <br>
@@ -74,7 +74,7 @@
                     <strong>Sub-tipo:</strong>
                 </div>
                 <div class="col-lg-9 text-justify">
-                    Taller de Nómina
+                    <span class="label label-success">Taller de Nómina</span>
                 </div>
             </div>
             <br>
@@ -104,6 +104,16 @@
                     {{ $taller->tallerNomina->tano_deducciontres != "" ? $taller->tallerNomina->tano_deducciontres : 'SIN DEDUCCIÓN' }}
                 </div>
             </div>
+        @elseif (isset($taller->tallerKardex))
+            <div class="row">
+                <div class="col-lg-3">
+                    <strong>Sub-tipo:</strong>
+                </div>
+                <div class="col-lg-9 text-justify">
+                    <span class="label label-warning">Taller de Kardex</span>
+                </div>
+            </div>
+            <br>
         @else
             <div class="row">
                 <div class="bs-callout bs-callout-danger">
@@ -117,8 +127,11 @@
                         {{ csrf_field() }}
                         <button type="submit" class="btn btn-info" id="btn-taller-asiento-contable">Taller para asientos contables</button>
                     </form>
-                    <a href="{{ route('profesor.curso.taller.crear.tallernomina', ['curs_id'=>$taller->curs_id,'tall_id' => $taller->tall_id]) }}" class="btn btn-success">Taller de nómina</a>
-                    <a href="#" class="btn btn-warning">Taller de kardex</a>
+                    <a href="{{ route('profesor.curso.taller.crear.tallernomina', ['curs_id'=>$curso->curs_id,'tall_id' => $taller->tall_id]) }}" class="btn btn-success">Taller de nómina</a>
+                    <form class="visible-lg-inline-block visible-sm-inline-block visible-md-inline-block visible-xs-inline-block" action="{{ route('profesor.curso.taller.crear.tallerkardex.post', ['curs_id' => $curso->curs_id, 'tall_id' => $taller->tall_id]) }}" method="post" id="form-tallerkardex">
+                        {{ csrf_field() }}
+                        <button type="submit" class="btn btn-warning" id="btn-taller-kardex">Taller de kardex</button>
+                    </form>
                     <a href="#" class="btn btn-default">Taller de estados financieros NIF</a>
                 </div>
             </div>
@@ -157,6 +170,27 @@
                 swal({
                     title: '¿Está seguro de esta acción?',
                     text: "Al marcar el taller con el sub-tipo: Taller Asientos Contables no podrá deshacer la acción. Por favor confirme.",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, continuar',
+                    cancelButtonText: 'No, cancelar'
+                }).then(function (option) {
+                    if(option === true){
+                        form.submit();
+                        return true;
+                    }else{
+                        return false;
+                    }
+                })
+            });
+            $(document).on('click', '#btn-taller-kardex', function(event) {
+                event.preventDefault();
+                var form = $('#form-tallerkardex');
+                swal({
+                    title: '¿Está seguro de esta acción?',
+                    text: "Al marcar el taller con el sub-tipo: Taller Kardex no podrá deshacer la acción. Por favor confirme.",
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',

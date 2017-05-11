@@ -98,6 +98,14 @@ class Taller extends Model
         return $this->hasOne('App\TallerNomina', 'tall_id');
     }
 
+    /**
+     * Obtener el taller de kardex asociado al taller actual.
+     */
+    public function tallerKardex()
+    {
+        return $this->hasOne('App\tallerKardex', 'tall_id');
+    }
+
     public static function getPossibleEnumValues(){
         $type = DB::select(DB::raw('SHOW COLUMNS FROM Taller WHERE Field = "tall_tipo"'))[0]->Type;
         preg_match('/^enum\((.*)\)$/', $type, $matches);
@@ -131,6 +139,5 @@ class Taller extends Model
             ->where('Taller.tall_id',$this->tall_id)
             ->get();
     }
-
 
 }
