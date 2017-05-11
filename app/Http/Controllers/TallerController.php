@@ -923,4 +923,41 @@ class TallerController extends Controller
         }
         echo json_encode($respuesta);
     }
+
+    public function solucionarTallerKardexPost(Request $request, $curs_id, $tall_id)
+    {
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            $respuesta = array('state' => 'error', 'message' => 'El curso con ID: '.$curs_id.' no existe. Verifique por favor.');
+            echo json_encode($respuesta);
+            die;
+        }
+        $taller = Taller::find($tall_id);
+        // Verificamos que el taller exista en bd, si no es así informamos al usuario y redireccionamos.
+        if (!isset($taller) || $taller->curs_id != $curso->curs_id) {
+            $respuesta = array('state' => 'error', 'message' => 'El taller con ID: '.$tall_id.' no pertenece al curso seleccionado. Verifique por favor.');
+            echo json_encode($respuesta);
+            die;
+        }
+        //verificamos que el taller sea un taller de tipo diagnóstico o teórico
+        if ( $taller->tall_tipo != "practico" ) {
+            $respuesta = array('state' => 'error', 'message' => 'El taller con ID: '.$tall_id.' no es un taller de tipo práctico. Verifique por favor.');
+            echo json_encode($respuesta);
+            die;
+        }
+        $fechaActual = new DateTime();
+        $fechaTaller = new DateTime($taller->tall_tiempo);
+        if($fechaActual > $fechaTaller){
+            $respuesta = array('state' => 'error', 'message' => 'El taller ha expirado, no se han podido guardar las respuestas.');
+            echo json_encode($respuesta);
+            die;
+        }
+        $tallerKardex = $taller->tallerKardex;
+        if (!isset($tallerKardex)) {
+            $respuesta = array('state' => 'error', 'message' => 'El taller de kardex no existe. Verifique por favor.');
+            echo json_encode($respuesta);
+            die;
+        }
+    }
 }
