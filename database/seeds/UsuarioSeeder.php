@@ -14,10 +14,17 @@ class UsuarioSeeder extends Seeder
     {
         $faker = Faker::create('es_ES');
         \DB::table('Usuario')->insertGetId(array(
-            'usua_nombre' => 'Andrés David Montoya Aguirre',
+            'usua_nombre' => 'Prof. Andrés David Montoya Aguirre',
             'usua_correo' => 'admont28@gmail.com',
             'usua_contrasena' => \Hash::make('123456'),
             'usua_rol' => 'profesor',
+            'remember_token' => null
+        ));
+        \DB::table('Usuario')->insertGetId(array(
+            'usua_nombre' => 'Est. Andrés David Montoya Aguirre',
+            'usua_correo' => 'admont28@live.com',
+            'usua_contrasena' => \Hash::make('123456'),
+            'usua_rol' => 'estudiante',
             'remember_token' => null
         ));
         for ($i=0; $i < 20; $i++) {
