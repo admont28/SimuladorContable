@@ -268,7 +268,7 @@
                                                     </tr>
                                                 @endfor
                                                 <tr>
-                                                    <td colspan="2" class="text-center vcenter valor-total-">TOTAL</td>
+                                                    <td colspan="2" class="text-center vcenter td-total">TOTAL</td>
                                                     <td class="text-center vcenter valor-total-td-dias-trabajados numero"></td>
                                                     <td class="text-center vcenter valor-total-td-salario"></td>
                                                     <td class="text-center vcenter valor-total-td-salario-basico"></td>
@@ -412,6 +412,16 @@
                             </div>
                             <br>
                             <div class="row">
+                                <div class="col-lg-12">
+                                    @if (isset($tallerPractico->tallerNomina->respuestaTallerNominaUsuarioAutenticado()->rear_id))
+                                        <div class="alert alert-info" role="alert">
+                                            <p>Usted ya ha cargado el siguiente archivo: <strong><a class="alert-link" target="_blank" href="{{ $tallerPractico->tallerNomina->respuestaTallerNominaUsuarioAutenticado()->respuestaArchivo->rear_rutaarchivo }}">{{ $tallerPractico->tallerNomina->respuestaTallerNominaUsuarioAutenticado()->respuestaArchivo->rear_nombre }}</a>.</strong> Si selecciona otro archivo, el archivo existente será reemplazado.</p>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
                                 <div class="col-lg-12 text-center">
                                     <button class="btn btn-default adicionar-fila-nomina" id="adicionar-fila-nomina">Adicionar fila</button>
                                     <button class="btn btn-primary solucionar-taller-nomina" id="solucionar-taller-nomina" data-ruta="{{ route('estudiante.curso.taller.solucionar.nomina.post', ['curs_id' => $curso->curs_id, 'tall_id' => $tallerPractico->tall_id]) }}">Guardar taller</button>
@@ -540,7 +550,7 @@
             });
             $('.tab-content:visible').find('.adicionar-fila-asiento-contable').click(function(event) {
                 event.preventDefault();
-                var tabla = $(this).parents('div.tab-pane').find('table');
+                var tabla = $(this).parents('div.tab-pane').find('table.taller-asiento-contable');
                 var filaSumasIguales = tabla.find("tbody").children().last();
                 var primerFilaClonada = tabla.find("tbody").children().first().clone(true);
                 var botonEliminarClonado = tabla.find("tbody > tr > td > button.eliminar-fila").first().clone(true);
@@ -558,7 +568,7 @@
             $('.tab-content:visible').find('.solucionar-taller-asiento-contable').click(function(event) {
                 event.preventDefault();
                 var botonPulsado = $(this);
-                var tabla = botonPulsado.parents('div.tab-pane').find('table');
+                var tabla = botonPulsado.parents('div.tab-pane').find('table.taller-asiento-contable');
                 botonPulsado.attr('disabled', true).text('ENVIANDO DATOS...');
                 botonPulsado.parents("div").find(".adicionar-fila-asiento-contable").attr('disabled', true);
                 var ruta = botonPulsado.data("ruta");
@@ -699,7 +709,7 @@
              */
             $('.tab-content:visible').find(".adicionar-fila-nomina").click(function(event) {
                 event.preventDefault();
-                var tabla = $(this).parents('div.tab-pane').find('table');
+                var tabla = $(this).parents('div.tab-pane').find('table.taller-nomina');
                 var filaTotal = tabla.find("tbody").children('tr').last();
                 var primerFilaClonada = tabla.find("tbody").children().first().clone();
                 var botonEliminarClonado =  tabla.find("tbody > tr > td > button.eliminar-fila").first().clone(true);
@@ -797,15 +807,13 @@
                 event.preventDefault();
                 var botonPulsado = $(this);
                 var tabPanelActivo = botonPulsado.parents('div.tab-pane');
-                var tabla = tabPanelActivo.find('table');
+                var tabla = tabPanelActivo.find('table.taller-nomina');
                 var textoOriginal = botonPulsado.text();
                 botonPulsado.attr('disabled', true).text('ENVIANDO DATOS...');
                 botonPulsado.parents("div").find(".adicionar-fila-nomina").attr('disabled', true);
                 var ruta = botonPulsado.data("ruta");
                 var inputFileImage = tabPanelActivo.find('input[type=file]');
-                console.log(inputFileImage);
                 var archivo = inputFileImage[0].files[0];
-                console.log(archivo);
                 var filas = [];
                 var ultimaFila = tabla.find('tbody > tr:last');
                 tabla.find('tbody > tr:not(:last)').each(function(index, el) {
@@ -860,6 +868,9 @@
                                     text: data.message,
                                     type: 'success'
                                 });
+                            }
+                            if(data.archivo != null){
+                                tabPanelActivo.find('.alert-link').attr('href', data.archivo.rear_rutaarchivo).text(data.archivo.rear_nombre);
                             }
                         }
                     })
@@ -1111,10 +1122,10 @@
             darFomatoACamposTallerNomina();
             function darFomatoACamposTallerNomina() {
                 $(".taller-nomina > tbody > tr > td").each(function(index, el) {
-                    if($(el).hasClass('numero')){
-                        $(el).text(numeral($(el).text()).format('0'));
-                    }else if ($(el).hasClass('td-nombres-y-apellidos') || $(el).hasClass('td-documento') || $(el).hasClass('td-opcion') || $(el).hasClass('td-total') || $(el).hasClass('td-vacio')) {
+                    if ($(el).hasClass('td-nombres-y-apellidos') || $(el).hasClass('td-documento') || $(el).hasClass('td-opcion') || $(el).hasClass('td-total') || $(el).hasClass('td-vacio')) {
                         return; //this is equivalent of 'continue' for jQuery loop
+                    }else if($(el).hasClass('numero')){
+                        $(el).text(numeral($(el).text()).format('0'));
                     }
                     else{
                         $(el).text(numeral($(el).text()).format('$0,0'));

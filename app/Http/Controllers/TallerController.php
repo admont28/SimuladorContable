@@ -782,15 +782,51 @@ class TallerController extends Controller
         DB::beginTransaction();
         try {
             $respuestaTallerNomina = $tallerNomina->respuestasTallerNomina()->where('usua_id', Auth::user()->usua_id)->get()->first();
-            // TODO: debo cargar el archivo y guardar la info en BD
             if(!isset($respuestaTallerNomina)){
                 $respuestaTallerNomina = RespuestaTallerNomina::create([
                     'tano_id' => $tallerNomina->tano_id,
                     'usua_id' => Auth::user()->usua_id,
-                    'rear_id' => isset($respuestaArchivo->rear_id) ? $respuestaArchivo->rear_id : null
+                    'rear_id' => null
                 ]);
             }
-            //dd($respuestaTallerNomina->filasTallerNomina);
+            //obtenemos el campo file definido en el formulario
+            $file = $request->file('archivo_taller_nomina');
+            $respuestaArchivo = null;
+            // Si existe y no es nulo $file es porque el usuario seleccionó un archivo en el formulario.
+            if(isset($file,$respuestaTallerNomina)){
+                $respuestaArchivo = $respuestaTallerNomina->respuestaArchivo;
+                $archivoOk = true;
+                if(isset($respuestaArchivo)){
+                    $infoArchivo = pathinfo($respuestaArchivo->rear_rutaarchivo);
+                    // Compruebo que exista el archivo en el disco de talleres.
+                    if(Storage::disk('talleres')->exists($taller->tall_id.'/'.Auth::user()->usua_id.'/'.$infoArchivo['basename'])){
+                        // Si existe el archivo procedo a eliminarlo, retorna true si fue exitoso, de lo contrario retorna false.
+                        $archivoOk = Storage::disk('talleres')->delete($taller->tall_id.'/'.Auth::user()->usua_id.'/'.$infoArchivo['basename']);
+                    }
+                }
+                if($archivoOk){
+                    //obtenemos el nombre del archivo
+                    $nombreArchivo = $file->getClientOriginalName();
+                    // Almaceno en el dicso talleres el archivo cargado por el usuario.
+                    $path = Storage::disk('talleres')->put('/'.$taller->tall_id.'/'.Auth::user()->usua_id, $file);
+                    if (!isset($respuestaArchivo)) {
+                        $respuestaArchivo = RespuestaArchivo::create([
+                            'rear_rutaarchivo' => asset('storage/talleres/'.$path),
+                            'rear_nombre'      => $nombreArchivo
+                        ]);
+                    }else {
+                        $respuestaArchivo->rear_rutaarchivo = asset('storage/talleres/'.$path);
+                        $respuestaArchivo->rear_nombre = $nombreArchivo;
+                        $respuestaArchivo->save();
+                    }
+                    $respuestaTallerNomina->rear_id = isset($respuestaArchivo->rear_id) ? $respuestaArchivo->rear_id : null;
+                    $respuestaTallerNomina->save();
+                }else {
+                    $respuesta = array('state' => 'error', 'message' => 'Ha ocurrido un error eliminando el archivo anterior. Por favor inténtelo de nuevo.');
+                    echo json_encode($respuesta);
+                    die();
+                }
+            }
             if ($respuestaTallerNomina->filasTallerNomina->isNotEmpty()) {
                 $respuestaTallerNomina->filasTallerNomina()->delete();
             }
@@ -847,7 +883,8 @@ class TallerController extends Controller
         if (!$success) {
             $respuesta = array('state' => 'error', 'message' => 'Ha ocurrido un error inesperado, por favor inténtelo de nuevo.');
         }else{
-            $respuesta = array('state' => 'success', 'message' => 'Se ha guardado su información con éxito, las filas sin nombres y apellidos ni documento se han omitido');
+
+            $respuesta = array('state' => 'success', 'message' => 'Se ha guardado su información con éxito, las filas sin nombres y apellidos ni documento se han omitido', 'archivo' => $respuestaArchivo);
         }
         echo json_encode($respuesta);
     }
