@@ -488,7 +488,13 @@
             $('body').on('click', '.eliminar-fila', function(event) {
                 event.preventDefault();
                 var cantidadFilas = $(this).parents('tbody').find('tr').length;
-                if(cantidadFilas > 2){
+                var tabla = $(this).parents('table');
+                var primerBoton = $(this).parents('tbody').find('button.eliminar-fila').first();
+                var cantidadMinimaFilas = 2;
+                if(tabla.hasClass('taller-kardex')){
+                    cantidadMinimaFilas = 1;
+                }
+                if(cantidadFilas > cantidadMinimaFilas){
                     $(this).parents('tr').remove();
                 }else {
                     swal(
@@ -497,8 +503,12 @@
                         'warning'
                     );
                 }
-                $('.columna_debito[contenteditable=true]').trigger('blur');
-                $('.columna_credito[contenteditable=true]').trigger('blur');
+                if(tabla.hasClass('taller-asiento-contable')){
+                    $('.columna_debito[contenteditable=true]').trigger('blur');
+                    $('.columna_credito[contenteditable=true]').trigger('blur');
+                }else if (tabla.hasClass('taller-nomina')) {
+                    calcularTotales(primerBoton);
+                }
             });
             /*
                 --------------------------------------------------------------------------------
@@ -698,14 +708,6 @@
                         $(el).text(numeral($(el).text()).format('$0,0'));
                     }
                 });
-                /*$(".taller-asiento-contable .total_debito").each(function(index, el) {
-                    $(el).text(numeral($(el).text()).format('$0,0'));
-                });
-                $(".taller-asiento-contable .total_credito").each(function(index, el) {
-                    $(el).text(numeral($(el).text()).format('$0,0'));
-                });*/
-                //$(".taller-asiento-contable .total_debito").text(numeral($(".taller-asiento-contable .total_debito").text()).format('$0,0'));
-                //$(".taller-asiento-contable .total_credito").text(numeral($(".taller-asiento-contable .total_credito").text()).format('$0,0'));
             }
             /*
                 --------------------------------------------------------------------------------
