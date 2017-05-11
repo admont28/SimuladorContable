@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-xs-12">
-        <table class="table" width="100%" id="tarifa-table" >
+        <table class="table" width="100%" id="tarifas-taller-{{ $tallerPractico->tall_id }}" >
             <thead>
                 <tr>
                     <td><strong>Nombre</strong></td>
@@ -15,7 +15,7 @@
 @push('scripts')
     <script type="text/javascript">
         $(function() {
-            $('#tarifa-table').DataTable({
+            $('#tarifas-taller-{{ $tallerPractico->tall_id }}').DataTable({
                 "responsive": true,
                 "processing": true,
                 "serverSide": true,
