@@ -57,7 +57,7 @@ class TallerNomina extends Model
     ];
 
     /**
-     * Obtener las respuestas del taller de nomina
+     * Obtener las respuestas del taller de nomina.
      */
     public function respuestasTallerNomina()
     {
@@ -65,13 +65,17 @@ class TallerNomina extends Model
     }
 
     /**
-     * Obtener el taller que es dueño del taller de asiento contable.
+     * Obtener el taller que es dueño del taller de nómina.
      */
     public function taller()
     {
         return $this->belongsTo('App\Taller', 'tall_id');
     }
 
+    /**
+     * Obtener la cantidad de deducciones definida por el profesor.
+     * @return int Retorna el número de deducciones que el profesor definió para el taller de nómina.
+     */
     public function cantidadDeducciones()
     {
         $cantidad = 0;
@@ -84,6 +88,10 @@ class TallerNomina extends Model
         return $cantidad;
     }
 
+    /**
+     * Obtener la RespuestaTallerNomina del usuario autenticado.
+     * @return RespuestaTallerNomina Retorna el primer objeto de tipo RespuestaTallerNomina si el usuario tiene una, de lo contrario retorna null.
+     */
     public function respuestaTallerNominaUsuarioAutenticado()
     {
         return RespuestaTallerNomina::where('usua_id', Auth::user()->usua_id)->where('tano_id', $this->tano_id)->get()->first();
