@@ -17,6 +17,8 @@ use App\Calificacion;
 use App\RespuestaTallerAsientoContable;
 use App\RespuestaTallerNomina;
 use App\FilaTallerNomina;
+use App\RespuestaTallerKardex;
+use App\FilaTallerKardex;
 use App\DataTables\TallerDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
@@ -959,5 +961,96 @@ class TallerController extends Controller
             echo json_encode($respuesta);
             die;
         }
+        $tallerKardexRespuestas = json_decode($request->filas);
+        $i = 1;
+        DB::beginTransaction();
+        try {
+            $respuestaTallerKardex = $tallerKardex->respuestasTallerKardex()->where('usua_id', Auth::user()->usua_id)->get()->first();
+            if(!isset($respuestaTallerKardex)){
+                $respuestaTallerKardex = RespuestaTallerKardex::create([
+                    'taka_id' => $tallerKardex->taka_id,
+                    'usua_id' => Auth::user()->usua_id,
+                    'rear_id' => null,
+                    'retk_articulo' => isset($request->articulo) ? $request->articulo : '',
+                    'retk_direccion' => isset($request->direccion) ? $request->direccion : '',
+                    'retk_proveedores' => isset($request->proveedores) ? $request->proveedores : ''
+                ]);
+            }
+            //obtenemos el campo file definido en el formulario
+            $file = $request->file('archivo_taller_kardex');
+            $respuestaArchivo = null;
+            // Si existe y no es nulo $file es porque el usuario seleccionó un archivo en el formulario.
+            if(isset($file,$respuestaTallerKardex)){
+                $respuestaArchivo = $respuestaTallerKardex->respuestaArchivo;
+                $archivoOk = true;
+                if(isset($respuestaArchivo)){
+                    $infoArchivo = pathinfo($respuestaArchivo->rear_rutaarchivo);
+                    // Compruebo que exista el archivo en el disco de talleres.
+                    if(Storage::disk('talleres')->exists($taller->tall_id.'/'.Auth::user()->usua_id.'/'.$infoArchivo['basename'])){
+                        // Si existe el archivo procedo a eliminarlo, retorna true si fue exitoso, de lo contrario retorna false.
+                        $archivoOk = Storage::disk('talleres')->delete($taller->tall_id.'/'.Auth::user()->usua_id.'/'.$infoArchivo['basename']);
+                    }
+                }
+                if($archivoOk){
+                    //obtenemos el nombre del archivo
+                    $nombreArchivo = $file->getClientOriginalName();
+                    // Almaceno en el dicso talleres el archivo cargado por el usuario.
+                    $path = Storage::disk('talleres')->put('/'.$taller->tall_id.'/'.Auth::user()->usua_id, $file);
+                    if (!isset($respuestaArchivo)) {
+                        $respuestaArchivo = RespuestaArchivo::create([
+                            'rear_rutaarchivo' => asset('storage/talleres/'.$path),
+                            'rear_nombre'      => $nombreArchivo
+                        ]);
+                    }else {
+                        $respuestaArchivo->rear_rutaarchivo = asset('storage/talleres/'.$path);
+                        $respuestaArchivo->rear_nombre = $nombreArchivo;
+                        $respuestaArchivo->save();
+                    }
+                    $respuestaTallerKardex->rear_id = isset($respuestaArchivo->rear_id) ? $respuestaArchivo->rear_id : null;
+                    $respuestaTallerKardex->save();
+                }else {
+                    $respuesta = array('state' => 'error', 'message' => 'Ha ocurrido un error eliminando el archivo anterior. Por favor inténtelo de nuevo.');
+                    echo json_encode($respuesta);
+                    die();
+                }
+            }
+            if ($respuestaTallerKardex->filasTallerKardex->isNotEmpty()) {
+                $respuestaTallerKardex->filasTallerKardex()->delete();
+            }
+            foreach ($tallerKardexRespuestas as $fila) {
+                //$fila = json_decode(json_encode($fila));
+                if(isset($fila->detalle) && $fila->detalle != ""){
+                    FilaTallerKardex::create([
+                        'retk_id' => $respuestaTallerKardex->retk_id,
+                        'fitk_dia' => $fila->dia,
+                        'fitk_mes' => $fila->mes,
+                        'fitk_ano' => $fila->ano,
+                        'fitk_detalle' => $fila->detalle,
+                        'fitk_valorunitario' => $fila->valorUnitario,
+                        'fitk_entradascantidad' => $fila->entradasCantidad,
+                        'fitk_entradasvalor' => $fila->entradasValor,
+                        'fitk_salidascantidad' => $fila->salidasCantidad,
+                        'fitk_salidasvalor' => $fila->salidasValor,
+                        'fitk_saldocantidad' => $fila->saldoCantidad,
+                        'fitk_saldovalor' => $fila->saldoValor,
+                        'fitk_promedio' => $fila->promedio,
+                        'fitk_fila' => $i
+                    ]);
+                    $i++;
+                }
+            }
+            DB::commit();
+            $success = true;
+        } catch (\Exception $e) {
+            $success = false;
+            DB::rollback();
+            dd($e->getMessage());
+        }
+        if (!$success) {
+            $respuesta = array('state' => 'error', 'message' => 'Ha ocurrido un error inesperado, por favor inténtelo de nuevo.');
+        }else{
+            $respuesta = array('state' => 'success', 'message' => 'Se ha guardado su información con éxito, las filas sin detalle se han omitido', 'archivo' => $respuestaArchivo);
+        }
+        echo json_encode($respuesta);
     }
 }

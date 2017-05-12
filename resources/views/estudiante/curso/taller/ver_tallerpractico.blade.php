@@ -1276,6 +1276,7 @@
                 var direccion = tabPanelActivo.find('input[name=direccion_taller_kardex]').val();
                 var proveedores = tabPanelActivo.find('input[name=proveedores_taller_kardex]').val();
                 if(articulo == undefined || articulo == ""){
+                    tabPanelActivo.find('input[name=articulo_taller_kardex]').focus();
                     swal(
                         '¡Cuidado!',
                         'El campo artículo es requerido.',
@@ -1283,6 +1284,7 @@
                     );
                     return;
                 }else if (direccion == undefined || direccion == "") {
+                    tabPanelActivo.find('input[name=direccion_taller_kardex]').focus();
                     swal(
                         '¡Cuidado!',
                         'El campo dirección es requerido.',
@@ -1290,6 +1292,7 @@
                     );
                     return;
                 }else if (proveedores == undefined || proveedores == "") {
+                    tabPanelActivo.find('input[name=proveedores_taller_kardex]').focus();
                     swal(
                         '¡Cuidado!',
                         'El campo proveedores es requerido.',
@@ -1432,11 +1435,15 @@
                         resolve(elemento);
                         return;
                     }
+                    // Ingresa una entrada negativa, en valor unitario debe tomar el promedio de la fila anterior
+                    if(indiceFila > 0 && $(elemento).hasClass('td-entradas-cantidad') && parseInt(numeral($(elemento).text()).format('0')) < 0 ){
+                        var filaAnterior = tabla.find('tbody > tr').eq(indiceFila - 1);
+                        var promedioAnterior = filaAnterior.children('.td-promedio').text();
+                        filaActual.children('.td-valor-unitario').text(promedioAnterior);
+                    }
                     if(indiceFila > 0 && $(elemento).hasClass('td-salidas-cantidad') && $(elemento).text() != '0'){
                         var filaAnterior = tabla.find('tbody > tr').eq(indiceFila - 1);
                         var promedioAnterior = filaAnterior.children('.td-promedio').text();
-                        console.log(filaAnterior.children('.td-promedio'));
-                        console.log(promedioAnterior);
                         filaActual.children('.td-valor-unitario').text(promedioAnterior);
                     }
                     var valorUnitario    = parseInt(numeral(filaActual.children('.td-valor-unitario').text()).format('0'));
