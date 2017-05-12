@@ -1014,7 +1014,7 @@ class TallerController extends Controller
                     die();
                 }
             }
-            if ($respuestaTallerKardex->filasTallerKardex->isNotEmpty()) {
+            if ($respuestaTallerKardex->filasTallerKardex->isNotEmpty() && !empty($tallerKardexRespuestas)) {
                 $respuestaTallerKardex->filasTallerKardex()->delete();
             }
             foreach ($tallerKardexRespuestas as $fila) {

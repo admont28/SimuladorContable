@@ -438,19 +438,19 @@
                                     <div class="form-group">
                                         <label for="articulo_taller_kardex" class="col-lg-2 control-label">Artículo:</label>
                                         <div class="col-lg-10">
-                                            <input type="text" class="form-control" placeholder="Ingrese el artículo" name="articulo_taller_kardex"/>
+                                            <input type="text" class="form-control" placeholder="Ingrese el artículo" name="articulo_taller_kardex" value="@if( $tallerPractico->tallerKardex->respuestaTallerKardexUsuarioAutenticado() !== null) {{ $tallerPractico->tallerKardex->respuestaTallerKardexUsuarioAutenticado()->retk_articulo }}  @endif"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="direccion_taller_kardex" class="col-lg-2 control-label">Dirección:</label>
                                         <div class="col-lg-10">
-                                            <input type="text" class="form-control" placeholder="Ingrese la dirección" name="direccion_taller_kardex"/>
+                                            <input type="text" class="form-control" placeholder="Ingrese la dirección" name="direccion_taller_kardex" value="@if( $tallerPractico->tallerKardex->respuestaTallerKardexUsuarioAutenticado() !== null) {{ $tallerPractico->tallerKardex->respuestaTallerKardexUsuarioAutenticado()->retk_direccion }} @endif"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="proveedores_taller_kardex" class="col-lg-2 control-label">Proveedores:</label>
                                         <div class="col-lg-10">
-                                            <input type="text" class="form-control" placeholder="Ingrese los proveedores" name="proveedores_taller_kardex"/>
+                                            <input type="text" class="form-control" placeholder="Ingrese los proveedores" name="proveedores_taller_kardex" value="@if( $tallerPractico->tallerKardex->respuestaTallerKardexUsuarioAutenticado() !== null) {{ $tallerPractico->tallerKardex->respuestaTallerKardexUsuarioAutenticado()->retk_proveedores }} @endif"/>
                                         </div>
                                     </div>
                                 </div>
@@ -505,7 +505,23 @@
                                                     </tr>
                                                 @endfor
                                             @else
-                                                {{ 'TIENE RESPUESTA'}}
+                                                @foreach ($tallerPractico->tallerKardex->respuestaTallerKardexUsuarioAutenticado()->filasTallerKardex as $fitk)
+                                                    <tr>
+                                                        <td class="text-center vcenter td-dia numero " contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $fitk->fitk_dia }}</td>
+                                                        <td class="text-center vcenter td-mes numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $fitk->fitk_mes }}</td>
+                                                        <td class="text-center vcenter td-ano numero" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $fitk->fitk_ano }}</td>
+                                                        <td class="text-center vcenter td-detalle" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $fitk->fitk_detalle }}</td>
+                                                        <td class="text-center vcenter td-valor-unitario actualizar-entradas-y-salidas" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $fitk->fitk_valorunitario }}</td>
+                                                        <td class="text-center vcenter td-entradas-cantidad numero actualizar-entradas-y-salidas" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $fitk->fitk_entradascantidad }}</td>
+                                                        <td class="text-center vcenter td-entradas-valor">{{ $fitk->fitk_entradasvalor }}</td>
+                                                        <td class="text-center vcenter td-salidas-cantidad numero actualizar-entradas-y-salidas" contenteditable="true" data-toggle="tooltip" title="Presione clic para editar.">{{ $fitk->fitk_salidascantidad }}</td>
+                                                        <td class="text-center vcenter td-salidas-valor">{{ $fitk->fitk_salidasvalor }}</td>
+                                                        <td class="text-center vcenter td-saldo-cantidad numero">{{ $fitk->fitk_saldocantidad }}</td>
+                                                        <td class="text-center vcenter td-saldo-valor">{{ $fitk->fitk_saldovalor }}</td>
+                                                        <td class="text-center vcenter td-promedio">{{ $fitk->fitk_promedio }}</td>
+                                                        <td class="text-center vcenter td-opcion"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
+                                                    </tr>
+                                                @endforeach
                                             @endif
                                         </tbody>
                                     </table>
@@ -1475,6 +1491,7 @@
                 });
                 return promise;
             }
+            darFomatoACamposTallerKardex();
             function darFomatoACamposTallerKardex() {
                 $(".taller-kardex > tbody > tr > td").each(function(index, el) {
                     if ($(el).hasClass('td-detalle') || $(el).hasClass('td-opcion')) {
