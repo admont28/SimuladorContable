@@ -187,6 +187,10 @@
             });
         });
     </script>
+    @include('estudiante.curso.taller.asientocontable.scripts')
+    @include('estudiante.curso.taller.nomina.scripts')
+    @include('estudiante.curso.taller.kardex.scripts')
+    @include('estudiante.curso.taller.niif.scripts')
     <script type="text/javascript">
         (function($) {
             fakewaffle.responsiveTabs(['xs', 'sm']);
