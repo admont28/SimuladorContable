@@ -73,7 +73,86 @@
             });
             $('.tab-content:visible').find('.solucionar-taller-asiento-contable').click(function(event) {
                 event.preventDefault();
-                var botonPulsado = $(this);
+                var botonPulsado = this;
+                swal({
+                    title: '¿Está seguro de esta acción?',
+                    text: "Al enviar los datos para ser almacenados, las filas sin código PUC serán omitidas y eliminadas de la tabla. Por favor confirme.",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, enviar',
+                    cancelButtonText: 'No, cancelar'
+                }).then(function (option) {
+                    if(option === true){
+                        enviarDatosTallerAsientoContable(botonPulsado);
+                        return true;
+                    }else{
+                        return false;
+                    }
+                });
+            });
+            function calcularColumnaDebito(elemento) {
+                var valorTdActual = $(elemento).text();
+                var tablaActual = $(elemento).parents('table');
+                valorTdActual = parseInt(numeral(valorTdActual).format('0'));
+                if(isNaN(valorTdActual)){
+                    swal(
+                        '¡Error!',
+                        'Debes introducir un número.',
+                        'error'
+                    );
+                    valorTdActual = 0;;
+                }
+                var total_debito = 0;
+                tablaActual.find('.columna_debito').each(function(index, el) {
+                    var number = numeral($(el).text()).format('0');
+                    var valorTd = parseInt(number);
+                    if(!isNaN(valorTd)){
+                        total_debito += valorTd;
+                    }
+                });
+                valorTdActual = numeral(valorTdActual).format('$0,0');
+                $(elemento).text(valorTdActual);
+                tablaActual.find(".total_debito").text(numeral(total_debito).format('$0,0'));
+            }
+            function calcularColumnaCredito(elemento) {
+                var valorTdActual = $(elemento).text();
+                var tablaActual = $(elemento).parents('table');
+                valorTdActual = parseInt(numeral(valorTdActual).format('0'));
+                if(isNaN(valorTdActual)){
+                    swal(
+                        '¡Error!',
+                        'Debes introducir un número.',
+                        'error'
+                    );
+                    valorTdActual = 0;;
+                }
+                var total_credito = 0;
+                tablaActual.find('.columna_credito').each(function(index, el) {
+                    var number = numeral($(el).text()).format('0');
+                    var valorTd = parseInt(number);
+                    if(!isNaN(valorTd)){
+                        total_credito += valorTd;
+                    }
+                });
+                valorTdActual = numeral(valorTdActual).format('$0,0');
+                $(elemento).text(valorTdActual);
+                tablaActual.find(".total_credito").text(numeral(total_credito).format('$0,0'));
+            }
+            darFormatoACamposTallerAsientoContable();
+            function darFormatoACamposTallerAsientoContable() {
+                $(".taller-asiento-contable > tbody > tr > td").each(function(index, el) {
+                    if($(el).hasClass('columna_opcion')){
+                        return;
+                    }
+                    else if ($(el).hasClass('columna_debito') || $(el).hasClass('columna_credito') || $(el).hasClass('total_debito') || $(el).hasClass('total_credito')) {
+                        $(el).text(numeral($(el).text()).format('$0,0'));
+                    }
+                });
+            }
+            function enviarDatosTallerAsientoContable(elemento) {
+                var botonPulsado = $(elemento);
                 var tabla = botonPulsado.parents('div.tab-pane').find('table.taller-asiento-contable');
                 botonPulsado.attr('disabled', true).text('ENVIANDO DATOS...');
                 botonPulsado.parents("div").find(".adicionar-fila-asiento-contable").attr('disabled', true);
@@ -140,65 +219,6 @@
                         botonPulsado.attr('disabled', false).text('GUARDAR TALLER');
                         botonPulsado.parents("div").find(".adicionar-fila-asiento-contable").attr('disabled', false);
                     });
-            });
-            function calcularColumnaDebito(elemento) {
-                var valorTdActual = $(elemento).text();
-                var tablaActual = $(elemento).parents('table');
-                valorTdActual = parseInt(numeral(valorTdActual).format('0'));
-                if(isNaN(valorTdActual)){
-                    swal(
-                        '¡Error!',
-                        'Debes introducir un número.',
-                        'error'
-                    );
-                    valorTdActual = 0;;
-                }
-                var total_debito = 0;
-                tablaActual.find('.columna_debito').each(function(index, el) {
-                    var number = numeral($(el).text()).format('0');
-                    var valorTd = parseInt(number);
-                    if(!isNaN(valorTd)){
-                        total_debito += valorTd;
-                    }
-                });
-                valorTdActual = numeral(valorTdActual).format('$0,0');
-                $(elemento).text(valorTdActual);
-                tablaActual.find(".total_debito").text(numeral(total_debito).format('$0,0'));
-            }
-            function calcularColumnaCredito(elemento) {
-                var valorTdActual = $(elemento).text();
-                var tablaActual = $(elemento).parents('table');
-                valorTdActual = parseInt(numeral(valorTdActual).format('0'));
-                if(isNaN(valorTdActual)){
-                    swal(
-                        '¡Error!',
-                        'Debes introducir un número.',
-                        'error'
-                    );
-                    valorTdActual = 0;;
-                }
-                var total_credito = 0;
-                tablaActual.find('.columna_credito').each(function(index, el) {
-                    var number = numeral($(el).text()).format('0');
-                    var valorTd = parseInt(number);
-                    if(!isNaN(valorTd)){
-                        total_credito += valorTd;
-                    }
-                });
-                valorTdActual = numeral(valorTdActual).format('$0,0');
-                $(elemento).text(valorTdActual);
-                tablaActual.find(".total_credito").text(numeral(total_credito).format('$0,0'));
-            }
-            darFormatoACamposTallerAsientoContable();
-            function darFormatoACamposTallerAsientoContable() {
-                $(".taller-asiento-contable > tbody > tr > td").each(function(index, el) {
-                    if($(el).hasClass('columna_opcion')){
-                        return;
-                    }
-                    else if ($(el).hasClass('columna_debito') || $(el).hasClass('columna_credito') || $(el).hasClass('total_debito') || $(el).hasClass('total_credito')) {
-                        $(el).text(numeral($(el).text()).format('$0,0'));
-                    }
-                });
             }
         });
     </script>
