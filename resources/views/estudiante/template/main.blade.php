@@ -60,13 +60,20 @@
         <script type="text/javascript" src="{{ asset('plugins/ajax-bootstrap-select/js/ajax-bootstrap-select.min.js') }}" charset="utf-8"></script>
         <script type="text/javascript" src="{{ asset('plugins/ajax-bootstrap-select/js/locale/ajax-bootstrap-select.es-ES.min.js') }}" charset="utf-8"></script>
         <script type="text/javascript" src="{{ asset('plugins/numeral/js/numeral.js') }}" charset="utf-8"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
-
+        <script type="text/javascript" src="{{ asset('plugins/idletimer/js/idle-timer.min.js') }}" charset="utf-8"></script>
         <script type="text/javascript">
-        $(document).ready(function() {
-            $("@yield('active','')").addClass('active');
-        });
-    </script>
+            $(document).ready(function() {
+                // idleTimer() takes an optional numeric argument that defines just the idle timeout
+                // timeout is in milliseconds
+                // Cerrar sesión después de 10 minutos de inactividad.
+                $( document ).idleTimer(600000);
+                $( document ).on( "idle.idleTimer", function(event, elem, obj){
+                    // function you want to fire when the user goes idle
+                    $('#logout-form').submit();
+                });
+                $("@yield('active','')").addClass('active');
+            });
+        </script>
     @stack('scripts')
   </body>
 </html>
