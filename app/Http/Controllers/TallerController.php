@@ -864,7 +864,7 @@ class TallerController extends Controller
                     die();
                 }
             }
-            if ($respuestaTallerNomina->filasTallerNomina->isNotEmpty()) {
+            if ($respuestaTallerNomina->filasTallerNomina->isNotEmpty() && !empty($tallerNominaRespuestas)) {
                 $respuestaTallerNomina->filasTallerNomina()->delete();
             }
             foreach ($tallerNominaRespuestas as $fila) {
