@@ -141,7 +141,7 @@
                         <td class="text-center vcenter valor-total-td-hora-extra-festiva-nocturna-cantidad numero"></td>
                         <td class="text-center vcenter valor-total-td-hora-extra-festiva-nocturna-valor"></td>
                         <td class="text-center vcenter valor-total-td-valor-total-de-horas-extras"></td>
-                        <td></td>
+                        <td class="td-vacio"></td>
                     </tr>
                 @else
                     @foreach ($tallerPractico->tallerNomina->respuestaTallerNominaUsuarioAutenticado()->filasTallerNomina as $fitn)
