@@ -29,7 +29,7 @@
         @endif
     </div>
     <div class="row">
-        <form class="form-horizontal" action="{{ route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante.calificar.pregunta.post',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->usua_id,'preg_id'=>$pregunta->preg_id ,'resp_id'=>$respuesta->resp_id])}}" method="post">
+        <form class="form-horizontal" action="{{ route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante.calificar.pregunta.post',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->id,'preg_id'=>$pregunta->preg_id ,'resp_id'=>$respuesta->resp_id])}}" method="post">
             {{ csrf_field() }}
             <div class="form-group {{ $errors->has('calificacion_pregunta') ? ' has-error' : '' }}">
                 <label for="calificacion_pregunta_texto" class="col-lg-2 control-label">Calificación</label>
@@ -44,7 +44,7 @@
             </div>
             <div class="form-group">
                 <div class="col-lg-10 col-lg-offset-2">
-                    <a href="{{ route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id'=> $curso->curs_id,'tall_id'=>$taller->tall_id, 'usua_id' => $usuario->usua_id]) }}"  class="btn btn-default">Regresar</a>
+                    <a href="{{ route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id'=> $curso->curs_id,'tall_id'=>$taller->tall_id, 'usua_id' => $usuario->id]) }}"  class="btn btn-default">Regresar</a>
                     <button type="submit" class="btn btn-primary">Calificar</button>
                 </div>
             </div>

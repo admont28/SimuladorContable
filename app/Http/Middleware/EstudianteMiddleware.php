@@ -16,8 +16,8 @@ class EstudianteMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::user()->usua_rol != "estudiante"){
-            return redirect()->route(Auth::user()->usua_rol.'.index');
+        if(Auth::user()->rol != "estudiante"){
+            return redirect()->route(Auth::user()->rol.'.index');
         }
         return $next($request);
     }

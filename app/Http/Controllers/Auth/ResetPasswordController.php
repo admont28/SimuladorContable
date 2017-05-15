@@ -30,7 +30,7 @@ class ResetPasswordController extends Controller
 
     protected function redirectTo()
     {
-        if (Auth::user()->usua_rol == "profesor") {
+        if (Auth::user()->rol == "profesor") {
             return route('profesor.index');
         }
         return route('estudiante.index');

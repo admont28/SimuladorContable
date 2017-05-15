@@ -78,9 +78,8 @@ return [
     ],
     'attributes' => [
         'username' => 'usuario',
-        'password' => 'contraseña',
-        'usua_correo' => 'Correo Electrónico',
-        'usua_contrasena' => 'Contraseña',
+        'password' => 'Contraseña',
+        'email' => 'Correo Electrónico',
         'nombre_curso' => 'Nombre del curso',
         'introduccion_curso' => 'Introducción del curso',
         'tema_titulo' => 'Titulo del tema',

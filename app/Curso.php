@@ -91,7 +91,7 @@ class Curso extends Model
                 ->select('Taller.tall_id')
                 ->distinct()
                 ->where('Taller.tall_tipo','diagnostico')
-                ->where('Respuesta.usua_id',Auth::user()->usua_id)
+                ->where('Respuesta.usua_id',Auth::user()->id)
                 ->get();
     }
 
@@ -110,7 +110,7 @@ class Curso extends Model
                 ->select('Taller.tall_id')
                 ->distinct()
                 ->where('Taller.tall_tipo','teorico')
-                ->where('Respuesta.usua_id',Auth::user()->usua_id)
+                ->where('Respuesta.usua_id',Auth::user()->id)
                 ->get();
     }
 
@@ -129,7 +129,7 @@ class Curso extends Model
                 ->select('Taller.tall_id')
                 ->distinct()
                 ->where('Taller.tall_tipo','practico')
-                ->where('Respuesta.usua_id',Auth::user()->usua_id)
+                ->where('Respuesta.usua_id',Auth::user()->id)
                 ->get();
     }
 }

@@ -18,7 +18,7 @@ class CreateRespuestaTallerAsientoContableTable extends Migration
             $table->integer('taac_id')->unsigned();
             $table->foreign('taac_id')->references('taac_id')->on('TallerAsientoContable');
             $table->integer('usua_id')->unsigned();
-            $table->foreign('usua_id')->references('usua_id')->on('Usuario');
+            $table->foreign('usua_id')->references('id')->on('Users');
             $table->integer('puc_id')->unsigned();
             $table->foreign('puc_id')->references('puc_id')->on('Puc');
             $table->integer('rtac_valordebito');

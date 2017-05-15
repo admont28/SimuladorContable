@@ -74,6 +74,6 @@ class TallerKardex extends Model
 
     public function respuestaTallerKardexUsuarioAutenticado()
     {
-        return RespuestaTallerKardex::where('usua_id', Auth::user()->usua_id)->where('taka_id', $this->taka_id)->get()->first();
+        return RespuestaTallerKardex::where('usua_id', Auth::user()->id)->where('taka_id', $this->taka_id)->get()->first();
     }
 }

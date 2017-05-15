@@ -19,7 +19,7 @@ class CreateCalificacion extends Migration
             $table->decimal('cali_calificacion', 3, 2);
             $table->decimal('cali_ponderado', 3, 2);
             $table->integer('usua_id')->unsigned();
-            $table->foreign('usua_id')->references('usua_id')->on('Usuario');
+            $table->foreign('usua_id')->references('id')->on('Users');
             $table->integer('tall_id')->unsigned();
             $table->foreign('tall_id')->references('tall_id')->on('Taller');
             $table->integer('preg_id')->unsigned();

@@ -16,7 +16,7 @@ class CreateRespuestaTable extends Migration
         Schema::create('Respuesta', function (Blueprint $table) {
             $table->increments('resp_id');
             $table->integer('usua_id')->unsigned();
-            $table->foreign('usua_id')->references('usua_id')->on('Usuario');
+            $table->foreign('usua_id')->references('id')->on('Users');
             $table->integer('preg_id')->unsigned();
             $table->foreign('preg_id')->references('preg_id')->on('Pregunta');
             $table->integer('remu_id')->unsigned()->nullable();

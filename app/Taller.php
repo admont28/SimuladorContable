@@ -130,10 +130,10 @@ class Taller extends Model
     public function usuariosPorTaller()
     {
         //$sql = 'SELECT DISTINCT u.usua_nombre FROM Respuesta r, Pregunta p, Taller t, Usuario u WHERE u.usua_id = r.usua_id and r.preg_id = p.preg_id and t.tall_id=';
-        return DB::table('Usuario')
-            ->select('Usuario.usua_id','usua_nombre', 'usua_correo')
+        return DB::table('Users')
+            ->select('Users.id','name', 'email')
             ->distinct()
-            ->join('Respuesta','Usuario.usua_id','=','Respuesta.usua_id')
+            ->join('Respuesta','Users.id','=','Respuesta.usua_id')
             ->join('Pregunta','Respuesta.preg_id','=','Pregunta.preg_id')
             ->join('Taller','Pregunta.tall_id','=','Taller.tall_id')
             ->where('Taller.tall_id',$this->tall_id)

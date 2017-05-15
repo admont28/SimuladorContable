@@ -38,7 +38,7 @@ class ForgotPasswordController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function sendResetLinkEmail(Request $request)
+    /*public function sendResetLinkEmail(Request $request)
     {
         $this->validate($request, ['usua_correo' => 'required|email']);
 
@@ -52,5 +52,5 @@ class ForgotPasswordController extends Controller
         return $response == Password::RESET_LINK_SENT
                     ? $this->sendResetLinkResponse($response)
                     : $this->sendResetLinkFailedResponse($request, $response);
-    }
+    }*/
 }

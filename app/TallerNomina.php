@@ -94,7 +94,7 @@ class TallerNomina extends Model
      */
     public function respuestaTallerNominaUsuarioAutenticado()
     {
-        return RespuestaTallerNomina::where('usua_id', Auth::user()->usua_id)->where('tano_id', $this->tano_id)->get()->first();
+        return RespuestaTallerNomina::where('usua_id', Auth::user()->id)->where('tano_id', $this->tano_id)->get()->first();
     }
 
 }

@@ -15,7 +15,7 @@ class User extends Authenticatable
      *
      * @var string
      */
-    protected $table = 'Usuario';
+    protected $table = 'Users';
 
     /**
      * El nombre de la llave primaria de la tabla.
@@ -23,47 +23,30 @@ class User extends Authenticatable
      *
      * @var string
      */
-    protected $primaryKey = 'usua_id';
+    protected $primaryKey = 'id';
 
     /**
-     * El nombre del campo equivalente a CREATE_AT en la base de datos.
-     * Se modifica debido a que no es el nombre por defecto: create_at.
-     *
-     * @var string
-     */
-    const CREATED_AT = 'usua_fechacreacion';
+    * The attributes that are mass assignable.
+    *
+    * @var array
+    */
+   protected $fillable = [
+       'name', 'email', 'password', 'rol',
+   ];
+   /**
+    * The attributes that should be hidden for arrays.
+    *
+    * @var array
+    */
+   protected $hidden = [
+       'password', 'remember_token',
+   ];
 
-    /**
-     * El nombre del campo equivalente a UPDATED_AT en la base de datos.
-     * Se modifica debido a que no es el nombre por defecto: update_at.
-     *
-     * @var string
-     */
-    const UPDATED_AT = 'usua_fechamodificacion';
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'usua_nombre', 'usua_correo', 'usua_contrasena','usua_rol'
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'usua_contrasena', 'remember_token',
-    ];
-
-    /**
+    /*
      * Get the password for the user.
      *
      * @return string
-     */
+     *
     public function getAuthPassword()
     {
         return $this->usua_contrasena;
@@ -81,6 +64,8 @@ class User extends Authenticatable
 
     // 4
     protected $email = "usua_correo";
+
+    */
 
     public function calificaciones()
     {
@@ -120,7 +105,7 @@ class User extends Authenticatable
                 ->whereColumn('Calificacion.usua_id', '=', 'Respuesta.usua_id');
         })
         ->where('Pregunta.tall_id',$tall_id)
-        ->where('Respuesta.usua_id',$this->usua_id)
+        ->where('Respuesta.usua_id',$this->id)
         ->get();
     }
 }

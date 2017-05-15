@@ -515,7 +515,7 @@ class TallerController extends Controller
                 foreach ($errores as $llave => $valor) {
                     $validator->getMessageBag()->add($llave, $valor);
                 }
-                $intentoTaller = DB::table('IntentoTaller')->select('inta_cantidad', 'inta_id')->where('usua_id', Auth::user()->usua_id)->where('tall_id', $taller->tall_id)->first();
+                $intentoTaller = DB::table('IntentoTaller')->select('inta_cantidad', 'inta_id')->where('usua_id', Auth::user()->id)->where('tall_id', $taller->tall_id)->first();
                 // Decremento el valor de inta_cantidad porque al cargar la página de las preguntas, el controlador se encarga de incrementarlo, y si existen errores en el formulario, no debería contar como un intento de guardar las respuestas.
                 DB::table('IntentoTaller')->where('inta_id', $intentoTaller->inta_id)->decrement('inta_cantidad');
                 DB::commit();
@@ -524,7 +524,7 @@ class TallerController extends Controller
             // En este punto, todas las preguntas tienen respuestas, y no hay errores en el formulario.
             // Se procede a verificar cuales están correctas y cuales no.
             $errores = $this->verificarErroresEnRespuestas($preguntas, $request);
-            $intentoTaller = DB::table('IntentoTaller')->select('inta_cantidad', 'inta_id')->where('usua_id', Auth::user()->usua_id)->where('tall_id', $taller->tall_id)->first();
+            $intentoTaller = DB::table('IntentoTaller')->select('inta_cantidad', 'inta_id')->where('usua_id', Auth::user()->id)->where('tall_id', $taller->tall_id)->first();
             $intentos = $intentoTaller->inta_cantidad;
             if(!empty($errores)){
                 // Si es el primer intento, aún no guardo las respuestas, le comunico que tiene errores y que envie de nuevo.
@@ -602,7 +602,7 @@ class TallerController extends Controller
                         foreach ($respuestasMultiplesUnicas as $respuesta ) {
                             if($request['r_p_'.$pregunta->preg_id.'_o_'.$respuesta->remu_id]){
                                 Respuesta::create([
-                                    'usua_id' => Auth::user()->usua_id,
+                                    'usua_id' => Auth::user()->id,
                                     'preg_id' => $pregunta->preg_id,
                                     'remu_id' => $respuesta->remu_id
                                 ]);
@@ -614,7 +614,7 @@ class TallerController extends Controller
                     $respuestaAnterior = $pregunta->obtenerRespuestaUsuario()->first();
                     if(!isset($respuestaAnterior)){
                         Respuesta::create([
-                            'usua_id' => Auth::user()->usua_id,
+                            'usua_id' => Auth::user()->id,
                             'preg_id' => $pregunta->preg_id,
                             'remu_id' => $request['r_p_'.$pregunta->preg_id]
                         ]);
@@ -624,7 +624,7 @@ class TallerController extends Controller
                 $respuestaAnterior = $pregunta->obtenerRespuestaUsuario()->first();
                 if(!isset($respuestaAnterior)){
                     Respuesta::create([
-                        'usua_id' => Auth::user()->usua_id,
+                        'usua_id' => Auth::user()->id,
                         'preg_id' => $pregunta->preg_id,
                         'resp_abierta' => $request['r_p_'.$pregunta->preg_id]
                     ]);
@@ -637,13 +637,13 @@ class TallerController extends Controller
                     //obtenemos el nombre del archivo
                     $nombreArchivo = $file->getClientOriginalName();
                     // Almaceno en el dicso talleres el archivo cargado por el usuario.
-                    $path = Storage::disk('talleres')->put('/'.$pregunta->tall_id.'/'.Auth::user()->usua_id, $file);
+                    $path = Storage::disk('talleres')->put('/'.$pregunta->tall_id.'/'.Auth::user()->id, $file);
                     $respuestaArchivo = RespuestaArchivo::create([
                         'rear_rutaarchivo' => asset('storage/talleres/'.$path),
                         'rear_nombre'      => $nombreArchivo
                     ]);
                     Respuesta::create([
-                        'usua_id' => Auth::user()->usua_id,
+                        'usua_id' => Auth::user()->id,
                         'preg_id' => $pregunta->preg_id,
                         'rear_id' => $respuestaArchivo->rear_id
                     ]);
@@ -672,7 +672,7 @@ class TallerController extends Controller
                     Calificacion::create([
                         'cali_calificacion' => $calificacion,
                         'cali_ponderado'    => round($calificacion * $pregunta->preg_porcentaje, 1),
-                        'usua_id'           => Auth::user()->usua_id,
+                        'usua_id'           => Auth::user()->id,
                         'tall_id'           => $pregunta->tall_id,
                         'preg_id'           => $pregunta->preg_id
                     ]);
@@ -689,7 +689,7 @@ class TallerController extends Controller
                     Calificacion::create([
                         'cali_calificacion' => $calificacion,
                         'cali_ponderado'    => $calificacion * $pregunta->preg_porcentaje,
-                        'usua_id'           => Auth::user()->usua_id,
+                        'usua_id'           => Auth::user()->id,
                         'tall_id'           => $pregunta->tall_id,
                         'preg_id'           => $pregunta->preg_id
                     ]);
@@ -721,7 +721,7 @@ class TallerController extends Controller
         return Datatables::of($usuarios)
                         ->addColumn('opciones', function ($usuario) use($taller,$curso) {
                             return
-                            '<a href="'.route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id' =>$curso->curs_id, 'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->usua_id ]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
+                            '<a href="'.route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id' =>$curso->curs_id, 'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->id ]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
                         })
                         ->make(true);
     }
@@ -760,13 +760,13 @@ class TallerController extends Controller
         $i = 1;
         DB::beginTransaction();
         try {
-            $tallerAsientoContable->respuestasTallerAsientosContables()->where('usua_id', Auth::user()->usua_id)->delete();
+            $tallerAsientoContable->respuestasTallerAsientosContables()->where('usua_id', Auth::user()->id)->delete();
             foreach ($tallerAsientoContableRespuestas->filas as $fila) {
                 $fila = json_decode(json_encode($fila));
                 if(isset($fila->codigo, $fila->debito, $fila->credito) && $fila->codigo != "" && $fila->debito != "" && $fila->credito != ""){
                     RespuestaTallerAsientoContable::create([
                         'taac_id' => $tallerAsientoContable->taac_id,
-                        'usua_id' => Auth::user()->usua_id,
+                        'usua_id' => Auth::user()->id,
                         'puc_id' => $fila->codigo,
                         'rtac_valordebito' => $fila->debito,
                         'rtac_valorcredito' => $fila->credito,
@@ -829,11 +829,11 @@ class TallerController extends Controller
         $i = 1;
         DB::beginTransaction();
         try {
-            $respuestaTallerNomina = $tallerNomina->respuestasTallerNomina()->where('usua_id', Auth::user()->usua_id)->get()->first();
+            $respuestaTallerNomina = $tallerNomina->respuestasTallerNomina()->where('usua_id', Auth::user()->id)->get()->first();
             if(!isset($respuestaTallerNomina)){
                 $respuestaTallerNomina = RespuestaTallerNomina::create([
                     'tano_id' => $tallerNomina->tano_id,
-                    'usua_id' => Auth::user()->usua_id,
+                    'usua_id' => Auth::user()->id,
                     'rear_id' => null
                 ]);
             }
@@ -847,16 +847,16 @@ class TallerController extends Controller
                 if(isset($respuestaArchivo)){
                     $infoArchivo = pathinfo($respuestaArchivo->rear_rutaarchivo);
                     // Compruebo que exista el archivo en el disco de talleres.
-                    if(Storage::disk('talleres')->exists($taller->tall_id.'/'.Auth::user()->usua_id.'/'.$infoArchivo['basename'])){
+                    if(Storage::disk('talleres')->exists($taller->tall_id.'/'.Auth::user()->id.'/'.$infoArchivo['basename'])){
                         // Si existe el archivo procedo a eliminarlo, retorna true si fue exitoso, de lo contrario retorna false.
-                        $archivoOk = Storage::disk('talleres')->delete($taller->tall_id.'/'.Auth::user()->usua_id.'/'.$infoArchivo['basename']);
+                        $archivoOk = Storage::disk('talleres')->delete($taller->tall_id.'/'.Auth::user()->id.'/'.$infoArchivo['basename']);
                     }
                 }
                 if($archivoOk){
                     //obtenemos el nombre del archivo
                     $nombreArchivo = $file->getClientOriginalName();
                     // Almaceno en el dicso talleres el archivo cargado por el usuario.
-                    $path = Storage::disk('talleres')->put('/'.$taller->tall_id.'/'.Auth::user()->usua_id, $file);
+                    $path = Storage::disk('talleres')->put('/'.$taller->tall_id.'/'.Auth::user()->id, $file);
                     if (!isset($respuestaArchivo)) {
                         $respuestaArchivo = RespuestaArchivo::create([
                             'rear_rutaarchivo' => asset('storage/talleres/'.$path),
@@ -976,11 +976,11 @@ class TallerController extends Controller
         $i = 1;
         DB::beginTransaction();
         try {
-            $respuestaTallerKardex = $tallerKardex->respuestasTallerKardex()->where('usua_id', Auth::user()->usua_id)->get()->first();
+            $respuestaTallerKardex = $tallerKardex->respuestasTallerKardex()->where('usua_id', Auth::user()->id)->get()->first();
             if(!isset($respuestaTallerKardex)){
                 $respuestaTallerKardex = RespuestaTallerKardex::create([
                     'taka_id' => $tallerKardex->taka_id,
-                    'usua_id' => Auth::user()->usua_id,
+                    'usua_id' => Auth::user()->id,
                     'rear_id' => null,
                     'retk_articulo' => isset($request->articulo) ? $request->articulo : '',
                     'retk_direccion' => isset($request->direccion) ? $request->direccion : '',
@@ -997,16 +997,16 @@ class TallerController extends Controller
                 if(isset($respuestaArchivo)){
                     $infoArchivo = pathinfo($respuestaArchivo->rear_rutaarchivo);
                     // Compruebo que exista el archivo en el disco de talleres.
-                    if(Storage::disk('talleres')->exists($taller->tall_id.'/'.Auth::user()->usua_id.'/'.$infoArchivo['basename'])){
+                    if(Storage::disk('talleres')->exists($taller->tall_id.'/'.Auth::user()->id.'/'.$infoArchivo['basename'])){
                         // Si existe el archivo procedo a eliminarlo, retorna true si fue exitoso, de lo contrario retorna false.
-                        $archivoOk = Storage::disk('talleres')->delete($taller->tall_id.'/'.Auth::user()->usua_id.'/'.$infoArchivo['basename']);
+                        $archivoOk = Storage::disk('talleres')->delete($taller->tall_id.'/'.Auth::user()->id.'/'.$infoArchivo['basename']);
                     }
                 }
                 if($archivoOk){
                     //obtenemos el nombre del archivo
                     $nombreArchivo = $file->getClientOriginalName();
                     // Almaceno en el dicso talleres el archivo cargado por el usuario.
-                    $path = Storage::disk('talleres')->put('/'.$taller->tall_id.'/'.Auth::user()->usua_id, $file);
+                    $path = Storage::disk('talleres')->put('/'.$taller->tall_id.'/'.Auth::user()->id, $file);
                     if (!isset($respuestaArchivo)) {
                         $respuestaArchivo = RespuestaArchivo::create([
                             'rear_rutaarchivo' => asset('storage/talleres/'.$path),

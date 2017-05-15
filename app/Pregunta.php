@@ -115,7 +115,7 @@ class Pregunta extends Model
     }
     public function obtenerRespuestaUsuario()
     {
-        return Respuesta::where('usua_id',Auth::user()->usua_id)->where('preg_id',$this->preg_id)->get();
+        return Respuesta::where('usua_id',Auth::user()->id)->where('preg_id',$this->preg_id)->get();
     }
 
 }

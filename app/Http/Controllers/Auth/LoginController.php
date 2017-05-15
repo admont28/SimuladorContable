@@ -30,7 +30,7 @@ class LoginController extends Controller
 
     protected function redirectTo()
     {
-        if (Auth::user()->usua_rol == "profesor") {
+        if (Auth::user()->rol == "profesor") {
             return route('profesor.index');
         }
         return route('estudiante.index');
@@ -51,10 +51,10 @@ class LoginController extends Controller
      *
      * @return string retorna el valor usua_correo
      */
-    public function username()
+    /*public function username()
     {
         return 'usua_correo';
-    }
+    }*/
 
 
 }

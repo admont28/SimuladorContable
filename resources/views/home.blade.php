@@ -1,15 +1,14 @@
-@extends('general.template.main')
+@extends('layouts.app')
 
-@section('title', 'Bienvenido')
 @section('content')
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">{{ trans('messages.actualizacion') }}</div>
+                <div class="panel-heading">Dashboard</div>
 
                 <div class="panel-body">
-                  {{ trans('messages.bienvenido') }}
+                    You are logged in!
                 </div>
             </div>
         </div>

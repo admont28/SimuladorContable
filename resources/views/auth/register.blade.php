@@ -12,43 +12,43 @@
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
                         {{ csrf_field() }}
 
-                        <div class="form-group{{ $errors->has('usua_nombre') ? ' has-error' : '' }}">
-                            <label for="usua_nombre" class="col-md-4 control-label">{{ trans('messages.nombre') }}</label>
+                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+                            <label for="name" class="col-md-4 control-label">{{ trans('messages.nombre') }}</label>
 
                             <div class="col-md-6">
-                                <input id="usua_nombre" type="text" class="form-control" name="usua_nombre" value="{{ old('usua_nombre') }}" required autofocus>
+                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
 
-                                @if ($errors->has('usua_nombre'))
+                                @if ($errors->has('name'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('usua_nombre') }}</strong>
+                                        <strong>{{ $errors->first('name') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('usua_correo') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">{{ trans('validation.attributes.usua_correo') }}</label>
+                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                            <label for="email" class="col-md-4 control-label">{{ trans('validation.attributes.email') }}</label>
 
                             <div class="col-md-6">
-                                <input id="usua_correo" type="email" class="form-control" name="usua_correo" value="{{ old('usua_correo') }}" required>
+                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
 
-                                @if ($errors->has('usua_correo'))
+                                @if ($errors->has('email'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('usua_correo') }}</strong>
+                                        <strong>{{ $errors->first('email') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('usua_contrasena') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">{{ trans('validation.attributes.usua_contrasena') }}</label>
+                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                            <label for="password" class="col-md-4 control-label">{{ trans('validation.attributes.password') }}</label>
 
                             <div class="col-md-6">
-                                <input id="usua_contrasena" type="password" class="form-control" name="usua_contrasena" required>
+                                <input id="password" type="password" class="form-control" name="password" required>
 
-                                @if ($errors->has('usua_contrasena'))
+                                @if ($errors->has('password'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('usua_contrasena') }}</strong>
+                                        <strong>{{ $errors->first('password') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -58,7 +58,7 @@
                             <label for="usua_contrasena-confirm" class="col-md-4 control-label">{{ trans('messages.Confirmar_Contrasena') }}</label>
 
                             <div class="col-md-6">
-                                <input id="usua_contrasenas-confirm" type="password" class="form-control" name="usua_contrasena_confirmation" required>
+                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
                             </div>
                         </div>
 

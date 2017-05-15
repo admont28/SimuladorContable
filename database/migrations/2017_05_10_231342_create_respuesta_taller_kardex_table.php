@@ -18,7 +18,7 @@ class CreateRespuestaTallerKardexTable extends Migration
             $table->integer('taka_id')->unsigned();
             $table->foreign('taka_id')->references('taka_id')->on('TallerKardex');
             $table->integer('usua_id')->unsigned();
-            $table->foreign('usua_id')->references('usua_id')->on('Usuario');
+            $table->foreign('usua_id')->references('id')->on('Users');
             $table->integer('rear_id')->unsigned()->nullable();
             $table->foreign('rear_id')->references('rear_id')->on('RespuestaArchivo');
             $table->string('retk_articulo',100);

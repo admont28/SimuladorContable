@@ -74,16 +74,16 @@ class TallerAsientoContable extends Model
 
     public function respuestasTallerAsientoContableUsuario()
     {
-        return RespuestaTallerAsientoContable::where('usua_id', Auth::user()->usua_id)->where('taac_id', $this->taac_id)->get();
+        return RespuestaTallerAsientoContable::where('usua_id', Auth::user()->id)->where('taac_id', $this->taac_id)->get();
     }
 
     public function calcularTotalDebito()
     {
-        return RespuestaTallerAsientoContable::where('usua_id', Auth::user()->usua_id)->where('taac_id', $this->taac_id)->sum('rtac_valordebito');
+        return RespuestaTallerAsientoContable::where('usua_id', Auth::user()->id)->where('taac_id', $this->taac_id)->sum('rtac_valordebito');
     }
 
     public function calcularTotalCredito()
     {
-        return RespuestaTallerAsientoContable::where('usua_id', Auth::user()->usua_id)->where('taac_id', $this->taac_id)->sum('rtac_valorcredito');
+        return RespuestaTallerAsientoContable::where('usua_id', Auth::user()->id)->where('taac_id', $this->taac_id)->sum('rtac_valorcredito');
     }
 }

@@ -37,7 +37,7 @@
             $('#usuario-table').DataTable({
                 "processing": true,
                 "serverSide": true,
-                "ajax": "{{ route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante.ajax',['curs_id' => $curso->curs_id,'tall_id'=>$taller->tall_id, 'usua_id'=>$usuario->usua_id]) }}",
+                "ajax": "{{ route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante.ajax',['curs_id' => $curso->curs_id,'tall_id'=>$taller->tall_id, 'usua_id'=>$usuario->id]) }}",
                 "columns" : [
                     {data: 'preg_texto', name: 'preg_texto', width: '59%'},
                     {data: 'preg_tipo', name: 'preg_tipo', width: '10%'},

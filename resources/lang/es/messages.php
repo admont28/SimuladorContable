@@ -16,7 +16,7 @@ return [
     'simulador_contable' => 'Simulador Contable',
     'bt_ingresar' => 'ingresar',
     'olvidaste_contrasena' => '¿Olvidaste tu contraseña?',
-    'Confirmar_Contrasena' => 'Confirmar contraseña',
+    'Confirmar_Contrasena' => 'Confirmar Contraseña',
     'footer' => 'Diseñado por',
     'and' => 'y',
     'introduccion' => 'introduccion',

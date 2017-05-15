@@ -193,8 +193,8 @@ class CalificacionController extends Controller
                         ->addColumn('opciones', function ($respuestas) use ($taller, $usuario) {
                             $botonCalificar = "";
                             if(!isset($respuestas->cali_calificacion)){
-                                $resp_id = Respuesta::where('preg_id',$respuestas->preg_id)->where('usua_id', $usuario->usua_id)->get()->first();
-                                $botonCalificar = '<a href="'.route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante.calificar.pregunta',['curs_id'=>$taller->curs_id,'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->usua_id,'preg_id'=>$respuestas->preg_id,'resp_id'=>$resp_id ]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>Calificar</a>';
+                                $resp_id = Respuesta::where('preg_id',$respuestas->preg_id)->where('usua_id', $usuario->id)->get()->first();
+                                $botonCalificar = '<a href="'.route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante.calificar.pregunta',['curs_id'=>$taller->curs_id,'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->id,'preg_id'=>$respuestas->preg_id,'resp_id'=>$resp_id ]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>Calificar</a>';
                             }
                             return $botonCalificar;
                         })
@@ -230,12 +230,12 @@ class CalificacionController extends Controller
         $pregunta = Pregunta::find($preg_id);
         if (!isset($pregunta)) {
             flash('la pregunta con ID: '.$preg_id.' no existe. Verifique por favor.', 'danger');
-            return redirect()->route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->usua_id]);
+            return redirect()->route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->id]);
         }
         $respuesta = Respuesta::find($resp_id);
         if (!isset($respuesta)) {
             flash('la respuesta con ID: '.$resp_id.' no existe. Verifique por favor.', 'danger');
-            return redirect()->route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->usua_id]);
+            return redirect()->route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->id]);
         }
         return view('profesor.curso.taller.pregunta.calificacion.hacer_calificacion_estudiante')
             ->with('curso', $curso)
@@ -270,25 +270,25 @@ class CalificacionController extends Controller
         $pregunta = Pregunta::find($preg_id);
         if (!isset($pregunta)) {
             flash('la pregunta con ID: '.$preg_id.' no existe. Verifique por favor.', 'danger');
-            return redirect()->route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->usua_id]);
+            return redirect()->route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->id]);
         }
         $respuesta = Respuesta::find($resp_id);
         if (!isset($respuesta)) {
             flash('la respuesta con ID: '.$resp_id.' no existe. Verifique por favor.', 'danger');
-            return redirect()->route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->usua_id]);
+            return redirect()->route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->id]);
         }
         Validator::make($request->all(), [
            'calificacion_pregunta' => 'required|max:5'
         ])->validate();
         $calificacion = Calificacion::create([
-            'usua_id'=>$usuario->usua_id,
+            'usua_id'=>$usuario->id,
             'tall_id'=>$taller->tall_id,
             'preg_id'=>$pregunta->preg_id,
             'cali_calificacion'=> $request['calificacion_pregunta'],
             'cali_ponderado'=>$request['calificacion_pregunta'] * $pregunta->preg_porcentaje
         ]);
         flash('La calificación se ha creado con éxito.','success' );
-        return redirect()->route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->usua_id]);
+        return redirect()->route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->id]);
     }
 
     /**

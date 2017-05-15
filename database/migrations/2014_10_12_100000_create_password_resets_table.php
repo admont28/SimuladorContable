@@ -13,12 +13,12 @@ class CreatePasswordResetsTable extends Migration
      */
     public function up()
     {
-        Schema::create('RestablecerContrasena', function (Blueprint $table) {
-            $table->string('reco_correo')->index();
-            $table->string('reco_token')->index();
+        Schema::create('password_resets', function (Blueprint $table) {
+            $table->string('email')->index();
+            $table->string('token')->index();
             $table->timestamp('created_at')->nullable();
-            $table->timestamp('reco_fechacreacion')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('reco_fechamodificacion')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+            //$table->timestamp('reco_fechacreacion')->default(DB::raw('CURRENT_TIMESTAMP'));
+            //$table->timestamp('reco_fechamodificacion')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
     }
 
@@ -29,6 +29,6 @@ class CreatePasswordResetsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('RestablecerContrasena');
+        Schema::dropIfExists('password_resets');
     }
 }

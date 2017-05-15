@@ -13,15 +13,15 @@
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
                         {{ csrf_field() }}
 
-                        <div class="form-group{{ $errors->has('usua_correo') ? ' has-error' : '' }}">
-                            <label for="usua_correo" class="col-md-4 control-label">{{trans('messages.correo')}}</label>
+                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                            <label for="email" class="col-md-4 control-label">{{trans('messages.correo')}}</label>
 
                             <div class="col-md-6">
-                                <input id="usua_correo" type="email" placeholder="Escriba su correo electronico" class="form-control" name="usua_correo" value="{{ old('usua_correo') }}" required autofocus>
+                                <input id="email" type="email" placeholder="Escriba su correo electronico" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
 
-                                @if ($errors->has('usua_correo'))
+                                @if ($errors->has('email'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('usua_correo') }}</strong>
+                                        <strong>{{ $errors->first('email') }}</strong>
                                     </span>
                                 @endif
                             </div>

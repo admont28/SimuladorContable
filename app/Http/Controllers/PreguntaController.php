@@ -287,11 +287,11 @@ class PreguntaController extends Controller
             return $this->redireccionarSegunTipoTaller($taller, $curso);
         }
         $preguntas = $taller->preguntas;
-        $intentoTaller = DB::table('IntentoTaller')->select('inta_cantidad', 'inta_id')->where('usua_id', Auth::user()->usua_id)->where('tall_id', $taller->tall_id)->first();
+        $intentoTaller = DB::table('IntentoTaller')->select('inta_cantidad', 'inta_id')->where('usua_id', Auth::user()->id)->where('tall_id', $taller->tall_id)->first();
         if(!isset($intentoTaller)){
             DB::table('IntentoTaller')->insert([
                 'inta_cantidad' => 1,
-                'usua_id' => Auth::user()->usua_id,
+                'usua_id' => Auth::user()->id,
                 'tall_id' => $taller->tall_id
             ]);
         }else{
