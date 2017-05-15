@@ -19,7 +19,7 @@
             <div class="form-group {{ $errors->has('deduccion_uno') ? ' has-error' : '' }}">
                 <label for="deduccion_uno" class="col-lg-2 control-label">¿Deducción uno?</label>
                 <div class="col-lg-10">
-                    <input type="text" class="form-control" id="deduccion_uno" placeholder="Ingrese si el taller tiene algúna deducción, esto hará que aparezca una columna más en la tabla plantilla" name="deduccion_uno" value="{{ old('deduccion_uno') }}">
+                    <input type="text" class="form-control" id="deduccion_uno" placeholder="Ingrese si el taller tiene algúna deducción, esto hará que aparezca una columna más en la tabla plantilla" name="deduccion_uno" value="{{ old('deduccion_uno') }}" autofocus="autofocus">
                     @if ($errors->has('deduccion_uno'))
                         <span class="help-block">
                             <strong>{{ $errors->first('deduccion_uno') }}</strong>

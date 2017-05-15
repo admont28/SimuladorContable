@@ -15,7 +15,7 @@
                 <label for="texto_respuesta" class="col-lg-2 control-label">Texto de la respuesta:</label>
                 <div class="col-lg-10">
                     <div class="input-group">
-                        <input type="text" name="texto_respuesta" class="form-control" maxlength="200" placeholder="Ingrese el texto de la respuesta, máximo 200 caracteres" value="{{ $respuesta->remu_texto }}">
+                        <input type="text" name="texto_respuesta" class="form-control" maxlength="200" placeholder="Ingrese el texto de la respuesta, máximo 200 caracteres" value="{{ $respuesta->remu_texto }}" autofocus="autofocus" required="required">
                         <span class="input-group-addon">
                             <span>¿Correcta?</span>
                             <input type="checkbox" id="correcta_respuesta" name="correcta_respuesta" @if ($respuesta->remu_correcta == true) {{ 'checked=checked'}} @endif>

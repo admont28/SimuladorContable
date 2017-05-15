@@ -13,7 +13,7 @@
     <div class="form-group {{ $errors->has('nombre_curso') ? ' has-error' : '' }}">
         <label for="nombre_curso" class="col-lg-2 control-label">Nombre del curso:</label>
         <div class="col-lg-10">
-            <input type="text" class="form-control" id="nombre_curso" value="{{ $curso->curs_nombre }}" name="nombre_curso" placeholder="Ingrese el nombre del curso">
+            <input type="text" class="form-control" id="nombre_curso" value="{{ $curso->curs_nombre }}" name="nombre_curso" placeholder="Ingrese el nombre del curso" autofocus="autofocus" required="required">
             @if ($errors->has('nombre_curso'))
                 <span class="help-block">
                     <strong>{{ $errors->first('nombre_curso') }}</strong>
@@ -24,7 +24,7 @@
     <div class="form-group {{ $errors->has('introduccion_curso') ? ' has-error' : '' }}">
         <label for="introduccion_curso" class="col-lg-2 control-label">Introducción del curso:</label>
         <div class="col-lg-10">
-           <textarea class="form-control" rows="3" id="introduccion_curso" name="introduccion_curso" placeholder="Ingrese la introducción del curso">{{ $curso->curs_introduccion }}</textarea>
+           <textarea class="form-control" rows="3" id="introduccion_curso" name="introduccion_curso" placeholder="Ingrese la introducción del curso" required="required">{{ $curso->curs_introduccion }}</textarea>
            @if ($errors->has('introduccion_curso'))
                <span class="help-block">
                    <strong>{{ $errors->first('introduccion_curso') }}</strong>

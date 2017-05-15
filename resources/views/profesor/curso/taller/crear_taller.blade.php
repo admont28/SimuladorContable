@@ -13,7 +13,7 @@
             <div class="form-group {{ $errors->has('nombre_taller') ? ' has-error' : '' }}">
                 <label for="nombre_taller" class="col-lg-2 control-label">Nombre del taller</label>
                 <div class="col-lg-10">
-                    <input type="text" class="form-control" id="nombre_taller" placeholder="Ingrese el nombre del taller" name="nombre_taller" value="{{ old('nombre_taller') }}">
+                    <input type="text" class="form-control" id="nombre_taller" placeholder="Ingrese el nombre del taller" name="nombre_taller" value="{{ old('nombre_taller') }}" autofocus="autofocus" required="required">
                     @if ($errors->has('nombre_taller'))
                         <span class="help-block">
                             <strong>{{ $errors->first('nombre_taller') }}</strong>
@@ -24,7 +24,7 @@
             <div class="form-group {{ $errors->has('tipo_taller') ? ' has-error' : '' }}">
                 <label for="tipo_taller" class="col-lg-2 control-label">Tipo</label>
                 <div class="col-lg-10">
-                    <select class="form-control" id="tipo_taller" name="tipo_taller">
+                    <select class="form-control" id="tipo_taller" name="tipo_taller" required="required">
                         @foreach ($opciones as $opcion)
                             <option value="{{ $opcion }}" @if(old('tipo_taller') == $opcion) {{'selected=selected'}} @endif>{{ $opcion }}</option>
                         @endforeach
@@ -43,7 +43,7 @@
                 <label for="tiempo_taller" class="col-lg-2 control-label">Tiempo del taller</label>
                 <div class="col-lg-10">
                     <div class='input-group date' >
-                        <input type="text" class="form-control" name="tiempo_taller" placeholder="Seleccione el tiempo máximo del taller" id="tiempo_taller" value="{{ old('tiempo_taller') }}"/>
+                        <input type="text" class="form-control" name="tiempo_taller" placeholder="Seleccione el tiempo máximo del taller" id="tiempo_taller" value="{{ old('tiempo_taller') }}" required="required"/>
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -58,7 +58,7 @@
             <div class="form-group {{ $errors->has('taller_rutaarchivo') ? ' has-error' : '' }}">
                 <label for="taller_rutaarchivo" class="col-lg-2 control-label">Archivo</label>
                 <div class="col-lg-10">
-                    <input type="file" class="form-control" id="taller_rutaarchivo" placeholder="ruta del archivo" name="taller_rutaarchivo">
+                    <input type="file" class="form-control" id="taller_rutaarchivo" placeholder="ruta del archivo" name="taller_rutaarchivo" required="required">
                     @if ($errors->has('taller_rutaarchivo'))
                         <span class="help-block">
                             <strong>{{ $errors->first('taller_rutaarchivo') }}</strong>

@@ -19,7 +19,7 @@
             <div class="form-group {{ $errors->has('archivo_puc') ? ' has-error' : '' }}">
                 <label for="archivo_puc" class="col-lg-2 control-label">Archivo PUC</label>
                 <div class="col-lg-10">
-                    <input type="file" class="form-control" id="archivo_puc" placeholder="ruta del archivo" name="archivo_puc" value="{{ old('archivo_puc') }}">
+                    <input type="file" class="form-control" id="archivo_puc" placeholder="ruta del archivo" name="archivo_puc" value="{{ old('archivo_puc') }}" autofocus="autofocus" required="required">
                     @if ($errors->has('archivo_puc'))
                         <span class="help-block">
                             <strong>{{ $errors->first('archivo_puc') }}</strong>

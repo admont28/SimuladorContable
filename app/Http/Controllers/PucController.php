@@ -7,7 +7,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Curso;
 use App\Puc;
 use Validator;
-use Illuminate\Support\Facades\DB;
+use Redirect;
+use DB;
 
 class PucController extends Controller
 {
@@ -53,6 +54,11 @@ class PucController extends Controller
             return redirect()->route('profesor.curso');
         }
         $file = $request->file('archivo_puc');
+        if(!isset($file)){
+            $validator = Validator::make(array(), array());
+            $validator->getMessageBag()->add('archivo_puc', 'El campo archivo PUC es requerido.');
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
         // Validamos los campos del formulario.
         Validator::make(
             [

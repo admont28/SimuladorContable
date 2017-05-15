@@ -14,7 +14,7 @@
             <div class="form-group {{ $errors->has('nombre_taller') ? ' has-error' : '' }}">
                 <label for="nombre_taller" class="col-lg-2 control-label">Nombre del taller</label>
                 <div class="col-lg-10">
-                    <input type="text" class="form-control" id="nombre_taller" placeholder="Ingrese el nombre del taller" name="nombre_taller" value="{{ $taller->tall_nombre }}">
+                    <input type="text" class="form-control" id="nombre_taller" placeholder="Ingrese el nombre del taller" name="nombre_taller" value="{{ $taller->tall_nombre }}" autofocus="autofocus" required="required">
                     @if ($errors->has('nombre_taller'))
                         <span class="help-block">
                             <strong>{{ $errors->first('nombre_taller') }}</strong>
@@ -25,7 +25,7 @@
             <div class="form-group">
                 <label for="tipo_taller" class="col-lg-2 control-label">Tipo</label>
                 <div class="col-lg-10">
-                    <select class="form-control" id="tipo_taller" name="tipo_taller" disabled="disabled">
+                    <select class="form-control" id="tipo_taller" name="tipo_taller" disabled="disabled" required="required">
                         @foreach ($opciones as $opcion)
                             <option value="{{ $opcion }}" @if($taller->tall_tipo == $opcion) {{'selected=selected'}} @endif>{{ $opcion }}</option>
                         @endforeach
@@ -36,7 +36,7 @@
                 <label for="tiempo_taller" class="col-lg-2 control-label">Tiempo del taller</label>
                 <div class="col-lg-10">
                     <div class='input-group date' >
-                        <input type="text" class="form-control" name="tiempo_taller" placeholder="Seleccione el tiempo máximo del taller" id="tiempo_taller" value="{{ $taller->tall_tiempo }}"/>
+                        <input type="text" class="form-control" name="tiempo_taller" placeholder="Seleccione el tiempo máximo del taller" id="tiempo_taller" value="{{ $taller->tall_tiempo }}" required="required"/>
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>

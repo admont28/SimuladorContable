@@ -7,32 +7,28 @@
 @section('active','#profesor-curso')
 
 @section('content')
-
-<br>
-<div class="row">
-    <div  class="table-responsive" >
-        <table class="table" id="usuario-table" >
-            <thead>
-                <tr>
-                    <td><strong>Pregunta</strong></td>
-                    <td><strong>Tipo</strong></td>
-                    <td><strong>Calificación</strong></td>
-                    <td><strong>Porcentaje</strong></td>
-                    <td><strong>Ponderado</strong></td>
-                    <td><strong>Opciones</strong></td>
-                </tr>
-            </thead>
-        </table>
+    <div class="row">
+        <div  class="table-responsive" >
+            <table class="table" id="usuario-table" >
+                <thead>
+                    <tr>
+                        <td><strong>Pregunta</strong></td>
+                        <td><strong>Tipo</strong></td>
+                        <td><strong>Calificación</strong></td>
+                        <td><strong>Porcentaje</strong></td>
+                        <td><strong>Ponderado</strong></td>
+                        <td><strong>Opciones</strong></td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </div>
-</div>
-<br>
-<div class="row">
-    <div class="col-lg-12 text-center">
-        <a href="{{ route('profesor.curso.taller.ver',['curs_id'=>$curso->curs_id, 'tall_id'=>$taller->tall_id]) }}"  class="btn btn-default">Regresar</a>
+    <br>
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <a href="{{ route('profesor.curso.taller.ver',['curs_id'=>$curso->curs_id, 'tall_id'=>$taller->tall_id]) }}"  class="btn btn-default">Regresar</a>
+        </div>
     </div>
-</div>
-<br>
-
 @endsection
 
 @push('scripts')

@@ -14,7 +14,7 @@
             <div class="form-group {{ $errors->has('mate_nombre') ? ' has-error' : '' }}">
                 <label for="mate_nombre" class="col-lg-2 control-label">Nombre de la materia</label>
                 <div class="col-lg-10">
-                    <input type="text" class="form-control" id="mate_nombre" placeholder="Ingrese el nombre de la materia" name="mate_nombre" value="{{ $materia->mate_nombre }}">
+                    <input type="text" class="form-control" id="mate_nombre" placeholder="Ingrese el nombre de la materia" name="mate_nombre" value="{{ $materia->mate_nombre }}" autofocus="autofocus" required="required">
                     @if ($errors->has('mate_nombre'))
                         <span class="help-block">
                             <strong>{{ $errors->first('mate_nombre') }}</strong>
@@ -25,7 +25,7 @@
             <div class="form-group {{ $errors->has('mate_tema') ? ' has-error' : '' }}">
                 <label for="mate_tema" class="col-lg-2 control-label">Tema de la materia</label>
                 <div class="col-lg-10">
-                    <textarea type="text" class="form-control" id="mate_tema" placeholder="Ingrese el tema de la materia" name="mate_tema" rows="5">{{ $materia->mate_tema }}</textarea>
+                    <textarea type="text" class="form-control" id="mate_tema" placeholder="Ingrese el tema de la materia" name="mate_tema" rows="5" required="required">{{ $materia->mate_tema }}</textarea>
                     @if ($errors->has('mate_tema'))
                         <span class="help-block">
                             <strong>{{ $errors->first('mate_tema') }}</strong>

@@ -12,7 +12,7 @@
         <div class="form-group {{ $errors->has('texto_pregunta') ? ' has-error' : '' }}">
             <label for="texto_pregunta" class="col-lg-2 control-label">Texto de la pregunta</label>
             <div class="col-lg-10">
-                <textarea class="form-control" id="texto_pregunta" placeholder="Ingrese el texto de la pregunta, máximo 500 caracteres." name="texto_pregunta" rows="5" required="required">{{ old('texto_pregunta') }}</textarea>
+                <textarea class="form-control" id="texto_pregunta" placeholder="Ingrese el texto de la pregunta, máximo 500 caracteres." name="texto_pregunta" rows="5" autofocus="autofocus" required="required">{{ old('texto_pregunta') }}</textarea>
                 @if ($errors->has('texto_pregunta'))
                     <span class="help-block">
                         <strong>{{ $errors->first('texto_pregunta') }}</strong>

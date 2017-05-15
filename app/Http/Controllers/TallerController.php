@@ -178,13 +178,9 @@ class TallerController extends Controller
             flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
-        // Obtengo las opciones disponbiles en bd en el campo tall_tipo de tipo enum.
-        $opciones = Taller::getPossibleEnumValues();
-        $opcionesSeparadasPorComas = implode(",", $opciones);
         // Validamos los campos del formulario.
         Validator::make($request->all(), [
            'nombre_taller' => 'required|max:45',
-           'tipo_taller' => 'required|in:'.$opcionesSeparadasPorComas,
            'tiempo_taller' => 'required|date_format:Y-m-d H:i:s'
         ])->validate();
         //obtenemos el campo file definido en el formulario
@@ -212,7 +208,6 @@ class TallerController extends Controller
         }
         // Asignamos el nuevo nombre del taller, nuevo tipo y tiempo.
         $taller->tall_nombre = $request->input('nombre_taller');
-        $taller->tall_tipo   = $request->input('tipo_taller');
         $taller->tall_tiempo = $request->input('tiempo_taller');
         // Si existe $path y $nombreArchivo es porque el usuario está cargando un nuevo archivo,
         // almaceno la nueva ruta y nombre del archivo en bd.
