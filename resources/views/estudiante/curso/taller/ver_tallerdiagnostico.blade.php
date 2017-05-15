@@ -121,7 +121,7 @@
                     }else{
                         return false;
                     }
-                })
+                });
             });
         });
     </script>
