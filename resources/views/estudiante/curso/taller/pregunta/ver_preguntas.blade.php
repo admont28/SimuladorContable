@@ -20,13 +20,8 @@
         </div>
     </div>
     <div class="row">
-        <form class="form-horizontal" action="{{ route('estudiante.curso.taller.solucionar.post', ['curs_id' => $curso->curs_id, 'tall_id' => $taller->tall_id]) }}" method="post" enctype="multipart/form-data">
+        <form class="form-horizontal" action="{{ route('estudiante.curso.taller.solucionar.post', ['curs_id' => $curso->curs_id, 'tall_id' => $taller->tall_id]) }}" method="post" enctype="multipart/form-data" id="formulario-taller">
             {{ csrf_field() }}
-            @if($errors->any())
-               @foreach ($errors->all() as $error)
-                  <div>{{ $error }}</div>
-              @endforeach
-            @endif
             @foreach ($preguntas as $pregunta)
                 <p class="lead"><strong>{{ $loop->iteration }}. {{ $pregunta->preg_texto }}</strong></p>
                 @if ($pregunta->preg_tipo== "unica-multiple")
@@ -134,14 +129,21 @@
                             $(this).html('<div class="alert alert-danger" role="alert">El taller ha expirado, no es posible guardar las respuestas.</div>');
                         });
         });
-        // Mensjae cuando el usuario intenta abandonar la página.
-        $(window).on('beforeunload', function(){
-            swal(
-                '¡Cuidado!',
-                'Intentaste abandonar esta pagina. Si abandonas la página de igual forma se contará como un intento de solución del taller.',
-                'warning'
-            );
-            return "Intentaste abandonar esta pagina. Si abandonas la página de igual forma se contará como un intento de solución del taller.";
+        // Mensaje cuando el usuario intenta abandonar la página.
+        window.onbeforeunload = alSalirDeLaPagina;
+        var preguntarAntesDeSalir = true;
+        $("#formulario-taller").submit(function(event) {
+            preguntarAntesDeSalir = false;
         });
+        function alSalirDeLaPagina() {
+            if(preguntarAntesDeSalir){
+                swal(
+                    '¡Cuidado!',
+                    'Intentaste abandonar esta pagina. Si abandonas la página, de igual forma se contará como un intento de solución del taller.<br>Por favor guarda el taller antes de salir.',
+                    'warning'
+                );
+                return "Intentaste abandonar esta pagina. Si abandonas la página de igual forma se contará como un intento de solución del taller.Por favor guarda el taller antes de salir.";
+            }
+        }
     </script>
 @endpush
