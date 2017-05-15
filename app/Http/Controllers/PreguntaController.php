@@ -34,6 +34,11 @@ class PreguntaController extends Controller
             flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
+        // Verificamos que el taller no tenga respuestas de usuarios, debido a que estos quedarían sin respuestas a las nuevas preguntas.
+        if ($taller->usuariosPorTaller()->isNotEmpty()) {
+            flash('No se pueden adicionar más preguntas al taller porque ya existen respuestas almacenadas de usuarios.', 'danger');
+            return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
+        }
         // Obtengo las opciones disponbiles en bd en el campo tall_tipo de tipo enum.
         $posiblesOpciones = Pregunta::getPossibleEnumValues();
         $taller = Taller::find($tall_id);
@@ -62,6 +67,11 @@ class PreguntaController extends Controller
         if (!isset($taller)) {
             flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
+        }
+        // Verificamos que el taller no tenga respuestas de usuarios, debido a que estos quedarían sin respuestas a las nuevas preguntas.
+        if ($taller->usuariosPorTaller()->isNotEmpty()) {
+            flash('No se pueden adicionar más preguntas al taller porque ya existen respuestas almacenadas de usuarios.', 'danger');
+            return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
         }
         // Obtengo las opciones disponbiles en bd en el campo preg_tipo de tipo enum.
         $opciones = Pregunta::getPossibleEnumValues();
