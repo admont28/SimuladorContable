@@ -21,7 +21,7 @@
             $('#usuario-table').DataTable({
                 "processing": true,
                 "serverSide": true,
-                "ajax": "{{ route('profesor.curso.taller.pregunta.respuesta.calificacion',['tall_id' => $taller->tall_id,'curs_id'=>$taller->curs_id]) }}",
+                "ajax": "{{ route('profesor.curso.taller.usuarios',['tall_id' => $taller->tall_id,'curs_id'=>$taller->curs_id]) }}",
                 "columns" : [
                     {data: 'usua_id', name: 'usua_id', width: '5%'},
                     {data: 'usua_nombre', name: 'usua_nombre', width: '50%'},

@@ -154,7 +154,7 @@
                 <h1>Usuarios que han respondido el taller</h1>
             </div>
         </div>
-        @include('profesor.curso.taller.pregunta.calificacion.ver_calificacion')
+        @include('profesor.curso.taller.usuarios_solucionado_taller')
 @endif
 
 @endsection

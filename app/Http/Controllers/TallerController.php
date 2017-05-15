@@ -715,6 +715,22 @@ class TallerController extends Controller
         }
     }
 
+    /**
+     * metodo para traer los usuarios que han respondido un taller
+     */
+    public function mostrarUsuariosTaller($curs_id, $tall_id)
+    {
+        $curso = Curso::find($curs_id);
+        $taller = Taller::find($tall_id);
+        $usuarios = $taller->usuariosPorTaller();
+        return Datatables::of($usuarios)
+                        ->addColumn('opciones', function ($usuario) use($taller,$curso) {
+                            return
+                            '<a href="'.route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id' =>$curso->curs_id, 'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->usua_id ]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
+                        })
+                        ->make(true);
+    }
+
     public function solucionarTallerAsientoContablePost(Request $request, $curs_id, $tall_id)
     {
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.

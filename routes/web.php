@@ -255,7 +255,7 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     | Rutas para las calificaciones
     |--------------------------------------------------------------------------
     */
-    Route::get('/curso/{curs_id}/taller/{tall_id}/usuarios/calificaciones', 'CalificacionController@mostrarUsuariosTaller')->name('profesor.curso.taller.pregunta.respuesta.calificacion');
+    Route::get('/curso/{curs_id}/taller/{tall_id}/usuarios-que-han-respondido-el-taller', 'TallerController@mostrarUsuariosTaller')->name('profesor.curso.taller.usuarios');
     Route::get('/curso/{curs_id}/taller/{tall_id}/usuario/{usua_id}/calificaciones', 'CalificacionController@mostrarCalificacionesUsuario')->name('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante');
     Route::get('/curso/{curs_id}/taller/{tall_id}/usuario/{usua_id}/calificaciones-ajax', 'CalificacionController@mostrarCalificacionesUsuarioAjax')->name('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante.ajax');
     Route::get('/curso/{curs_id}/taller/{tall_id}/usuario/{usua_id}/pregunta/{preg_id}/calificar-respuesta/{resp_id}', 'CalificacionController@calificarRespuestaUsuario')->name('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante.calificar.pregunta');
