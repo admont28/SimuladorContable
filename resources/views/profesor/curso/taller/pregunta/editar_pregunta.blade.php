@@ -22,7 +22,7 @@
                     @endif
                 </div>
             </div>
-            <div class="form-group {{ $errors->has('tipo_pregunta') ? ' has-error' : '' }}">
+            <div class="form-group">
                 <label for="tipo_pregunta" class="col-lg-2 control-label">Tipo</label>
                 <div class="col-lg-10">
                     <select class="form-control" id="tipo_pregunta" name="tipo_pregunta" disabled="disabled">
@@ -30,11 +30,6 @@
                             <option value="{{ $opcion }}" @if($pregunta->preg_tipo == $opcion) {{'selected=selected'}} @endif>{{ $opcion }}</option>
                         @endforeach
                     </select>
-                    @if ($errors->has('tipo_pregunta'))
-                        <span class="help-block">
-                            <strong>{{ $errors->first('tipo_pregunta') }}</strong>
-                        </span>
-                    @endif
                 </div>
             </div>
             <div class="form-group {{ $errors->has('porcentaje_pregunta') ? ' has-error' : '' }}">
