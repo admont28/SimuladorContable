@@ -8,7 +8,7 @@
 
 @section('content')
     <div class="row">
-        <form class="form-horizontal" action="{{ route('profesor.curso.taller.crear.post', ['curs_id' => $curso->curs_id]) }}" method="post" enctype="multipart/form-data">
+        <form class="form-horizontal" action="{{ route('profesor.curso.taller.crear.post', ['curs_id' => $curso->curs_id]) }}" method="post" enctype="multipart/form-data" id="formulario-crear-taller">
             {{ csrf_field() }}
             <div class="form-group {{ $errors->has('nombre_taller') ? ' has-error' : '' }}">
                 <label for="nombre_taller" class="col-lg-2 control-label">Nombre del taller</label>
@@ -30,7 +30,7 @@
                         @endforeach
                     </select>
                     <span class="help-block">
-                        <strong>Seleccione el tipo de taller que está creando.</strong>
+                        <strong>Seleccione el tipo de taller que está creando. Este tipo no podrá ser modificado después.</strong>
                     </span>
                     @if ($errors->has('tipo_taller'))
                         <span class="help-block">
@@ -69,7 +69,7 @@
             <div class="form-group">
                 <div class="col-lg-10 col-lg-offset-2">
                     <a href="{{ route('profesor.curso.ver',['curs_id' => $curso->curs_id]) }}"  class="btn btn-default">Cancelar</a>
-                    <button type="submit" class="btn btn-primary">Crear Taller</button>
+                    <button type="submit" class="btn btn-primary" id="btn-crear-taller">Crear Taller</button>
                 </div>
             </div>
         </form>
@@ -78,33 +78,55 @@
 
 @push('scripts')
     <script type="text/javascript">
-        $(function () {
-            $('#tiempo_taller').datetimepicker({
-                format: 'YYYY-MM-DD HH:mm:ss',
-                sideBySide: true,
-                showTodayButton: true,
-                showClear: true,
-                showClose: true,
-                toolbarPlacement: 'top',
-                minDate: new Date(),
-                tooltips: {
-                    today: 'Hoy',
-                    clear: 'Limpiar selección',
-                    close: 'Cerrar ventana',
-                    selectMonth: 'Seleccionar mes',
-                    prevMonth: 'Mes anterior',
-                    nextMonth: 'Siguiente mes',
-                    selectYear: 'Seleccionar año',
-                    prevYear: 'Año anterior',
-                    nextYear: 'Siguiente año',
-                    selectDecade: 'Seleccionar década',
-                    prevDecade: 'Década anterior',
-                    nextDecade: 'Siguiente década',
-                    prevCentury: 'Siglo anterior',
-                    nextCentury: 'Siguiente siglo'
-                }
+        $(document).ready(function() {
+            $(function () {
+                $('#tiempo_taller').datetimepicker({
+                    format: 'YYYY-MM-DD HH:mm:ss',
+                    sideBySide: true,
+                    showTodayButton: true,
+                    showClear: true,
+                    showClose: true,
+                    toolbarPlacement: 'top',
+                    minDate: new Date(),
+                    tooltips: {
+                        today: 'Hoy',
+                        clear: 'Limpiar selección',
+                        close: 'Cerrar ventana',
+                        selectMonth: 'Seleccionar mes',
+                        prevMonth: 'Mes anterior',
+                        nextMonth: 'Siguiente mes',
+                        selectYear: 'Seleccionar año',
+                        prevYear: 'Año anterior',
+                        nextYear: 'Siguiente año',
+                        selectDecade: 'Seleccionar década',
+                        prevDecade: 'Década anterior',
+                        nextDecade: 'Siguiente década',
+                        prevCentury: 'Siglo anterior',
+                        nextCentury: 'Siguiente siglo'
+                    }
+                });
+                $('#tiempo_taller').val('{{ old('tiempo_taller') }}');
             });
-            $('#tiempo_taller').val('{{ old('tiempo_taller') }}');
+            $("#btn-crear-taller").click(function(event) {
+                event.preventDefault();
+                swal({
+                    title: '¿Está seguro de esta acción?',
+                    text: 'El campo tipo de taller no podrá ser modificado después, Por favor confirme.',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, continuar',
+                    cancelButtonText: 'No, cancelar'
+                }).then(function (option) {
+                    if(option === true){
+                        $("#formulario-crear-taller").submit();
+                        return true;
+                    }else{
+                        return false;
+                    }
+                });
+            });
         });
     </script>
 @endpush
