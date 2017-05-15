@@ -7,7 +7,7 @@
 @section('active','#profesor-curso')
 
 @section('content')
-    <form class="form-horizontal" action="{{ route('profesor.curso.taller.pregunta.crear.post',['curs_id'=>$taller->curs_id,'tall_id'=>$taller->tall_id]) }}" method="post">
+    <form class="form-horizontal" action="{{ route('profesor.curso.taller.pregunta.crear.post',['curs_id'=>$taller->curs_id,'tall_id'=>$taller->tall_id]) }}" method="post" id="formulario-crear-pregunta">
         {{ csrf_field() }}
         <div class="form-group {{ $errors->has('texto_pregunta') ? ' has-error' : '' }}">
             <label for="texto_pregunta" class="col-lg-2 control-label">Texto de la pregunta</label>
@@ -50,8 +50,35 @@
         <div class="form-group">
             <div class="col-lg-10 col-lg-offset-2">
                 <a href="{{ route('profesor.curso.taller.ver',['curs_id'=> $taller->curs_id,'tall_id'=>$taller->tall_id]) }}"  class="btn btn-default">Regresar</a>
-                <button type="submit" class="btn btn-primary">Crear Pregunta</button>
+                <button type="submit" class="btn btn-primary" id="btn-crear-pregunta">Crear Pregunta</button>
             </div>
         </div>
     </form>
 @endsection
+
+@push('scripts')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#btn-crear-pregunta").click(function(event) {
+                event.preventDefault();
+                swal({
+                    title: '¿Está seguro de esta acción?',
+                    text: 'El campo tipo de pregunta no podrá ser modificado después, Por favor confirme.',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, continuar',
+                    cancelButtonText: 'No, cancelar'
+                }).then(function (option) {
+                    if(option === true){
+                        $("#formulario-crear-pregunta").submit();
+                        return true;
+                    }else{
+                        return false;
+                    }
+                });
+            });
+        });
+    </script>
+@endpush
