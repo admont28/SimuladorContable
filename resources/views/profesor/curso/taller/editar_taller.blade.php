@@ -22,22 +22,14 @@
                     @endif
                 </div>
             </div>
-            <div class="form-group {{ $errors->has('tipo_taller') ? ' has-error' : '' }}">
+            <div class="form-group">
                 <label for="tipo_taller" class="col-lg-2 control-label">Tipo</label>
                 <div class="col-lg-10">
-                    <select class="form-control" id="tipo_taller" name="tipo_taller">
+                    <select class="form-control" id="tipo_taller" name="tipo_taller" disabled="disabled">
                         @foreach ($opciones as $opcion)
                             <option value="{{ $opcion }}" @if($taller->tall_tipo == $opcion) {{'selected=selected'}} @endif>{{ $opcion }}</option>
                         @endforeach
                     </select>
-                    <span class="help-block">
-                        <strong>Seleccione el nuevo tipo de taller.</strong>
-                    </span>
-                    @if ($errors->has('tipo_taller'))
-                        <span class="help-block">
-                            <strong>{{ $errors->first('tipo_taller') }}</strong>
-                        </span>
-                    @endif
                 </div>
             </div>
             <div class="form-group {{ $errors->has('tiempo_taller') ? ' has-error' : '' }}">
