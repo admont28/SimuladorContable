@@ -2,7 +2,9 @@
 
 @section('title-head', 'Calificaciones de un usuario')
 
-@section('title', 'Calificaciones del usuario: <strong>'.$usuario->name.'</strong>')
+@section('title')
+    {!! 'Calificaciones del usuario: <strong>'.$usuario->name.'</strong>' !!}
+@endsection
 
 @section('active','#profesor-curso')
 
@@ -35,6 +37,8 @@
     <script type="text/javascript">
         $(function() {
             $('#usuario-table').DataTable({
+                "dom"       : "lBfrtip",
+                "buttons"   : ['reset', 'reload'],
                 "processing": true,
                 "serverSide": true,
                 "ajax": "{{ route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante.ajax',['curs_id' => $curso->curs_id,'tall_id'=>$taller->tall_id, 'usua_id'=>$usuario->id]) }}",

@@ -19,6 +19,8 @@
     <script type="text/javascript">
         $(function() {
             $('#usuario-table').DataTable({
+                "dom"       : "lBfrtip",
+                "buttons"   : ['reset', 'reload'],
                 "responsive": true,
                 "processing": true,
                 "serverSide": true,
@@ -27,8 +29,8 @@
                 "columns" : [
                     {data: 'id', name: 'id', width: '5%'},
                     {data: 'name', name: 'name', width: '50%'},
-                    {data: 'email', name: 'email', width: '50%'},
-                    {data: 'opciones', name: 'action', orderable: false, searchable: false, width: '30%'}
+                    {data: 'email', name: 'email', width: '20%'},
+                    {data: 'opciones', name: 'action', orderable: false, searchable: false, width: '15%'}
                 ],
                 "language" : {
                     "url" : "//cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"

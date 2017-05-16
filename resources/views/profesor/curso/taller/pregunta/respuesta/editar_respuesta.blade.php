@@ -2,7 +2,9 @@
 
 @section('title-head', 'Editar Respuesta')
 
-@section('title', 'Editar respuesta para la pregunta: <strong>'.substr($pregunta->preg_texto,0,80).'...</strong>')
+@section('title')
+    {!! 'Editar respuesta para la pregunta: <strong>'.substr($pregunta->preg_texto,0,80).'...</strong>' !!}
+@endsection
 
 @section('active','#profesor-curso')
 

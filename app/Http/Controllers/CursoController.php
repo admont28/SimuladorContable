@@ -61,7 +61,7 @@ class CursoController extends Controller
             'curs_nombre' => $request['nombre_curso'],
             'curs_introduccion'=> $request['introduccion_curso']
         ]);
-        flash('Curso "'.$curso->curs_nombre.'" creado con éxito.', 'success');
+        flash('Curso "'.$curso->curs_nombre.'" creado con éxito.')->success();
         return redirect()->route('profesor.curso');
     }
 
@@ -76,7 +76,7 @@ class CursoController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         return View('profesor.curso.ver_curso')->with('curso', $curso);
@@ -105,7 +105,7 @@ class CursoController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         return View('profesor.curso.editar_curso')->with('curso', $curso);
@@ -123,7 +123,7 @@ class CursoController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         Validator::make($request->all(), [
@@ -133,7 +133,7 @@ class CursoController extends Controller
         $curso->curs_nombre = $request->input('nombre_curso');
         $curso->curs_introduccion = $request->input('introduccion_curso');
         $curso->save();
-        flash('Curso "'.$curso->curs_nombre.'" editado con éxito.', 'success');
+        flash('Curso "'.$curso->curs_nombre.'" editado con éxito.')->success();
         return redirect()->route('profesor.curso');
     }
 
@@ -148,17 +148,17 @@ class CursoController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         $materias = $curso->materias;
         $talleres = $curso->talleres;
         if(!$materias->isEmpty() || !$talleres->isEmpty()){
-            flash('No es posible eliminar el curso: "'.$curso->curs_nombre.'" porque este contiene materias o talleres asociados.', 'danger');
+            flash('No es posible eliminar el curso: "'.$curso->curs_nombre.'" porque este contiene materias o talleres asociados.')->error();
             return redirect()->route('profesor.curso');
         }
         $respuesta = $curso->delete();
-        flash('Curso "'.$curso->curs_nombre.'" eliminado con éxito.', 'success');
+        flash('Curso "'.$curso->curs_nombre.'" eliminado con éxito.')->success();
         return redirect()->route('profesor.curso');
     }
 
@@ -180,6 +180,7 @@ class CursoController extends Controller
                         })
                         ->editColumn('mate_rutaarchivo', '<a href="{{$mate_rutaarchivo}}">{{$mate_nombrearchivo}}</a>')
                         ->editColumn('mate_tema','<div class="inner-cell">{{$mate_tema}}</div>')
+                        ->rawColumns(['opciones','mate_rutaarchivo','mate_tema'])
                         ->make(true);
     }
 
@@ -197,12 +198,12 @@ class CursoController extends Controller
         $curso = Curso::find($curs_id);
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('estudiante.curso');
         }
         // Verificamos que el curso tenga talleres
         if ($curso->talleres->isEmpty()) {
-            flash('El curso con ID: '.$curs_id.' no posee talleres. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no posee talleres. Verifique por favor.')->error();
             return redirect()->route('estudiante.curso');
         }
         //relaciones entre los modelos
@@ -222,12 +223,12 @@ class CursoController extends Controller
         $curso = Curso::find($curs_id);
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('estudiante.curso');
         }
         // Verificamos que el curso tenga talleres
         if ($curso->talleres->isEmpty()) {
-            flash('El curso con ID: '.$curs_id.' no posee talleres. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no posee talleres. Verifique por favor.')->error();
             return redirect()->route('estudiante.curso');
         }
         $talleresDiagnostico = $curso->talleres->where('tall_tipo', 'diagnostico');
@@ -243,7 +244,7 @@ class CursoController extends Controller
                         ->with('talleresTeoricos', $talleresTeoricos)
                         ->with('talleresTeoricosCompletos', $talleresTeoricosCompletos);
         }
-        flash('Para visualizar los talleres teóricos usted debe haber completado primero los talleres diagnóstico. Verifique por favor.','danger');
+        flash('Para visualizar los talleres teóricos usted debe haber completado primero los talleres diagnóstico. Verifique por favor.')->error();
         return redirect()->route('estudiante.curso.ver.talleresdiagnostico', ['curs_id' => $curso->curs_id]);
     }
 
@@ -252,12 +253,12 @@ class CursoController extends Controller
         $curso = Curso::find($curs_id);
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('estudiante.curso');
         }
         // Verificamos que el curso tenga talleres
         if ($curso->talleres->isEmpty()) {
-            flash('El curso con ID: '.$curs_id.' no posee talleres. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no posee talleres. Verifique por favor.')->error();
             return redirect()->route('estudiante.curso');
         }
         $talleresTeoricos = $curso->talleres->where('tall_tipo', 'teorico');
@@ -269,7 +270,7 @@ class CursoController extends Controller
                         ->with('curso', $curso)
                         ->with('talleresPracticos', $talleresPracticos);
         }
-        flash('Para visualizar los talleres prácticos usted debe haber completado primero los talleres diagnóstico. Verifique por favor.','danger');
+        flash('Para visualizar los talleres prácticos usted debe haber completado primero los talleres diagnóstico. Verifique por favor.')->error();
         return redirect()->route('estudiante.curso.ver.talleresdiagnostico', ['curs_id' => $curso->curs_id]);
     }
 
@@ -297,6 +298,7 @@ class CursoController extends Controller
                        })
                        ->editColumn('tall_tipo', '@if($tall_tipo == "teorico") <span class="label label-info">{{ $tall_tipo }}</span> @elseif($tall_tipo == "diagnostico") <span class="label label-warning">{{ $tall_tipo }}</span> @else <span class="label label-default">{{ $tall_tipo }}</span> @endif')
                        ->editColumn('tall_rutaarchivo', '<a href="{{$tall_rutaarchivo}}">{{$tall_nombrearchivo}}</a>')
+                       ->rawColumns(['opciones','tall_tipo','tall_rutaarchivo'])
                        ->make(true);
     }
 
@@ -312,7 +314,9 @@ class CursoController extends Controller
                 return
                 '<a href="'.route('estudiante.curso.ver.introduccion',['curs_id' => $curso->curs_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
                //<a href="'.route('profesor.curso.tema.ver', ['curs_id' => $curso->curs_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-zoom-out"></i> Ver temas</a>';
-           })->make(true);
+           })
+           ->rawColumns(['opciones'])
+           ->make(true);
     }
 
     /**

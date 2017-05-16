@@ -23,6 +23,8 @@
     <script type="text/javascript">
         $(function() {
             $('#pregunta-table').DataTable({
+                "dom"       : "lBfrtip",
+                "buttons"   : ['reset', 'reload'],
                 "responsive": true,
                 "processing": true,
                 "serverSide": true,

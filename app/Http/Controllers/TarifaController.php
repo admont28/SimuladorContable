@@ -20,13 +20,13 @@ class TarifaController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
         $taller = Taller::find($tall_id);
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['id' => $curs_id]);
         }
         return View('profesor.curso.taller.tarifa.crear_tarifa')
@@ -45,13 +45,13 @@ class TarifaController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
         $taller = Taller::find($tall_id);
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
         // Validamos los campos del formulario.
@@ -66,7 +66,7 @@ class TarifaController extends Controller
             'tall_id'     => $tall_id
         ]);
         // Informo al usuario y redireccionamos.
-        flash('La tarifa "'.$request['nombre_tarifa'].'" ha sido creada con éxito.', 'success');
+        flash('La tarifa "'.$request['nombre_tarifa'].'" ha sido creada con éxito.')->success();
         return redirect()->route('profesor.curso.taller.ver',['curs_id'=> $curso->curs_id, 'tall_id' => $taller->tall_id]);
     }
 
@@ -81,19 +81,19 @@ class TarifaController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
         $taller = Taller::find($tall_id);
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
         // Verificamos que exista la tarifa en bd, si no es así, informamos al usuario y redireccionamos.
         $tarifa = Tarifa::find($tari_id);
         if (!isset($tarifa)) {
-            flash('La tarifa con ID: '.$tari_id.' no existe. Verifique por favor.', 'danger');
+            flash('La tarifa con ID: '.$tari_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
         }
         // Retornamos la vista para editr la tarifa,
@@ -117,19 +117,19 @@ class TarifaController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
         $taller = Taller::find($tall_id);
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
         // Verificamos que exista la tarifa en bd, si no es así, informamos al usuario y redireccionamos.
         $tarifa = Tarifa::find($tari_id);
         if (!isset($tarifa)) {
-            flash('La tarifa con ID: '.$tari_id.' no existe. Verifique por favor.', 'danger');
+            flash('La tarifa con ID: '.$tari_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
         }
         // Validamos los campos del formulario.
@@ -140,7 +140,7 @@ class TarifaController extends Controller
         $tarifa->tari_nombre = $request['nombre_tarifa'];
         $tarifa->tari_valor  = $request['valor_tarifa'];
         $tarifa->save();
-        flash('Tarifa: "'.$request['nombre_tarifa'].'" editada con éxito.', 'success');
+        flash('Tarifa: "'.$request['nombre_tarifa'].'" editada con éxito.')->success();
         return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
     }
 
@@ -155,23 +155,23 @@ class TarifaController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
         $taller = Taller::find($tall_id);
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
         // Verificamos que exista la tarifa en bd, si no es así, informamos al usuario y redireccionamos.
         $tarifa = Tarifa::find($tari_id);
         if (!isset($tarifa)) {
-            flash('La tarifa con ID: '.$tari_id.' no existe. Verifique por favor.', 'danger');
+            flash('La tarifa con ID: '.$tari_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
         }
         $tarifa->delete();
-        flash('Tarifa: "'.$tarifa->tari_nombre.'" eliminada con éxito.', 'success');
+        flash('Tarifa: "'.$tarifa->tari_nombre.'" eliminada con éxito.')->success();
         return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
     }
 }

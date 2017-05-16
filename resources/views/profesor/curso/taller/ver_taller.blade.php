@@ -2,7 +2,9 @@
 
 @section('title-head', 'Ver taller')
 
-@section('title', 'Taller: <strong>'.$taller->tall_nombre.'</strong>')
+@section('title')
+    {!! 'Taller: <strong>'.$taller->tall_nombre.'</strong>' !!}
+@endsection
 
 @section('active','#profesor-curso')
 

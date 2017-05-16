@@ -25,7 +25,7 @@ class MateriaController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         // Retornamos la vista con el formulario para adicionar una nueva materia.
@@ -44,7 +44,7 @@ class MateriaController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         // Validamos los campos del formulario.
@@ -68,7 +68,7 @@ class MateriaController extends Controller
             'curs_id'=> $curs_id
         ]);
         // Informo al usuario y redireccionamos.
-        flash('La materia "'.$request['mate_nombre'].'" ha sido creada con éxito.','success');
+        flash('La materia "'.$request['mate_nombre'].'" ha sido creada con éxito.')->success();
         return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
     }
 
@@ -97,13 +97,13 @@ class MateriaController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         // Verificamos que exista la materia en bd, si no es así, informamos al usuario y redireccionamos.
         $materia = Materia::find($mate_id);
         if (!isset($materia)) {
-            flash('La materia con ID: '.$mate_id.' no existe. Verifique por favor.', 'danger');
+            flash('La materia con ID: '.$mate_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['id' => $curs_id]);
         }
         // Retornamos la vista para editr la materia,
@@ -125,13 +125,13 @@ class MateriaController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         // Verificamos que exista la materia en bd, si no es así, informamos al usuario y redireccionamos.
         $materia = Materia::find($mate_id);
         if (!isset($materia)) {
-            flash('La materia con ID: '.$mate_id.' no existe. Verifique por favor.', 'danger');
+            flash('La materia con ID: '.$mate_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
         // Validar solo 2 campos del formulario.
@@ -158,7 +158,7 @@ class MateriaController extends Controller
                 $path = Storage::disk('materias')->put('/', $file);
             }else {
                 // Si no se pudo eliminar el archivo anterior, informo al usuario y redireccionamos.
-                flash('No se pudo eliminar el archivo asociado a la materia "'.$materia->mate_nombre.'"', 'danger');
+                flash('No se pudo eliminar el archivo asociado a la materia "'.$materia->mate_nombre.'"')->error();
                 return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
             }
         }
@@ -174,7 +174,7 @@ class MateriaController extends Controller
         // Guardo los cambios en el modelo.
         $materia->save();
         // Informo al usuairo y redireccionamos.
-        flash('Materia "'.$materia->mate_nombre.'" editada con éxito.', 'success');
+        flash('Materia "'.$materia->mate_nombre.'" editada con éxito.')->success();
         return redirect()->route('profesor.curso.ver', ['id' => $curs_id]);
     }
 
@@ -200,12 +200,12 @@ class MateriaController extends Controller
         }
         // Si no se pudo eliminar el archivo por cualquier motivo, le informo al usuario.
         if($eliminacionArchivo == false){
-            flash('No se pudo eliminar el archivo asociado a la materia "'.$materia->mate_nombre.'"', 'danger');
+            flash('No se pudo eliminar el archivo asociado a la materia "'.$materia->mate_nombre.'"')->error();
         }else{
             // Si se eliminó el archivo o no existía en el disco procedo a eliminar la materia.
             $materia->delete();
             // Mensaje para el usuario indicando la eliminación exitosa.
-            flash('Materia "'.$materia->mate_nombre.'" eliminada con éxito.', 'success');
+            flash('Materia "'.$materia->mate_nombre.'" eliminada con éxito.')->success();
         }
         // Cualquiera que sea el caso, de éxito o error es redirigido a la vista del curso.
         return redirect()->route('profesor.curso.ver', ['id' => $curs_id]);

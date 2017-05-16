@@ -2,7 +2,9 @@
 
 @section('title-head', 'Editar Tarifa')
 
-@section('title', 'Editar tarifa para el taller: <strong>'.$taller->tall_nombre.'</strong>')
+@section('title')
+    {!! 'Editar tarifa para el taller: <strong>'.$taller->tall_nombre.'</strong>' !!}
+@endsection
 
 @section('active','#profesor-curso')
 

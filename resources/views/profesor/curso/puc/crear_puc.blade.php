@@ -2,7 +2,9 @@
 
 @section('title-head', 'Cargar archivo PUC')
 
-@section('title', 'Cargar archivo PUC para el curso: <strong>'.$curso->curs_nombre.'</strong>')
+@section('title')
+    {!! 'Cargar archivo PUC para el curso: <strong>'.$curso->curs_nombre.'</strong>' !!}
+@endsection
 
 @section('active','#profesor-curso')
 

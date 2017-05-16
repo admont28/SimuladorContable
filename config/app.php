@@ -188,6 +188,7 @@ return [
         Yajra\Datatables\DatatablesServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Yajra\Datatables\ButtonsServiceProvider::class,
 
 
     ],

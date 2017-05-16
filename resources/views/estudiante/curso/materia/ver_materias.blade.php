@@ -2,7 +2,9 @@
 
 @section('title-head', 'Ver materias de un curso')
 
-@section('title',' Curso: <strong>'.$curso->curs_nombre.'</strong>')
+@section('title')
+    {!! 'Curso: <strong>'.$curso->curs_nombre.'</strong>' !!}
+@endsection
 
 @section('active','#estudiante-curso')
 

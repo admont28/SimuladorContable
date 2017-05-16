@@ -2,7 +2,9 @@
 
 @section('title-head', 'Crear materia')
 
-@section('title', 'Crear materia para el curso: <strong>'.$curso->curs_nombre.'</strong>')
+@section('title')
+    {!! 'Crear materia para el curso: <strong>'.$curso->curs_nombre.'</strong>' !!}
+@endsection
 
 @section('active','#profesor-curso')
 

@@ -2,7 +2,9 @@
 
 @section('title-head', 'Solucionar Taller de un curso')
 
-@section('title',' Taller: <strong>'.$taller->tall_nombre.'</strong>')
+@section('title')
+    {!! 'Taller: <strong>'.$taller->tall_nombre.'</strong>' !!}
+@endsection
 
 @section('active','#estudiante-curso')
 

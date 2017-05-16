@@ -2,7 +2,9 @@
 
 @section('title-head', 'Editar Pregunta')
 
-@section('title', 'Editar pregunta para el taller: <strong>'.$taller->tall_nombre.'</strong>')
+@section('title')
+    {!! 'Editar pregunta para el taller: <strong>'.$taller->tall_nombre.'</strong>' !!}
+@endsection
 
 @section('active','#profesor-curso')
 

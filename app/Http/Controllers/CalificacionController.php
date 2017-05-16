@@ -26,22 +26,22 @@ class CalificacionController extends Controller
     {
         $usuario = User::find($usua_id);
         if (!isset($usuario)) {
-            flash('El usuario con ID: '.$usua_id.' no existe. Verifique por favor.', 'danger');
+            flash('El usuario con ID: '.$usua_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('login');
         }
         $taller = Taller::find($tall_id);
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
         $pregunta = Pregunta::find($preg_id);
         if (!isset($pregunta)) {
-            flash('la pregunta con ID: '.$preg_id.' no existe. Verifique por favor.', 'danger');
+            flash('la pregunta con ID: '.$preg_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
         }
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('el curso  con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('el curso  con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         return view('profesor.curso.taller.pregunta.calificacion.ver_calificacion')
@@ -55,22 +55,22 @@ class CalificacionController extends Controller
     {
         $usuario = User::find($usua_id);
         if (!isset($usuario)) {
-            flash('El usuario con ID: '.$usua_id.' no existe. Verifique por favor.', 'danger');
+            flash('El usuario con ID: '.$usua_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('login');
         }
         $taller = Taller::find($tall_id);
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
         $pregunta = Pregunta::find($preg_id);
         if (!isset($pregunta)) {
-            flash('la pregunta con ID: '.$preg_id.' no existe. Verifique por favor.', 'danger');
+            flash('la pregunta con ID: '.$preg_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
         }
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('el curso  con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('el curso  con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         $calificacion = 0;
@@ -89,7 +89,7 @@ class CalificacionController extends Controller
             'cali_calificacion'=>$calificacion,
             'cali_ponderado'=>$cali_ponderado
         ]);
-        flash('el taller "'.$taller->tall_nombre.'" se calificó con exito.', 'success');
+        flash('el taller "'.$taller->tall_nombre.'" se calificó con exito.')->success();
         return redirect()->route('profesor.curso.taller.ver',['curs_id'=> $curs_id,'tall_id'=>$taller->tall_id]);
     }
 
@@ -97,22 +97,22 @@ class CalificacionController extends Controller
     {
         $usuario = User::find($usua_id);
         if (!isset($usuario)) {
-            flash('El usuario con ID: '.$usua_id.' no existe. Verifique por favor.', 'danger');
+            flash('El usuario con ID: '.$usua_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('login');
         }
         $taller = Taller::find($tall_id);
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
         $pregunta = Pregunta::find($preg_id);
         if (!isset($pregunta)) {
-            flash('la pregunta con ID: '.$preg_id.' no existe. Verifique por favor.', 'danger');
+            flash('la pregunta con ID: '.$preg_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
         }
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('el curso  con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('el curso  con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         $calificacion = 0;
@@ -131,7 +131,7 @@ class CalificacionController extends Controller
             'cali_calificacion'=>$calificacion,
             'cali_ponderado'=>$cali_ponderado
         ]);
-        flash('el taller "'.$taller->tall_nombre.'" se calificó con exito.', 'success');
+        flash('el taller "'.$taller->tall_nombre.'" se calificó con exito.')->success();
         return redirect()->route('profesor.curso.taller.ver',['curs_id'=> $curs_id,'tall_id'=>$taller->tall_id]);
     }
 
@@ -161,18 +161,18 @@ class CalificacionController extends Controller
         $curso = Curso::find($curs_id);
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         $taller = Taller::find($tall_id);
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver',['curs_id' => $taller->tall_id]);
         }
         $usuario = User::find($usua_id);
         if (!isset($usuario)) {
-            flash('El usuario con ID: '.$usua_id.' no existe. Verifique por favor.', 'danger');
+            flash('El usuario con ID: '.$usua_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller.pregunta.respuesta.calificacion',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id]);
         }
         return view('profesor.curso.taller.pregunta.calificacion.ver_calificacion_pregunta')
@@ -202,6 +202,7 @@ class CalificacionController extends Controller
                         ->editColumn('preg_tipo', '@if($preg_tipo == "unica-multiple") <span class="label label-info">{{ $preg_tipo }}</span> @elseif($preg_tipo == "abierta") <span class="label label-warning">{{ $preg_tipo }}</span> @else <span class="label label-default">{{ $preg_tipo }}</span> @endif')
                         ->editColumn('preg_porcentaje','{{ $preg_porcentaje * 100 }}%')
                         ->editColumn('cali_ponderado', '@if(isset($cali_ponderado)) {{ $cali_ponderado }} @else <span class="label label-danger">SIN PONDERADO</span> @endif')
+                        ->rawColumns(['opciones','cali_calificacion','preg_tipo','cali_ponderado'])
                         ->make(true);
     }
 
@@ -213,28 +214,28 @@ class CalificacionController extends Controller
         $curso = Curso::find($curs_id);
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         $taller = Taller::find($tall_id);
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver',['curs_id' => $taller->tall_id]);
         }
         $usuario = User::find($usua_id);
         if (!isset($usuario)) {
-            flash('El usuario con ID: '.$usua_id.' no existe. Verifique por favor.', 'danger');
+            flash('El usuario con ID: '.$usua_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller.ver',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id]);
         }
         $pregunta = Pregunta::find($preg_id);
         if (!isset($pregunta)) {
-            flash('la pregunta con ID: '.$preg_id.' no existe. Verifique por favor.', 'danger');
+            flash('la pregunta con ID: '.$preg_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->id]);
         }
         $respuesta = Respuesta::find($resp_id);
         if (!isset($respuesta)) {
-            flash('la respuesta con ID: '.$resp_id.' no existe. Verifique por favor.', 'danger');
+            flash('la respuesta con ID: '.$resp_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->id]);
         }
         return view('profesor.curso.taller.pregunta.calificacion.hacer_calificacion_estudiante')
@@ -253,28 +254,28 @@ class CalificacionController extends Controller
         $curso = Curso::find($curs_id);
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         $taller = Taller::find($tall_id);
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver',['curs_id' => $taller->tall_id]);
         }
         $usuario = User::find($usua_id);
         if (!isset($usuario)) {
-            flash('El usuario con ID: '.$usua_id.' no existe. Verifique por favor.', 'danger');
+            flash('El usuario con ID: '.$usua_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller.ver',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id]);
         }
         $pregunta = Pregunta::find($preg_id);
         if (!isset($pregunta)) {
-            flash('la pregunta con ID: '.$preg_id.' no existe. Verifique por favor.', 'danger');
+            flash('la pregunta con ID: '.$preg_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->id]);
         }
         $respuesta = Respuesta::find($resp_id);
         if (!isset($respuesta)) {
-            flash('la respuesta con ID: '.$resp_id.' no existe. Verifique por favor.', 'danger');
+            flash('la respuesta con ID: '.$resp_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->id]);
         }
         Validator::make($request->all(), [
@@ -287,7 +288,7 @@ class CalificacionController extends Controller
             'cali_calificacion'=> $request['calificacion_pregunta'],
             'cali_ponderado'=>$request['calificacion_pregunta'] * $pregunta->preg_porcentaje
         ]);
-        flash('La calificación se ha creado con éxito.','success' );
+        flash('La calificación se ha creado con éxito.')->success();
         return redirect()->route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->id]);
     }
 

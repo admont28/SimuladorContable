@@ -51,7 +51,7 @@ class TallerController extends Controller
         // Obtengo las opciones disponbiles en bd en el campo tall_tipo de tipo enum.
         $posiblesOpciones = Taller::getPossibleEnumValues();
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         return View('profesor.curso.taller.crear_taller')->with('curso', $curso)->with('opciones', $posiblesOpciones);
@@ -68,7 +68,7 @@ class TallerController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso=Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller',['curs_id'=> $curso->curs_id]);
         }
         // Obtengo las opciones disponbiles en bd en el campo tall_tipo de tipo enum.
@@ -98,7 +98,7 @@ class TallerController extends Controller
         ]);
         Storage::disk('talleres')->makeDirectory($taller->tall_id);
         // Informo al usuario y redireccionamos.
-        flash('El taller "'.$request['nombre_taller'].'" ha sido creado con éxito.', 'success');
+        flash('El taller "'.$request['nombre_taller'].'" ha sido creado con éxito.')->success();
         return redirect()->route('profesor.curso.ver',['curs_id'=> $curso->curs_id]);
     }
 
@@ -112,13 +112,13 @@ class TallerController extends Controller
     {
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
         $taller = Taller::find($tall_id);
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['id' => $curs_id]);
         }
         return View('profesor.curso.taller.ver_taller')
@@ -137,13 +137,13 @@ class TallerController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
         $taller = Taller::find($tall_id);
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['id' => $curs_id]);
         }
         // Obtengo las opciones disponbiles en bd en el campo tall_tipo de tipo enum.
@@ -169,13 +169,13 @@ class TallerController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
         $taller = Taller::find($tall_id);
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
         // Validamos los campos del formulario.
@@ -202,7 +202,7 @@ class TallerController extends Controller
                 $path = Storage::disk('talleres')->put('/', $file);
             }else {
                 // Si no se pudo eliminar el archivo anterior, informo al usuario y redireccionamos.
-                flash('No se pudo eliminar el archivo asociado al taller "'.$taller->mate_nombre.'"', 'danger');
+                flash('No se pudo eliminar el archivo asociado al taller "'.$taller->mate_nombre.'"')->error();
                 return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
             }
         }
@@ -218,7 +218,7 @@ class TallerController extends Controller
         // Guardo los cambios en el modelo.
         $taller->save();
         // Informo al usuairo y redireccionamos.
-        flash('Taller "'.$taller->tall_nombre.'" editado con éxito.', 'success');
+        flash('Taller "'.$taller->tall_nombre.'" editado con éxito.')->success();
         return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
     }
 
@@ -237,9 +237,9 @@ class TallerController extends Controller
         {
             $taller->delete();
             // Mensaje para el usuario indicando la eliminación exitosa.
-            flash('taller "'.$taller->tall_nombre.'" eliminada con éxito.', 'success');
+            flash('taller "'.$taller->tall_nombre.'" eliminada con éxito.')->success();
         }else{
-            flash('No se pudo eliminar el archivo asociado al taller "'.$taller->taller_nombre.'"', 'danger');
+            flash('No se pudo eliminar el archivo asociado al taller "'.$taller->taller_nombre.'"')->error();
         }
         // Cualquiera que sea el caso, de éxito o error es redirigido a la vista del curso.
         return redirect()->route('profesor.curso.ver', ['id' => $curs_id]);
@@ -250,13 +250,13 @@ class TallerController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
         $taller = Taller::find($tall_id);
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
         // Verificamos que el taller no tenga asiganado ya un sub-tipo.
@@ -264,7 +264,7 @@ class TallerController extends Controller
         $tallerNomina = $taller->tallerNomina;
         $tallerKardex = $taller->tallerKardex;
         if(isset($tallerAsientoContable) || isset($tallerNomina) || isset($tallerKardex)){
-            flash('El taller con ID: '.$tall_id.' ya tiene relacionado un sub-tipo. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' ya tiene relacionado un sub-tipo. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
         }
         // Creo el taller de asiento contable en bd y lo relaciono con el taller que sería el padre
@@ -272,7 +272,7 @@ class TallerController extends Controller
             'tall_id' => $taller->tall_id
         ]);
         // Informo al usuario y redireccionamos.
-        flash('El taller "'.$taller->tall_nombre.'" ha sido marcado con el sub-tipo: "Taller Asientos Contables" con éxito.', 'success');
+        flash('El taller "'.$taller->tall_nombre.'" ha sido marcado con el sub-tipo: "Taller Asientos Contables" con éxito.')->success();
         return redirect()->route('profesor.curso.taller.ver',['curs_id'=> $curso->curs_id,'tall_id' => $taller->tall_id]);
     }
 
@@ -281,13 +281,13 @@ class TallerController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
         $taller = Taller::find($tall_id);
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
         // Verificamos que el taller no tenga asiganado ya un sub-tipo.
@@ -295,7 +295,7 @@ class TallerController extends Controller
         $tallerNomina = $taller->tallerNomina;
         $tallerKardex = $taller->tallerKardex;
         if(isset($tallerAsientoContable) || isset($tallerNomina) || isset($tallerKardex)){
-            flash('El taller con ID: '.$tall_id.' ya tiene relacionado un sub-tipo. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' ya tiene relacionado un sub-tipo. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
         }
         return View('profesor.curso.taller.nomina.crear')
@@ -308,13 +308,13 @@ class TallerController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
         $taller = Taller::find($tall_id);
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
         // Verificamos que el taller no tenga asiganado ya un sub-tipo.
@@ -322,7 +322,7 @@ class TallerController extends Controller
         $tallerNomina = $taller->tallerNomina;
         $tallerKardex = $taller->tallerKardex;
         if(isset($tallerAsientoContable) || isset($tallerNomina) || isset($tallerKardex)){
-            flash('El taller con ID: '.$tall_id.' ya tiene relacionado un sub-tipo. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' ya tiene relacionado un sub-tipo. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
         }
         // Validamos los campos del formulario.
@@ -339,7 +339,7 @@ class TallerController extends Controller
             'tall_id'                => $taller->tall_id
         ]);
         // Informo al usuario y redireccionamos.
-        flash('El taller "'.$taller->tall_nombre.'" ha sido marcado con el sub-tipo: "Taller de Nómina" con éxito.', 'success');
+        flash('El taller "'.$taller->tall_nombre.'" ha sido marcado con el sub-tipo: "Taller de Nómina" con éxito.')->success();
         return redirect()->route('profesor.curso.taller.ver',['curs_id'=> $curso->curs_id,'tall_id' => $taller->tall_id]);
     }
 
@@ -348,13 +348,13 @@ class TallerController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
         $taller = Taller::find($tall_id);
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
         // Verificamos que el taller no tenga asiganado ya un sub-tipo.
@@ -362,7 +362,7 @@ class TallerController extends Controller
         $tallerNomina = $taller->tallerNomina;
         $tallerKardex = $taller->tallerKardex;
         if(isset($tallerAsientoContable) || isset($tallerNomina) || isset($tallerKardex)){
-            flash('El taller con ID: '.$tall_id.' ya tiene relacionado un sub-tipo. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' ya tiene relacionado un sub-tipo. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
         }
         // Creo el taller de asiento contable en bd y lo relaciono con el taller que sería el padre
@@ -370,7 +370,7 @@ class TallerController extends Controller
             'tall_id' => $taller->tall_id
         ]);
         // Informo al usuario y redireccionamos.
-        flash('El taller "'.$taller->tall_nombre.'" ha sido marcado con el sub-tipo: "Taller Kardex" con éxito.', 'success');
+        flash('El taller "'.$taller->tall_nombre.'" ha sido marcado con el sub-tipo: "Taller Kardex" con éxito.')->success();
         return redirect()->route('profesor.curso.taller.ver',['curs_id'=> $curso->curs_id,'tall_id' => $taller->tall_id]);
     }
 
@@ -404,6 +404,7 @@ class TallerController extends Controller
             })
             ->editColumn('preg_tipo', '@if($preg_tipo == "unica-multiple") <span class="label label-info">{{ $preg_tipo }}</span> @elseif($preg_tipo == "abierta") <span class="label label-warning">{{ $preg_tipo }}</span> @else <span class="label label-default">{{ $preg_tipo }}</span> @endif')
             ->editColumn('preg_porcentaje','{{ $preg_porcentaje * 100 }}%')
+            ->rawColumns(['opciones','preg_tipo','preg_porcentaje'])
             ->make(true);
     }
 
@@ -422,7 +423,9 @@ class TallerController extends Controller
                         '.$csrf_field.'
                         <button type="submit" name="eliminar" class="btn btn-xs btn-danger btn-eliminar"><i class="glyphicon glyphicon-trash"></i> Eliminar</button>
                     </form>';
-            })->make(true);
+            })
+            ->rawColumns(['opciones'])
+            ->make(true);
     }
 
     /**
@@ -445,29 +448,29 @@ class TallerController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('estudiante.curso');
         }
         $taller = Taller::find($tall_id);
         // Verificamos que el taller exista en bd, si no es así informamos al usuario y redireccionamos.
         if (!isset($taller) || $taller->curs_id != $curso->curs_id) {
-            flash('El taller con ID: '.$tall_id.' no pertenece al curso seleccionado. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no pertenece al curso seleccionado. Verifique por favor.')->error();
             return redirect()->route('estudiante.curso');
         }
         //verificamos que el taller sea un taller de tipo diagnóstico o teórico
         if ( ! ($taller->tall_tipo == "diagnostico" ||  $taller->tall_tipo == "teorico") ) {
-            flash('El taller con ID: '.$tall_id.' no es un taller de tipo diagnóstico o teórico. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no es un taller de tipo diagnóstico o teórico. Verifique por favor.')->error();
             return redirect()->route('estudiante.curso');
         }
         //verificamos que el taller contenga preguntas
         if ($taller->preguntas->count() == 0) {
-            flash('El taller con ID: '.$tall_id.' no posee preguntas. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no posee preguntas. Verifique por favor.')->error();
             return $this->redireccionarSegunTipoTaller($taller, $curso);
         }
         $fechaActual = new DateTime();
         $fechaTaller = new DateTime($taller->tall_tiempo);
         if($fechaActual > $fechaTaller){
-            flash('El taller ha expirado, no se han podido guardar las respuestas.', 'danger');
+            flash('El taller ha expirado, no se han podido guardar las respuestas.')->error();
             return $this->redireccionarSegunTipoTaller($taller, $curso);
         }
         $preguntas = $taller->preguntas;
@@ -532,7 +535,7 @@ class TallerController extends Controller
                     foreach ($errores as $llave => $valor) {
                         $validator->getMessageBag()->add($llave, $valor);
                     }
-                    flash('Usted tiene respuestas incorrectas, sus respuestas aún no se han guardado, por favor intente corregir las respuestas y enviar la solución del taller nuevamente. Este es su segundo intento de solución, ya no tendrá más intentos disponibles.', 'danger');
+                    flash('Usted tiene respuestas incorrectas, sus respuestas aún no se han guardado, por favor intente corregir las respuestas y enviar la solución del taller nuevamente. Este es su segundo intento de solución, ya no tendrá más intentos disponibles.')->error();
                     return Redirect::back()->withErrors($validator)->withInput();
                 }
             }
@@ -548,10 +551,10 @@ class TallerController extends Controller
             DB::rollback();
         }
         if (!$success) {
-            flash('Ha ocurrido un error en el sistema, por favor inténtalo de nuevo.', 'danger');
+            flash('Ha ocurrido un error en el sistema, por favor inténtalo de nuevo.')->error();
             return $this->redireccionarSegunTipoTaller($taller, $curso);
         }
-        flash('Todas sus respuestas han quedado guardadas.', 'success');
+        flash('Todas sus respuestas han quedado guardadas.')->success();
         return $this->redireccionarSegunTipoTaller($taller, $curso);
     }
 
@@ -723,6 +726,7 @@ class TallerController extends Controller
                             return
                             '<a href="'.route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id' =>$curso->curs_id, 'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->id ]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
                         })
+                        ->rawColumns(['opciones'])
                         ->make(true);
     }
 
