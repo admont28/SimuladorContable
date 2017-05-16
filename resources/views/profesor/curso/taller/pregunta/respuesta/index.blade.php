@@ -22,6 +22,8 @@
 <script type="text/javascript">
     $(function() {
         $('#ver-respuestas').DataTable({
+            "dom"       : "lBfrtip",
+            "buttons"   : ['reset', 'reload'],
             "responsive": true,
             "processing": true,
             "serverSide": true,

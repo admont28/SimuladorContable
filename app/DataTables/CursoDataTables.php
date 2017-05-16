@@ -55,16 +55,14 @@ class CursoDataTables extends DataTable
         return $this->builder()
                     ->columns($this->getColumns())
                     ->ajax(route('profesor.curso'))
-                    //->addAction(['width' => '80px'])
                     ->parameters(
                         [
+                            'dom'       => 'lBfrtip',
                             "responsive"=> true,
                             "stateSave" => true,
                             "responsive" =>  true,
                             "lengthMenu" => [5, 10, 25, 50, 75, 100],
-                            "buttons" => [
-                                "print"
-                            ],
+                            "buttons" => ['reset', 'reload'],
                             "language" => [
                                 "url" => "//cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
                             ]
@@ -104,13 +102,10 @@ class CursoDataTables extends DataTable
                 'data' => 'opciones',
                 'searchable' => false,
                 'orderable'=> false,
+                'exportable' => false,
+                'printable' => false,
                 'width' => '20%'
             ]
-            // add your columns
-            //'name',
-            //'Introducción',
-            //'created_at',
-            //2'updated_at',
         ];
     }
 

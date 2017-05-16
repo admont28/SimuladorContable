@@ -19,6 +19,8 @@
     <script type="text/javascript">
         $(function() {
             $('#usuario-table').DataTable({
+                "dom"       : "lBfrtip",
+                "buttons"   : ['reset', 'reload'],
                 "responsive": true,
                 "processing": true,
                 "serverSide": true,
