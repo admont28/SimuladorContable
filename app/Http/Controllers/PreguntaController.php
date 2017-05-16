@@ -25,18 +25,18 @@ class PreguntaController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
         $taller = Taller::find($tall_id);
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
         // Verificamos que el taller no tenga respuestas de usuarios, debido a que estos quedarían sin respuestas a las nuevas preguntas.
         if ($taller->usuariosPorTaller()->isNotEmpty()) {
-            flash('No se pueden adicionar más preguntas al taller porque ya existen respuestas almacenadas de usuarios.', 'danger');
+            flash('No se pueden adicionar más preguntas al taller porque ya existen respuestas almacenadas de usuarios.')->error();
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
         }
         // Obtengo las opciones disponbiles en bd en el campo tall_tipo de tipo enum.
@@ -59,18 +59,18 @@ class PreguntaController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
         $taller = Taller::find($tall_id);
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
         // Verificamos que el taller no tenga respuestas de usuarios, debido a que estos quedarían sin respuestas a las nuevas preguntas.
         if ($taller->usuariosPorTaller()->isNotEmpty()) {
-            flash('No se pueden adicionar más preguntas al taller porque ya existen respuestas almacenadas de usuarios.', 'danger');
+            flash('No se pueden adicionar más preguntas al taller porque ya existen respuestas almacenadas de usuarios.')->error();
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
         }
         // Obtengo las opciones disponbiles en bd en el campo preg_tipo de tipo enum.
@@ -103,19 +103,19 @@ class PreguntaController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
         $taller = Taller::find($tall_id);
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
         // Verificamos que exista la pregunta en bd, si no es así, informamos al usuario y redireccionamos.
         $pregunta = Pregunta::find($preg_id);
         if (!isset($pregunta)) {
-            flash('La pregunta con ID: '.$preg_id.' no existe. Verifique por favor.', 'danger');
+            flash('La pregunta con ID: '.$preg_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
         }
         return view('profesor.curso.taller.pregunta.ver_pregunta')
@@ -135,19 +135,19 @@ class PreguntaController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
         $taller = Taller::find($tall_id);
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
         // Verificamos que exista la pregunta en bd, si no es así, informamos al usuario y redireccionamos.
         $pregunta = Pregunta::find($preg_id);
         if (!isset($pregunta)) {
-            flash('La pregunta con ID: '.$preg_id.' no existe. Verifique por favor.', 'danger');
+            flash('La pregunta con ID: '.$preg_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
         }
         // Obtengo las opciones disponbiles en bd en el campo tall_tipo de tipo enum.
@@ -174,19 +174,19 @@ class PreguntaController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
         $taller = Taller::find($tall_id);
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
         // Verificamos que exista la pregunta en bd, si no es así, informamos al usuario y redireccionamos.
         $pregunta = Pregunta::find($preg_id);
         if (!isset($pregunta)) {
-            flash('La pregunta con ID: '.$preg_id.' no existe. Verifique por favor.', 'danger');
+            flash('La pregunta con ID: '.$preg_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
         }
         Validator::make($request->all(), [
@@ -211,23 +211,23 @@ class PreguntaController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso');
         }
         // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
         $taller = Taller::find($tall_id);
         if (!isset($taller)) {
-            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
         // Verificamos que exista la pregunta en bd, si no es así, informamos al usuario y redireccionamos.
         $pregunta = Pregunta::find($preg_id);
         if (!isset($pregunta)) {
-            flash('La pregunta con ID: '.$preg_id.' no existe. Verifique por favor.', 'danger');
+            flash('La pregunta con ID: '.$preg_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
         }
         if($pregunta->preg_tipo == 'unica-multiple' && ! $pregunta->respuestasMultiplesUnicas->isEmpty()){
-            flash('Pregunta: "'.substr($pregunta->preg_texto,0,80).'..." no puede ser eliminada, debido a que posee respuestas asociadas.', 'danger');
+            flash('Pregunta: "'.substr($pregunta->preg_texto,0,80).'..." no puede ser eliminada, debido a que posee respuestas asociadas.')->error();
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
         }
         $pregunta->delete();
@@ -267,23 +267,23 @@ class PreguntaController extends Controller
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
         if (!isset($curso)) {
-            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.', 'danger');
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('estudiante.curso');
         }
         $taller = Taller::find($tall_id);
         // Verificamos que el taller exista en bd, si no es así informamos al usuario y redireccionamos.
         if (!isset($taller) || $taller->curs_id != $curso->curs_id) {
-            flash('El taller con ID: '.$tall_id.' no pertenece al curso seleccionado. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no pertenece al curso seleccionado. Verifique por favor.')->error();
             return redirect()->route('estudiante.curso');
         }
         //verificamos que el taller sea un taller de tipo diagnóstico o teórico
         if ( ! ($taller->tall_tipo == "diagnostico" ||  $taller->tall_tipo == "teorico") ) {
-            flash('El taller con ID: '.$tall_id.' no es un taller de tipo diagnóstico o teórico. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no es un taller de tipo diagnóstico o teórico. Verifique por favor.')->error();
             return redirect()->route('estudiante.curso');
         }
         //verificamos que el taller contenga preguntas
         if ($taller->preguntas->isEmpty()) {
-            flash('El taller con ID: '.$tall_id.' no posee preguntas. Verifique por favor.', 'danger');
+            flash('El taller con ID: '.$tall_id.' no posee preguntas. Verifique por favor.')->error();
             return $this->redireccionarSegunTipoTaller($taller, $curso);
         }
         $preguntas = $taller->preguntas;
@@ -297,7 +297,7 @@ class PreguntaController extends Controller
         }else{
             $intentos = $intentoTaller->inta_cantidad + 1;
             if($intentos >= 3){
-                flash('Ha superado el número de intentos permitidos para este taller.', 'danger');
+                flash('Ha superado el número de intentos permitidos para este taller.')->error();
                 return $this->redireccionarSegunTipoTaller($taller, $curso);
             }else{
                 DB::table('IntentoTaller')->where('inta_id', $intentoTaller->inta_id)->increment('inta_cantidad');
