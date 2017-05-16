@@ -33,12 +33,7 @@
                         @yield('title', 'Título por defecto.')
                     </h1>
                 </div>
-                @if (session()->has('flash_notification.message'))
-                    <div class="alert alert-{{ session('flash_notification.level') }}">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        {!! session('flash_notification.message') !!}
-                    </div>
-                @endif
+                @include('flash::message')
             </div>
             @yield('content', '')
             <br>
@@ -81,6 +76,9 @@
                 });
                 $("@yield('active','')").addClass('active');
             });
+        </script>
+        <script>
+            $('#flash-overlay-modal').modal();
         </script>
         @stack('scripts')
     </body>
