@@ -2,7 +2,7 @@
 
 @section('title-head', 'Calificar respuesta de un usuario')
 
-@section('title', 'Calificar respuesta para el usuario: <strong>'.$usuario->usua_nombre.'</strong>')
+@section('title', 'Calificar respuesta para el usuario: <strong>'.$usuario->name.'</strong>')
 
 @section('active','#profesor-curso')
 

@@ -2,7 +2,7 @@
 
 @section('title-head', 'Calificaciones de un usuario')
 
-@section('title', 'Calificaciones del usuario: <strong>'.$usuario->usua_nombre.'</strong>')
+@section('title', 'Calificaciones del usuario: <strong>'.$usuario->name.'</strong>')
 
 @section('active','#profesor-curso')
 
