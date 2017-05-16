@@ -68,7 +68,7 @@ class MateriaController extends Controller
             'curs_id'=> $curs_id
         ]);
         // Informo al usuario y redireccionamos.
-        flash('La materia "'.$request['mate_nombre'].'" ha sido creada con éxito.','success');
+        flash('La materia "'.$request['mate_nombre'].'" ha sido creada con éxito.')->success();
         return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
     }
 
@@ -174,7 +174,7 @@ class MateriaController extends Controller
         // Guardo los cambios en el modelo.
         $materia->save();
         // Informo al usuairo y redireccionamos.
-        flash('Materia "'.$materia->mate_nombre.'" editada con éxito.', 'success');
+        flash('Materia "'.$materia->mate_nombre.'" editada con éxito.')->success();
         return redirect()->route('profesor.curso.ver', ['id' => $curs_id]);
     }
 
@@ -205,7 +205,7 @@ class MateriaController extends Controller
             // Si se eliminó el archivo o no existía en el disco procedo a eliminar la materia.
             $materia->delete();
             // Mensaje para el usuario indicando la eliminación exitosa.
-            flash('Materia "'.$materia->mate_nombre.'" eliminada con éxito.', 'success');
+            flash('Materia "'.$materia->mate_nombre.'" eliminada con éxito.')->success();
         }
         // Cualquiera que sea el caso, de éxito o error es redirigido a la vista del curso.
         return redirect()->route('profesor.curso.ver', ['id' => $curs_id]);

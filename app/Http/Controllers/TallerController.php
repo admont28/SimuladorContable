@@ -98,7 +98,7 @@ class TallerController extends Controller
         ]);
         Storage::disk('talleres')->makeDirectory($taller->tall_id);
         // Informo al usuario y redireccionamos.
-        flash('El taller "'.$request['nombre_taller'].'" ha sido creado con éxito.', 'success');
+        flash('El taller "'.$request['nombre_taller'].'" ha sido creado con éxito.')->success();
         return redirect()->route('profesor.curso.ver',['curs_id'=> $curso->curs_id]);
     }
 
@@ -218,7 +218,7 @@ class TallerController extends Controller
         // Guardo los cambios en el modelo.
         $taller->save();
         // Informo al usuairo y redireccionamos.
-        flash('Taller "'.$taller->tall_nombre.'" editado con éxito.', 'success');
+        flash('Taller "'.$taller->tall_nombre.'" editado con éxito.')->success();
         return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
     }
 
@@ -237,7 +237,7 @@ class TallerController extends Controller
         {
             $taller->delete();
             // Mensaje para el usuario indicando la eliminación exitosa.
-            flash('taller "'.$taller->tall_nombre.'" eliminada con éxito.', 'success');
+            flash('taller "'.$taller->tall_nombre.'" eliminada con éxito.')->success();
         }else{
             flash('No se pudo eliminar el archivo asociado al taller "'.$taller->taller_nombre.'"')->error();
         }
@@ -272,7 +272,7 @@ class TallerController extends Controller
             'tall_id' => $taller->tall_id
         ]);
         // Informo al usuario y redireccionamos.
-        flash('El taller "'.$taller->tall_nombre.'" ha sido marcado con el sub-tipo: "Taller Asientos Contables" con éxito.', 'success');
+        flash('El taller "'.$taller->tall_nombre.'" ha sido marcado con el sub-tipo: "Taller Asientos Contables" con éxito.')->success();
         return redirect()->route('profesor.curso.taller.ver',['curs_id'=> $curso->curs_id,'tall_id' => $taller->tall_id]);
     }
 
@@ -339,7 +339,7 @@ class TallerController extends Controller
             'tall_id'                => $taller->tall_id
         ]);
         // Informo al usuario y redireccionamos.
-        flash('El taller "'.$taller->tall_nombre.'" ha sido marcado con el sub-tipo: "Taller de Nómina" con éxito.', 'success');
+        flash('El taller "'.$taller->tall_nombre.'" ha sido marcado con el sub-tipo: "Taller de Nómina" con éxito.')->success();
         return redirect()->route('profesor.curso.taller.ver',['curs_id'=> $curso->curs_id,'tall_id' => $taller->tall_id]);
     }
 
@@ -370,7 +370,7 @@ class TallerController extends Controller
             'tall_id' => $taller->tall_id
         ]);
         // Informo al usuario y redireccionamos.
-        flash('El taller "'.$taller->tall_nombre.'" ha sido marcado con el sub-tipo: "Taller Kardex" con éxito.', 'success');
+        flash('El taller "'.$taller->tall_nombre.'" ha sido marcado con el sub-tipo: "Taller Kardex" con éxito.')->success();
         return redirect()->route('profesor.curso.taller.ver',['curs_id'=> $curso->curs_id,'tall_id' => $taller->tall_id]);
     }
 
@@ -551,7 +551,7 @@ class TallerController extends Controller
             flash('Ha ocurrido un error en el sistema, por favor inténtalo de nuevo.')->error();
             return $this->redireccionarSegunTipoTaller($taller, $curso);
         }
-        flash('Todas sus respuestas han quedado guardadas.', 'success');
+        flash('Todas sus respuestas han quedado guardadas.')->success();
         return $this->redireccionarSegunTipoTaller($taller, $curso);
     }
 

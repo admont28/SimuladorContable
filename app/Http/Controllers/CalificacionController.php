@@ -89,7 +89,7 @@ class CalificacionController extends Controller
             'cali_calificacion'=>$calificacion,
             'cali_ponderado'=>$cali_ponderado
         ]);
-        flash('el taller "'.$taller->tall_nombre.'" se calificó con exito.', 'success');
+        flash('el taller "'.$taller->tall_nombre.'" se calificó con exito.')->success();
         return redirect()->route('profesor.curso.taller.ver',['curs_id'=> $curs_id,'tall_id'=>$taller->tall_id]);
     }
 
@@ -131,7 +131,7 @@ class CalificacionController extends Controller
             'cali_calificacion'=>$calificacion,
             'cali_ponderado'=>$cali_ponderado
         ]);
-        flash('el taller "'.$taller->tall_nombre.'" se calificó con exito.', 'success');
+        flash('el taller "'.$taller->tall_nombre.'" se calificó con exito.')->success();
         return redirect()->route('profesor.curso.taller.ver',['curs_id'=> $curs_id,'tall_id'=>$taller->tall_id]);
     }
 
@@ -287,7 +287,7 @@ class CalificacionController extends Controller
             'cali_calificacion'=> $request['calificacion_pregunta'],
             'cali_ponderado'=>$request['calificacion_pregunta'] * $pregunta->preg_porcentaje
         ]);
-        flash('La calificación se ha creado con éxito.','success' );
+        flash('La calificación se ha creado con éxito.')->success();
         return redirect()->route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->id]);
     }
 

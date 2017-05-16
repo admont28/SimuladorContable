@@ -135,7 +135,7 @@ class RespuestaController extends Controller
             'remu_correcta'=> isset($request['correcta_respuesta']) ? '1' : '0',
             'preg_id'=>$preg_id
         ]);
-        flash('Respuesta "'.$request['texto_respuesta'].'" creada con éxito.', 'success');
+        flash('Respuesta "'.$request['texto_respuesta'].'" creada con éxito.')->success();
         return redirect()->route('profesor.curso.taller.pregunta.ver',['curs_id'=> $curs_id,'tall_id'=>$taller->tall_id, 'preg_id' => $preg_id]);
     }
 
@@ -239,7 +239,7 @@ class RespuestaController extends Controller
         $respuestaMultipleUnica->remu_texto = $request['texto_respuesta'];
         $respuestaMultipleUnica->remu_correcta = isset($request['correcta_respuesta']) ? '1' : '0';
         $respuestaMultipleUnica->save();
-        flash('Respuesta "'.$respuestaMultipleUnica->remu_texto.'" editada con éxito.', 'success');
+        flash('Respuesta "'.$respuestaMultipleUnica->remu_texto.'" editada con éxito.')->success();
         return redirect()->route('profesor.curso.taller.pregunta.ver',['curs_id'=> $curs_id,'tall_id'=>$taller->tall_id, 'preg_id' => $preg_id]);
     }
 
@@ -281,7 +281,7 @@ class RespuestaController extends Controller
             return redirect()->route('profesor.curso.taller.pregunta.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id, 'preg_id' => $pregunta->preg_id]);
         }
         $respuestaMultipleUnica->delete();
-        flash('Respuesta "'.$respuestaMultipleUnica->remu_texto.'" ha sido eliminada con éxito.', 'success');
+        flash('Respuesta "'.$respuestaMultipleUnica->remu_texto.'" ha sido eliminada con éxito.')->success();
         return redirect()->route('profesor.curso.taller.pregunta.ver',['curs_id'=> $curs_id,'tall_id'=>$taller->tall_id, 'preg_id' => $preg_id]);
     }
 

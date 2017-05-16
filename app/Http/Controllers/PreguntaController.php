@@ -88,7 +88,7 @@ class PreguntaController extends Controller
             'preg_porcentaje'=> $request['porcentaje_pregunta']/100,
             'tall_id'=>$tall_id
         ]);
-        flash('Pregunta "'.$request['texto_pregunta'].'" creada con éxito.', 'success');
+        flash('Pregunta "'.$request['texto_pregunta'].'" creada con éxito.')->success();
         return redirect()->route('profesor.curso.taller.ver',['curs_id'=> $curs_id,'tall_id'=>$taller->tall_id]);
     }
 
@@ -196,7 +196,7 @@ class PreguntaController extends Controller
         $pregunta->preg_texto = $request->input('texto_pregunta');
         $pregunta->preg_porcentaje = $request->input('porcentaje_pregunta')/100;
         $pregunta->save();
-        flash('La pregunta "'.substr($pregunta->preg_texto, 0, 80).'..." ha sido editada con éxito.', 'success');
+        flash('La pregunta "'.substr($pregunta->preg_texto, 0, 80).'..." ha sido editada con éxito.')->success();
         return redirect()->route('profesor.curso.taller.ver',['curs_id'=> $curs_id, 'tall_id'=> $tall_id]);
     }
 
@@ -231,7 +231,7 @@ class PreguntaController extends Controller
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
         }
         $pregunta->delete();
-        flash('Pregunta: "'.substr($pregunta->preg_texto,0,80).'..." eliminada con éxito.', 'success');
+        flash('Pregunta: "'.substr($pregunta->preg_texto,0,80).'..." eliminada con éxito.')->success();
         return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
 
     }

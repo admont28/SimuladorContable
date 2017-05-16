@@ -133,7 +133,7 @@ class CursoController extends Controller
         $curso->curs_nombre = $request->input('nombre_curso');
         $curso->curs_introduccion = $request->input('introduccion_curso');
         $curso->save();
-        flash('Curso "'.$curso->curs_nombre.'" editado con éxito.', 'success');
+        flash('Curso "'.$curso->curs_nombre.'" editado con éxito.')->success();
         return redirect()->route('profesor.curso');
     }
 
@@ -158,7 +158,7 @@ class CursoController extends Controller
             return redirect()->route('profesor.curso');
         }
         $respuesta = $curso->delete();
-        flash('Curso "'.$curso->curs_nombre.'" eliminado con éxito.', 'success');
+        flash('Curso "'.$curso->curs_nombre.'" eliminado con éxito.')->success();
         return redirect()->route('profesor.curso');
     }
 

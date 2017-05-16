@@ -84,7 +84,7 @@ class PucController extends Controller
             }
         });
         // Informo al usuario y redireccionamos.
-        flash('El archivo PUC "'.$file->getClientOriginalName().'" ha sido importado con éxito.','success');
+        flash('El archivo PUC "'.$file->getClientOriginalName().'" ha sido importado con éxito.')->success();
         return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
     }
 
@@ -111,7 +111,7 @@ class PucController extends Controller
         }
         DB::table('Puc')->insert($valores);
         // Informo al usuario y redireccionamos.
-        flash('El PUC Comercial se ha asociado al curso con éxito al curso.','success');
+        flash('El PUC Comercial se ha asociado al curso con éxito al curso.')->success();
         return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
     }
 
