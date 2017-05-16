@@ -10,7 +10,6 @@ use App\Taller;
 use App\Pregunta;
 use App\Puc;
 use App\DataTables\CursoDataTables;
-use App\DataTables\MateriaDataTables;
 use Validator;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Auth;

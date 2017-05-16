@@ -57,8 +57,10 @@ class CursoDataTables extends DataTable
                     //->addAction(['width' => '80px'])
                     ->parameters(
                         [
+                            "responsive"=> true,
                             "stateSave" => true,
                             "responsive" =>  true,
+                            "lengthMenu" => [5, 10, 25, 50, 75, 100],
                             "buttons" => [
                                 "print"
                             ],
@@ -81,19 +83,19 @@ class CursoDataTables extends DataTable
                 'name' => 'curs_id',
                 'title' => 'ID',
                 'data' => 'curs_id',
-                'width' => '10px'
+                'width' => '5%'
             ],
             [
                 'name' => 'curs_nombre',
                 'title' => 'Nombre del curso',
                 'data' => 'curs_nombre',
-                'width' => '30px'
+                'width' => '20%'
             ],
             [
                 'name' => 'curs_introduccion',
                 'title' => 'Introducción del curso',
                 'data' => 'curs_introduccion',
-                'width' => '30px'
+                'width' => '55%'
             ],
             [
                 'name' => 'opciones',
@@ -101,7 +103,7 @@ class CursoDataTables extends DataTable
                 'data' => 'opciones',
                 'searchable' => false,
                 'orderable'=> false,
-                'width' => '10px'
+                'width' => '20%'
             ]
             // add your columns
             //'name',
