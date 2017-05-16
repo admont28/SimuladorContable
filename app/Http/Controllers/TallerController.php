@@ -404,6 +404,7 @@ class TallerController extends Controller
             })
             ->editColumn('preg_tipo', '@if($preg_tipo == "unica-multiple") <span class="label label-info">{{ $preg_tipo }}</span> @elseif($preg_tipo == "abierta") <span class="label label-warning">{{ $preg_tipo }}</span> @else <span class="label label-default">{{ $preg_tipo }}</span> @endif')
             ->editColumn('preg_porcentaje','{{ $preg_porcentaje * 100 }}%')
+            ->rawColumns(['opciones','preg_tipo','preg_porcentaje'])
             ->make(true);
     }
 
@@ -422,7 +423,9 @@ class TallerController extends Controller
                         '.$csrf_field.'
                         <button type="submit" name="eliminar" class="btn btn-xs btn-danger btn-eliminar"><i class="glyphicon glyphicon-trash"></i> Eliminar</button>
                     </form>';
-            })->make(true);
+            })
+            ->rawColumns(['opciones'])
+            ->make(true);
     }
 
     /**
@@ -723,6 +726,7 @@ class TallerController extends Controller
                             return
                             '<a href="'.route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id' =>$curso->curs_id, 'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->id ]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
                         })
+                        ->rawColumns(['opciones'])
                         ->make(true);
     }
 

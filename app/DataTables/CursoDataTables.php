@@ -29,6 +29,7 @@ class CursoDataTables extends DataTable
                 </form>';
             })
             //->addColumn('action', 'path.to.action.view')
+            ->rawColumns(['opciones'])
             ->make(true);
     }
 

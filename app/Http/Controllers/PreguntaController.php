@@ -253,6 +253,7 @@ class PreguntaController extends Controller
                     </form>';
             })
             ->editColumn('remu_correcta', '@if($remu_correcta == 1) <span class="label label-success">SI</span> @else <span class="label label-danger">NO</span> @endif')
+            ->rawColumns(['opciones','remu_correcta'])
             ->make(true);
     }
 

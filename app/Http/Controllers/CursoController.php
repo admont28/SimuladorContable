@@ -180,6 +180,7 @@ class CursoController extends Controller
                         })
                         ->editColumn('mate_rutaarchivo', '<a href="{{$mate_rutaarchivo}}">{{$mate_nombrearchivo}}</a>')
                         ->editColumn('mate_tema','<div class="inner-cell">{{$mate_tema}}</div>')
+                        ->rawColumns(['opciones','mate_rutaarchivo','mate_tema'])
                         ->make(true);
     }
 
@@ -297,6 +298,7 @@ class CursoController extends Controller
                        })
                        ->editColumn('tall_tipo', '@if($tall_tipo == "teorico") <span class="label label-info">{{ $tall_tipo }}</span> @elseif($tall_tipo == "diagnostico") <span class="label label-warning">{{ $tall_tipo }}</span> @else <span class="label label-default">{{ $tall_tipo }}</span> @endif')
                        ->editColumn('tall_rutaarchivo', '<a href="{{$tall_rutaarchivo}}">{{$tall_nombrearchivo}}</a>')
+                       ->rawColumns(['opciones','tall_tipo','tall_rutaarchivo'])
                        ->make(true);
     }
 
@@ -312,7 +314,9 @@ class CursoController extends Controller
                 return
                 '<a href="'.route('estudiante.curso.ver.introduccion',['curs_id' => $curso->curs_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
                //<a href="'.route('profesor.curso.tema.ver', ['curs_id' => $curso->curs_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-zoom-out"></i> Ver temas</a>';
-           })->make(true);
+           })
+           ->rawColumns(['opciones'])
+           ->make(true);
     }
 
     /**
