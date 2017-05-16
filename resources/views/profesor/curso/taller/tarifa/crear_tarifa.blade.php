@@ -2,7 +2,9 @@
 
 @section('title-head', 'Crear Tarifa')
 
-@section('title', 'Crear tarifa para el taller: <strong>'.$taller->tall_nombre.'</strong>')
+@section('title')
+    {!! 'Crear tarifa para el taller: <strong>'.$taller->tall_nombre.'</strong>' !!}
+@endsection
 
 @section('active','#profesor-curso')
 

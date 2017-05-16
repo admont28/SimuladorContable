@@ -2,7 +2,9 @@
 
 @section('title-head', 'Editar curso')
 
-@section('title', 'Editar curso: <strong>'.$curso->curs_nombre.'</strong>')
+@section('title')
+    {!! 'Editar curso: <strong>'.$curso->curs_nombre.'</strong>' !!}
+@endsection
 
 @section('active','#profesor-curso')
 
