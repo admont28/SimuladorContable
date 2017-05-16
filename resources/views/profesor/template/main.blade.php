@@ -1,19 +1,27 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title-head', 'Título por defecto.') | Simulador Contable</title>
-    <link rel="stylesheet" href="{{ asset('plugins/bootstrap/css/bootstrap-lumen.min.css') }}" media="screen" title="no title">
-    <link rel="stylesheet" href="{{ asset('css/main.css') }}" media="screen" title="no title">
-    <link rel="stylesheet" href="{{ asset('plugins/datetimepicker/css/bootstrap-datetimepicker.min.css') }}"  media="screen" title="no title">
-    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/DataTables-1.10.13/css/dataTables.bootstrap.min.css') }}"/>
-    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/Buttons-1.2.4/css/buttons.bootstrap.min.css') }}"/>
-    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/Responsive-2.1.1/css/responsive.bootstrap.min.css') }} "/>
-    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/sweetalert2/css/sweetalert2.min.css') }} "/>
-    @yield('styelsheet')
-  </head>
-  <body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>@yield('title-head', 'Título por defecto.') | Simulador Contable</title>
+        <!-- CSRF Token -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <link rel="stylesheet" href="{{ asset('plugins/bootstrap/css/bootstrap-lumen.min.css') }}" media="screen" title="no title">
+        <link rel="stylesheet" href="{{ asset('css/main.css') }}" media="screen" title="no title">
+        <link rel="stylesheet" href="{{ asset('plugins/datetimepicker/css/bootstrap-datetimepicker.min.css') }}"  media="screen" title="no title">
+        <link rel="stylesheet" type="text/css" href="{{ asset('plugins/DataTables-1.10.13/css/dataTables.bootstrap.min.css') }}"/>
+        <link rel="stylesheet" type="text/css" href="{{ asset('plugins/Buttons-1.2.4/css/buttons.bootstrap.min.css') }}"/>
+        <link rel="stylesheet" type="text/css" href="{{ asset('plugins/Responsive-2.1.1/css/responsive.bootstrap.min.css') }} "/>
+        <link rel="stylesheet" type="text/css" href="{{ asset('plugins/sweetalert2/css/sweetalert2.min.css') }} "/>
+        @yield('styelsheet')
+        <!-- Scripts -->
+        <script>
+            window.Laravel = <?php echo json_encode([
+                'csrfToken' => csrf_token(),
+            ]); ?>
+        </script>
+    </head>
+    <body>
         @include('profesor.template.partials.nav')
         <!-- Begin page content -->
         <div class="container">
@@ -69,6 +77,6 @@
                 $("@yield('active','')").addClass('active');
             });
         </script>
-    @stack('scripts')
-  </body>
+        @stack('scripts')
+    </body>
 </html>
