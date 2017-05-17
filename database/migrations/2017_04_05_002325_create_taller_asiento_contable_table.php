@@ -18,7 +18,7 @@ class CreateTallerAsientoContableTable extends Migration
             $table->integer('tall_id')->unsigned();
             $table->foreign('tall_id')->references('tall_id')->on('Taller');
             $table->unique('tall_id');
-            $table->integer('tall_cantidadtablas');
+            $table->integer('taac_cantidadtablas');
             $table->timestamp('taac_fechacreacion')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('taac_fechamodificacion')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
