@@ -54,7 +54,7 @@
             <div class="form-group">
                 <div class="col-lg-10 col-lg-offset-2">
                     <a href="{{ route('profesor.curso.taller.ver',['curs_id' => $curso->curs_id, 'tall_id' => $taller->tall_id]) }}"  class="btn btn-default">Cancelar</a>
-                    <button type="submit" class="btn btn-primary btn-enviar">Crear Taller de Asientos Contables</button>
+                    <button type="submit" class="btn btn-primary btn-enviar">Crear Taller de Nómina</button>
                 </div>
             </div>
         </form>
