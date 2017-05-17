@@ -125,10 +125,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-12 text-center">
-                    <form class="visible-lg-inline-block visible-sm-inline-block visible-md-inline-block visible-xs-inline-block" action="{{ route('profesor.curso.taller.crear.tallerasientocontable.post', ['curs_id' => $curso->curs_id, 'tall_id' => $taller->tall_id]) }}" method="post" id="form-tallerasientocontable">
-                        {{ csrf_field() }}
-                        <button type="submit" class="btn btn-info" id="btn-taller-asiento-contable">Taller para asientos contables</button>
-                    </form>
+                    <a href="{{ route('profesor.curso.taller.crear.tallerasientocontable', ['curs_id'=>$curso->curs_id,'tall_id' => $taller->tall_id]) }}" class="btn btn-info">Taller para asientos contables</a>
                     <a href="{{ route('profesor.curso.taller.crear.tallernomina', ['curs_id'=>$curso->curs_id,'tall_id' => $taller->tall_id]) }}" class="btn btn-success">Taller de nómina</a>
                     <form class="visible-lg-inline-block visible-sm-inline-block visible-md-inline-block visible-xs-inline-block" action="{{ route('profesor.curso.taller.crear.tallerkardex.post', ['curs_id' => $curso->curs_id, 'tall_id' => $taller->tall_id]) }}" method="post" id="form-tallerkardex">
                         {{ csrf_field() }}
@@ -163,30 +160,6 @@
 @push('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
-            /**
-             * Función para pedir confirmación del usuario antes de eliminar un elemento de la tabla.
-             */
-            $(document).on('click', '#btn-taller-asiento-contable', function(event) {
-                event.preventDefault();
-                var form = $('#form-tallerasientocontable');
-                swal({
-                    title: '¿Está seguro de esta acción?',
-                    text: "Al marcar el taller con el sub-tipo: Taller Asientos Contables no podrá deshacer la acción. Por favor confirme.",
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Si, continuar',
-                    cancelButtonText: 'No, cancelar'
-                }).then(function (option) {
-                    if(option === true){
-                        form.submit();
-                        return true;
-                    }else{
-                        return false;
-                    }
-                })
-            });
             $(document).on('click', '#btn-taller-kardex', function(event) {
                 event.preventDefault();
                 var form = $('#form-tallerkardex');
