@@ -70,6 +70,15 @@
                 </div>
             </div>
             <br>
+            <div class="row">
+                <div class="col-lg-3">
+                    <strong>Cantidad de tablas a generar:</strong>
+                </div>
+                <div class="col-lg-9 text-justify">
+                    {{ $taller->tallerAsientoContable->taac_cantidadtablas }}
+                </div>
+            </div>
+            <br>
         @elseif (isset($taller->tallerNomina))
             <div class="row">
                 <div class="col-lg-3">
