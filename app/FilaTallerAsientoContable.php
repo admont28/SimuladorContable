@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RespuestaTallerAsientoContable extends Model
+class FilaTallerAsientoContable extends Model
 {
     /**
      * El nombre de la tabla asociada al modelo.
      *
      * @var string
      */
-    protected $table = 'RespuestaTallerAsientoContable';
+    protected $table = 'FilaTallerAsientoContable';
 
     /**
      * El nombre de la llave primaria de la tabla.
@@ -19,7 +19,7 @@ class RespuestaTallerAsientoContable extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'rtac_id';
+    protected $primaryKey = 'ftac_id';
 
     /**
      * El nombre del campo equivalente a CREATE_AT en la base de datos.
@@ -27,7 +27,7 @@ class RespuestaTallerAsientoContable extends Model
      *
      * @var string
      */
-    const CREATED_AT = 'rtac_fechacreacion';
+    const CREATED_AT = 'ftac_fechacreacion';
 
     /**
      * El nombre del campo equivalente a UPDATED_AT en la base de datos.
@@ -35,7 +35,7 @@ class RespuestaTallerAsientoContable extends Model
      *
      * @var string
      */
-    const UPDATED_AT = 'rtac_fechamodificacion';
+    const UPDATED_AT = 'ftac_fechamodificacion';
 
     /**
      * The attributes that are mass assignable.
@@ -43,7 +43,7 @@ class RespuestaTallerAsientoContable extends Model
      * @var array
      */
     protected $fillable = [
-        'rtac_id', 'taac_id', 'usua_id', 'rtac_numerotabla'
+        'ftac_id', 'rtac_id', 'puc_id', 'ftac_valordebito', 'ftac_valorcredito','ftac_fila'
     ];
 
     /**
@@ -56,16 +56,15 @@ class RespuestaTallerAsientoContable extends Model
     ];
 
     /**
-     * Obtener el taller de asientos contables dueño de la respuesta.
+     * Obtener la respuesta taller de asientos contables dueño de la fila.
      */
-    public function tallerAsientoContable()
+    public function respuestaTallerAsientoContable()
     {
-        return $this->belongsTo('App\TallerAsientoContable','taac_id');
+        return $this->belongsTo('App\RespuestaTallerAsientoContable','rtac_id');
     }
 
-    public function usuario()
+    public function puc()
     {
-        return $this->belongsTo('App\User','usua_id');
+        return $this->belongsTo('App\Puc','puc_id');
     }
-
 }

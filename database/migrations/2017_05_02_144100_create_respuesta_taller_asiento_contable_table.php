@@ -15,15 +15,11 @@ class CreateRespuestaTallerAsientoContableTable extends Migration
     {
         Schema::create('RespuestaTallerAsientoContable', function (Blueprint $table) {
             $table->increments('rtac_id');
-            $table->integer('taac_id')->unsigned();
-            $table->foreign('taac_id')->references('taac_id')->on('TallerAsientoContable');
             $table->integer('usua_id')->unsigned();
             $table->foreign('usua_id')->references('id')->on('Users');
-            $table->integer('puc_id')->unsigned();
-            $table->foreign('puc_id')->references('puc_id')->on('Puc');
-            $table->integer('rtac_valordebito');
-            $table->integer('rtac_valorcredito');
-            $table->integer('rtac_fila');
+            $table->integer('taac_id')->unsigned();
+            $table->foreign('taac_id')->references('taac_id')->on('TallerAsientoContable');
+            $table->integer('rtac_numerotabla');
             $table->timestamp('rtac_fechacreacion')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('rtac_fechamodificacion')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
