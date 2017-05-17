@@ -55,8 +55,8 @@
         });
         $('.tab-content:visible').find('.adicionar-fila-asiento-contable').click(function(event) {
             event.preventDefault();
-            console.log(this);
-            var tabla = $(this).parents('div.tab-pane').find('table.taller-asiento-contable');
+            var iteracion = $(this).data('iteracion');
+            var tabla = $(this).parents('div.tab-pane').find('table#taller-asiento-contable-'+iteracion);
             var filaSumasIguales = tabla.find("tbody").children().last();
             var primerFilaClonada = tabla.find("tbody").children().first().clone(true);
             var botonEliminarClonado = tabla.find("tbody > tr > td > button.eliminar-fila").first().clone(true);

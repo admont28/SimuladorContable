@@ -98,7 +98,9 @@
                             </div>
                         @endif
                         @if (isset($tallerPractico->tallerAsientoContable))
-                            @include('estudiante.curso.taller.asientocontable.tabla')
+                            @for ($i = 0; $i < $tallerPractico->tallerAsientoContable->taac_cantidadtablas; $i++)
+                                @include('estudiante.curso.taller.asientocontable.tabla', ['iteracion' => $i])
+                            @endfor
                         @elseif(isset($tallerPractico->tallerNomina))
                             @include('estudiante.curso.taller.nomina.tabla')
                         @elseif (isset($tallerPractico->tallerKardex))

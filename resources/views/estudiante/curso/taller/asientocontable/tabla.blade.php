@@ -1,8 +1,9 @@
+<br>
 <div class="row">
-    <table class="table table-striped table-bordered table-hover taller-asiento-contable" id="taller-asiento-contable">
+    <table class="table table-striped table-bordered table-hover taller-asiento-contable" id="taller-asiento-contable-{{ $iteracion }}" data-iteracion="{{ $iteracion }}">
         <thead>
             <tr>
-                <td colspan="5" class="text-center"><strong>CONTABILIZACIÓN DE LA PROVISIÓN</strong></td>
+                <td colspan="5" class="text-center"><strong>CONTABILIZACIÓN DE LA PROVISIÓN - TABLA {{ $iteracion + 1 }}</strong></td>
             </tr>
             <tr>
                 <td class="text-center" width="20%"><strong>CÓDIGO</strong></td>
@@ -52,20 +53,14 @@
                     <td class="text-center total_credito" id="total_credito">{{ $tallerPractico->tallerAsientoContable->calcularTotalCredito() }}</td>
                     <td class="text-center"></td>
                 </tr>
-                @push('scripts')
-                    <script type="text/javascript">
-                        $(document).ready(function() {
-
-                        });
-                    </script>
-                @endpush
             @endif
         </tbody>
     </table>
 </div>
 <div class="row">
     <div class="col-lg-12 text-center">
-        <button class="btn btn-default adicionar-fila-asiento-contable" id="adicionar-fila-asiento-contable">Adicionar fila</button>
+        <button class="btn btn-default adicionar-fila-asiento-contable" id="adicionar-fila-asiento-contable" data-iteracion="{{ $iteracion }}">Adicionar fila</button>
         <button class="btn btn-primary solucionar-taller-asiento-contable" id="solucionar-taller-asiento-contable" data-ruta="{{ route('estudiante.curso.taller.solucionar.asientocontable.post', ['curs_id' => $curso->curs_id, 'tall_id' => $tallerPractico->tall_id]) }}">Guardar taller</button>
     </div>
 </div>
+<br>
