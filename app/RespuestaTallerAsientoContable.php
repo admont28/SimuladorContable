@@ -68,4 +68,9 @@ class RespuestaTallerAsientoContable extends Model
         return $this->belongsTo('App\User','usua_id');
     }
 
+    public function filasTallerAsientoContable()
+    {
+        return $this->hasMany('App\FilaTallerAsientoContable', 'rtac_id');
+    }
+
 }
