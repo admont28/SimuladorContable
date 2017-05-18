@@ -60,7 +60,7 @@
 <div class="row">
     <div class="col-lg-12 text-center">
         <button class="btn btn-default adicionar-fila-asiento-contable" id="adicionar-fila-asiento-contable" data-iteracion="{{ $iteracion }}">Adicionar fila</button>
-        <button class="btn btn-primary solucionar-taller-asiento-contable" id="solucionar-taller-asiento-contable" data-ruta="{{ route('estudiante.curso.taller.solucionar.asientocontable.post', ['curs_id' => $curso->curs_id, 'tall_id' => $tallerPractico->tall_id]) }}">Guardar taller</button>
+        <button class="btn btn-primary solucionar-taller-asiento-contable" id="solucionar-taller-asiento-contable" data-ruta="{{ route('estudiante.curso.taller.solucionar.asientocontable.post', ['curs_id' => $curso->curs_id, 'tall_id' => $tallerPractico->tall_id, 'numeroTabla' => ($iteracion + 1)]) }}" data-iteracion="{{ $iteracion }}">Guardar taller</button>
     </div>
 </div>
 <br>

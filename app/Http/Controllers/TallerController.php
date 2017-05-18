@@ -15,6 +15,7 @@ use App\RespuestaArchivo;
 use App\Tarifa;
 use App\Calificacion;
 use App\RespuestaTallerAsientoContable;
+use App\FilaTallerAsientoContable;
 use App\RespuestaTallerNomina;
 use App\FilaTallerNomina;
 use App\RespuestaTallerKardex;
@@ -762,7 +763,7 @@ class TallerController extends Controller
                         ->make(true);
     }
 
-    public function solucionarTallerAsientoContablePost(Request $request, $curs_id, $tall_id)
+    public function solucionarTallerAsientoContablePost(Request $request, $curs_id, $tall_id, $numeroTabla)
     {
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
@@ -784,6 +785,11 @@ class TallerController extends Controller
             echo json_encode($respuesta);
             die;
         }
+        if(isset($numeroTabla) && $numeroTabla < 1){
+            $respuesta = array('state' => 'error', 'message' => 'Error en el número de tabla a guardar. Por favor recargue la página e inténtelo de nuevo.');
+            echo json_encode($respuesta);
+            die;
+        }
         $fechaActual = new DateTime();
         $fechaTaller = new DateTime($taller->tall_tiempo);
         if($fechaActual > $fechaTaller){
@@ -792,21 +798,30 @@ class TallerController extends Controller
             die;
         }
         $tallerAsientoContable = $taller->tallerAsientoContable;
-        $tallerAsientoContableRespuestas = json_decode(json_encode($request->all()));
+        $tallerAsientoContableRespuestasRequest = json_decode(json_encode($request->all()));
         $i = 1;
         DB::beginTransaction();
         try {
-            $tallerAsientoContable->respuestasTallerAsientosContables()->where('usua_id', Auth::user()->id)->delete();
-            foreach ($tallerAsientoContableRespuestas->filas as $fila) {
+            $respuestaTallerAsientoContable = $tallerAsientoContable->respuestasTallerAsientosContables()->where('usua_id', Auth::user()->id)->where('rtac_numerotabla', $numeroTabla)->get()->first();
+            if(!isset($respuestaTallerAsientoContable) ){
+                $respuestaTallerAsientoContable = RespuestaTallerAsientoContable::create([
+                    'usua_id' =>  Auth::user()->id,
+                    'taac_id' => $tallerAsientoContable->taac_id,
+                    'rtac_numerotabla' => $numeroTabla
+                ]);
+            }
+            if ($respuestaTallerAsientoContable->filasTallerAsientoContable->isNotEmpty() && !empty($tallerAsientoContableRespuestasRequest)) {
+                $respuestaTallerAsientoContable->filasTallerAsientoContable()->delete();
+            }
+            foreach ($tallerAsientoContableRespuestasRequest->filas as $fila) {
                 $fila = json_decode(json_encode($fila));
                 if(isset($fila->codigo, $fila->debito, $fila->credito) && $fila->codigo != "" && $fila->debito != "" && $fila->credito != ""){
-                    RespuestaTallerAsientoContable::create([
-                        'taac_id' => $tallerAsientoContable->taac_id,
-                        'usua_id' => Auth::user()->id,
+                    FilaTallerAsientoContable::create([
+                        'rtac_id' => $respuestaTallerAsientoContable->rtac_id,
                         'puc_id' => $fila->codigo,
-                        'rtac_valordebito' => $fila->debito,
-                        'rtac_valorcredito' => $fila->credito,
-                        'rtac_fila' => $i
+                        'ftac_valordebito' => $fila->debito,
+                        'ftac_valorcredito' => $fila->credito,
+                        'ftac_fila' => $i
                     ]);
                     $i++;
                 }

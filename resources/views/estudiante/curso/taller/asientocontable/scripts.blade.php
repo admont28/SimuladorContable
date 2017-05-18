@@ -153,7 +153,8 @@
         }
         function enviarDatosTallerAsientoContable(elemento) {
             var botonPulsado = $(elemento);
-            var tabla = botonPulsado.parents('div.tab-pane').find('table.taller-asiento-contable');
+            var iteracion = $(elemento).data('iteracion');
+            var tabla = botonPulsado.parents('div.tab-pane').find('table#taller-asiento-contable-'+iteracion);
             botonPulsado.attr('disabled', true).text('ENVIANDO DATOS...');
             botonPulsado.parents("div").find(".adicionar-fila-asiento-contable").attr('disabled', true);
             var ruta = botonPulsado.data("ruta");
@@ -187,7 +188,7 @@
                 $.ajax({
                     url: ruta,
                     type: 'POST',
-                     headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                    headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
                     dataType: 'JSON',
                     data: datos,
                     beforeSend: function () {
