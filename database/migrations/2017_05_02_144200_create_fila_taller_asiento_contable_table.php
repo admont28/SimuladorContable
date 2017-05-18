@@ -15,6 +15,8 @@ class CreateFilaTallerAsientoContableTable extends Migration
     {
         Schema::create('FilaTallerAsientoContable', function (Blueprint $table) {
             $table->increments('ftac_id');
+            $table->integer('rtac_id')->unsigned();
+            $table->foreign('rtac_id')->references('rtac_id')->on('RespuestaTallerAsientoContable');
             $table->integer('puc_id')->unsigned();
             $table->foreign('puc_id')->references('puc_id')->on('Puc');
             $table->integer('ftac_valordebito');
