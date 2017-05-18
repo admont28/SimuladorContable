@@ -3,7 +3,7 @@
     <table class="table table-striped table-bordered table-hover taller-asiento-contable" id="taller-asiento-contable-{{ $iteracion }}" data-iteracion="{{ $iteracion }}">
         <thead>
             <tr>
-                <td colspan="5" class="text-center"><strong>CONTABILIZACIÓN DE LA PROVISIÓN - TABLA {{ $iteracion + 1 }}</strong></td>
+                <td colspan="5" class="text-center"><strong>CONTABILIZACIÓN DE LA PROVISIÓN - TABLA {{ $iteracion }}</strong></td>
             </tr>
             <tr>
                 <td class="text-center" width="20%"><strong>CÓDIGO</strong></td>
@@ -14,7 +14,7 @@
             </tr>
         </thead>
         <tbody>
-            @if($tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuario()->isEmpty())
+            @if($tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuario($iteracion)->isEmpty())
                 @for ($i = 0; $i < 2; $i++)
                     <tr>
                         <td class="text-center vcenter" width="20%">
@@ -34,23 +34,23 @@
                     <td class="text-center"></td>
                 </tr>
             @else
-                @foreach ($tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuario() as $rtac)
+                @foreach ($tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuario($iteracion)->first()->filasTallerAsientoContable as $ftac)
                     <tr>
                         <td class="text-center vcenter" width="20%">
                             <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true">
-                                <option value="{{ $rtac->puc_id }}" data-subtext="{{ $rtac->puc->puc_nombre }}" selected="selected">{{ $rtac->puc->puc_codigo }}</option>
+                                <option value="{{ $ftac->puc_id }}" data-subtext="{{ $ftac->puc->puc_nombre }}" selected="selected">{{ $ftac->puc->puc_codigo }}</option>
                             </select>
                         </td>
-                        <td class="text-center vcenter columna_cuentas" width="20%">{{ $rtac->puc->puc_nombre }}</td>
-                        <td class="text-center vcenter columna_debito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">{{ $rtac->rtac_valordebito }}</td>
-                        <td class="text-center vcenter columna_credito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">{{ $rtac->rtac_valorcredito }}</td>
+                        <td class="text-center vcenter columna_cuentas" width="20%">{{ $ftac->puc->puc_nombre }}</td>
+                        <td class="text-center vcenter columna_debito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">{{ $ftac->ftac_valordebito }}</td>
+                        <td class="text-center vcenter columna_credito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">{{ $ftac->ftac_valorcredito }}</td>
                         <td class="text-center vcenter columna_opcion" width="10%"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
                     </tr>
                 @endforeach
                 <tr id="sumas-iguales">
                     <td colspan="2" class="text-center"><strong>SUMAS IGUALES</strong></td>
-                    <td class="text-center total_debito" id="total_debito">{{ $tallerPractico->tallerAsientoContable->calcularTotalDebito() }}</td>
-                    <td class="text-center total_credito" id="total_credito">{{ $tallerPractico->tallerAsientoContable->calcularTotalCredito() }}</td>
+                    <td class="text-center total_debito" id="total_debito">{{ $tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuario($iteracion)->first()->calcularTotalDebito() }}</td>
+                    <td class="text-center total_credito" id="total_credito">{{ $tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuario($iteracion)->first()->calcularTotalCredito() }}</td>
                     <td class="text-center"></td>
                 </tr>
             @endif
@@ -60,7 +60,7 @@
 <div class="row">
     <div class="col-lg-12 text-center">
         <button class="btn btn-default adicionar-fila-asiento-contable" id="adicionar-fila-asiento-contable" data-iteracion="{{ $iteracion }}">Adicionar fila</button>
-        <button class="btn btn-primary solucionar-taller-asiento-contable" id="solucionar-taller-asiento-contable" data-ruta="{{ route('estudiante.curso.taller.solucionar.asientocontable.post', ['curs_id' => $curso->curs_id, 'tall_id' => $tallerPractico->tall_id, 'numeroTabla' => ($iteracion + 1)]) }}" data-iteracion="{{ $iteracion }}">Guardar taller</button>
+        <button class="btn btn-primary solucionar-taller-asiento-contable" id="solucionar-taller-asiento-contable" data-ruta="{{ route('estudiante.curso.taller.solucionar.asientocontable.post', ['curs_id' => $curso->curs_id, 'tall_id' => $tallerPractico->tall_id, 'numeroTabla' => ($iteracion)]) }}" data-iteracion="{{ $iteracion }}">Guardar taller</button>
     </div>
 </div>
 <br>

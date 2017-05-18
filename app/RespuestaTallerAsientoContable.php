@@ -73,4 +73,14 @@ class RespuestaTallerAsientoContable extends Model
         return $this->hasMany('App\FilaTallerAsientoContable', 'rtac_id');
     }
 
+    public function calcularTotalDebito()
+    {
+        return $this->filasTallerAsientoContable->sum('ftac_valordebito');
+    }
+
+    public function calcularTotalCredito()
+    {
+        return $this->filasTallerAsientoContable->sum('ftac_valorcredito');
+    }
+
 }
