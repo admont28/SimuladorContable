@@ -1,5 +1,3 @@
-<script type="text/javascript">
-    $(document).ready(function() {
         /*
             --------------------------------------------------------------------------------
             Eventos para Taller Kardex
@@ -262,5 +260,3 @@
                     });
             }
         }
-    });
-</script>

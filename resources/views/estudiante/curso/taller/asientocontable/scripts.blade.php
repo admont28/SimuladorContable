@@ -1,5 +1,3 @@
-<script type="text/javascript">
-    $(document).ready(function() {
         /*
             --------------------------------------------------------------------------------
             Eventos para Taller Asiento Contable
@@ -40,12 +38,11 @@
         $('select').trigger('change');
         $('.tab-content:visible').find('.taller-asiento-contable').on('change', 'select',function(event) {
             event.preventDefault();
-            // Obtengo la fila en la que se modificó el select.
-            var fila = $(this).data('fila');
             // Obtengo el nombre del puc, este se encuentra en el atributo data-subtext de la opción seleccionada por el usuario.
             var nombre = $(this).find('option:selected').data('subtext');
             // Cambio el nombre de la columna CUENTAS en la fila en que se modificó el select.
             $(this).parents('tr').find('td.columna_cuentas').text(nombre);
+            cambioAlgoEnTablaTallerAsientoContable(this);
         });
         $('.tab-content:visible').find('.taller-asiento-contable').on('blur', '.columna_debito[contenteditable=true]',function(event) {
             calcularColumnaDebito(this);
@@ -70,6 +67,7 @@
             tabla.find('tbody').append(filaSumasIguales);
             $('.selectpicker').selectpicker('refresh');
             $('.selectpicker').selectpicker().filter('.with-ajax').ajaxSelectPicker(options);
+            cambioAlgoEnTablaTallerAsientoContable(filaSumasIguales);
         });
         $('.tab-content:visible').find('.solucionar-taller-asiento-contable').click(function(event) {
             event.preventDefault();
@@ -92,6 +90,11 @@
                 }
             });
         });
+        $('.tab-content:visible').find('.taller-asiento-contable').on('focus', '[contenteditable=true]',function(event) {
+            console.log($(this).data('valor-antiguo'));
+            $(this).data('valor-antiguo', numeral($(this).text()).format('0'));
+            console.log($(this).data('valor-antiguo'));
+        });
         function calcularColumnaDebito(elemento) {
             var valorTdActual = $(elemento).text();
             var tablaActual = $(elemento).parents('table');
@@ -103,6 +106,9 @@
                     'error'
                 );
                 valorTdActual = 0;;
+            }
+            if(valorTdActual != $(elemento).data('valor-antiguo')){
+                cambioAlgoEnTablaTallerAsientoContable(elemento);
             }
             var total_debito = 0;
             tablaActual.find('.columna_debito').each(function(index, el) {
@@ -127,6 +133,9 @@
                     'error'
                 );
                 valorTdActual = 0;;
+            }
+            if(valorTdActual != $(elemento).data('valor-antiguo')){
+                cambioAlgoEnTablaTallerAsientoContable(elemento);
             }
             var total_credito = 0;
             tablaActual.find('.columna_credito').each(function(index, el) {
@@ -155,8 +164,9 @@
             var botonPulsado = $(elemento);
             var iteracion = $(elemento).data('iteracion');
             var tabla = botonPulsado.parents('div.tab-pane').find('table#taller-asiento-contable-'+iteracion);
-            botonPulsado.attr('disabled', true).text('ENVIANDO DATOS...');
-            botonPulsado.parents("div").find(".adicionar-fila-asiento-contable").attr('disabled', true);
+            botonPulsado.text('ENVIANDO DATOS...');
+            botonPulsado.parents("div.tab-pane").find(".adicionar-fila-asiento-contable").attr('disabled', true);
+            botonPulsado.parents("div.tab-pane").find(".solucionar-taller-asiento-contable").attr('disabled', true);
             var ruta = botonPulsado.data("ruta");
             var filas = [];
             tabla.find('tbody > tr:not(:last)').each(function(index, el) {
@@ -206,6 +216,7 @@
                                 text: data.message,
                                 type: 'success'
                             });
+                            tabla.find('#label-tabla-'+iteracion).text('TABLA GUARDADA').removeClass('label-danger').addClass('label-success');
                         }
                     }
                 })
@@ -217,9 +228,14 @@
                 })
                 .always(function() {
                     console.log("complete");
-                    botonPulsado.attr('disabled', false).text('GUARDAR TALLER');
-                    botonPulsado.parents("div").find(".adicionar-fila-asiento-contable").attr('disabled', false);
+                    botonPulsado.text('GUARDAR TABLA');
+                    botonPulsado.parents("div.tab-pane").find(".adicionar-fila-asiento-contable").attr('disabled', false);
+                    botonPulsado.parents("div.tab-pane").find(".solucionar-taller-asiento-contable").attr('disabled', false);
                 });
         }
-    });
-</script>
+        function cambioAlgoEnTablaTallerAsientoContable(elemento) {
+            var tabla = $(elemento).parents('table');
+            var iteracion = tabla.data('iteracion');
+            console.log(tabla.find('#label-tabla-'+iteracion));
+            tabla.find('#label-tabla-'+iteracion).text('TABLA SIN GUARDAR').removeClass('label-success').addClass('label-danger');
+        }

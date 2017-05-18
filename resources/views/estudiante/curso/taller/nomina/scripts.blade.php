@@ -1,5 +1,3 @@
-<script type="text/javascript">
-    $(document).ready(function() {
         /*
             --------------------------------------------------------------------------------
             Eventos para Taller Nomina
@@ -451,5 +449,3 @@
                     botonPulsado.parents("div").find(".adicionar-fila-nomina").attr('disabled', false);;
                 });
         }
-    });
-</script>

@@ -3,7 +3,13 @@
     <table class="table table-striped table-bordered table-hover taller-asiento-contable" id="taller-asiento-contable-{{ $iteracion }}" data-iteracion="{{ $iteracion }}">
         <thead>
             <tr>
-                <td colspan="5" class="text-center"><strong>CONTABILIZACIÓN DE LA PROVISIÓN - TABLA {{ $iteracion }}</strong></td>
+                <td colspan="5" class="text-center"><strong>CONTABILIZACIÓN DE LA PROVISIÓN - TABLA {{ $iteracion }}</strong>
+                    @if($tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuario($iteracion)->isEmpty())
+                        <span id="label-tabla-{{ $iteracion }}" class="label label-danger">TABLA SIN GUARDAR</span>
+                    @else
+                        <span id="label-tabla-{{ $iteracion }}" class="label label-success">TABLA GUARDADA</span>
+                    @endif
+                    </td>
             </tr>
             <tr>
                 <td class="text-center" width="20%"><strong>CÓDIGO</strong></td>
@@ -22,8 +28,8 @@
                             </select>
                         </td>
                         <td class="text-center vcenter columna_cuentas" width="20%"></td>
-                        <td class="text-center vcenter columna_debito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>
-                        <td class="text-center vcenter columna_credito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">$ 0</td>
+                        <td class="text-center vcenter columna_debito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar." data-valor-antiguo="0">$ 0</td>
+                        <td class="text-center vcenter columna_credito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar." data-valor-antiguo="0">$ 0</td>
                         <td class="text-center vcenter columna_opcion" width="10%"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
                     </tr>
                 @endfor
@@ -42,8 +48,8 @@
                             </select>
                         </td>
                         <td class="text-center vcenter columna_cuentas" width="20%">{{ $ftac->puc->puc_nombre }}</td>
-                        <td class="text-center vcenter columna_debito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">{{ $ftac->ftac_valordebito }}</td>
-                        <td class="text-center vcenter columna_credito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar.">{{ $ftac->ftac_valorcredito }}</td>
+                        <td class="text-center vcenter columna_debito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar." data-valor-antiguo="{{ $ftac->ftac_valordebito }}">{{ $ftac->ftac_valordebito }}</td>
+                        <td class="text-center vcenter columna_credito" contenteditable="true" width="25%" data-toggle="tooltip" title="Presiona clic para editar." data-valor-antiguo="{{ $ftac->ftac_valorcredito }}">{{ $ftac->ftac_valorcredito }}</td>
                         <td class="text-center vcenter columna_opcion" width="10%"><button class="btn btn-xs btn-danger eliminar-fila" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button></td>
                     </tr>
                 @endforeach
@@ -60,7 +66,7 @@
 <div class="row">
     <div class="col-lg-12 text-center">
         <button class="btn btn-default adicionar-fila-asiento-contable" id="adicionar-fila-asiento-contable" data-iteracion="{{ $iteracion }}">Adicionar fila</button>
-        <button class="btn btn-primary solucionar-taller-asiento-contable" id="solucionar-taller-asiento-contable" data-ruta="{{ route('estudiante.curso.taller.solucionar.asientocontable.post', ['curs_id' => $curso->curs_id, 'tall_id' => $tallerPractico->tall_id, 'numeroTabla' => ($iteracion)]) }}" data-iteracion="{{ $iteracion }}">Guardar taller</button>
+        <button class="btn btn-primary solucionar-taller-asiento-contable" id="solucionar-taller-asiento-contable" data-ruta="{{ route('estudiante.curso.taller.solucionar.asientocontable.post', ['curs_id' => $curso->curs_id, 'tall_id' => $tallerPractico->tall_id, 'numeroTabla' => ($iteracion)]) }}" data-iteracion="{{ $iteracion }}">Guardar tabla</button>
     </div>
 </div>
 <br>

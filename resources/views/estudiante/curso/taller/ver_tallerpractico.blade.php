@@ -177,10 +177,12 @@
                         'La tabla no puede quedar con menos de una fila.',
                         'warning'
                     );
+                    return;
                 }
                 if(tabla.hasClass('taller-asiento-contable')){
                     $('.columna_debito[contenteditable=true]').trigger('blur');
                     $('.columna_credito[contenteditable=true]').trigger('blur');
+                    cambioAlgoEnTablaTallerAsientoContable(primerBoton);
                 }else if (tabla.hasClass('taller-nomina')) {
                     calcularTotales(primerBoton);
                 }
@@ -189,12 +191,13 @@
                 'selector': '[data-toggle="tooltip"]',
                 'container' : 'body'
             });
+            @include('estudiante.curso.taller.asientocontable.scripts')
+            @include('estudiante.curso.taller.nomina.scripts')
+            @include('estudiante.curso.taller.kardex.scripts')
+            @include('estudiante.curso.taller.niif.scripts')
         });
     </script>
-    @include('estudiante.curso.taller.asientocontable.scripts')
-    @include('estudiante.curso.taller.nomina.scripts')
-    @include('estudiante.curso.taller.kardex.scripts')
-    @include('estudiante.curso.taller.niif.scripts')
+
     <script type="text/javascript">
         (function($) {
             fakewaffle.responsiveTabs(['xs', 'sm']);
