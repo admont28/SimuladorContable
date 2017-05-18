@@ -322,4 +322,14 @@ class PreguntaController extends Controller
         }
     }
 
+    public function validarPorcentaje()
+    {
+        $total = $this.TotalPorcentajePreguntas($this->tall_id);
+        if ($total>=1) {
+            $validator = Validator::make(array(), array());
+            $validator->getMessageBag()->add('porcentaje_pregunta', 'El porcentaje de la pregunta sumado a los otros porcentajes de las otras preguntas superan el 100%');
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
+    }
+
 }

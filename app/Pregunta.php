@@ -118,4 +118,17 @@ class Pregunta extends Model
         return Respuesta::where('usua_id',Auth::user()->id)->where('preg_id',$this->preg_id)->get();
     }
 
+    /**
+     * metodo para consultar el total de porcentaje.
+     */
+    public function TotalPorcentajePreguntas($tall_id)
+    {
+        //SELECT SUM(preg_porcentaje) FROM PREGUNTA WHERE tall_id=1
+        return DB::table('Pregunta')
+            ->select('preg_porcentaje')
+            ->where('tall_id',$tall_id)
+            ->sum('preg_porcentaje')
+            ->get();
+    }
+
 }

@@ -93,6 +93,17 @@ class CalificacionController extends Controller
         return redirect()->route('profesor.curso.taller.ver',['curs_id'=> $curs_id,'tall_id'=>$taller->tall_id]);
     }
 
+    
+
+    /**
+     * [calificarPreguntaArchivo description]
+     * @param  Request $request [description]
+     * @param  [type]  $usua_id [description]
+     * @param  [type]  $tall_id [description]
+     * @param  [type]  $preg_id [description]
+     * @param  [type]  $curs_id [description]
+     * @return [type]           [description]
+     */
     public function calificarPreguntaArchivo(Request $request, $usua_id, $tall_id, $preg_id, $curs_id)
     {
         $usuario = User::find($usua_id);
