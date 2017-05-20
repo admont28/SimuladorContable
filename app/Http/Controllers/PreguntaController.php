@@ -12,6 +12,7 @@ use App\Taller;
 use App\DataTables\PreguntaDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
+use Redirect;
 
 class PreguntaController extends Controller
 {
@@ -76,11 +77,19 @@ class PreguntaController extends Controller
         // Obtengo las opciones disponbiles en bd en el campo preg_tipo de tipo enum.
         $opciones = Pregunta::getPossibleEnumValues();
         $opcionesSeparadasPorComas = implode(",", $opciones);
-        Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'texto_pregunta' => 'required|max:500|min:5',
             'tipo_pregunta' => 'required|in:'.$opcionesSeparadasPorComas,
-            'porcentaje_pregunta'=>'required|numeric|min:1|max:100'
+            'porcentaje_pregunta'=>'required|integer|min:1|max:100'
         ])->validate();
+        $porcentajePreguntaNueva = $request['porcentaje_pregunta']/100;
+        $total = $taller->totalPorcentajePreguntas();
+        $totalPorcentajes = $total + $porcentajePreguntaNueva;
+        if ($totalPorcentajes > 1) {
+            $validator = Validator::make(array(), array());
+            $validator->getMessageBag()->add('porcentaje_pregunta', 'El porcentaje de la pregunta sumado a los otros porcentajes de las otras preguntas superan el 100%. Total porcentajes: '.($totalPorcentajes * 100).'%');
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
         // Almaceno en bd la nueva pregunta
         Pregunta::create([
             'preg_texto'=> $request['texto_pregunta'],
@@ -191,8 +200,16 @@ class PreguntaController extends Controller
         }
         Validator::make($request->all(), [
             'texto_pregunta' => 'required|max:500|min:5',
-            'porcentaje_pregunta'=>'required|numeric|min:1|max:100'
+            'porcentaje_pregunta'=>'required|integer|min:1|max:100'
         ])->validate();
+        $porcentajePreguntaEditada = $request['porcentaje_pregunta']/100;
+        $total = $taller->totalPorcentajePreguntas();
+        $totalPorcentajes = $total + $porcentajePreguntaEditada - $pregunta->preg_porcentaje;
+        if ($totalPorcentajes > 1) {
+            $validator = Validator::make(array(), array());
+            $validator->getMessageBag()->add('porcentaje_pregunta', 'El porcentaje de la pregunta sumado a los otros porcentajes de las otras preguntas superan el 100%. Total porcentajes: '.($totalPorcentajes * 100).'%');
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
         $pregunta->preg_texto = $request->input('texto_pregunta');
         $pregunta->preg_porcentaje = $request->input('porcentaje_pregunta')/100;
         $pregunta->save();
@@ -319,16 +336,6 @@ class PreguntaController extends Controller
             return redirect()->route('estudiante.curso.ver.talleresteorico',['curs_id'=>$curso->curs_id]);
         else {
             return redirect()->route('estudiante.curso');
-        }
-    }
-
-    public function validarPorcentaje()
-    {
-        $total = $this.TotalPorcentajePreguntas($this->tall_id);
-        if ($total>=1) {
-            $validator = Validator::make(array(), array());
-            $validator->getMessageBag()->add('porcentaje_pregunta', 'El porcentaje de la pregunta sumado a los otros porcentajes de las otras preguntas superan el 100%');
-            return Redirect::back()->withErrors($validator)->withInput();
         }
     }
 

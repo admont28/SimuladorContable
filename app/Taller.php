@@ -140,6 +140,13 @@ class Taller extends Model
             ->get();
     }
 
-
+    /**
+     * metodo para consultar el total de porcentaje.
+     */
+    public function totalPorcentajePreguntas()
+    {
+        //SELECT SUM(preg_porcentaje) FROM PREGUNTA WHERE tall_id=
+        return Pregunta::where('tall_id',$this->tall_id)->sum('preg_porcentaje');
+    }
 
 }
