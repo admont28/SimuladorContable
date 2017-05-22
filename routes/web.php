@@ -170,6 +170,16 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
 
     /*
     |--------------------------------------------------------------------------
+    | Rutas para los talleres de NIIF
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/curso/{curs_id}/taller/{tall_id}/crear-taller-niif', 'TallerController@crearTallerNiif')->name('profesor.curso.taller.crear.tallerniif');
+    Route::post('/curso/{curs_id}/taller/{tall_id}/crear-taller-niif-post', 'TallerController@crearTallerNiifPost')->name('profesor.curso.taller.crear.tallerniif.post');
+
+
+    /*
+    |--------------------------------------------------------------------------
     | Rutas para las preguntas
     |--------------------------------------------------------------------------
     */
