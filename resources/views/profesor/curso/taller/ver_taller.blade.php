@@ -125,6 +125,34 @@
                 </div>
             </div>
             <br>
+        @elseif (isset($taller->tallerNiif))
+            <div class="row">
+                <div class="col-lg-3">
+                    <strong>Sub-tipo:</strong>
+                </div>
+                <div class="col-lg-9 text-justify">
+                    <span class="label label-default">Taller de NIIF</span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-3">
+                    <strong>Nombre de la empresa:</strong>
+                </div>
+                <div class="col-lg-9 text-justify">
+                    {{ $taller->tallerNiif->tani_nombreempresa }}
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-3">
+                    <strong>Periodo:</strong>
+                </div>
+                <div class="col-lg-9 text-justify">
+                    {{ $taller->tallerNiif->tani_periodo }}
+                </div>
+            </div>
+            <br>
         @else
             <div class="row">
                 <div class="bs-callout bs-callout-danger">
@@ -140,7 +168,7 @@
                         {{ csrf_field() }}
                         <button type="submit" class="btn btn-warning" id="btn-taller-kardex">Taller de kardex</button>
                     </form>
-                    <a href="#" class="btn btn-default">Taller de estados financieros NIF</a>
+                    <a href="{{ route('profesor.curso.taller.crear.tallerniif', ['curs_id'=>$curso->curs_id,'tall_id' => $taller->tall_id]) }}" class="btn btn-default">Taller de estados financieros NIIF</a>
                 </div>
             </div>
         @endif
