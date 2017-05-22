@@ -106,6 +106,14 @@ class Taller extends Model
         return $this->hasOne('App\tallerKardex', 'tall_id');
     }
 
+    /**
+     * Obtener el taller de niif asociado al taller actual.
+     */
+    public function tallerNiif()
+    {
+        return $this->hasOne('App\tallerNiif', 'tall_id');
+    }
+
     public static function getPossibleEnumValues(){
         $type = DB::select(DB::raw('SHOW COLUMNS FROM Taller WHERE Field = "tall_tipo"'))[0]->Type;
         preg_match('/^enum\((.*)\)$/', $type, $matches);

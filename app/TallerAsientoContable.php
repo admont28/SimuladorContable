@@ -72,8 +72,13 @@ class TallerAsientoContable extends Model
         return $this->belongsTo('App\Taller', 'tall_id');
     }
 
-    public function respuestasTallerAsientoContableUsuario($numeroTabla = 0)
+    public function respuestasTallerAsientoContableUsuarioAutenticado($numeroTabla = null)
     {
+        if(is_null($numeroTabla)){
+            return RespuestaTallerAsientoContable::where('usua_id', Auth::user()->id)->where('taac_id', $this->taac_id)->get();
+        }
         return RespuestaTallerAsientoContable::where('usua_id', Auth::user()->id)->where('taac_id', $this->taac_id)->where('rtac_numerotabla', $numeroTabla)->get();
     }
+
+
 }

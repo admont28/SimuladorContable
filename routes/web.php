@@ -91,6 +91,7 @@ Route::group(['prefix' => 'estudiante', 'middleware' => ['auth','estudiante'] ],
     Route::post('/curso/{curs_id}/taller/{tall_id}/enviar-respuestas-taller-asiento-contable/tabla/{numeroTabla}', 'TallerController@solucionarTallerAsientoContablePost')->name('estudiante.curso.taller.solucionar.asientocontable.post');
     Route::post('/curso/{curs_id}/taller/{tall_id}/enviar-respuestas-taller-nomina', 'TallerController@solucionarTallerNominaPost')->name('estudiante.curso.taller.solucionar.nomina.post');
     Route::post('/curso/{curs_id}/taller/{tall_id}/enviar-respuestas-taller-kardex', 'TallerController@solucionarTallerKardexPost')->name('estudiante.curso.taller.solucionar.kardex.post');
+    Route::GET('/curso/{curs_id}/taller/{tall_id}/generar-tablas-niif', 'TallerController@generarTablasNiif')->name('estudiante.curso.taller.generartablasniif');
     /*
     |--------------------------------------------------------------------------
     | Rutas para las preguntas

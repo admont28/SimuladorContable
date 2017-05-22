@@ -63,6 +63,7 @@
                                             @if(isset($tallerPractico->tallerAsientoContable)) <span class="label label-info">asientos contables</span>
                                             @elseif(isset($tallerPractico->tallerNomina)) <span class="label label-success">nómina</span>
                                             @elseif(isset($tallerPractico->tallerKardex)) <span class="label label-warning">kardex</span>
+                                            @elseif(isset($tallerPractico->tallerNiif)) <span class="label label-default">NIIF</span>
                                             @endif
                                         </div>
                                     </div>
@@ -106,7 +107,7 @@
                         @elseif (isset($tallerPractico->tallerKardex))
                             @include('estudiante.curso.taller.kardex.tabla')
                         @elseif (isset($tallerPractico->tallerNiif))
-                            @include('estudiante.curso.taller.niif')
+                            @include('estudiante.curso.taller.niif.balanceprueba')
                         @endif
                     </div>
                 @endforeach

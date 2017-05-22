@@ -3,8 +3,8 @@
     <table class="table table-striped table-bordered table-hover taller-asiento-contable" id="taller-asiento-contable-{{ $iteracion }}" data-iteracion="{{ $iteracion }}">
         <thead>
             <tr>
-                <td colspan="5" class="text-center"><strong>CONTABILIZACIÓN DE LA PROVISIÓN - TABLA {{ $iteracion }}</strong>
-                    @if($tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuario($iteracion)->isEmpty())
+                <td colspan="5" class="text-center"><strong>TABLA {{ $iteracion }}</strong>
+                    @if($tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuarioAutenticado($iteracion)->isEmpty())
                         <span id="label-tabla-{{ $iteracion }}" class="label label-danger">TABLA SIN GUARDAR</span>
                     @else
                         <span id="label-tabla-{{ $iteracion }}" class="label label-success">TABLA GUARDADA</span>
@@ -20,7 +20,7 @@
             </tr>
         </thead>
         <tbody>
-            @if($tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuario($iteracion)->isEmpty())
+            @if($tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuarioAutenticado($iteracion)->isEmpty())
                 @for ($i = 0; $i < 2; $i++)
                     <tr>
                         <td class="text-center vcenter" width="20%">
@@ -40,7 +40,7 @@
                     <td class="text-center"></td>
                 </tr>
             @else
-                @foreach ($tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuario($iteracion)->first()->filasTallerAsientoContable as $ftac)
+                @foreach ($tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuarioAutenticado($iteracion)->first()->filasTallerAsientoContable as $ftac)
                     <tr>
                         <td class="text-center vcenter" width="20%">
                             <select class="form-control selectpicker columna_codigo with-ajax" data-live-search="true">
@@ -55,8 +55,8 @@
                 @endforeach
                 <tr id="sumas-iguales">
                     <td colspan="2" class="text-center"><strong>SUMAS IGUALES</strong></td>
-                    <td class="text-center total_debito" id="total_debito">{{ $tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuario($iteracion)->first()->calcularTotalDebito() }}</td>
-                    <td class="text-center total_credito" id="total_credito">{{ $tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuario($iteracion)->first()->calcularTotalCredito() }}</td>
+                    <td class="text-center total_debito" id="total_debito">{{ $tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuarioAutenticado($iteracion)->first()->calcularTotalDebito() }}</td>
+                    <td class="text-center total_credito" id="total_credito">{{ $tallerPractico->tallerAsientoContable->respuestasTallerAsientoContableUsuarioAutenticado($iteracion)->first()->calcularTotalCredito() }}</td>
                     <td class="text-center"></td>
                 </tr>
             @endif

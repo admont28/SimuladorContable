@@ -132,4 +132,16 @@ class Curso extends Model
                 ->where('Respuesta.usua_id',Auth::user()->id)
                 ->get();
     }
+
+    public function tallerAsientoContable()
+    {
+        $tallerAsientoContable =  DB::table('TallerAsientoContable')
+                ->join('Taller', 'Taller.tall_id', '=', 'TallerAsientoContable.tall_id')
+                ->join('Curso', 'Curso.curs_id', '=', 'Taller.curs_id')
+                ->select('TallerAsientoContable.taac_id', 'TallerAsientoContable.tall_id', 'TallerAsientoContable.taac_cantidadtablas')
+                ->where('Curso.curs_id', $this->curs_id)
+                ->get()
+                ->toArray();
+        return $tallerAsientoContable;
+    }
 }

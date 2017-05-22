@@ -1187,4 +1187,63 @@ class TallerController extends Controller
         }
         echo json_encode($respuesta);
     }
+
+    public function generarTablasNiif($curs_id, $tall_id)
+    {
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            $respuesta = array('state' => 'error', 'message' => 'El curso con ID: '.$curs_id.' no existe. Verifique por favor.');
+            echo json_encode($respuesta);
+            die;
+        }
+        $taller = Taller::find($tall_id);
+        // Verificamos que el taller exista en bd, si no es así informamos al usuario y redireccionamos.
+        if (!isset($taller) || $taller->curs_id != $curso->curs_id) {
+            $respuesta = array('state' => 'error', 'message' => 'El taller con ID: '.$tall_id.' no pertenece al curso seleccionado. Verifique por favor.');
+            echo json_encode($respuesta);
+            die;
+        }
+        //verificamos que el taller sea un taller de tipo diagnóstico o teórico
+        if ( $taller->tall_tipo != "practico" ) {
+            $respuesta = array('state' => 'error', 'message' => 'El taller con ID: '.$tall_id.' no es un taller de tipo práctico. Verifique por favor.');
+            echo json_encode($respuesta);
+            die;
+        }
+        $fechaActual = new DateTime();
+        $fechaTaller = new DateTime($taller->tall_tiempo);
+        if($fechaActual > $fechaTaller){
+            $respuesta = array('state' => 'error', 'message' => 'El taller ha expirado, no se han podido guardar las respuestas.');
+            echo json_encode($respuesta);
+            die;
+        }
+        $tallerNiif = $taller->tallerNiif;
+        if (!isset($tallerNiif)) {
+            $respuesta = array('state' => 'error', 'message' => 'El taller NIIF no existe. Verifique por favor.');
+            echo json_encode($respuesta);
+            die;
+        }
+        $tallerAsientoContable = TallerAsientoContable::hydrate($curso->tallerAsientoContable())->first();
+        $respuestasTallerAsientoContable = $tallerAsientoContable->respuestasTallerAsientoContableUsuarioAutenticado();
+        $filasTallerAsientoContable = collect();
+        foreach ($respuestasTallerAsientoContable as $rtac) {
+            $filasTallerAsientoContable = $filasTallerAsientoContable->merge($rtac->filasTallerAsientoContable);
+        }
+        $valoresConPuc = collect();
+        foreach ($filasTallerAsientoContable as $ftac ) {
+            $fila = new \StdClass();
+            $fila->codigoGeneral = substr($ftac->puc->puc_codigo,0,4);
+            $fila->debito = $ftac->ftac_valordebito;
+            $fila->credito = $ftac->ftac_valorcredito;
+            /*$fila = array();
+            $fila[] = substr($ftac->puc->puc_codigo,0,4);
+            $fila[] = $ftac->ftac_valordebito;
+            $fila[] = $ftac->ftac_valorcredito;*/
+            $valoresConPuc->push($fila);
+        }
+        $valoresConPuc->search(function ($item, $key) {
+            dd($item, $key);
+        });
+        dd($valoresConPuc,$valoresConPuc->search());
+    }
 }
