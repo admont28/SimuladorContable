@@ -33,7 +33,7 @@
         </div>
         <div class="col-lg-10 text-justify">
             <div class='input-group date ' >
-                {{ $pregunta->preg_porcentaje }}
+                {{ $pregunta->preg_porcentaje*100 }}%
             </div>
         </div>
     </div>
