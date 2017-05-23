@@ -107,7 +107,7 @@
                         @elseif (isset($tallerPractico->tallerKardex))
                             @include('estudiante.curso.taller.kardex.tabla')
                         @elseif (isset($tallerPractico->tallerNiif))
-                            @include('estudiante.curso.taller.niif.balanceprueba')
+                            @include('estudiante.curso.taller.niif.tablas')
                         @endif
                     </div>
                 @endforeach

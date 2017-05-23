@@ -21,6 +21,7 @@ use App\RespuestaTallerNomina;
 use App\FilaTallerNomina;
 use App\RespuestaTallerKardex;
 use App\FilaTallerKardex;
+use App\Puc;
 use App\DataTables\TallerDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
@@ -29,6 +30,7 @@ use Auth;
 use Redirect;
 use Storage;
 use DateTime;
+use View;
 
 class TallerController extends Controller
 {
@@ -1265,7 +1267,17 @@ class TallerController extends Controller
                 }
             }
         }
-        
-        dd($valoresConPuc,$resumen);
+        $resultado = collect();
+        foreach ($resumen as $llave => $valor) {
+            $a = new \StdClass();
+            $a->primerDigito = substr($llave,0,1);
+            $a->puc = Puc::where('puc_codigo', $llave)->get()->first();
+            $a->valor = $valor;
+            $resultado->push($a);
+        }
+        $resultado = $resultado->sortBy('puc');
+        $balancePrueba = View::make('estudiante.curso.taller.niif.balanceprueba', ['filas' => $resultado,'tallerNiif' => $tallerNiif]);
+        $respuesta = array('state' => 'success', 'balanceprueba' => $balancePrueba->render());
+        echo json_encode($respuesta);
     }
 }
