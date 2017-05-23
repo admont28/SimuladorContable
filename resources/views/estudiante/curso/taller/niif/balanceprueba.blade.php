@@ -12,8 +12,8 @@
                 <td colspan="4" class="text-center"><strong>{{ $tallerNiif->tani_periodo }}</strong></td>
             </tr>
             <tr>
-                <td class="text-center" width="20%"><strong>CÓDIGO</strong></td>
-                <td class="text-center" width="20%"><strong>CUENTA</strong></td>
+                <td class="text-center" width="10%"><strong>CÓDIGO</strong></td>
+                <td class="text-center" width="40%"><strong>CUENTA</strong></td>
                 <td class="text-center" width="25%"><strong>DÉBITO</strong></td>
                 <td class="text-center" width="25%"><strong>CRÉDITO</strong></td>
             </tr>
@@ -21,8 +21,8 @@
         <tbody>
             @foreach ($filas as $fila)
                 <tr>
-                    <td class="text-center vcenter columna_codigo" width="20%">{{ $fila->puc->puc_codigo }}</td>
-                    <td class="text-center vcenter columna_cuentas" width="20%">{{ $fila->puc->puc_nombre }}</td>
+                    <td class="text-center vcenter columna_codigo" width="10%">{{ $fila->puc->puc_codigo }}</td>
+                    <td class="text-center vcenter columna_cuentas" width="40%">{{ $fila->puc->puc_nombre }}</td>
                     @if ($fila->primerDigito == 1 || $fila->primerDigito == 5 || $fila->primerDigito == 6)
                         @if ($fila->valor >= 0)
                             <td class="text-center vcenter columna_debito" width="25%">{{ $fila->valor }}</td>
