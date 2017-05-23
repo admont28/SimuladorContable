@@ -17,10 +17,11 @@ class CreateBalancePruebaTable extends Migration
             $table->increments('bapr_id');
             $table->integer('rtni_id')->unsigned();
             $table->foreign('rtni_id')->references('rtni_id')->on('RespuestaTallerNiif');
-            $table->string('bapr_codigo', 45);
-            $table->string('bapr_cuenta', 45);
+            $table->string('bapr_codigo', 100);
+            $table->string('bapr_cuenta', 100);
             $table->integer('bapr_debito');
             $table->integer('bapr_credito');
+            $table->integer('bapr_fila');
             $table->timestamp('bapr_fechacreacion')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('bapr_fechamodificacion')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });

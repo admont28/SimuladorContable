@@ -43,7 +43,7 @@ class BalancePrueba extends Model
      * @var array
      */
     protected $fillable = [
-        'bapr_id', 'rtni_id', 'bapr_debito', 'bapr_credito','bapr_fila'
+        'bapr_id', 'rtni_id', 'bapr_codigo', 'bapr_cuenta', 'bapr_debito', 'bapr_credito','bapr_fila'
     ];
 
     /**
