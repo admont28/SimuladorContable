@@ -24,6 +24,7 @@ use App\FilaTallerKardex;
 use App\Puc;
 use App\RespuestaTallerNiif;
 use App\BalancePrueba;
+use App\EstadoResultado;
 use App\DataTables\TallerDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
@@ -1310,6 +1311,7 @@ class TallerController extends Controller
             }
             $balancesPruebas = BalancePrueba::where('rtni_id', $respuestaTallerNiif->rtni_id)->orderBy('bapr_fila', 'asc')->get();
             $balancePrueba = View::make('estudiante.curso.taller.niif.balanceprueba', ['balancesPruebas' => $balancesPruebas,'tallerNiif' => $tallerNiif]);
+            $estadoresultado = $this->generarTablaEstadoDeResultados($respuestaTallerNiif, $balancesPruebas, $tallerNiif);
             DB::commit();
             $success = true;
         } catch (\Exception $e) {
@@ -1320,8 +1322,52 @@ class TallerController extends Controller
         if (!$success) {
             $respuesta = array('state' => 'error', 'message' => 'Ha ocurrido un error inesperado, por favor inténtelo de nuevo.');
         }else{
-            $respuesta = array('state' => 'success', 'message' => 'Se han generado las tablas con éxito.', 'balanceprueba' => $balancePrueba->render());
+            $respuesta = array(
+                'state' => 'success',
+                'message' => 'Se han generado las tablas con éxito.',
+                'balanceprueba' => $balancePrueba->render(),
+                'estadoresultado' => $estadoresultado->render());
         }
         echo json_encode($respuesta);
+    }
+
+    private function generarTablaEstadoDeResultados($respuestaTallerNiif, $balancesPruebas = null, $tallerNiif)
+    {
+        if($balancesPruebas == null || $respuestaTallerNiif == null || $tallerNiif == null)
+            return '';
+        $datos                               = array();
+        $datos['rtni_id']                         = $respuestaTallerNiif->rtni_id;
+        $datos['esre_ingresosoperacionales']      = $this->obtenerValorSegunDebitoOCredito(BalancePrueba::where('bapr_codigo', '4135')->get()->first());
+        $datos['esre_totalingresosoperacionales'] = $datos['esre_ingresosoperacionales'];
+        $datos['esre_costoventa']                 = $this->obtenerValorSegunDebitoOCredito(BalancePrueba::where('bapr_codigo', '6135')->get()->first());
+        $datos['esre_utilidadbruta']              = $datos['esre_totalingresosoperacionales'] - $datos['esre_costoventa'];
+        $datos['esre_gastospersonal']             = $this->obtenerValorSegunDebitoOCredito(BalancePrueba::where('bapr_codigo', '5105')->get()->first());
+        $datos['esre_resultadoexplotacion']       = $datos['esre_utilidadbruta'] - $datos['esre_gastospersonal'];
+        $datos['esre_ingresosfinancieros']        = $this->obtenerValorSegunDebitoOCredito(BalancePrueba::where('bapr_codigo', '4210')->get()->first());
+        $datos['esre_gastosfinancieros']          = $this->obtenerValorSegunDebitoOCredito(BalancePrueba::where('bapr_codigo', '5305')->get()->first());
+        $datos['esre_utilidadantesimpuestos']     = $datos['esre_resultadoexplotacion'] + $datos['esre_ingresosfinancieros'] - $datos['esre_gastosfinancieros'];
+        $datos['esre_impuestosobreganancias']     = round($datos['esre_utilidadantesimpuestos'] * 0.34);
+        $datos['esre_utilidadliquida']            = $datos['esre_utilidadantesimpuestos'] - $datos['esre_impuestosobreganancias'];
+        $datos['esre_reservalegal']               = round($datos['esre_utilidadliquida'] * 0.1);
+        $datos['esre_utilidadnetaejercicio']      = $datos['esre_utilidadliquida'] - $datos['esre_reservalegal'];
+        $estadoResultado=  EstadoResultado::where('rtni_id', $respuestaTallerNiif->rtni_id)->get()->first();
+        if(isset($estadoResultado)){
+            $estadoResultado->fill($datos);
+            $estadoResultado->save();
+        }else{
+            $estadoResultado = EstadoResultado::create($datos);
+        }
+        return View::make('estudiante.curso.taller.niif.estadoresultado', ['estadoResultado' => $estadoResultado, 'tallerNiif' => $tallerNiif]);
+    }
+
+    private function obtenerValorSegunDebitoOCredito($balancePrueba = null)
+    {
+        if($balancePrueba == null)
+            return 0;
+        elseif($balancePrueba->bapr_debito != 0){
+            return $balancePrueba->bapr_debito;
+        }else{
+            return $balancePrueba->bapr_credito;
+        }
     }
 }

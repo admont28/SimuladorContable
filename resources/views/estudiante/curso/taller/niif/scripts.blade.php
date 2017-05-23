@@ -53,6 +53,7 @@ function generarTablasNiif(elemento) {
                         });
                         divTablas.html('');
                         divTablas.append(data.balanceprueba);
+                        divTablas.append(data.estadoresultado);
                         calcularTotalesBalancePrueba().then(function () {
                             return darFormatoACamposTablasNiif();
                         });
@@ -76,11 +77,8 @@ calcularTotalesBalancePrueba().then(function () {
     return darFormatoACamposTablasNiif();
 });
 function darFormatoACamposTablasNiif() {
-    $('.tab-content:visible').find(".taller-balance-prueba > tbody > tr > td").each(function(index, el) {
-        if($(el).hasClass('columna_opcion') || $(el).hasClass('columna_codigo') || $(el).hasClass('columna_cuentas')){
-            return;
-        }
-        else if ($(el).hasClass('columna_debito') || $(el).hasClass('columna_credito') || $(el).hasClass('total_debito') || $(el).hasClass('total_credito')) {
+    $('.tab-content:visible').find(".tabla-niif > tbody > tr > td").each(function(index, el) {
+        if ($(el).hasClass('formato_pesos')) {
             $(el).text(numeral($(el).text()).format('$0,0'));
         }
     });

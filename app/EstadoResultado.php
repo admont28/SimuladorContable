@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RespuestaTallerNiif extends Model
+class EstadoResultado extends Model
 {
     /**
      * El nombre de la tabla asociada al modelo.
      *
      * @var string
      */
-    protected $table = 'RespuestaTallerNiif';
+    protected $table = 'EstadoResultado';
 
     /**
      * El nombre de la llave primaria de la tabla.
@@ -19,7 +19,7 @@ class RespuestaTallerNiif extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'rtni_id';
+    protected $primaryKey = 'esre_id';
 
     /**
      * El nombre del campo equivalente a CREATE_AT en la base de datos.
@@ -27,7 +27,7 @@ class RespuestaTallerNiif extends Model
      *
      * @var string
      */
-    const CREATED_AT = 'rtni_fechacreacion';
+    const CREATED_AT = 'esre_fechacreacion';
 
     /**
      * El nombre del campo equivalente a UPDATED_AT en la base de datos.
@@ -35,7 +35,7 @@ class RespuestaTallerNiif extends Model
      *
      * @var string
      */
-    const UPDATED_AT = 'rtni_fechamodificacion';
+    const UPDATED_AT = 'esre_fechamodificacion';
 
     /**
      * The attributes that are mass assignable.
@@ -43,7 +43,7 @@ class RespuestaTallerNiif extends Model
      * @var array
      */
     protected $fillable = [
-        'rtni_id', 'tani_id', 'usua_id'
+        'esre_id', 'rtni_id', 'esre_ingresosoperacionales', 'esre_totalingresosoperacionales', 'esre_costoventa', 'esre_utilidadbruta','esre_gastospersonal', 'esre_resultadoexplotacion', 'esre_ingresosfinancieros', 'esre_gastosfinancieros', 'esre_utilidadantesimpuestos', 'esre_impuestosobreganancias', 'esre_utilidadliquida', 'esre_reservalegal', 'esre_utilidadnetaejercicio'
     ];
 
     /**
@@ -55,23 +55,11 @@ class RespuestaTallerNiif extends Model
 
     ];
 
-    public function usuario()
+    /**
+     * Obtener la respuesta taller niif
+     */
+    public function respuestaTallerNiif()
     {
-        return $this->belongsTo('App\User','usua_id');
-    }
-
-    public function tallerNiif()
-    {
-        return $this->belongsTo('App\TallerNiif','tani_id');
-    }
-
-    public function balancesPruebas()
-    {
-        return $this->hasMany('App\BalancePrueba', 'rtni_id');
-    }
-
-    public function estadoResultado()
-    {
-        return $this->hasOne('App\EstadoResultado', 'rtni_id');
+        return $this->belongsTo('App\RespuestaTallerNiif','rtni_id');
     }
 }
