@@ -25,6 +25,12 @@
             </table>
         </div>
     </div>
+
+    <div class="row">
+
+        <h3><strong>Calificación del taller: </strong> {{ $calificacionTaller }}</h3>
+
+    </div>
     <br>
     <div class="row">
         <div class="col-lg-12 text-center">

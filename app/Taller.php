@@ -157,4 +157,14 @@ class Taller extends Model
         return Pregunta::where('tall_id',$this->tall_id)->sum('preg_porcentaje');
     }
 
+    /**
+     * metodo para consultar el total de calificacion.
+     */
+    public function calificacionTotalTaller($tall_id)
+    {
+        //SELECT SUM(cali_ponderado) FROM calificacion WHERE tall_id=1
+        return Calificacion::where('tall_id',$tall_id)->sum('cali_ponderado');
+    }
+
+
 }
