@@ -22,6 +22,8 @@ use App\FilaTallerNomina;
 use App\RespuestaTallerKardex;
 use App\FilaTallerKardex;
 use App\Puc;
+use App\RespuestaTallerNiif;
+use App\BalancePrueba;
 use App\DataTables\TallerDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
@@ -1233,11 +1235,6 @@ class TallerController extends Controller
         }
         $valoresConPuc = collect();
         foreach ($filasTallerAsientoContable as $ftac ) {
-            /*$fila = new \StdClass();
-            $fila->codigoGeneral = substr($ftac->puc->puc_codigo,0,4);
-            $fila->codigoCompleto = $ftac->puc->puc_codigo;
-            $fila->debito = $ftac->ftac_valordebito;
-            $fila->credito = $ftac->ftac_valorcredito;*/
             $fila = array();
             $fila['primerDigito'] = substr($ftac->puc->puc_codigo,0,1);
             $fila['codigoGeneral'] = substr($ftac->puc->puc_codigo,0,4);
@@ -1276,8 +1273,55 @@ class TallerController extends Controller
             $resultado->push($a);
         }
         $resultado = $resultado->sortBy('puc');
-        $balancePrueba = View::make('estudiante.curso.taller.niif.balanceprueba', ['filas' => $resultado,'tallerNiif' => $tallerNiif]);
-        $respuesta = array('state' => 'success', 'balanceprueba' => $balancePrueba->render());
+        DB::beginTransaction();
+        try {
+            $respuestaTallerNiif = $tallerNiif->respuestaTallerNiifUsuarioAutenticado();
+            if(!isset($respuestaTallerNiif)){
+                $respuestaTallerNiif = RespuestaTallerNiif::create([
+                    'tani_id' => $tallerNiif->tani_id,
+                    'usua_id' => Auth::user()->id
+                ]);
+            }
+            BalancePrueba::where('rtni_id', $respuestaTallerNiif->rtni_id)->delete();
+            $fila = 1;
+            foreach ($resultado as $r) {
+                $valorDebito  = 0;
+                $valorCredito = 0;
+                if ($r->primerDigito == 1 || $r->primerDigito == 5 || $r->primerDigito == 6){
+                    if ($r->valor >= 0)
+                        $valorDebito  = $r->valor;
+                    else
+                        $valorCredito = $r->valor;
+                }elseif ($r->primerDigito == 2 || $r->primerDigito == 3 || $r->primerDigito == 4 || $r->primerDigito == 7){
+                    if ($r->valor >= 0)
+                        $valorCredito = $r->valor;
+                    else
+                        $valorDebito  = $r->valor;
+                }
+                BalancePrueba::create([
+                    'rtni_id'      => $respuestaTallerNiif->rtni_id,
+                    'bapr_codigo'  => $r->puc->puc_codigo,
+                    'bapr_cuenta'  => $r->puc->puc_nombre,
+                    'bapr_debito'  => $valorDebito,
+                    'bapr_credito' => $valorCredito,
+                    'bapr_fila'    => $fila
+                ]);
+                $fila++;
+            }
+            $balancesPruebas = BalancePrueba::where('rtni_id', $respuestaTallerNiif->rtni_id)->orderBy('bapr_fila', 'asc')->get();
+            $balancePrueba = View::make('estudiante.curso.taller.niif.balanceprueba', ['balancesPruebas' => $balancesPruebas,'tallerNiif' => $tallerNiif]);
+            DB::commit();
+            $success = true;
+        } catch (\Exception $e) {
+            $success = false;
+            DB::rollback();
+            dd($e->getMessage());
+        }
+        if (!$success) {
+            $respuesta = array('state' => 'error', 'message' => 'Ha ocurrido un error inesperado, por favor inténtelo de nuevo.');
+        }else{
+            $respuesta = array('state' => 'success', 'message' => 'Se han generado las tablas con éxito.', 'balanceprueba' => $balancePrueba->render());
+        }
         echo json_encode($respuesta);
     }
 }

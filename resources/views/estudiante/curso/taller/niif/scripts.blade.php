@@ -53,7 +53,7 @@ function generarTablasNiif(elemento) {
                         });
                         divTablas.html('');
                         divTablas.append(data.balanceprueba);
-                        calcularTotalesBalancePrueba(divTablas).then(function () {
+                        calcularTotalesBalancePrueba().then(function () {
                             return darFormatoACamposTablasNiif();
                         });
                     }
@@ -72,7 +72,9 @@ function generarTablasNiif(elemento) {
     });
     return promise;
 }
-
+calcularTotalesBalancePrueba().then(function () {
+    return darFormatoACamposTablasNiif();
+});
 function darFormatoACamposTablasNiif() {
     $('.tab-content:visible').find(".taller-balance-prueba > tbody > tr > td").each(function(index, el) {
         if($(el).hasClass('columna_opcion') || $(el).hasClass('columna_codigo') || $(el).hasClass('columna_cuentas')){
@@ -83,12 +85,11 @@ function darFormatoACamposTablasNiif() {
         }
     });
 }
-
-function calcularTotalesBalancePrueba(elemento) {
+function calcularTotalesBalancePrueba() {
     var promise = new Promise(function (resolve, reject) {
         var total_credito = 0;
         var total_debito = 0;
-        var tablaBalancePrueba = $(elemento).find('.taller-balance-prueba');
+        var tablaBalancePrueba = $('.tab-content:visible').find('.taller-balance-prueba');
         tablaBalancePrueba.find('.columna_credito').each(function(index, el) {
             var number = numeral($(el).text()).format('0');
             var valorTd = parseInt(number);
@@ -105,7 +106,7 @@ function calcularTotalesBalancePrueba(elemento) {
         });
         tablaBalancePrueba.find(".total_credito").text(numeral(total_credito).format('$0,0'));
         tablaBalancePrueba.find(".total_debito").text(numeral(total_debito).format('$0,0'));
-        resolve(elemento);
+        resolve();
     });
     return promise;
 }

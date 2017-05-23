@@ -19,27 +19,12 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($filas as $fila)
+            @foreach ($balancesPruebas as $bp)
                 <tr>
-                    <td class="text-center vcenter columna_codigo" width="10%">{{ $fila->puc->puc_codigo }}</td>
-                    <td class="text-center vcenter columna_cuentas" width="40%">{{ $fila->puc->puc_nombre }}</td>
-                    @if ($fila->primerDigito == 1 || $fila->primerDigito == 5 || $fila->primerDigito == 6)
-                        @if ($fila->valor >= 0)
-                            <td class="text-center vcenter columna_debito" width="25%">{{ $fila->valor }}</td>
-                            <td class="text-center vcenter columna_credito" width="25%"></td>
-                        @else
-                            <td class="text-center vcenter columna_debito" width="25%"></td>
-                            <td class="text-center vcenter columna_credito" width="25%">{{ $fila->valor }}</td>
-                        @endif
-                    @elseif ($fila->primerDigito == 2 || $fila->primerDigito == 3 || $fila->primerDigito == 4 || $fila->primerDigito == 7)
-                        @if ($fila->valor >= 0)
-                            <td class="text-center vcenter columna_debito" width="25%"></td>
-                            <td class="text-center vcenter columna_credito" width="25%">{{ $fila->valor }}</td>
-                        @else
-                            <td class="text-center vcenter columna_debito" width="25%">{{ $fila->valor }}</td>
-                            <td class="text-center vcenter columna_credito" width="25%"></td>
-                        @endif
-                    @endif
+                    <td class="text-center vcenter columna_codigo" width="10%">{{ $bp->bapr_codigo }}</td>
+                    <td class="text-center vcenter columna_cuentas" width="40%">{{ $bp->bapr_cuenta }}</td>
+                    <td class="text-center vcenter columna_debito" width="25%">{{ $bp->bapr_debito }}</td>
+                    <td class="text-center vcenter columna_credito" width="25%">{{ $bp->bapr_credito }}</td>
                 </tr>
             @endforeach
             <tr>
