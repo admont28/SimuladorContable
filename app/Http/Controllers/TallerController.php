@@ -1231,19 +1231,41 @@ class TallerController extends Controller
         }
         $valoresConPuc = collect();
         foreach ($filasTallerAsientoContable as $ftac ) {
-            $fila = new \StdClass();
+            /*$fila = new \StdClass();
             $fila->codigoGeneral = substr($ftac->puc->puc_codigo,0,4);
+            $fila->codigoCompleto = $ftac->puc->puc_codigo;
             $fila->debito = $ftac->ftac_valordebito;
-            $fila->credito = $ftac->ftac_valorcredito;
-            /*$fila = array();
-            $fila[] = substr($ftac->puc->puc_codigo,0,4);
-            $fila[] = $ftac->ftac_valordebito;
-            $fila[] = $ftac->ftac_valorcredito;*/
+            $fila->credito = $ftac->ftac_valorcredito;*/
+            $fila = array();
+            $fila['primerDigito'] = substr($ftac->puc->puc_codigo,0,1);
+            $fila['codigoGeneral'] = substr($ftac->puc->puc_codigo,0,4);
+            $fila['codigoCompleto'] = $ftac->puc->puc_codigo;
+            $fila['debito'] = $ftac->ftac_valordebito;
+            $fila['credito'] = $ftac->ftac_valorcredito;
             $valoresConPuc->push($fila);
         }
-        $valoresConPuc->search(function ($item, $key) {
-            dd($item, $key);
-        });
-        dd($valoresConPuc,$valoresConPuc->search());
+        $valoresConPucUnicos = $valoresConPuc->unique('codigoGeneral');
+        $resumen = array();
+        foreach ($valoresConPucUnicos as $v) {
+            foreach ($valoresConPuc as $v2) {
+                if($v['codigoGeneral'] == $v2['codigoGeneral']){
+                    if(array_key_exists($v['codigoGeneral'], $resumen)){
+                        if($v['primerDigito'] == 1 || $v['primerDigito'] == 5 || $v['primerDigito'] == 6){
+                            $resumen[$v['codigoGeneral']] +=  $v2['debito'] - $v2['credito'];
+                        }else if($v['primerDigito'] == 2 || $v['primerDigito'] == 3 || $v['primerDigito'] == 4 || $v['primerDigito'] == 7){
+                            $resumen[$v['codigoGeneral']] +=  $v2['credito'] - $v2['debito'];
+                        }
+                    }else{
+                        if($v['primerDigito'] == 1 || $v['primerDigito'] == 5 || $v['primerDigito'] == 6){
+                            $resumen[$v['codigoGeneral']] =  $v2['debito'] - $v2['credito'];
+                        }else if($v['primerDigito'] == 2 || $v['primerDigito'] == 3 || $v['primerDigito'] == 4 || $v['primerDigito'] == 7){
+                            $resumen[$v['codigoGeneral']] =  $v2['credito'] - $v2['debito'];
+                        }
+                    }
+                }
+            }
+        }
+        
+        dd($valoresConPuc,$resumen);
     }
 }
