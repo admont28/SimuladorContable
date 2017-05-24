@@ -330,7 +330,13 @@ class RespuestaController extends Controller
                         ->with('usuario', $usuario)
                         ->with('respuestaTallerKardex', $respuestaTallerKardex);
         }elseif (isset($tallerNiif)) {
-
+            $respuestaTallerNiif = $tallerNiif->respuestasTallerNiif->where('usua_id', $usuario->id)->first();
+            return View('profesor.curso.taller.niif.respuesta')
+                        ->with('curso', $curso)
+                        ->with('taller', $taller)
+                        ->with('tallerNiif', $tallerNiif)
+                        ->with('usuario', $usuario)
+                        ->with('respuestaTallerNiif', $respuestaTallerNiif);
         }
         flash('El taller con ID: '.$tall_id.' no es un taller práctico. Verifique por favor.')->error();
         return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);

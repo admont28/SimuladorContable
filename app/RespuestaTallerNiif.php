@@ -79,4 +79,9 @@ class RespuestaTallerNiif extends Model
     {
         return $this->hasOne('App\EstadoSituacionFinanciera', 'rtni_id');
     }
+
+    public function calcularTotalEnBalancePruebaColumna($columna = "")
+    {
+        return BalancePrueba::where('rtni_id', $this->rtni_id)->sum($columna);
+    }
 }
