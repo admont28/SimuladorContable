@@ -312,7 +312,12 @@ class RespuestaController extends Controller
             flash('El usuario con ID: '.$usua_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
         }
-        dd($usuario);
-        $respuestaTallerNomina = $tallerNomina->respuestaTallerNomina->where('usua_id', $usuario->id);
+        $respuestaTallerNomina = $tallerNomina->respuestasTallerNomina->where('usua_id', $usuario->id)->first();
+        return View('profesor.curso.taller.nomina.respuesta')
+                    ->with('curso', $curso)
+                    ->with('taller', $taller)
+                    ->with('tallerNomina', $tallerNomina)
+                    ->with('usuario', $usuario)
+                    ->with('respuestaTallerNomina', $respuestaTallerNomina);
     }
 }
