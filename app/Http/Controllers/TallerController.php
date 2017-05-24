@@ -25,6 +25,7 @@ use App\Puc;
 use App\RespuestaTallerNiif;
 use App\BalancePrueba;
 use App\EstadoResultado;
+use App\EstadoSituacionFinanciera;
 use App\DataTables\TallerDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
@@ -1310,8 +1311,10 @@ class TallerController extends Controller
                 $fila++;
             }
             $balancesPruebas = BalancePrueba::where('rtni_id', $respuestaTallerNiif->rtni_id)->orderBy('bapr_fila', 'asc')->get();
-            $balancePrueba = View::make('estudiante.curso.taller.niif.balanceprueba', ['balancesPruebas' => $balancesPruebas,'tallerNiif' => $tallerNiif]);
-            $estadoresultado = $this->generarTablaEstadoDeResultados($respuestaTallerNiif, $balancesPruebas, $tallerNiif);
+            $balancePruebaView = View::make('estudiante.curso.taller.niif.balanceprueba', ['balancesPruebas' => $balancesPruebas,'tallerNiif' => $tallerNiif]);
+            $estadoResultadoView = $this->generarTablaEstadoDeResultados($respuestaTallerNiif, $balancesPruebas, $tallerNiif);
+            $estadoResultado = EstadoResultado::where('rtni_id', $respuestaTallerNiif->rtni_id)->get()->first();
+            $estadoSituacionFinanciera = $this->generarTablaEstadoSituacionFinanciera($respuestaTallerNiif, $estadoResultado, $balancesPruebas, $tallerNiif);
             DB::commit();
             $success = true;
         } catch (\Exception $e) {
@@ -1325,8 +1328,9 @@ class TallerController extends Controller
             $respuesta = array(
                 'state' => 'success',
                 'message' => 'Se han generado las tablas con éxito.',
-                'balanceprueba' => $balancePrueba->render(),
-                'estadoresultado' => $estadoresultado->render());
+                'balanceprueba' => $balancePruebaView->render(),
+                'estadoresultado' => $estadoResultadoView->render(),
+                'estadoSituacionFinanciera' => $estadoSituacionFinanciera->render());
         }
         echo json_encode($respuesta);
     }
@@ -1369,5 +1373,63 @@ class TallerController extends Controller
         }else{
             return $balancePrueba->bapr_credito;
         }
+    }
+
+    private function generarTablaEstadoSituacionFinanciera($respuestaTallerNiif, $estadoResultado, $balancesPruebas, $tallerNiif)
+    {
+        if($respuestaTallerNiif == null || $estadoResultado == null || $balancesPruebas == null || $tallerNiif == null)
+            return '';
+        $datos = array();
+        $datos['rtni_id']                            = $respuestaTallerNiif->rtni_id;
+        $datos['essf_efectivoequivalentes']          = $this->sumarValoresSegunPuc($balancesPruebas,'11');
+        $datos['essf_deudores']                      = $this->sumarValoresSegunPuc($balancesPruebas,'1305');
+        $datos['essf_anticipoimpuesto']              = $this->sumarValoresSegunPuc($balancesPruebas,'1355');
+        $datos['essf_inventario']                    = $this->sumarValoresSegunPuc($balancesPruebas,'1435');
+        $datos['essf_activocorriente']               = $datos['essf_efectivoequivalentes'] + $datos['essf_deudores'] + $datos['essf_anticipoimpuesto'] + $datos['essf_inventario'];
+        $datos['essf_construccionesedificaciones']   = $this->sumarValoresSegunPuc($balancesPruebas,'1516');
+        $datos['essf_equiposoficina']                = $this->sumarValoresSegunPuc($balancesPruebas,'1524');
+        $datos['essf_equipocomputacioncomunicacion'] = $this->sumarValoresSegunPuc($balancesPruebas,'1528');
+        $datos['essf_flotaequipotransporte']         = $this->sumarValoresSegunPuc($balancesPruebas,'1540');
+        $datos['essf_activonocorriente']             = $datos['essf_construccionesedificaciones'] + $datos['essf_equiposoficina'] + $datos['essf_equipocomputacioncomunicacion'] + $datos['essf_flotaequipotransporte'];
+        $datos['essf_totalactivos']                  = $datos['essf_activocorriente'] + $datos['essf_activonocorriente'];
+        $datos['essf_proveedores']                   = $this->sumarValoresSegunPuc($balancesPruebas,'2205');
+        $datos['essf_retencionfuente']               = $this->sumarValoresSegunPuc($balancesPruebas,'2365');
+        $datos['essf_retencionaportesnomina']        = $this->sumarValoresSegunPuc($balancesPruebas,'2370');
+        $datos['essf_acreedoresvarios']              = $this->sumarValoresSegunPuc($balancesPruebas,'2380');
+        $datos['essf_ivagenerado']                   = $this->sumarValoresSegunPuc($balancesPruebas,'2408');
+        $datos['essf_obligacioneslaborales']         = $this->sumarValoresSegunPuc($balancesPruebas,'2610');
+        $datos['essf_pasivocorriente']               = $datos['essf_proveedores'] + $datos['essf_retencionfuente'] + $datos['essf_retencionaportesnomina'] + $datos['essf_acreedoresvarios'] + $datos['essf_ivagenerado'] + $datos['essf_obligacioneslaborales'];
+        $datos['essf_obligacionesfinancieras']       = $this->sumarValoresSegunPuc($balancesPruebas,'21');
+        $datos['essf_pasivonocorriente']             = $datos['essf_obligacionesfinancieras'];
+        $datos['essf_totalpasivos']                  = $datos['essf_pasivocorriente'] + $datos['essf_pasivonocorriente'];
+        $datos['essf_aportessociales']               = $this->sumarValoresSegunPuc($balancesPruebas,'3115');
+        $datos['essf_utilidadejercicio']             = $estadoResultado->esre_utilidadnetaejercicio;
+        $datos['essf_reservasobligatorias']          = $estadoResultado->esre_reservalegal;
+        $datos['essf_totalpatrimonio']               = $datos['essf_aportessociales'] + $datos['essf_utilidadejercicio'] + $datos['essf_reservasobligatorias'];
+        $datos['essf_totalpasivopatrimonio']         = $datos['essf_totalpasivos'] + $datos['essf_totalpatrimonio'];
+        $estadoSituacionFinanciera =  EstadoSituacionFinanciera::where('rtni_id', $respuestaTallerNiif->rtni_id)->get()->first();
+        if(isset($estadoSituacionFinanciera)){
+            $estadoSituacionFinanciera->fill($datos);
+            $estadoSituacionFinanciera->save();
+        }else{
+            $estadoSituacionFinanciera = EstadoSituacionFinanciera::create($datos);
+        }
+        return View::make('estudiante.curso.taller.niif.estadosituacionfinanciera', ['estadoSituacionFinanciera' => $estadoSituacionFinanciera, 'tallerNiif' => $tallerNiif]);
+
+    }
+
+    private function sumarValoresSegunPuc($balancesPruebas = null, $codigoPuc = '')
+    {
+        if($balancesPruebas == null || $codigoPuc == null || $codigoPuc == '')
+            return 0;
+        $suma = 0;
+        $cantidadDigitos = strlen($codigoPuc);
+        foreach ($balancesPruebas as $bp) {
+            $puc = substr($bp->bapr_codigo,0,$cantidadDigitos);
+            if($puc == $codigoPuc){
+                $suma += $this->obtenerValorSegunDebitoOCredito($bp);
+            }
+        }
+        return $suma;
     }
 }

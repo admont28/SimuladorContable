@@ -1,7 +1,14 @@
 <div class="tablas-niif">
     @if ($tallerPractico->tallerNiif->respuestaTallerNiifUsuarioAutenticado() !== null)
-        @include('estudiante.curso.taller.niif.balanceprueba', ['balancesPruebas' => $tallerPractico->tallerNiif->respuestaTallerNiifUsuarioAutenticado()->balancesPruebas, 'tallerNiif' => $tallerPractico->tallerNiif])
-        @include('estudiante.curso.taller.niif.estadoresultado', ['estadoResultado' => $tallerPractico->tallerNiif->respuestaTallerNiifUsuarioAutenticado()->estadoResultado, 'tallerNiif' => $tallerPractico->tallerNiif])
+        @if ($tallerPractico->tallerNiif->respuestaTallerNiifUsuarioAutenticado()->balancesPruebas != null && $tallerPractico->tallerNiif->respuestaTallerNiifUsuarioAutenticado()->balancesPruebas->isNotEmpty())
+            @include('estudiante.curso.taller.niif.balanceprueba', ['balancesPruebas' => $tallerPractico->tallerNiif->respuestaTallerNiifUsuarioAutenticado()->balancesPruebas, 'tallerNiif' => $tallerPractico->tallerNiif])
+        @endif
+        @if ($tallerPractico->tallerNiif->respuestaTallerNiifUsuarioAutenticado()->estadoResultado != null)
+            @include('estudiante.curso.taller.niif.estadoresultado', ['estadoResultado' => $tallerPractico->tallerNiif->respuestaTallerNiifUsuarioAutenticado()->estadoResultado, 'tallerNiif' => $tallerPractico->tallerNiif])
+        @endif
+        @if ($tallerPractico->tallerNiif->respuestaTallerNiifUsuarioAutenticado()->estadoSituacionFinanciera != null)
+            @include('estudiante.curso.taller.niif.estadosituacionfinanciera', ['estadoSituacionFinanciera' => $tallerPractico->tallerNiif->respuestaTallerNiifUsuarioAutenticado()->estadoSituacionFinanciera, 'tallerNiif' => $tallerPractico->tallerNiif])
+        @endif
     @endif
 </div>
 <br>

@@ -54,6 +54,7 @@ function generarTablasNiif(elemento) {
                         divTablas.html('');
                         divTablas.append(data.balanceprueba);
                         divTablas.append(data.estadoresultado);
+                        divTablas.append(data.estadoSituacionFinanciera);
                         calcularTotalesBalancePrueba().then(function () {
                             return darFormatoACamposTablasNiif();
                         });

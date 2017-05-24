@@ -74,4 +74,9 @@ class RespuestaTallerNiif extends Model
     {
         return $this->hasOne('App\EstadoResultado', 'rtni_id');
     }
+
+    public function estadoSituacionFinanciera()
+    {
+        return $this->hasOne('App\EstadoSituacionFinanciera', 'rtni_id');
+    }
 }
