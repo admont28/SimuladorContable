@@ -29,8 +29,8 @@
             @endforeach
             <tr>
                 <td colspan="2" class="text-center"><strong>TOTAL</strong></td>
-                <td class="text-center total_debito formato_pesos">$ 0</td>
-                <td class="text-center total_credito formato_pesos">$ 0</td>
+                <td class="text-center total_debito formato_pesos">{{ $respuestaTallerNiif->calcularTotalEnBalancePruebaColumna('bapr_debito') }}</td>
+                <td class="text-center total_credito formato_pesos">{{ $respuestaTallerNiif->calcularTotalEnBalancePruebaColumna('bapr_credito') }}</td>
             </tr>
         </tbody>
     </table>

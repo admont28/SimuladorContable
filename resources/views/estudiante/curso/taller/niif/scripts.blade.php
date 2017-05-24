@@ -55,9 +55,7 @@ function generarTablasNiif(elemento) {
                         divTablas.append(data.balanceprueba);
                         divTablas.append(data.estadoresultado);
                         divTablas.append(data.estadoSituacionFinanciera);
-                        calcularTotalesBalancePrueba().then(function () {
-                            return darFormatoACamposTablasNiif();
-                        });
+                        darFormatoACamposTablasNiif();
                     }
                 }
             })
@@ -74,38 +72,12 @@ function generarTablasNiif(elemento) {
     });
     return promise;
 }
-calcularTotalesBalancePrueba().then(function () {
-    return darFormatoACamposTablasNiif();
-});
+
+darFormatoACamposTablasNiif();
 function darFormatoACamposTablasNiif() {
     $('.tab-content:visible').find(".tabla-niif > tbody > tr > td").each(function(index, el) {
         if ($(el).hasClass('formato_pesos')) {
             $(el).text(numeral($(el).text()).format('$0,0'));
         }
     });
-}
-function calcularTotalesBalancePrueba() {
-    var promise = new Promise(function (resolve, reject) {
-        var total_credito = 0;
-        var total_debito = 0;
-        var tablaBalancePrueba = $('.tab-content:visible').find('.taller-balance-prueba');
-        tablaBalancePrueba.find('.columna_credito').each(function(index, el) {
-            var number = numeral($(el).text()).format('0');
-            var valorTd = parseInt(number);
-            if(!isNaN(valorTd)){
-                total_credito += valorTd;
-            }
-        });
-        tablaBalancePrueba.find('.columna_debito').each(function(index, el) {
-            var number = numeral($(el).text()).format('0');
-            var valorTd = parseInt(number);
-            if(!isNaN(valorTd)){
-                total_debito += valorTd;
-            }
-        });
-        tablaBalancePrueba.find(".total_credito").text(numeral(total_credito).format('$0,0'));
-        tablaBalancePrueba.find(".total_debito").text(numeral(total_debito).format('$0,0'));
-        resolve();
-    });
-    return promise;
 }

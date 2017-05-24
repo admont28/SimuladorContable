@@ -1340,7 +1340,7 @@ class TallerController extends Controller
                 $fila++;
             }
             $balancesPruebas = BalancePrueba::where('rtni_id', $respuestaTallerNiif->rtni_id)->orderBy('bapr_fila', 'asc')->get();
-            $balancePruebaView = View::make('estudiante.curso.taller.niif.balanceprueba', ['balancesPruebas' => $balancesPruebas,'tallerNiif' => $tallerNiif]);
+            $balancePruebaView = View::make('estudiante.curso.taller.niif.balanceprueba', ['balancesPruebas' => $balancesPruebas,'tallerNiif' => $tallerNiif, 'respuestaTallerNiif' => $respuestaTallerNiif]);
             $estadoResultadoView = $this->generarTablaEstadoDeResultados($respuestaTallerNiif, $balancesPruebas, $tallerNiif);
             $estadoResultado = EstadoResultado::where('rtni_id', $respuestaTallerNiif->rtni_id)->get()->first();
             $estadoSituacionFinanciera = $this->generarTablaEstadoSituacionFinanciera($respuestaTallerNiif, $estadoResultado, $balancesPruebas, $tallerNiif);

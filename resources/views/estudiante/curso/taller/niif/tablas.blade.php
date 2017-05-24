@@ -1,7 +1,7 @@
 <div class="tablas-niif">
     @if ($tallerPractico->tallerNiif->respuestaTallerNiifUsuarioAutenticado() !== null)
         @if ($tallerPractico->tallerNiif->respuestaTallerNiifUsuarioAutenticado()->balancesPruebas != null && $tallerPractico->tallerNiif->respuestaTallerNiifUsuarioAutenticado()->balancesPruebas->isNotEmpty())
-            @include('estudiante.curso.taller.niif.balanceprueba', ['balancesPruebas' => $tallerPractico->tallerNiif->respuestaTallerNiifUsuarioAutenticado()->balancesPruebas, 'tallerNiif' => $tallerPractico->tallerNiif])
+            @include('estudiante.curso.taller.niif.balanceprueba', ['balancesPruebas' => $tallerPractico->tallerNiif->respuestaTallerNiifUsuarioAutenticado()->balancesPruebas, 'tallerNiif' => $tallerPractico->tallerNiif, 'respuestaTallerNiif' => $tallerPractico->tallerNiif->respuestaTallerNiifUsuarioAutenticado()])
         @endif
         @if ($tallerPractico->tallerNiif->respuestaTallerNiifUsuarioAutenticado()->estadoResultado != null)
             @include('estudiante.curso.taller.niif.estadoresultado', ['estadoResultado' => $tallerPractico->tallerNiif->respuestaTallerNiifUsuarioAutenticado()->estadoResultado, 'tallerNiif' => $tallerPractico->tallerNiif])
