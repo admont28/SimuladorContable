@@ -7,6 +7,7 @@ use App\Pregunta;
 use App\RespuestaMultipleUnica;
 use App\Curso;
 use App\Taller;
+use App\User;
 use App\DataTables\PreguntaDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
@@ -285,5 +286,33 @@ class RespuestaController extends Controller
         return redirect()->route('profesor.curso.taller.pregunta.ver',['curs_id'=> $curs_id,'tall_id'=>$taller->tall_id, 'preg_id' => $preg_id]);
     }
 
-
+    public function mostrarRespuestaTallerNomina($curs_id, $tall_id, $usua_id)
+    {
+        // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
+        $curso = Curso::find($curs_id);
+        if (!isset($curso)) {
+            flash('El curso con ID: '.$curs_id.' no existe. Verifique por favor.')->error();
+            return redirect()->route('profesor.curso');
+        }
+        // Verificamos que exista el taller en bd, si no es así, informamos al usuario y redireccionamos.
+        $taller = Taller::find($tall_id);
+        if (!isset($taller)) {
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
+            return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
+        }
+        $tallerNomina = $taller->tallerNomina;
+        // Verificamos que exista el taller de nómina, si no es así, informamos al usuario y redireccionamos.
+        if (!isset($tallerNomina)) {
+            flash('El taller con ID: '.$tall_id.' no es un taller de nómina. Verifique por favor.')->error();
+            return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
+        }
+        // Verificamos que exista el usuario en bd, si no es así, informamos al usuario y redireccionamos.
+        $usuario = User::find($usua_id);
+        if (!isset($usuario)) {
+            flash('El usuario con ID: '.$usua_id.' no existe. Verifique por favor.')->error();
+            return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
+        }
+        dd($usuario);
+        $respuestaTallerNomina = $tallerNomina->respuestaTallerNomina->where('usua_id', $usuario->id);
+    }
 }
