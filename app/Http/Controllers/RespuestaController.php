@@ -286,7 +286,7 @@ class RespuestaController extends Controller
         return redirect()->route('profesor.curso.taller.pregunta.ver',['curs_id'=> $curs_id,'tall_id'=>$taller->tall_id, 'preg_id' => $preg_id]);
     }
 
-    public function mostrarRespuestaTallerNomina($curs_id, $tall_id, $usua_id)
+    public function mostrarRespuestaTallerPractico($curs_id, $tall_id, $usua_id)
     {
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
@@ -300,24 +300,39 @@ class RespuestaController extends Controller
             flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
-        $tallerNomina = $taller->tallerNomina;
-        // Verificamos que exista el taller de nómina, si no es así, informamos al usuario y redireccionamos.
-        if (!isset($tallerNomina)) {
-            flash('El taller con ID: '.$tall_id.' no es un taller de nómina. Verifique por favor.')->error();
-            return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
-        }
         // Verificamos que exista el usuario en bd, si no es así, informamos al usuario y redireccionamos.
         $usuario = User::find($usua_id);
         if (!isset($usuario)) {
             flash('El usuario con ID: '.$usua_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
         }
-        $respuestaTallerNomina = $tallerNomina->respuestasTallerNomina->where('usua_id', $usuario->id)->first();
-        return View('profesor.curso.taller.nomina.respuesta')
-                    ->with('curso', $curso)
-                    ->with('taller', $taller)
-                    ->with('tallerNomina', $tallerNomina)
-                    ->with('usuario', $usuario)
-                    ->with('respuestaTallerNomina', $respuestaTallerNomina);
+        $tallerAsientoContable = $taller->tallerAsientoContable;
+        $tallerNomina          = $taller->tallerNomina;
+        $tallerKardex          = $taller->tallerKardex;
+        $tallerNiif            = $taller->tallerNiif;
+        // Verificamos el tipo de taller practico para mostrar la respuesta de ese taller.
+        if(isset($tallerAsientoContable)){
+
+        }elseif (isset($tallerNomina)) {
+            $respuestaTallerNomina = $tallerNomina->respuestasTallerNomina->where('usua_id', $usuario->id)->first();
+            return View('profesor.curso.taller.nomina.respuesta')
+                        ->with('curso', $curso)
+                        ->with('taller', $taller)
+                        ->with('tallerNomina', $tallerNomina)
+                        ->with('usuario', $usuario)
+                        ->with('respuestaTallerNomina', $respuestaTallerNomina);
+        }elseif (isset($tallerKardex)) {
+            $respuestaTallerKardex = $tallerKardex->respuestasTallerKardex->where('usua_id', $usuario->id)->first();
+            return View('profesor.curso.taller.kardex.respuesta')
+                        ->with('curso', $curso)
+                        ->with('taller', $taller)
+                        ->with('tallerKardex', $tallerKardex)
+                        ->with('usuario', $usuario)
+                        ->with('respuestaTallerKardex', $respuestaTallerKardex);
+        }elseif (isset($tallerNiif)) {
+
+        }
+        flash('El taller con ID: '.$tall_id.' no es un taller práctico. Verifique por favor.')->error();
+        return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
     }
 }

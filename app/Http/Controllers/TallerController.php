@@ -837,17 +837,14 @@ class TallerController extends Controller
             $tipoTaller = 'diagnosticoTeorico';
             $usuarios = $taller->usuariosPorTaller();
         }elseif($taller->tall_tipo == 'practico'){
+            $tipoTaller = 'practico';
             if(isset($taller->tallerAsientoContable)){
-                $tipoTaller = 'tallerAsientoContable';
                 $respuestasTaller = $taller->tallerAsientoContable->respuestasTallerAsientosContables;
             }elseif (isset($taller->tallerNomina)) {
-                $tipoTaller = 'tallerNomina';
                 $respuestasTaller = $taller->tallerNomina->respuestasTallerNomina;
             }elseif (isset($taller->tallerKardex)) {
-                $tipoTaller = 'tallerKardex';
                 $respuestasTaller = $taller->tallerKardex->respuestasTallerKardex;
             }elseif (isset($taller->tallerNiif)) {
-                $tipoTaller = 'tallerNiif';
                 $respuestasTaller = $taller->tallerNiif->respuestasTallerNiif;
             }else{
                 $respuestasTaller = collect();
@@ -862,14 +859,8 @@ class TallerController extends Controller
                             if($tipoTaller == 'diagnosticoTeorico'){
                                 return
                                 '<a href="'.route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id' =>$curso->curs_id, 'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->id ]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
-                            }elseif ($tipoTaller == 'tallerAsientoContable') {
-                                return 'ASIENTOCONTABLE';
-                            }elseif ($tipoTaller == 'tallerNomina') {
-                                return '<a href="'.route('profesor.curso.taller.nomina.respuesta',['curs_id' =>$curso->curs_id, 'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->id ]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
-                            }elseif ($tipoTaller == 'tallerKardex') {
-                                return 'KARDEX';
-                            }elseif ($tipoTaller == 'tallerNiif') {
-                                return 'NIIF';
+                            }elseif ($tipoTaller == 'practico') {
+                                return '<a href="'.route('profesor.curso.taller.practico.respuesta',['curs_id' =>$curso->curs_id, 'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->id ]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
                             }else {
                                 return 'SIN TIPO DE TALLLER';
                             }

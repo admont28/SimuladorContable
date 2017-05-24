@@ -275,10 +275,11 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
 
     /*
     |--------------------------------------------------------------------------
-    | Rutas para las respuestas de un taller de nómina
+    | Rutas para las respuestas de un taller practico
     |--------------------------------------------------------------------------
     */
-    Route::get('/curso/{curs_id}/taller/{tall_id}/usuario/{usua_id}/respuestas-taller-nomina', 'RespuestaController@mostrarRespuestaTallerNomina')->name('profesor.curso.taller.nomina.respuesta');
+
+    Route::get('/curso/{curs_id}/taller/{tall_id}/usuario/{usua_id}/respuesta-taller-practico', 'RespuestaController@mostrarRespuestaTallerPractico')->name('profesor.curso.taller.practico.respuesta');
 
 });
 
