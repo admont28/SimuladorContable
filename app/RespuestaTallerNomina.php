@@ -78,6 +78,6 @@ class RespuestaTallerNomina extends Model
 
     public function calcularTotalColumna($columna = "")
     {
-        return FilaTallerNomina::sum($columna);
+        return FilaTallerNomina::where('retn_id', $this->retn_id)->sum($columna);
     }
 }
