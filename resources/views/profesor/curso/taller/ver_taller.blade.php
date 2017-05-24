@@ -185,14 +185,13 @@
             </div>
         </div>
         @include('profesor.curso.taller.pregunta.index')
-        <div class="row">
-            <div class="page-header">
-                <h1>Usuarios que han respondido el taller</h1>
-            </div>
+    @endif
+    <div class="row">
+        <div class="page-header">
+            <h1>Usuarios que han respondido el taller</h1>
         </div>
-        @include('profesor.curso.taller.usuarios_solucionado_taller')
-@endif
-
+    </div>
+    @include('profesor.curso.taller.usuarios_solucionado_taller')
 @endsection
 @push('scripts')
     <script type="text/javascript">

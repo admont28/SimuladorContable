@@ -25,7 +25,7 @@
                 "processing": true,
                 "serverSide": true,
                 "lengthMenu": [5, 10, 25, 50, 75, 100],
-                "ajax": "{{ route('profesor.curso.taller.usuarios',['tall_id' => $taller->tall_id,'curs_id'=>$taller->curs_id]) }}",
+                "ajax": "{{ route('profesor.curso.taller.usuarios',['curs_id'=>$taller->curs_id, 'tall_id' => $taller->tall_id]) }}",
                 "columns" : [
                     {data: 'id', name: 'id', width: '5%'},
                     {data: 'name', name: 'name', width: '50%'},

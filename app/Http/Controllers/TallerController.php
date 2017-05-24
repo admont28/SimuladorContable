@@ -831,11 +831,49 @@ class TallerController extends Controller
     {
         $curso = Curso::find($curs_id);
         $taller = Taller::find($tall_id);
-        $usuarios = $taller->usuariosPorTaller();
+        $tipoTaller = '';
+        $usuarios = collect();
+        if($taller->tall_tipo == 'diagnostico' || $taller->tall_tipo == 'teorico'){
+            $tipoTaller = 'diagnosticoTeorico';
+            $usuarios = $taller->usuariosPorTaller();
+        }elseif($taller->tall_tipo == 'practico'){
+            if(isset($taller->tallerAsientoContable)){
+                $tipoTaller = 'tallerAsientoContable';
+                $respuestasTaller = $taller->tallerAsientoContable->respuestasTallerAsientosContables;
+            }elseif (isset($taller->tallerNomina)) {
+                $tipoTaller = 'tallerNomina';
+                $respuestasTaller = $taller->tallerNomina->respuestasTallerNomina;
+            }elseif (isset($taller->tallerKardex)) {
+                $tipoTaller = 'tallerKardex';
+                $respuestasTaller = $taller->tallerKardex->respuestasTallerKardex;
+            }elseif (isset($taller->tallerNiif)) {
+                $tipoTaller = 'tallerNiif';
+                $respuestasTaller = $taller->tallerNiif->respuestasTallerNiif;
+            }else{
+                $respuestasTaller = collect();
+            }
+            foreach ($respuestasTaller as $rt) {
+                if(!$usuarios->contains($rt->usuario))
+                    $usuarios->push($rt->usuario);
+            }
+        }
         return Datatables::of($usuarios)
-                        ->addColumn('opciones', function ($usuario) use($taller,$curso) {
-                            return
-                            '<a href="'.route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id' =>$curso->curs_id, 'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->id ]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
+                        ->addColumn('opciones', function ($usuario) use($taller,$curso, $tipoTaller) {
+                            if($tipoTaller == 'diagnosticoTeorico'){
+                                return
+                                '<a href="'.route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id' =>$curso->curs_id, 'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->id ]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
+                            }elseif ($tipoTaller == 'tallerAsientoContable') {
+                                return 'ASIENTOCONTABLE';
+                            }elseif ($tipoTaller == 'tallerNomina') {
+                                return '<a href="'.route('profesor.curso.taller.nomina.respuesta',['curs_id' =>$curso->curs_id, 'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->id ]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
+                            }elseif ($tipoTaller == 'tallerKardex') {
+                                return 'KARDEX';
+                            }elseif ($tipoTaller == 'tallerNiif') {
+                                return 'NIIF';
+                            }else {
+                                return 'SIN TIPO DE TALLLER';
+                            }
+
                         })
                         ->rawColumns(['opciones'])
                         ->make(true);
