@@ -66,6 +66,28 @@
         <script type="text/javascript" src="{{ asset('plugins/idletimer/js/idle-timer.min.js') }}" charset="utf-8"></script>
         <script type="text/javascript">
             $(document).ready(function() {
+                // load a locale
+                numeral.register('locale', 'es_CO', {
+                    delimiters: {
+                        thousands: '.',
+                        decimal: ','
+                    },
+                    abbreviations: {
+                        thousand: 'k',
+                        million: 'm',
+                        billion: 'b',
+                        trillion: 't'
+                    },
+                    ordinal : function (number) {
+                        return number === 1 ? 'er' : 'ème';
+                    },
+                    currency: {
+                        symbol: '$ '
+                    }
+                });
+                // switch between locales
+                numeral.locale('es_CO');
+                // '$1,000.00'*/
                 // idleTimer() takes an optional numeric argument that defines just the idle timeout
                 // timeout is in milliseconds
                 // Cerrar sesión después de 10 minutos de inactividad.

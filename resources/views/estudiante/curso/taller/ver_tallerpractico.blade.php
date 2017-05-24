@@ -8,35 +8,6 @@
 
 @section('active','#estudiante-curso')
 
-@push('scripts')
-    <script type="text/javascript">
-        $(document).ready(function() {
-            // load a locale
-            numeral.register('locale', 'es_CO', {
-                delimiters: {
-                    thousands: '.',
-                    decimal: ','
-                },
-                abbreviations: {
-                    thousand: 'k',
-                    million: 'm',
-                    billion: 'b',
-                    trillion: 't'
-                },
-                ordinal : function (number) {
-                    return number === 1 ? 'er' : 'ème';
-                },
-                currency: {
-                    symbol: '$ '
-                }
-            });
-            // switch between locales
-            numeral.locale('es_CO');
-            // '$1,000.00'*/
-        });
-    </script>
-@endpush
-
 @section('content')
     <div class="row">
         <h2 class="text-center"><strong>TALLERES PRÁCTICOS</strong></h2>
