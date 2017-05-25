@@ -35,23 +35,25 @@
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        <div class="form-horizontal">
-                            <div class="form-group">
-                                <label for="articulo_taller_kardex" class="col-lg-2 control-label"><strong>Artículo:</strong></label>
-                                <div class="col-lg-10">
-                                    <p class="form-control-static">{{ $respuestaTallerKardex->retk_articulo or 'SIN ARTÍCULO'}}</p>
+                        <div class="col-lg-12">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="articulo_taller_kardex" class="col-lg-2 control-label"><strong>Artículo:</strong></label>
+                                    <div class="col-lg-10">
+                                        <p class="form-control-static">{{ $respuestaTallerKardex->retk_articulo or 'SIN ARTÍCULO'}}</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="direccion_taller_kardex" class="col-lg-2 control-label"><strong>Dirección:</strong></label>
-                                <div class="col-lg-10">
-                                    <p class="form-control-static">{{ $respuestaTallerKardex->retk_direccion or 'SIN DIRECCIÓN'}}</p>
+                                <div class="form-group">
+                                    <label for="direccion_taller_kardex" class="col-lg-2 control-label"><strong>Dirección:</strong></label>
+                                    <div class="col-lg-10">
+                                        <p class="form-control-static">{{ $respuestaTallerKardex->retk_direccion or 'SIN DIRECCIÓN'}}</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="proveedores_taller_kardex" class="col-lg-2 control-label"><strong>Proveedores:</strong></label>
-                                <div class="col-lg-10">
-                                    <p class="form-control-static">{{ $respuestaTallerKardex->retk_proveedores or 'SIN PROVEEDORES'}}</p>
+                                <div class="form-group">
+                                    <label for="proveedores_taller_kardex" class="col-lg-2 control-label"><strong>Proveedores:</strong></label>
+                                    <div class="col-lg-10">
+                                        <p class="form-control-static">{{ $respuestaTallerKardex->retk_proveedores or 'SIN PROVEEDORES'}}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
