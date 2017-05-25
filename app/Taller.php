@@ -160,11 +160,30 @@ class Taller extends Model
     /**
      * metodo para consultar el total de calificacion.
      */
-    public function calificacionTotalTaller($tall_id)
+    public function calificacionTotalTaller($tall_id, $usua_id)
     {
         //SELECT SUM(cali_ponderado) FROM calificacion WHERE tall_id=1
-        return Calificacion::where('tall_id',$tall_id)->sum('cali_ponderado');
+        //SELECT DISTINCT SUM(cali_ponderado) FROM calificacion c JOIN users u on c.usua_id=u.id WHERE c.tall_id=1 and u.id=23
+
+        return Calificacion::join('Users','usua_id','=','Users.id')->where('tall_id',$tall_id)->where('usua_id', $usua_id)->sum('cali_ponderado');
     }
 
+    /**
+     * metodo para traer las respuestas de un taller practico de asientos contables.
+     * SELECT DISTINCT t.tall_id,t.tall_tipo,ac.taac_id,rac.rtac_id,rac.rtac_numerotabla,fta.ftac_valordebito,fta.ftac_valorcredito,fta.ftac_fila,u.id,u.name
+     * FROM taller t JOIN tallerasientocontable ac on t.tall_id=ac.tall_id, respuestatallerasientocontable rac JOIN users u on rac.usua_id=u.id,filatallerasientocontable fta
+     * WHERE t.tall_tipo="practico"
+     */
+    public function mostrarRespuestasTallerAsientosContablesPorUsuario()
+    {
+        return DB::table('Taller')
+            ->select('Taller.tall_id','Taller.tall_tipo','AsientoContable.taac_id','respuestatallerasientocontable.','','Users.id','name')
+            ->distinct()
+            ->join('Respuesta','Users.id','=','Respuesta.usua_id')
+            ->join('Pregunta','Respuesta.preg_id','=','Pregunta.preg_id')
+            ->join('Taller','Pregunta.tall_id','=','Taller.tall_id')
+            ->where('Taller.tall_id',$this->tall_id)
+            ->get();
+    }
 
 }
