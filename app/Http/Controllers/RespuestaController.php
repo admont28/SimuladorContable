@@ -312,7 +312,13 @@ class RespuestaController extends Controller
         $tallerNiif            = $taller->tallerNiif;
         // Verificamos el tipo de taller practico para mostrar la respuesta de ese taller.
         if(isset($tallerAsientoContable)){
-
+            $respuestasTallerAsientosContables = $tallerAsientoContable->respuestasTallerAsientosContables()->where('usua_id', $usuario->id)->orderBy('rtac_numerotabla','asc')->get();
+            return View('profesor.curso.taller.asientocontable.respuesta')
+                        ->with('curso', $curso)
+                        ->with('taller', $taller)
+                        ->with('tallerAsientoContable', $tallerAsientoContable)
+                        ->with('usuario', $usuario)
+                        ->with('respuestasTallerAsientosContables', $respuestasTallerAsientosContables);
         }elseif (isset($tallerNomina)) {
             $respuestaTallerNomina = $tallerNomina->respuestasTallerNomina->where('usua_id', $usuario->id)->first();
             return View('profesor.curso.taller.nomina.respuesta')
