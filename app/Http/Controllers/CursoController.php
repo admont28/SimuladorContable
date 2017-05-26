@@ -296,7 +296,26 @@ class CursoController extends Controller
                                     <button type="submit" name="eliminar" class="btn btn-xs btn-danger btn-eliminar"><i class="glyphicon glyphicon-trash"></i> Eliminar</button>
                                 </form>';
                        })
-                       ->editColumn('tall_tipo', '@if($tall_tipo == "teorico") <span class="label label-info">{{ $tall_tipo }}</span> @elseif($tall_tipo == "diagnostico") <span class="label label-warning">{{ $tall_tipo }}</span> @else <span class="label label-default">{{ $tall_tipo }}</span> @endif')
+                       ->editColumn('tall_tipo', function ($taller) {
+                           $label = '';
+                            if($taller->tall_tipo == "teorico"){
+                                $label = '<span class="label label-info">'.$taller->tall_tipo.'</span>';
+                            }elseif($taller->tall_tipo == "diagnostico"){
+                                $label = '<span class="label label-warning">'.$taller->tall_tipo.'</span>';
+                            }elseif($taller->tall_tipo == "practico"){
+                                $label = '<span class="label label-default">'.$taller->tall_tipo.'</span>';
+                                if( isset($taller->tallerAsientoContable)){
+                                    $label .= ' <span class="label label-info">asientos contables</span>';
+                                }elseif(isset($taller->tallerNomina)){
+                                    $label .= ' <span class="label label-success">nómina</span>';
+                                }elseif(isset($taller->tallerKardex)){
+                                    $label .= ' <span class="label label-warning">kardex</span>';
+                                }elseif(isset($taller->tallerNiif)){
+                                    $label .= ' <span class="label label-default">NIIF</span>';
+                                }
+                            }
+                            return $label;
+                       })
                        ->editColumn('tall_rutaarchivo', '<a href="{{$tall_rutaarchivo}}">{{$tall_nombrearchivo}}</a>')
                        ->rawColumns(['opciones','tall_tipo','tall_rutaarchivo'])
                        ->make(true);
