@@ -78,13 +78,14 @@ class Curso extends Model
 
     public function talleresDiagnosticoFinalizadosUsuario()
     {
-        // SELECT Distinct t.tall_id
-        // FROM Respuesta r, Pregunta p, Taller t
-        // WHERE
-        //  r.preg_id = p.preg_id
-        //  AND p.tall_id = t.tall_id
-        //  AND t.tall_tipo = 'diagnostico'
-        //  AND r.usua_id = 2
+        /* SELECT Distinct t.tall_id
+        FROM Respuesta r, Pregunta p, Taller t
+        WHERE
+        r.preg_id = p.preg_id
+        AND p.tall_id = t.tall_id
+        AND t.tall_tipo = 'diagnostico'
+        AND t.curs_id = 1
+        AND t.tall_id = 1 */
         return DB::table('Respuesta')
                 ->join('Pregunta', 'Respuesta.preg_id', '=', 'Pregunta.preg_id')
                 ->join('Taller', 'Pregunta.tall_id', '=', 'Taller.tall_id')
@@ -92,6 +93,7 @@ class Curso extends Model
                 ->distinct()
                 ->where('Taller.tall_tipo','diagnostico')
                 ->where('Respuesta.usua_id',Auth::user()->id)
+                ->where('Taller.curs_id', $this->curs_id)
                 ->get();
     }
 
