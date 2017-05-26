@@ -316,6 +316,12 @@ class PreguntaController extends Controller
             return $this->redireccionarSegunTipoTaller($taller, $curso);
         }
         $preguntas = $taller->preguntas;
+        foreach ($preguntas as $p ) {
+            if($p->preg_tipo == "unica-multiple" && $p->respuestasMultiplesUnicas->isEmpty()){
+                flash('El taller posee preguntas de tipo unica-multiple y estas no poseen opciones de respuesta, Por favor contacte a su profesor.')->error();
+                return $this->redireccionarSegunTipoTaller($taller, $curso);
+            }
+        }
         $intentoTaller = DB::table('IntentoTaller')->select('inta_cantidad', 'inta_id')->where('usua_id', Auth::user()->id)->where('tall_id', $taller->tall_id)->first();
         if(!isset($intentoTaller)){
             DB::table('IntentoTaller')->insert([
