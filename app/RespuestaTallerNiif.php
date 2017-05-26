@@ -43,7 +43,7 @@ class RespuestaTallerNiif extends Model
      * @var array
      */
     protected $fillable = [
-        'rtni_id', 'tani_id', 'usua_id'
+        'rtni_id', 'tani_id', 'usua_id', 'rear_id'
     ];
 
     /**
@@ -78,6 +78,11 @@ class RespuestaTallerNiif extends Model
     public function estadoSituacionFinanciera()
     {
         return $this->hasOne('App\EstadoSituacionFinanciera', 'rtni_id');
+    }
+
+    public function respuestaArchivo()
+    {
+        return $this->belongsTo('App\RespuestaArchivo', 'rear_id');
     }
 
     public function calcularTotalEnBalancePruebaColumna($columna = "")

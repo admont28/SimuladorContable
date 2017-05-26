@@ -27,15 +27,24 @@ $('.tab-content:visible').find('.generar-tablas-niif').click(function(event) {
 function generarTablasNiif(elemento) {
     var promise = new Promise(function (resolve, reject) {
         var botonPulsado = $(elemento);
+        var tabPanelActivo = botonPulsado.parents('div.tab-pane');
         var divTablas = botonPulsado.parents('div.tab-pane').find('div.tablas-niif');
         var ruta = botonPulsado.data("ruta");
+        var inputFileImage = tabPanelActivo.find('input[type=file]');
+        var archivo = inputFileImage[0].files[0];
+        var data = new FormData();
+        data.append('archivo_taller_niif',archivo);
         var xhr =
             $.ajax({
                 url: ruta,
-                type: 'GET',
+                type: 'POST',
                 headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
                 dataType: 'JSON',
-                data: {},
+                //necesario para subir archivos via ajax
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: data,
                 beforeSend: function () {
                 },
                 success: function(data) {
@@ -56,6 +65,9 @@ function generarTablasNiif(elemento) {
                         divTablas.append(data.estadoresultado);
                         divTablas.append(data.estadoSituacionFinanciera);
                         darFormatoACamposTablasNiif();
+                    }
+                    if(data.archivo != null){
+                        tabPanelActivo.find('.alert-link').attr('href', data.archivo.rear_rutaarchivo).text(data.archivo.rear_nombre);
                     }
                 }
             })

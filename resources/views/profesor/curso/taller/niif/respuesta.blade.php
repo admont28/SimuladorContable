@@ -13,6 +13,24 @@
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
+                    <h3 class="panel-title">Respuesta del usuario - Carga de archivo</h3>
+                </div>
+                <div class="panel-body">
+                    @if (isset($respuestaTallerNiif->respuestaArchivo))
+                        <a href="{{ $respuestaTallerNiif->respuestaArchivo->rear_rutaarchivo }}">{{ $respuestaTallerNiif->respuestaArchivo->rear_nombre }}</a>
+                    @else
+                        <p>EL usuario no cargó algún archivo.</p>
+                    @endif
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
                     <h3 class="panel-title">Respuesta del usuario - Tabla NIIF</h3>
                 </div>
                 <div class="panel-body">

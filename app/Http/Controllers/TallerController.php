@@ -1223,7 +1223,7 @@ class TallerController extends Controller
         echo json_encode($respuesta);
     }
 
-    public function generarTablasNiif($curs_id, $tall_id)
+    public function generarTablasNiifPost(Request $request, $curs_id, $tall_id)
     {
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
         $curso = Curso::find($curs_id);
@@ -1258,6 +1258,82 @@ class TallerController extends Controller
             echo json_encode($respuesta);
             die;
         }
+        DB::beginTransaction();
+        try {
+            $respuestaTallerNiif = $tallerNiif->respuestaTallerNiifUsuarioAutenticado();
+            if(!isset($respuestaTallerNiif)){
+                $respuestaTallerNiif = RespuestaTallerNiif::create([
+                    'tani_id' => $tallerNiif->tani_id,
+                    'usua_id' => Auth::user()->id,
+                    'rear_id' => null
+                ]);
+            }
+            //obtenemos el campo file definido en el formulario
+            $file = $request->file('archivo_taller_niif');
+            $respuestaArchivo = null;
+            // Si existe y no es nulo $file es porque el usuario seleccionó un archivo en el formulario.
+            if(isset($file,$respuestaTallerNiif)){
+                $respuestaArchivo = $respuestaTallerNiif->respuestaArchivo;
+                $archivoOk = true;
+                if(isset($respuestaArchivo)){
+                    $infoArchivo = pathinfo($respuestaArchivo->rear_rutaarchivo);
+                    // Compruebo que exista el archivo en el disco de talleres.
+                    if(Storage::disk('talleres')->exists($taller->tall_id.'/'.Auth::user()->id.'/'.$infoArchivo['basename'])){
+                        // Si existe el archivo procedo a eliminarlo, retorna true si fue exitoso, de lo contrario retorna false.
+                        $archivoOk = Storage::disk('talleres')->delete($taller->tall_id.'/'.Auth::user()->id.'/'.$infoArchivo['basename']);
+                    }
+                }
+                if($archivoOk){
+                    //obtenemos el nombre del archivo
+                    $nombreArchivo = $file->getClientOriginalName();
+                    // Almaceno en el dicso talleres el archivo cargado por el usuario.
+                    $path = Storage::disk('talleres')->put('/'.$taller->tall_id.'/'.Auth::user()->id, $file);
+                    if (!isset($respuestaArchivo)) {
+                        $respuestaArchivo = RespuestaArchivo::create([
+                            'rear_rutaarchivo' => asset('storage/talleres/'.$path),
+                            'rear_nombre'      => $nombreArchivo
+                        ]);
+                    }else {
+                        $respuestaArchivo->rear_rutaarchivo = asset('storage/talleres/'.$path);
+                        $respuestaArchivo->rear_nombre = $nombreArchivo;
+                        $respuestaArchivo->save();
+                    }
+                    $respuestaTallerNiif->rear_id = isset($respuestaArchivo->rear_id) ? $respuestaArchivo->rear_id : null;
+                    $respuestaTallerNiif->save();
+                }else {
+                    $respuesta = array('state' => 'error', 'message' => 'Ha ocurrido un error eliminando el archivo anterior. Por favor inténtelo de nuevo.');
+                    echo json_encode($respuesta);
+                    die();
+                }
+            }
+            $balancePruebaView = $this->generarTablaBalancePrueba($curso, $tallerNiif, $respuestaTallerNiif);
+            $balancesPruebas = BalancePrueba::where('rtni_id', $respuestaTallerNiif->rtni_id)->orderBy('bapr_fila', 'asc')->get();
+            $estadoResultadoView = $this->generarTablaEstadoDeResultados($respuestaTallerNiif, $balancesPruebas, $tallerNiif);
+            $estadoResultado = EstadoResultado::where('rtni_id', $respuestaTallerNiif->rtni_id)->get()->first();
+            $estadoSituacionFinanciera = $this->generarTablaEstadoSituacionFinanciera($respuestaTallerNiif, $estadoResultado, $balancesPruebas, $tallerNiif);
+            DB::commit();
+            $success = true;
+        } catch (\Exception $e) {
+            $success = false;
+            DB::rollback();
+            dd($e->getMessage());
+        }
+        if (!$success) {
+            $respuesta = array('state' => 'error', 'message' => 'Ha ocurrido un error inesperado, por favor inténtelo de nuevo.');
+        }else{
+            $respuesta = array(
+                'state' => 'success',
+                'message' => 'Se han generado las tablas con éxito.',
+                'balanceprueba' => $balancePruebaView->render(),
+                'estadoresultado' => $estadoResultadoView->render(),
+                'estadoSituacionFinanciera' => $estadoSituacionFinanciera->render(),
+                'archivo' => $respuestaArchivo);
+        }
+        echo json_encode($respuesta);
+    }
+
+    private function generarTablaBalancePrueba($curso, $tallerNiif, $respuestaTallerNiif)
+    {
         $tallerAsientoContable = TallerAsientoContable::hydrate($curso->tallerAsientoContable())->first();
         $respuestasTallerAsientoContable = $tallerAsientoContable->respuestasTallerAsientoContableUsuarioAutenticado();
         $filasTallerAsientoContable = collect();
@@ -1304,64 +1380,34 @@ class TallerController extends Controller
             $resultado->push($a);
         }
         $resultado = $resultado->sortBy('puc');
-        DB::beginTransaction();
-        try {
-            $respuestaTallerNiif = $tallerNiif->respuestaTallerNiifUsuarioAutenticado();
-            if(!isset($respuestaTallerNiif)){
-                $respuestaTallerNiif = RespuestaTallerNiif::create([
-                    'tani_id' => $tallerNiif->tani_id,
-                    'usua_id' => Auth::user()->id
-                ]);
+        BalancePrueba::where('rtni_id', $respuestaTallerNiif->rtni_id)->delete();
+        $fila = 1;
+        foreach ($resultado as $r) {
+            $valorDebito  = 0;
+            $valorCredito = 0;
+            if ($r->primerDigito == 1 || $r->primerDigito == 5 || $r->primerDigito == 6){
+                if ($r->valor >= 0)
+                    $valorDebito  = $r->valor;
+                else
+                    $valorCredito = $r->valor;
+            }elseif ($r->primerDigito == 2 || $r->primerDigito == 3 || $r->primerDigito == 4 || $r->primerDigito == 7){
+                if ($r->valor >= 0)
+                    $valorCredito = $r->valor;
+                else
+                    $valorDebito  = $r->valor;
             }
-            BalancePrueba::where('rtni_id', $respuestaTallerNiif->rtni_id)->delete();
-            $fila = 1;
-            foreach ($resultado as $r) {
-                $valorDebito  = 0;
-                $valorCredito = 0;
-                if ($r->primerDigito == 1 || $r->primerDigito == 5 || $r->primerDigito == 6){
-                    if ($r->valor >= 0)
-                        $valorDebito  = $r->valor;
-                    else
-                        $valorCredito = $r->valor;
-                }elseif ($r->primerDigito == 2 || $r->primerDigito == 3 || $r->primerDigito == 4 || $r->primerDigito == 7){
-                    if ($r->valor >= 0)
-                        $valorCredito = $r->valor;
-                    else
-                        $valorDebito  = $r->valor;
-                }
-                BalancePrueba::create([
-                    'rtni_id'      => $respuestaTallerNiif->rtni_id,
-                    'bapr_codigo'  => $r->puc->puc_codigo,
-                    'bapr_cuenta'  => $r->puc->puc_nombre,
-                    'bapr_debito'  => $valorDebito,
-                    'bapr_credito' => $valorCredito,
-                    'bapr_fila'    => $fila
-                ]);
-                $fila++;
-            }
-            $balancesPruebas = BalancePrueba::where('rtni_id', $respuestaTallerNiif->rtni_id)->orderBy('bapr_fila', 'asc')->get();
-            $balancePruebaView = View::make('estudiante.curso.taller.niif.balanceprueba', ['balancesPruebas' => $balancesPruebas,'tallerNiif' => $tallerNiif, 'respuestaTallerNiif' => $respuestaTallerNiif]);
-            $estadoResultadoView = $this->generarTablaEstadoDeResultados($respuestaTallerNiif, $balancesPruebas, $tallerNiif);
-            $estadoResultado = EstadoResultado::where('rtni_id', $respuestaTallerNiif->rtni_id)->get()->first();
-            $estadoSituacionFinanciera = $this->generarTablaEstadoSituacionFinanciera($respuestaTallerNiif, $estadoResultado, $balancesPruebas, $tallerNiif);
-            DB::commit();
-            $success = true;
-        } catch (\Exception $e) {
-            $success = false;
-            DB::rollback();
-            dd($e->getMessage());
+            BalancePrueba::create([
+                'rtni_id'      => $respuestaTallerNiif->rtni_id,
+                'bapr_codigo'  => $r->puc->puc_codigo,
+                'bapr_cuenta'  => $r->puc->puc_nombre,
+                'bapr_debito'  => $valorDebito,
+                'bapr_credito' => $valorCredito,
+                'bapr_fila'    => $fila
+            ]);
+            $fila++;
         }
-        if (!$success) {
-            $respuesta = array('state' => 'error', 'message' => 'Ha ocurrido un error inesperado, por favor inténtelo de nuevo.');
-        }else{
-            $respuesta = array(
-                'state' => 'success',
-                'message' => 'Se han generado las tablas con éxito.',
-                'balanceprueba' => $balancePruebaView->render(),
-                'estadoresultado' => $estadoResultadoView->render(),
-                'estadoSituacionFinanciera' => $estadoSituacionFinanciera->render());
-        }
-        echo json_encode($respuesta);
+        $balancesPruebas = BalancePrueba::where('rtni_id', $respuestaTallerNiif->rtni_id)->orderBy('bapr_fila', 'asc')->get();
+        return View::make('estudiante.curso.taller.niif.balanceprueba', ['balancesPruebas' => $balancesPruebas,'tallerNiif' => $tallerNiif, 'respuestaTallerNiif' => $respuestaTallerNiif]);
     }
 
     private function generarTablaEstadoDeResultados($respuestaTallerNiif, $balancesPruebas = null, $tallerNiif)
