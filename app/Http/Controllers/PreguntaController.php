@@ -13,6 +13,7 @@ use App\DataTables\PreguntaDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
 use Redirect;
+use DateTime;
 
 class PreguntaController extends Controller
 {
@@ -302,6 +303,12 @@ class PreguntaController extends Controller
         //verificamos que el taller contenga preguntas
         if ($taller->preguntas->isEmpty()) {
             flash('El taller con ID: '.$tall_id.' no posee preguntas. Verifique por favor.')->error();
+            return $this->redireccionarSegunTipoTaller($taller, $curso);
+        }
+        $fechaActual = new DateTime();
+        $fechaTaller = new DateTime($taller->tall_tiempo);
+        if($fechaActual > $fechaTaller){
+            flash('El taller ha expirado, no se han podido guardar las respuestas.')->error();
             return $this->redireccionarSegunTipoTaller($taller, $curso);
         }
         $preguntas = $taller->preguntas;
