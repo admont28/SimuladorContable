@@ -252,34 +252,44 @@ class TallerController extends Controller
         // Compruebo que exista el registro en la tabla de taller.
         if(isset($taller))
         {
-            if( isset($taller->tallerAsientoContable)){
-                if ($taller->tallerAsientoContable->respuestasTallerAsientosContables->isNotEmpty()) {
-                    $errorEnRespuestas = true;
+            if($taller->tall_tipo == "diagnostico" || $taller->tall_tipo == "teorico"){
+                if($taller->preguntas->isNotEmpty()){
+                    flash('El taller: "'.$taller->tall_nombre.'" no se ha podido eliminar debido a que tiene preguntas asociadas.')->error();
                 }else{
-                    $taller->TallerAsientoContable->delete();
+                    $taller->delete();
+                    // Mensaje para el usuario indicando la eliminación exitosa.
+                    flash('El taller:  "'.$taller->tall_nombre.'" ha sido eliminado con éxito.')->success();
                 }
-            }elseif(isset($taller->tallerNomina)){
-                if($taller->tallerNomina->respuestasTallerNomina->isNotEmpty()){
-                    $errorEnRespuestas = true;
-                }else{
-                    $taller->tallerNomina->delete();
+            }else{
+                if( isset($taller->tallerAsientoContable)){
+                    if ($taller->tallerAsientoContable->respuestasTallerAsientosContables->isNotEmpty()) {
+                        $errorEnRespuestas = true;
+                    }else{
+                        $taller->TallerAsientoContable->delete();
+                    }
+                }elseif(isset($taller->tallerNomina)){
+                    if($taller->tallerNomina->respuestasTallerNomina->isNotEmpty()){
+                        $errorEnRespuestas = true;
+                    }else{
+                        $taller->tallerNomina->delete();
+                    }
+                }elseif(isset($taller->tallerKardex)){
+                    if($taller->tallerKardex->respuestasTallerKardex->isNotEmpty()){
+                        $errorEnRespuestas = true;
+                    }else{
+                        $taller->tallerKardex->delete();
+                    }
+                }elseif(isset($taller->tallerNiif)){
+                    if($taller->tallerNiif->respuestasTallerNiif->isNotEmpty()){
+                        $errorEnRespuestas = true;
+                    }else {
+                        $taller->tallerNiif->delete();
+                    }
                 }
-            }elseif(isset($taller->tallerKardex)){
-                if($taller->tallerKardex->respuestasTallerKardex->isNotEmpty()){
-                    $errorEnRespuestas = true;
-                }else{
-                    $taller->tallerKardex->delete();
-                }
-            }elseif(isset($taller->tallerNiif)){
-                if($taller->tallerNiif->respuestasTallerNiif->isNotEmpty()){
-                    $errorEnRespuestas = true;
-                }else {
-                    $taller->tallerNiif->delete();
-                }
+                $taller->delete();
+                // Mensaje para el usuario indicando la eliminación exitosa.
+                flash('El taller:  "'.$taller->tall_nombre.'" ha sido eliminado con éxito.')->success();
             }
-            $taller->delete();
-            // Mensaje para el usuario indicando la eliminación exitosa.
-            flash('El taller:  "'.$taller->tall_nombre.'" ha sido eliminado con éxito.')->success();
         }else{
             flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
         }
