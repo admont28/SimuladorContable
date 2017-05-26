@@ -97,8 +97,8 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td class="text-left">Iva generado</td>
-                    <td class="text-right formato_pesos">{{ $estadoSituacionFinanciera->essf_ivagenerado }}</td>
+                    <td class="text-left">Iva</td>
+                    <td class="text-right formato_pesos">{{ $estadoSituacionFinanciera->essf_iva }}</td>
                 </tr>
                 <tr>
                     <td></td>
@@ -135,18 +135,18 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td class="text-left">Aportes sociales</td>
-                    <td class="text-right formato_pesos">{{ $estadoSituacionFinanciera->essf_aportessociales }}</td>
+                    <td class="text-left">Capital social</td>
+                    <td class="text-right formato_pesos">{{ $estadoSituacionFinanciera->essf_capitalsocial }}</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td class="text-left">Utilidad del ejercicio</td>
-                    <td class="text-right formato_pesos">{{ $estadoSituacionFinanciera->essf_utilidadejercicio }}</td>
+                    <td class="text-left">Ganancias acumuladas</td>
+                    <td class="text-right formato_pesos">{{ $estadoSituacionFinanciera->essf_gananciasacumuladas }}</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td class="text-left">Reservas obligatorias</td>
-                    <td class="text-right formato_pesos">{{ $estadoSituacionFinanciera->essf_reservasobligatorias }}</td>
+                    <td class="text-left">Reserva legal</td>
+                    <td class="text-right formato_pesos">{{ $estadoSituacionFinanciera->essf_reservalegal }}</td>
                 </tr>
                 <tr>
                     <td colspan="2" class="text-left"><strong>TOTAL PATRIMONIO</strong></td>

@@ -43,8 +43,8 @@ class EstadoSituacionFinanciera extends Model
      * @var array
      */
     protected $fillable = [
-        'essf_id', 'rtni_id', 'essf_efectivoequivalentes', 'essf_deudores', 'essf_anticipoimpuesto', 'essf_inventario','essf_activocorriente', 'essf_construccionesedificaciones', 'essf_equiposoficina', 'essf_equipocomputacioncomunicacion', 'essf_flotaequipotransporte', 'essf_activonocorriente', 'essf_totalactivos', 'essf_proveedores', 'essf_retencionfuente', 'essf_retencionaportesnomina', 'essf_acreedoresvarios', 'essf_ivagenerado', 'essf_obligacioneslaborales', 'essf_pasivocorriente',
-        'essf_obligacionesfinancieras', 'essf_impuestossobrelasventasporpagar', 'essf_pasivonocorriente', 'essf_totalpasivos', 'essf_aportessociales', 'essf_utilidadejercicio', 'essf_reservasobligatorias', 'essf_totalpatrimonio', 'essf_totalpasivopatrimonio'
+        'essf_id', 'rtni_id', 'essf_efectivoequivalentes', 'essf_deudores', 'essf_anticipoimpuesto', 'essf_inventario','essf_activocorriente', 'essf_construccionesedificaciones', 'essf_equiposoficina', 'essf_equipocomputacioncomunicacion', 'essf_flotaequipotransporte', 'essf_activonocorriente', 'essf_totalactivos', 'essf_proveedores', 'essf_retencionfuente', 'essf_retencionaportesnomina', 'essf_acreedoresvarios', 'essf_iva', 'essf_obligacioneslaborales', 'essf_pasivocorriente',
+        'essf_obligacionesfinancieras', 'essf_impuestossobrelasventasporpagar', 'essf_pasivonocorriente', 'essf_totalpasivos', 'essf_capitalsocial', 'essf_gananciasacumuladas', 'essf_reservalegal', 'essf_totalpatrimonio', 'essf_totalpasivopatrimonio'
     ];
 
     /**

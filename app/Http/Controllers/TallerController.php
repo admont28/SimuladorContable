@@ -1425,17 +1425,17 @@ class TallerController extends Controller
         $datos['essf_retencionfuente']               = $this->sumarValoresSegunPuc($balancesPruebas,'2365');
         $datos['essf_retencionaportesnomina']        = $this->sumarValoresSegunPuc($balancesPruebas,'2370');
         $datos['essf_acreedoresvarios']              = $this->sumarValoresSegunPuc($balancesPruebas,'2380');
-        $datos['essf_ivagenerado']                   = $this->sumarValoresSegunPuc($balancesPruebas,'2408');
+        $datos['essf_iva']                           = $this->sumarValoresSegunPuc($balancesPruebas,'2408');
         $datos['essf_obligacioneslaborales']         = $this->sumarValoresSegunPuc($balancesPruebas,'2610');
         $datos['essf_impuestossobrelasventasporpagar'] = $estadoResultado->esre_impuestosobreganancias;
-        $datos['essf_pasivocorriente']               = $datos['essf_proveedores'] + $datos['essf_retencionfuente'] + $datos['essf_retencionaportesnomina'] + $datos['essf_acreedoresvarios'] + $datos['essf_ivagenerado'] + $datos['essf_obligacioneslaborales'] + $datos['essf_impuestossobrelasventasporpagar']; 
+        $datos['essf_pasivocorriente']               = $datos['essf_proveedores'] + $datos['essf_retencionfuente'] + $datos['essf_retencionaportesnomina'] + $datos['essf_acreedoresvarios'] + $datos['essf_iva'] + $datos['essf_obligacioneslaborales'] + $datos['essf_impuestossobrelasventasporpagar'];
         $datos['essf_obligacionesfinancieras']       = $this->sumarValoresSegunPuc($balancesPruebas,'21');
         $datos['essf_pasivonocorriente']             = $datos['essf_obligacionesfinancieras'];
         $datos['essf_totalpasivos']                  = $datos['essf_pasivocorriente'] + $datos['essf_pasivonocorriente'];
-        $datos['essf_aportessociales']               = $this->sumarValoresSegunPuc($balancesPruebas,'3115');
-        $datos['essf_utilidadejercicio']             = $estadoResultado->esre_utilidadnetaejercicio;
-        $datos['essf_reservasobligatorias']          = $estadoResultado->esre_reservalegal;
-        $datos['essf_totalpatrimonio']               = $datos['essf_aportessociales'] + $datos['essf_utilidadejercicio'] + $datos['essf_reservasobligatorias'];
+        $datos['essf_capitalsocial']                 = $this->sumarValoresSegunPuc($balancesPruebas,'3115');
+        $datos['essf_gananciasacumuladas']             = $estadoResultado->esre_utilidadnetaejercicio;
+        $datos['essf_reservalegal']                  = $estadoResultado->esre_reservalegal;
+        $datos['essf_totalpatrimonio']               = $datos['essf_capitalsocial'] + $datos['essf_gananciasacumuladas'] + $datos['essf_reservalegal'];
         $datos['essf_totalpasivopatrimonio']         = $datos['essf_totalpasivos'] + $datos['essf_totalpatrimonio'];
         $estadoSituacionFinanciera =  EstadoSituacionFinanciera::where('rtni_id', $respuestaTallerNiif->rtni_id)->get()->first();
         if(isset($estadoSituacionFinanciera)){
