@@ -144,4 +144,19 @@ class Curso extends Model
                 ->toArray();
         return $tallerAsientoContable;
     }
+
+    public function cantidadTallerPracticoDeTipo($tipoTaller = '')
+    {
+        if($tipoTaller == null || $tipoTaller == ''){
+            return 0;
+        }
+        $cantidadTalleres = 0;
+        $talleresPracticos = $this->talleres()->where('tall_tipo', 'practico')->get();
+        foreach ($talleresPracticos as $tp ) {
+            if(isset($tp->$tipoTaller)){
+                $cantidadTalleres++;
+            }
+        }
+        return $cantidadTalleres;
+    }
 }

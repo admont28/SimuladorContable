@@ -89,6 +89,14 @@ class TallerController extends Controller
            'tiempo_taller' => 'required|date_format:Y-m-d H:i:s',
            'taller_rutaarchivo' => 'required'
         ])->validate();
+        if($request->tipo_taller == "practico"){
+            $cantidadTalleresPracticos = $curso->talleres()->where('tall_tipo','practico')->count();
+            if($cantidadTalleresPracticos >= 4){
+                $validator = Validator::make(array(), array());
+                $validator->getMessageBag()->add('tipo_taller', 'Un curso no puede poseer más de 4 talleres prácticos. Cantidad de talleres prácticos actuales: '.$cantidadTalleresPracticos);
+                return Redirect::back()->withErrors($validator)->withInput();
+            }
+        }
         //obtenemos el campo file definido en el formulario
         $file = $request->file('taller_rutaarchivo');
         //obtenemos el nombre del archivo
@@ -267,6 +275,11 @@ class TallerController extends Controller
             flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
+        // Verificamos si existe otro taller del mismo tipo del taller que se desea crear, si es así se le informa del error.
+        if($curso->cantidadTallerPracticoDeTipo('tallerAsientoContable') >= 1){
+            flash('El curso con ID: '.$curs_id.' ya tiene un taller de asientos contables asociado. Verifique por favor.')->error();
+            return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
+        }
         // Verificamos que el taller no tenga asiganado ya un sub-tipo.
         $tallerAsientoContable = $taller->tallerAsientoContable;
         $tallerNomina = $taller->tallerNomina;
@@ -294,6 +307,11 @@ class TallerController extends Controller
         if (!isset($taller)) {
             flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
+        }
+        // Verificamos si existe otro taller del mismo tipo del taller que se desea crear, si es así se le informa del error.
+        if($curso->cantidadTallerPracticoDeTipo('tallerAsientoContable') >= 1){
+            flash('El curso con ID: '.$curs_id.' ya tiene un taller de asientos contables asociado. Verifique por favor.')->error();
+            return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
         }
         // Verificamos que el taller no tenga asiganado ya un sub-tipo.
         $tallerAsientoContable = $taller->tallerAsientoContable;
@@ -332,6 +350,11 @@ class TallerController extends Controller
             flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
+        // Verificamos si existe otro taller del mismo tipo del taller que se desea crear, si es así se le informa del error.
+        if($curso->cantidadTallerPracticoDeTipo('tallerNomina') >= 1){
+            flash('El curso con ID: '.$curs_id.' ya tiene un taller de nómina asociado. Verifique por favor.')->error();
+            return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
+        }
         // Verificamos que el taller no tenga asiganado ya un sub-tipo.
         $tallerAsientoContable = $taller->tallerAsientoContable;
         $tallerNomina = $taller->tallerNomina;
@@ -359,6 +382,11 @@ class TallerController extends Controller
         if (!isset($taller)) {
             flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
+        }
+        // Verificamos si existe otro taller del mismo tipo del taller que se desea crear, si es así se le informa del error.
+        if($curso->cantidadTallerPracticoDeTipo('tallerNomina') >= 1){
+            flash('El curso con ID: '.$curs_id.' ya tiene un taller de nómina asociado. Verifique por favor.')->error();
+            return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
         }
         // Verificamos que el taller no tenga asiganado ya un sub-tipo.
         $tallerAsientoContable = $taller->tallerAsientoContable;
@@ -401,6 +429,11 @@ class TallerController extends Controller
             flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
+        // Verificamos si existe otro taller del mismo tipo del taller que se desea crear, si es así se le informa del error.
+        if($curso->cantidadTallerPracticoDeTipo('tallerKardex') >= 1){
+            flash('El curso con ID: '.$curs_id.' ya tiene un taller de kardex asociado. Verifique por favor.')->error();
+            return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
+        }
         // Verificamos que el taller no tenga asiganado ya un sub-tipo.
         $tallerAsientoContable = $taller->tallerAsientoContable;
         $tallerNomina = $taller->tallerNomina;
@@ -433,6 +466,11 @@ class TallerController extends Controller
             flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
         }
+        // Verificamos si existe otro taller del mismo tipo del taller que se desea crear, si es así se le informa del error.
+        if($curso->cantidadTallerPracticoDeTipo('tallerNiif') >= 1){
+            flash('El curso con ID: '.$curs_id.' ya tiene un taller NIIF asociado. Verifique por favor.')->error();
+            return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
+        }
         // Verificamos que el taller no tenga asiganado ya un sub-tipo.
         $tallerAsientoContable = $taller->tallerAsientoContable;
         $tallerNomina = $taller->tallerNomina;
@@ -460,6 +498,11 @@ class TallerController extends Controller
         if (!isset($taller)) {
             flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
             return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
+        }
+        // Verificamos si existe otro taller del mismo tipo del taller que se desea crear, si es así se le informa del error.
+        if($curso->cantidadTallerPracticoDeTipo('tallerNiif') >= 1){
+            flash('El curso con ID: '.$curs_id.' ya tiene un taller NIIF asociado. Verifique por favor.')->error();
+            return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
         }
         // Verificamos que el taller no tenga asiganado ya un sub-tipo.
         $tallerAsientoContable = $taller->tallerAsientoContable;
