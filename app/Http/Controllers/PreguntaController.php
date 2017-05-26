@@ -248,6 +248,10 @@ class PreguntaController extends Controller
             flash('Pregunta: "'.substr($pregunta->preg_texto,0,80).'..." no puede ser eliminada, debido a que posee respuestas asociadas.')->error();
             return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
         }
+        if($pregunta->respuestas->isNotEmpty()){
+            flash('Pregunta: "'.substr($pregunta->preg_texto,0,80).'..." no puede ser eliminada, debido a que posee respuestas de estudiantes.')->error();
+            return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
+        }
         $pregunta->delete();
         flash('Pregunta: "'.substr($pregunta->preg_texto,0,80).'..." eliminada con éxito.')->success();
         return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
