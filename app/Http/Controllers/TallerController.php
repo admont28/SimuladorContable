@@ -1427,7 +1427,8 @@ class TallerController extends Controller
         $datos['essf_acreedoresvarios']              = $this->sumarValoresSegunPuc($balancesPruebas,'2380');
         $datos['essf_ivagenerado']                   = $this->sumarValoresSegunPuc($balancesPruebas,'2408');
         $datos['essf_obligacioneslaborales']         = $this->sumarValoresSegunPuc($balancesPruebas,'2610');
-        $datos['essf_pasivocorriente']               = $datos['essf_proveedores'] + $datos['essf_retencionfuente'] + $datos['essf_retencionaportesnomina'] + $datos['essf_acreedoresvarios'] + $datos['essf_ivagenerado'] + $datos['essf_obligacioneslaborales'];
+        $datos['essf_impuestossobrelasventasporpagar'] = $estadoResultado->esre_impuestosobreganancias;
+        $datos['essf_pasivocorriente']               = $datos['essf_proveedores'] + $datos['essf_retencionfuente'] + $datos['essf_retencionaportesnomina'] + $datos['essf_acreedoresvarios'] + $datos['essf_ivagenerado'] + $datos['essf_obligacioneslaborales'] + $datos['essf_impuestossobrelasventasporpagar']; 
         $datos['essf_obligacionesfinancieras']       = $this->sumarValoresSegunPuc($balancesPruebas,'21');
         $datos['essf_pasivonocorriente']             = $datos['essf_obligacionesfinancieras'];
         $datos['essf_totalpasivos']                  = $datos['essf_pasivocorriente'] + $datos['essf_pasivonocorriente'];

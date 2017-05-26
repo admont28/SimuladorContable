@@ -102,8 +102,13 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td class="text-left">Para obligaciones laborales</td>
+                    <td class="text-left">Obligaciones laborales</td>
                     <td class="text-right formato_pesos">{{ $estadoSituacionFinanciera->essf_obligacioneslaborales }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="text-left">Impuestos sobre las ventas por pagar</td>
+                    <td class="text-right formato_pesos">{{ $estadoSituacionFinanciera->essf_impuestossobrelasventasporpagar }}</td>
                 </tr>
                 <tr>
                     <td colspan="2" class="text-left"><strong>CORRIENTE</strong></td>

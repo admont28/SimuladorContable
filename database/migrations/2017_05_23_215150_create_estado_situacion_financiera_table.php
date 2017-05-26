@@ -34,6 +34,7 @@ class CreateEstadoSituacionFinancieraTable extends Migration
             $table->string('essf_acreedoresvarios', 100);
             $table->string('essf_ivagenerado', 100);
             $table->string('essf_obligacioneslaborales', 100);
+            $table->string('essf_impuestossobrelasventasporpagar',100);
             $table->string('essf_pasivocorriente', 100);
             $table->string('essf_obligacionesfinancieras', 100);
             $table->string('essf_pasivonocorriente', 100);
