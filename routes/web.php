@@ -143,6 +143,15 @@ Route::group(['prefix' => 'profesor', 'middleware' => ['auth','profesor']], func
     Route::get('/curso/{curs_id}/taller/editar/{tall_id}', 'TallerController@edit')->name('profesor.curso.taller.editar');
     Route::put('/curso/{curs_id}/taller/editar/{tall_id}', 'TallerController@update')->name('profesor.curso.taller.editar.put');
     Route::delete('/curso/{curs_id}/taller/eliminar/{tall_id}', 'TallerController@destroy')->name('profesor.curso.taller.eliminar');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Rutas para los intentos de un estudiante en un taller.
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/curso/{curs_id}/taller/{tall_id}/intentos-de-respuesta-de-usuarios', 'TallerController@mostrarIntentosDeUsuarios')->name('profesor.curso.taller.intentostaller.ajax');
+    Route::get('/editar-intentos-de-estudiante/{inta_id}', 'TallerController@editarIntentos')->name('profesor.curso.taller.intentostaller.editar');
+    Route::post('/editar-intentos-de-estudiante/{inta_id}', 'TallerController@editarIntentosPost')->name('profesor.curso.taller.intentostaller.editar.post');
     /*
     |--------------------------------------------------------------------------
     | Rutas para los talleres de asientos contables

@@ -17,9 +17,9 @@ class CreateIntentoTallerTable extends Migration
             $table->increments('inta_id');
             $table->integer('inta_cantidad');
             $table->integer('usua_id')->unsigned();
-            $table->foreign('usua_id')->references('id')->on('Users');
+            $table->foreign('usua_id')->references('id')->on('Users')->onDelete('cascade');
             $table->integer('tall_id')->unsigned();
-            $table->foreign('tall_id')->references('tall_id')->on('Taller');
+            $table->foreign('tall_id')->references('tall_id')->on('Taller')->onDelete('cascade');
             $table->timestamp('inta_fechacreacion')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('inta_fechamodificacion')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });

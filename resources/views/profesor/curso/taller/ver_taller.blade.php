@@ -192,6 +192,12 @@
         </div>
     </div>
     @include('profesor.curso.taller.usuarios_solucionado_taller')
+    <div class="row">
+        <div class="page-header">
+            <h1>Intentos de respuesta de usuarios</h1>
+        </div>
+    </div>
+    @include('profesor.curso.taller.intentostaller')
 @endsection
 @push('scripts')
     <script type="text/javascript">

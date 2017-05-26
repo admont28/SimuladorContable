@@ -26,6 +26,7 @@ use App\RespuestaTallerNiif;
 use App\BalancePrueba;
 use App\EstadoResultado;
 use App\EstadoSituacionFinanciera;
+use App\User;
 use App\DataTables\TallerDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
@@ -1589,5 +1590,79 @@ class TallerController extends Controller
             }
         }
         return $suma;
+    }
+
+    public function mostrarIntentosDeUsuarios($curs_id, $tall_id)
+    {
+        $curso = Curso::find($curs_id);
+        $taller = Taller::find($tall_id);
+        $intentosTaller = DB::table('IntentoTaller')->where('tall_id', $taller->tall_id)->get();
+        return Datatables::of($intentosTaller)
+                        ->addColumn('opciones', function ($intento) {
+                            return '<a href="'.route('profesor.curso.taller.intentostaller.editar', ['inta_id'=>$intento->inta_id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Editar</a>';
+                        })
+                        ->editColumn('id', function ($intento) {
+                            return $intento->usua_id;
+                        })
+                        ->editColumn('name', function ($intento) {
+                            return User::find($intento->usua_id)->name;
+                        })
+                        ->editColumn('email', function ($intento) {
+                            return User::find($intento->usua_id)->email;
+                        })
+                        ->rawColumns(['opciones'])
+                        ->make(true);
+    }
+
+    public function editarIntentos($inta_id)
+    {
+        $intentoTaller = DB::table('IntentoTaller')->where('inta_id',$inta_id)->get()->first();
+        if(!isset($intentoTaller)){
+            flash('El intento de taller con ID: '.$inta_id.' no existe. Verifique por favor.')->error();
+            return redirect()->route('profesor.curso');
+        }
+        $usuario       = User::find($intentoTaller->usua_id);
+        if(!isset($intentoTaller)){
+            flash('El usuario con ID: '.$intentoTaller->usua_id.' no existe. Verifique por favor.')->error();
+            return redirect()->route('profesor.curso');
+        }
+        $taller        = Taller::find($intentoTaller->tall_id);
+        if (!isset($taller)) {
+            flash('El taler con ID: '.$intentoTaller->tall_id.' no existe. Verifique por favor.')->error();
+            return redirect()->route('profesor.curso');
+        }
+        return View('profesor.curso.taller.editar_intentostaller')
+                ->with('intentoTaller', $intentoTaller)
+                ->with('usuario', $usuario)
+                ->with('taller', $taller);
+    }
+
+    public function editarIntentosPost(Request $request, $inta_id)
+    {
+        $intentoTaller = DB::table('IntentoTaller')->where('inta_id',$inta_id)->get()->first();
+        if(!isset($intentoTaller)){
+            flash('El intento de taller con ID: '.$inta_id.' no existe. Verifique por favor.')->error();
+            return redirect()->route('profesor.curso');
+        }
+        $usuario       = User::find($intentoTaller->usua_id);
+        if(!isset($intentoTaller)){
+            flash('El usuario con ID: '.$intentoTaller->usua_id.' no existe. Verifique por favor.')->error();
+            return redirect()->route('profesor.curso');
+        }
+        $taller        = Taller::find($intentoTaller->tall_id);
+        if (!isset($taller)) {
+            flash('El taler con ID: '.$intentoTaller->tall_id.' no existe. Verifique por favor.')->error();
+            return redirect()->route('profesor.curso');
+        }
+        // Validamos los campos del formulario.
+        Validator::make($request->all(), [
+           'cantidad_intentos' => 'required|min:1|max:2'
+        ])->validate();
+        DB::table('IntentoTaller')
+            ->where('inta_id', $inta_id)
+            ->update(['inta_cantidad' => $request->cantidad_intentos]);
+        // Informo al usuairo y redireccionamos.
+        flash('Intento de respuesta editado con éxito.')->success();
+        return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $taller->curs_id, 'tall_id' => $taller->tall_id]);
     }
 }
