@@ -248,14 +248,43 @@ class TallerController extends Controller
     {
         // Busco el taller a eliminar.
         $taller = Taller::find($tall_id);
+        $errorEnRespuestas = false;
         // Compruebo que exista el registro en la tabla de taller.
-        if($taller)
+        if(isset($taller))
         {
+            if( isset($taller->tallerAsientoContable)){
+                if ($taller->tallerAsientoContable->respuestasTallerAsientosContables->isNotEmpty()) {
+                    $errorEnRespuestas = true;
+                }else{
+                    $taller->TallerAsientoContable->delete();
+                }
+            }elseif(isset($taller->tallerNomina)){
+                if($taller->tallerNomina->respuestasTallerNomina->isNotEmpty()){
+                    $errorEnRespuestas = true;
+                }else{
+                    $taller->tallerNomina->delete();
+                }
+            }elseif(isset($taller->tallerKardex)){
+                if($taller->tallerKardex->respuestasTallerKardex->isNotEmpty()){
+                    $errorEnRespuestas = true;
+                }else{
+                    $taller->tallerKardex->delete();
+                }
+            }elseif(isset($taller->tallerNiif)){
+                if($taller->tallerNiif->respuestasTallerNiif->isNotEmpty()){
+                    $errorEnRespuestas = true;
+                }else {
+                    $taller->tallerNiif->delete();
+                }
+            }
             $taller->delete();
             // Mensaje para el usuario indicando la eliminación exitosa.
-            flash('taller "'.$taller->tall_nombre.'" eliminada con éxito.')->success();
+            flash('El taller:  "'.$taller->tall_nombre.'" ha sido eliminado con éxito.')->success();
         }else{
-            flash('No se pudo eliminar el archivo asociado al taller "'.$taller->taller_nombre.'"')->error();
+            flash('El taller con ID: '.$tall_id.' no existe. Verifique por favor.')->error();
+        }
+        if($errorEnRespuestas){
+            flash('El taller: "'.$taller->tall_nombre.'" no se ha podido eliminar debido a que tiene respuestas asociadas.')->error();
         }
         // Cualquiera que sea el caso, de éxito o error es redirigido a la vista del curso.
         return redirect()->route('profesor.curso.ver', ['id' => $curs_id]);
