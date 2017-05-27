@@ -28,4 +28,5 @@ class PucComercialSeeder extends Seeder
             DB::table('PucComercial')->insert($valores);
         });
     }
+    
 }

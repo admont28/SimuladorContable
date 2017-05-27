@@ -18,6 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->command->info("CursoSeeder -> Ejecutado con éxito =)");
         $this->call(PucComercialSeeder::class);
         $this->command->info("PucComercialSeeder -> Ejecutado con éxito =)");
-
     }
+    
 }

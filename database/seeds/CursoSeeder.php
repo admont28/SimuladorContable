@@ -187,4 +187,5 @@ class CursoSeeder extends Seeder
             'tall_id' => $tall_id
         ));
     }
+    
 }
