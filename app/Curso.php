@@ -163,4 +163,5 @@ class Curso extends Model
         }
         return $cantidadTalleres;
     }
+    
 }

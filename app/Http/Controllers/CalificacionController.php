@@ -93,8 +93,6 @@ class CalificacionController extends Controller
         return redirect()->route('profesor.curso.taller.ver',['curs_id'=> $curs_id,'tall_id'=>$taller->tall_id]);
     }
 
-
-
     /**
      * [calificarPreguntaArchivo description]
      * @param  Request $request [description]
@@ -187,7 +185,6 @@ class CalificacionController extends Controller
             return redirect()->route('profesor.curso.taller.pregunta.respuesta.calificacion',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id]);
         }
         $calificacionTaller = $taller->calificacionTotalTaller($taller->tall_id,$usua_id);
-
         return view('profesor.curso.taller.pregunta.calificacion.ver_calificacion_pregunta')
             ->with('curso', $curso)
             ->with('taller', $taller)
@@ -305,60 +302,5 @@ class CalificacionController extends Controller
         flash('La calificación se ha creado con éxito.')->success();
         return redirect()->route('profesor.curso.taller.pregunta.respuesta.calificacion.estudiante',['curs_id'=>$curso->curs_id,'tall_id'=>$taller->tall_id,'usua_id'=>$usuario->id]);
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+    
 }

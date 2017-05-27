@@ -80,5 +80,4 @@ class TallerAsientoContable extends Model
         return RespuestaTallerAsientoContable::where('usua_id', Auth::user()->id)->where('taac_id', $this->taac_id)->where('rtac_numerotabla', $numeroTabla)->get();
     }
 
-
 }

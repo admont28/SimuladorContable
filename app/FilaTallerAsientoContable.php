@@ -67,4 +67,5 @@ class FilaTallerAsientoContable extends Model
     {
         return $this->belongsTo('App\Puc','puc_id');
     }
+    
 }

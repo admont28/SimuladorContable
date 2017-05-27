@@ -68,4 +68,5 @@ class Puc extends Model
     {
         return $this->hasMany('App\RespuestaTallerAsientoContable', 'puc_id');
     }
+    
 }

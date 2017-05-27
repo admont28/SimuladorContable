@@ -72,18 +72,6 @@ class MateriaController extends Controller
         return redirect()->route('profesor.curso.ver', ['curs_id' => $curs_id]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    /*public function show($curs_id, $mate_id)
-    {
-        $materia = Materia::find($id);
-        return View('profesor.materia.ver_materia')->with('materia', $materia);
-    }*/
 
     /**
      * Mostrar el formulario para editar una materia.
@@ -210,4 +198,5 @@ class MateriaController extends Controller
         // Cualquiera que sea el caso, de éxito o error es redirigido a la vista del curso.
         return redirect()->route('profesor.curso.ver', ['id' => $curs_id]);
     }
+    
 }

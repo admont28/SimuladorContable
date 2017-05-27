@@ -26,46 +26,22 @@ class User extends Authenticatable
     protected $primaryKey = 'id';
 
     /**
-    * The attributes that are mass assignable.
-    *
-    * @var array
-    */
-   protected $fillable = [
-       'name', 'email', 'password', 'rol',
-   ];
-   /**
-    * The attributes that should be hidden for arrays.
-    *
-    * @var array
-    */
-   protected $hidden = [
-       'password', 'remember_token',
-   ];
-
-    /*
-     * Get the password for the user.
+     * The attributes that are mass assignable.
      *
-     * @return string
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'email', 'password', 'rol',
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
      *
-    public function getAuthPassword()
-    {
-        return $this->usua_contrasena;
-    }
-
-    // 2
-    public function getEmailForPasswordReset() {
-        return $this->usua_correo;
-    }
-
-    // 3
-    public function getUserNameForPasswordReset(){
-        return $this->usua_correo;
-    }
-
-    // 4
-    protected $email = "usua_correo";
-
-    */
+     * @var array
+     */
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
 
     public function calificaciones()
     {
@@ -108,4 +84,5 @@ class User extends Authenticatable
         ->where('Respuesta.usua_id',$this->id)
         ->get();
     }
+    
 }

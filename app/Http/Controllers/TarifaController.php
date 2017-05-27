@@ -174,4 +174,5 @@ class TarifaController extends Controller
         flash('Tarifa: "'.$tarifa->tari_nombre.'" eliminada con éxito.')->success();
         return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $tall_id]);
     }
+    
 }

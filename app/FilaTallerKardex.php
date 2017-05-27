@@ -71,11 +71,12 @@ class FilaTallerKardex extends Model
 
     /**
      * Obtiene la respuesta taller kardex que es dueña del registro.
-     * 
+     *
      * @return RespuestaTallerKardex Retorna el modelo RespuestaTallerKardex o null.
      */
     public function respuestaTaller()
     {
         return $this->belongsTo('App\RespuestaTallerKardex','retk_id');
     }
+    
 }

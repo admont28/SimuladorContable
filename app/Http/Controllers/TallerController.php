@@ -27,7 +27,6 @@ use App\BalancePrueba;
 use App\EstadoResultado;
 use App\EstadoSituacionFinanciera;
 use App\User;
-use App\DataTables\TallerDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
 use DB;
@@ -39,15 +38,6 @@ use View;
 
 class TallerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(TallerDataTables $dataTable,$curs_id = "")
-    {
-        return $dataTable->render('profesor.curso.taller.index')->with('curs_id',$curs_id );
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -865,7 +855,6 @@ class TallerController extends Controller
                     }
                     $cantidadRespuestasCorrectasPregunta = $pregunta->cantidadRespuestasCorrectas();
                     $calificacion = ($cantidadRespuestasCorrectasUsuario * 5) / $cantidadRespuestasCorrectasPregunta;
-                    //dd($cantidadRespuestasCorrectasUsuario,$cantidadRespuestasCorrectasPregunta, $calificacion, round($calificacion * $pregunta->preg_porcentaje, 1));
                     Calificacion::create([
                         'cali_calificacion' => $calificacion,
                         'cali_ponderado'    => round($calificacion * $pregunta->preg_porcentaje, 1),
@@ -1172,7 +1161,6 @@ class TallerController extends Controller
         if (!$success) {
             $respuesta = array('state' => 'error', 'message' => 'Ha ocurrido un error inesperado, por favor inténtelo de nuevo.');
         }else{
-
             $respuesta = array('state' => 'success', 'message' => 'Se ha guardado su información con éxito, las filas sin nombres y apellidos ni documento se han omitido', 'archivo' => $respuestaArchivo);
         }
         echo json_encode($respuesta);
@@ -1665,4 +1653,5 @@ class TallerController extends Controller
         flash('Intento de respuesta editado con éxito.')->success();
         return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $taller->curs_id, 'tall_id' => $taller->tall_id]);
     }
+
 }

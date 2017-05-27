@@ -62,4 +62,5 @@ class RespuestaMultipleUnica extends Model
     {
         return $this->belongsTo('App\Pregunta','preg_id');
     }
+    
 }

@@ -8,21 +8,11 @@ use App\RespuestaMultipleUnica;
 use App\Curso;
 use App\Taller;
 use App\User;
-use App\DataTables\PreguntaDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
 
 class RespuestaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -60,7 +50,6 @@ class RespuestaController extends Controller
                     ->with('pregunta', $pregunta);
     }
 
-
     public function responderPreguntaMultipleUnica($curs_id, $tall_id, $preg_id)
     {
         // Verificamos que el curso exista en bd, si no es así informamos al usuario y redireccionamos.
@@ -90,8 +79,6 @@ class RespuestaController extends Controller
                     ->with('curso', $curso)
                     ->with('taller', $taller)
                     ->with('pregunta', $pregunta);
-
-
     }
 
 
@@ -138,17 +125,6 @@ class RespuestaController extends Controller
         ]);
         flash('Respuesta "'.$request['texto_respuesta'].'" creada con éxito.')->success();
         return redirect()->route('profesor.curso.taller.pregunta.ver',['curs_id'=> $curs_id,'tall_id'=>$taller->tall_id, 'preg_id' => $preg_id]);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -347,4 +323,5 @@ class RespuestaController extends Controller
         flash('El taller con ID: '.$tall_id.' no es un taller práctico. Verifique por favor.')->error();
         return redirect()->route('profesor.curso.taller.ver', ['curs_id' => $curs_id, 'tall_id' => $taller->tall_id]);
     }
+    
 }

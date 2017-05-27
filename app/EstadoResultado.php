@@ -62,4 +62,5 @@ class EstadoResultado extends Model
     {
         return $this->belongsTo('App\RespuestaTallerNiif','rtni_id');
     }
+    
 }

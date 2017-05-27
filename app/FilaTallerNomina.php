@@ -94,4 +94,5 @@ class FilaTallerNomina extends Model
     {
         return $this->belongsTo('App\RespuestaTallerNomina','retn_id');
     }
+    
 }

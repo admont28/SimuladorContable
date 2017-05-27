@@ -63,4 +63,5 @@ class Materia extends Model
         // Especifica la llave foránea de Curso en la tabla actual: Materia
         return $this->belongsTo('App\Curso', 'curs_id');
     }
+    
 }

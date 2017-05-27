@@ -62,4 +62,5 @@ class BalancePrueba extends Model
     {
         return $this->belongsTo('App\RespuestaTallerNiif','rtni_id');
     }
+    
 }

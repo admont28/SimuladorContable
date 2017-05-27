@@ -80,6 +80,4 @@ class Calificacion extends Model
         return $this->belongsTo('App\Pregunta','preg_id');
     }
 
-
-
 }

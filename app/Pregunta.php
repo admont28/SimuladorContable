@@ -74,7 +74,8 @@ class Pregunta extends Model
         return $this->hasMany('App\RespuestaMultipleUnica','preg_id');
     }
 
-    public static function getPossibleEnumValues(){
+    public static function getPossibleEnumValues()
+    {
         $type = DB::select(DB::raw('SHOW COLUMNS FROM Pregunta WHERE Field = "preg_tipo"'))[0]->Type;
         preg_match('/^enum\((.*)\)$/', $type, $matches);
         $values = array();
@@ -84,7 +85,8 @@ class Pregunta extends Model
         return $values;
     }
 
-    public function tieneRespuestaMultiple(){
+    public function tieneRespuestaMultiple()
+    {
         $cantidadRespuestaCorrecta = RespuestaMultipleUnica::where('preg_id', $this->preg_id)->where('remu_correcta',true)->count();
         if ($cantidadRespuestaCorrecta>1) {
             return true;
@@ -113,10 +115,10 @@ class Pregunta extends Model
         //inverso de hasMany tecnicamente no es necesasario pero siempre usar la relación y la inversa. el inverso belongsTo trae un dato y el hasmany trae una coleccion.
         return $this->hasMany('App\Respuesta','preg_id');
     }
+
     public function obtenerRespuestaUsuario()
     {
         return Respuesta::where('usua_id',Auth::user()->id)->where('preg_id',$this->preg_id)->get();
     }
-
 
 }

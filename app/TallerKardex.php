@@ -76,4 +76,5 @@ class TallerKardex extends Model
     {
         return RespuestaTallerKardex::where('usua_id', Auth::user()->id)->where('taka_id', $this->taka_id)->get()->first();
     }
+    
 }

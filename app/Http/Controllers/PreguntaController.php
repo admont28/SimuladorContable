@@ -9,7 +9,6 @@ use App\Pregunta;
 use App\RespuestaMultipleUnica;
 use App\Curso;
 use App\Taller;
-use App\DataTables\PreguntaDataTables;
 use Yajra\Datatables\Datatables;
 use Validator;
 use Redirect;

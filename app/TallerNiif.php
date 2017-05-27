@@ -80,4 +80,5 @@ class TallerNiif extends Model
     {
         return RespuestaTallerNiif::where('usua_id', Auth::user()->id)->where('tani_id', $this->tani_id)->get()->first();
     }
+    
 }

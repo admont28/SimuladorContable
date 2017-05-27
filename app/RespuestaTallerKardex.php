@@ -94,4 +94,5 @@ class RespuestaTallerKardex extends Model
     {
         return $this->hasMany('App\FilaTallerKardex', 'retk_id');
     }
+    
 }

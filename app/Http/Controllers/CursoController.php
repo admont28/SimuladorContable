@@ -12,7 +12,7 @@ use App\Puc;
 use App\DataTables\CursoDataTables;
 use Validator;
 use Yajra\Datatables\Datatables;
-use Illuminate\Support\Facades\Auth;
+use Auth;
 
 class CursoController extends Controller
 {
@@ -265,7 +265,6 @@ class CursoController extends Controller
         if($talleresTeoricos->count() == $curso->talleresTeoricoFinalizadosUsuario()->count()){
             //relaciones entre los modelos
             $talleresPracticos = $curso->talleres->where('tall_tipo', 'practico');
-            //dd($talleresPracticos->first()->tallerNomina->respuestaTallerNominaUsuarioAutenticado());
             return view('estudiante.curso.taller.ver_tallerpractico')
                         ->with('curso', $curso)
                         ->with('talleresPracticos', $talleresPracticos);
@@ -332,7 +331,6 @@ class CursoController extends Controller
            ->addColumn('opciones', function ($curso) {
                 return
                 '<a href="'.route('estudiante.curso.ver.introduccion',['curs_id' => $curso->curs_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i> Ver</a>';
-               //<a href="'.route('profesor.curso.tema.ver', ['curs_id' => $curso->curs_id]).'" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-zoom-out"></i> Ver temas</a>';
            })
            ->rawColumns(['opciones'])
            ->make(true);

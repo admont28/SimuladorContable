@@ -63,4 +63,5 @@ class RespuestaArchivo extends Model
         // Se pasa el modelo con el que está relacionado, seguido de la llave foranea de la tabla Curso en la tabla Taller
         return $this->hasMany('App\Respuesta','resp_id');
     }
+    
 }

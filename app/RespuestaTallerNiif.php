@@ -89,4 +89,5 @@ class RespuestaTallerNiif extends Model
     {
         return BalancePrueba::where('rtni_id', $this->rtni_id)->sum($columna);
     }
+    
 }
