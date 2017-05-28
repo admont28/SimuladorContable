@@ -19,7 +19,7 @@ class CreateRespuestaTallerNiifTable extends Migration
             $table->foreign('tani_id')->references('tani_id')->on('TallerNiif');
             $table->integer('usua_id')->unsigned();
             $table->foreign('usua_id')->references('id')->on('Users');
-            $table->integer('rear_id')->unsigned();
+            $table->integer('rear_id')->unsigned()->nullable();
             $table->foreign('rear_id')->references('rear_id')->on('RespuestaArchivo');
             $table->timestamp('rtni_fechacreacion')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('rtni_fechamodificacion')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
