@@ -95,6 +95,7 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => 'password_resets',
+            //'email' => 'auth.users.usua_correo',
             'expire' => 60,
         ],
     ],

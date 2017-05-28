@@ -1,0 +1,167 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+use Auth;
+use DB;
+
+class Curso extends Model
+{
+    /**
+     * El nombre de la tabla asociada al modelo.
+     *
+     * @var string
+     */
+    protected $table = 'Curso';
+
+    /**
+     * El nombre de la llave primaria de la tabla.
+     * Se modifica debido a que no es el nombre por defecto: id.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'curs_id';
+
+    /**
+     * El nombre del campo equivalente a CREATE_AT en la base de datos.
+     * Se modifica debido a que no es el nombre por defecto: create_at.
+     *
+     * @var string
+     */
+    const CREATED_AT = 'curs_fechacreacion';
+
+    /**
+     * El nombre del campo equivalente a UPDATED_AT en la base de datos.
+     * Se modifica debido a que no es el nombre por defecto: update_at.
+     *
+     * @var string
+     */
+    const UPDATED_AT = 'curs_fechamodificacion';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'curs_id', 'curs_nombre', 'curs_introduccion'
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+
+    ];
+
+    /**
+     * Obtener los temas para el curso
+     */
+    public function talleres()
+    {
+        // Se pasa el modelo con el que está relacionado, seguido de la llave foranea de la tabla Curso en la tabla Taller
+        return $this->hasMany('App\Taller','curs_id');
+    }
+
+    public function materias()
+    {
+        return $this->hasMany('App\Materia','curs_id');
+    }
+
+    public function pucs()
+    {
+        return $this->hasMany('App\Puc','curs_id');
+    }
+
+    public function talleresDiagnosticoFinalizadosUsuario()
+    {
+        /* SELECT Distinct t.tall_id
+        FROM Respuesta r, Pregunta p, Taller t
+        WHERE
+        r.preg_id = p.preg_id
+        AND p.tall_id = t.tall_id
+        AND t.tall_tipo = 'diagnostico'
+        AND t.curs_id = 1
+        AND t.tall_id = 1 */
+        return DB::table('Respuesta')
+                ->join('Pregunta', 'Respuesta.preg_id', '=', 'Pregunta.preg_id')
+                ->join('Taller', 'Pregunta.tall_id', '=', 'Taller.tall_id')
+                ->select('Taller.tall_id')
+                ->distinct()
+                ->where('Taller.tall_tipo','diagnostico')
+                ->where('Respuesta.usua_id',Auth::user()->id)
+                ->where('Taller.curs_id', $this->curs_id)
+                ->get();
+    }
+
+    public function talleresTeoricoFinalizadosUsuario()
+    {
+        /*SELECT Distinct t.tall_id
+        FROM Respuesta r, Pregunta p, Taller t
+        WHERE
+        r.preg_id = p.preg_id
+        AND p.tall_id = t.tall_id
+        AND t.tall_tipo = 'teorico'
+        AND t.curs_id = 1
+        AND r.usua_id = 2*/
+        return DB::table('Respuesta')
+                ->join('Pregunta', 'Respuesta.preg_id', '=', 'Pregunta.preg_id')
+                ->join('Taller', 'Pregunta.tall_id', '=', 'Taller.tall_id')
+                ->select('Taller.tall_id')
+                ->distinct()
+                ->where('Taller.tall_tipo','teorico')
+                ->where('Respuesta.usua_id',Auth::user()->id)
+                ->where('Taller.curs_id', $this->curs_id)
+                ->get();
+    }
+
+    public function talleresPracticoFinalizadosUsuario()
+    {
+        // SELECT Distinct t.tall_id
+        // FROM Respuesta r, Pregunta p, Taller t
+        // WHERE
+        //  r.preg_id = p.preg_id
+        //  AND p.tall_id = t.tall_id
+        //  AND t.tall_tipo = 'practico'
+        //  AND r.usua_id = 2
+        return DB::table('Respuesta')
+                ->join('Pregunta', 'Respuesta.preg_id', '=', 'Pregunta.preg_id')
+                ->join('Taller', 'Pregunta.tall_id', '=', 'Taller.tall_id')
+                ->select('Taller.tall_id')
+                ->distinct()
+                ->where('Taller.tall_tipo','practico')
+                ->where('Respuesta.usua_id',Auth::user()->id)
+                ->get();
+    }
+
+    public function tallerAsientoContable()
+    {
+        $tallerAsientoContable =  DB::table('TallerAsientoContable')
+                ->join('Taller', 'Taller.tall_id', '=', 'TallerAsientoContable.tall_id')
+                ->join('Curso', 'Curso.curs_id', '=', 'Taller.curs_id')
+                ->select('TallerAsientoContable.taac_id', 'TallerAsientoContable.tall_id', 'TallerAsientoContable.taac_cantidadtablas')
+                ->where('Curso.curs_id', $this->curs_id)
+                ->get()
+                ->toArray();
+        return $tallerAsientoContable;
+    }
+
+    public function cantidadTallerPracticoDeTipo($tipoTaller = '')
+    {
+        if($tipoTaller == null || $tipoTaller == ''){
+            return 0;
+        }
+        $cantidadTalleres = 0;
+        $talleresPracticos = $this->talleres()->where('tall_tipo', 'practico')->get();
+        foreach ($talleresPracticos as $tp ) {
+            if(isset($tp->$tipoTaller)){
+                $cantidadTalleres++;
+            }
+        }
+        return $cantidadTalleres;
+    }
+    
+}
