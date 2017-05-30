@@ -7,3 +7,11 @@ Homestead.json
 Homestead.yaml
 .env
 .ftpconfig
+composer.phar
+composer.lock
+.env.*.php
+.env.php
+.DS_Store
+workspace.xml
+Thumbs.db
+.ftpconfig
